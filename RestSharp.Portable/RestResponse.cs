@@ -29,15 +29,11 @@ namespace RestSharp.Portable
 
     public class RestResponse<T> : RestResponse, IRestResponse<T>
     {
-        public RestResponse(IRestRequest request, HttpWebResponse response)
+        public RestResponse(IRestClient client, IRestRequest request, HttpWebResponse response)
             : base(request, response)
         {
-            var input = new MemoryStream(RawBytes);
-            using (var reader = new StreamReader(input))
-            {
-                var serializer = new JsonSerializer();
-                Data = serializer.Deserialize<T>(new JsonTextReader(reader));
-            }
+            var handler = client.GetHandler(response.ContentType);
+            Data = handler.Deserialize<T>(this);
         }
 
         public T Data { get; private set; }

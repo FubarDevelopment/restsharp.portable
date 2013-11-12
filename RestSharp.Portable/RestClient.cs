@@ -22,7 +22,17 @@ namespace RestSharp.Portable
 
         public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
 
+        public RestClient()
+        {
+            // register default handlers
+            AddHandler("application/json", new JsonDeserializer());
+            AddHandler("text/json", new JsonDeserializer());
+            AddHandler("text/x-json", new JsonDeserializer());
+            AddHandler("text/javascript", new JsonDeserializer());
+        }
+
         public RestClient(Uri baseUrl)
+            : this()
         {
             BaseUrl = baseUrl;
         }
@@ -149,7 +159,7 @@ namespace RestSharp.Portable
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
-            return new RestResponse<T>(request, response);
+            return new RestResponse<T>(this, request, response);
         }
 
         private void UpdateAcceptsHeader()
