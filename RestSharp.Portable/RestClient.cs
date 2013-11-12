@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -74,92 +75,101 @@ namespace RestSharp.Portable
             return url;
         }
 
-        private void AddHttpHeaders(HttpWebRequest http, IRestRequest request)
+        private HttpRequestMessage CreateHttpRequestMessage(IRestRequest request)
         {
+            var message = new HttpRequestMessage(request.Method ?? HttpMethod.Get, request.Resource);
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
-                if (string.Equals(param.Name, "accept", StringComparison.OrdinalIgnoreCase))
-                {
-                    http.Accept = (string)param.Value;
-                }
-                else
-                {
-                    http.Headers[param.Name] = string.Format("{0}", param.Value);
-                }
+                if (message.Headers.Contains(param.Name))
+                    message.Headers.Remove(param.Name);
+                message.Headers.Add(param.Name, string.Format("{0}", param.Value));
             }
+            return message;
         }
 
-        private byte[] GetBodyData(HttpWebRequest http, IRestRequest request)
+        private HttpContent GetBodyData(IRestRequest request)
         {
-            var bodyData = new MemoryStream();
+            HttpContent content;
             var body = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
             if (body != null)
             {
+                MediaTypeHeaderValue contentType;
                 byte[] buffer;
                 if (body.Value is byte[])
                 {
                     buffer = (byte[])body.Value;
-                    http.ContentType = body.ContentType;
+                    contentType = body.ContentType;
                 }
                 else
                 {
                     buffer = request.Serializer.Serialize(body.Value);
-                    http.ContentType = request.Serializer.ContentType;
+                    contentType = request.Serializer.ContentType;
                 }
-                bodyData.Write(buffer, 0, buffer.Length);
+                content = new ByteArrayContent(buffer);
+                content.Headers.ContentType = contentType;
+                content.Headers.ContentLength = buffer.Length;
             }
             else if (request.Method == HttpMethod.Post)
             {
-                var bodyDataWriter = new StreamWriter(bodyData);
-                bodyDataWriter.NewLine = "&";
-                foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.GetOrPost))
-                {
-                    var data = Uri.EscapeDataString(string.Format("{0}", param.Value));
-                    bodyDataWriter.WriteLine("{0}={1}", param.Name, data);
-                    System.Diagnostics.Debug.WriteLine("{0}={1}", param.Name, data);
-                }
-                bodyDataWriter.Flush();
+                var postData = request.Parameters.Where(x => x.Type == ParameterType.GetOrPost)
+                    .Select(x => new KeyValuePair<string,string>(x.Name, string.Format("{0}", x.Value)))
+                    .ToList();
+                content = new FormUrlEncodedContent(postData);
             }
-            return bodyData.ToArray();
+            else
+            {
+                content = null;
+            }
+            return content;
         }
 
-        private HttpWebRequest CreateHttpRequest(IRestRequest request)
+        private HttpClient CreateHttpClient(IRestRequest request)
         {
+            HttpClient httpClient;
             var url = BuildUri(request);
-            var http = HttpWebRequest.CreateHttp(url);
-            if (request.Method != null)
-                http.Method = request.Method.Method;
-            AddHttpHeaders(http, request);
-            return http;
+            if (Proxy != null)
+            {
+                var handler = new HttpClientHandler();
+                if (handler.SupportsProxy)
+                    handler.Proxy = Proxy;
+                httpClient = new HttpClient(handler, true);
+            }
+            else
+            {
+                httpClient = new HttpClient();
+            }
+            httpClient.BaseAddress = BaseUrl;
+            return httpClient;
         }
 
-        private async Task<HttpWebResponse> ExecuteRequest(IRestRequest request)
+        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request)
         {
             ConfigureRequest(request);
-            var http = CreateHttpRequest(request);
-            var bodyData = GetBodyData(http, request);
-            if (bodyData.Length != 0)
-            {
-                var bodyBuffer = bodyData.ToArray();
-                using (var requestStream = await Task.Factory.FromAsync(http.BeginGetRequestStream, new Func<IAsyncResult, Stream>(http.EndGetRequestStream), null))
-                {
-                    requestStream.Write(bodyBuffer, 0, bodyBuffer.Length);
-                }
-            }
-            var response = await Task.Factory.FromAsync(http.BeginGetResponse, new Func<IAsyncResult, WebResponse>(http.EndGetResponse), null) as HttpWebResponse;
+            var httpClient = CreateHttpClient(request);
+            var message = CreateHttpRequestMessage(request);
+            
+            var bodyData = GetBodyData(request);
+            if (bodyData != null)
+                message.Content = bodyData;
+
+            var response = await httpClient.SendAsync(message);
             return response;
         }
 
         public async Task<IRestResponse> Execute(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
-            return new RestResponse(request, response);
+            var restResponse = new RestResponse(this, request);
+            await restResponse.LoadResponse(response);
+            return restResponse;
         }
 
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
-            return new RestResponse<T>(this, request, response);
+            var restResponse = new RestResponse<T>(this, request);
+            await restResponse.LoadResponse(response);
+            return restResponse;
         }
 
         private void UpdateAcceptsHeader()

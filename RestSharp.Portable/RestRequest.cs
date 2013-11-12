@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ namespace RestSharp.Portable
             return AddParameter(new Parameter { Name = name, Value = value, Type = type });
         }
 
-        public IRestRequest AddParameter(string name, object value, ParameterType type, string contentType)
+        public IRestRequest AddParameter(string name, object value, ParameterType type, MediaTypeHeaderValue contentType)
         {
             return AddParameter(new Parameter { Name = name, Value = value, Type = type, ContentType = contentType });
         }

@@ -10,6 +10,7 @@ namespace RestSharp.Portable
         IRestRequest Request { get; }
         Uri ResponseUri { get; }
         byte[] RawBytes { get; }
+        string ContentType { get; }
     }
 
     public interface IRestResponse<T> : IRestResponse

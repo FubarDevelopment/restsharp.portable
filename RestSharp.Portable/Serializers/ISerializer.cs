@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable.Serializers
@@ -9,6 +10,6 @@ namespace RestSharp.Portable.Serializers
     {
         byte[] Serialize(object obj);
         string DateFormat { get; set; }
-        string ContentType { get; set; }
+        MediaTypeHeaderValue ContentType { get; set; }
     }
 }

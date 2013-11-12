@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable
@@ -16,7 +17,7 @@ namespace RestSharp.Portable
         IRestRequest AddBody(object obj);
         IRestRequest AddParameter(string name, object value);
         IRestRequest AddParameter(string name, object value, ParameterType type);
-        IRestRequest AddParameter(string name, object value, ParameterType type, string contentType);
+        IRestRequest AddParameter(string name, object value, ParameterType type, MediaTypeHeaderValue contentType);
         IRestRequest AddParameter(Parameter parameter);
     }
 }

@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable.Serializers
 {
     public class JsonSerializer : ISerializer
     {
+        private static Encoding _encoding = Encoding.UTF8;
+
         public JsonSerializer()
         {
-            ContentType = "application/json";
+            ContentType = new MediaTypeHeaderValue("application/json")
+            {
+                CharSet = _encoding.WebName,
+            };
         }
 
         public byte[] Serialize(object obj)
@@ -23,6 +29,6 @@ namespace RestSharp.Portable.Serializers
 
         public string DateFormat { get; set; }
 
-        public string ContentType { get; set; }
+        public MediaTypeHeaderValue ContentType { get; set; }
     }
 }

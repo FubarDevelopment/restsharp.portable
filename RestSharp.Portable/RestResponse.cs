@@ -4,35 +4,51 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
     public class RestResponse : IRestResponse
     {
+        protected IRestClient Client { get; private set; }
+
         public IRestRequest Request { get; private set; }
 
         public Uri ResponseUri { get; private set; }
 
-        public RestResponse(IRestRequest request, HttpWebResponse response)
+        public RestResponse(IRestClient client, IRestRequest request)
         {
-            ResponseUri = response.ResponseUri;
+            Client = client;
             Request = request;
-            var temp = new MemoryStream();
-            using (var stream = response.GetResponseStream())
-                stream.CopyTo(temp);
-            RawBytes = temp.ToArray();
+        }
+
+        protected internal async virtual Task LoadResponse(HttpResponseMessage response)
+        {
+            ResponseUri = response.Headers.Location ?? new Uri(Client.BaseUrl, new Uri(Request.Resource, UriKind.RelativeOrAbsolute));
+            RawBytes = await response.Content.ReadAsByteArrayAsync();
+            var contentType = response.Content.Headers.ContentType;
+            var mediaType = contentType == null ? string.Empty : contentType.MediaType;
+            ContentType = mediaType;
         }
 
         public byte[] RawBytes { get; private set; }
+
+        public string ContentType { get; private set; }
     }
 
     public class RestResponse<T> : RestResponse, IRestResponse<T>
     {
-        public RestResponse(IRestClient client, IRestRequest request, HttpWebResponse response)
-            : base(request, response)
+        public RestResponse(IRestClient client, IRestRequest request)
+            : base(client, request)
         {
-            var handler = client.GetHandler(response.ContentType);
+        }
+
+        protected internal override async Task LoadResponse(HttpResponseMessage response)
+        {
+            await base.LoadResponse(response);
+            var handler = Client.GetHandler(ContentType);
             Data = handler.Deserialize<T>(this);
         }
 
