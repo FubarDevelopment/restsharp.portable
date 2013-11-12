@@ -31,7 +31,7 @@ namespace RestSharp.Portable
             {
                 if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                     queryString.Append("&");
-                queryString.AppendFormat("{0}={1}", param.Name, param.Value);
+                queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
             }
             if (request.Method == HttpMethod.Get)
             {
@@ -39,7 +39,7 @@ namespace RestSharp.Portable
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                         queryString.Append("&");
-                    queryString.AppendFormat("{0}={1}", param.Name, param.Value);
+                    queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
                 }
             }
             urlBuilder.Query = queryString.ToString();
