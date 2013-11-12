@@ -69,40 +69,24 @@ namespace RestSharp.Portable
             if (bodyData.Length != 0)
             {
                 var bodyBuffer = bodyData.ToArray();
-                var requestStreamTask = Task.Factory.FromAsync(http.BeginGetRequestStream, new Func<IAsyncResult, Stream>(http.EndGetRequestStream), null);
-                requestStreamTask.Wait();
-                if (requestStreamTask.IsFaulted)
-                    throw new AggregateException(requestStreamTask.Exception);
-                using (var requestStream = requestStreamTask.Result)
+                using (var requestStream = await Task.Factory.FromAsync(http.BeginGetRequestStream, new Func<IAsyncResult, Stream>(http.EndGetRequestStream), null))
                 {
                     requestStream.Write(bodyBuffer, 0, bodyBuffer.Length);
                 }
             }
-            var responseTask = Task.Factory.FromAsync(http.BeginGetResponse, new Func<IAsyncResult, WebResponse>(http.EndGetResponse), null);
-            responseTask.Wait();
-            if (responseTask.IsFaulted)
-                throw new AggregateException(responseTask.Exception);
-            var response = responseTask.Result as HttpWebResponse;
+            var response = await Task.Factory.FromAsync(http.BeginGetResponse, new Func<IAsyncResult, WebResponse>(http.EndGetResponse), null) as HttpWebResponse;
             return response;
         }
 
         public async Task<RestResponse> Execute(RestRequest request)
         {
-            var responseTask = ExecuteRequest(request);
-            responseTask.Wait();
-            if (responseTask.IsFaulted)
-                throw new AggregateException(responseTask.Exception);
-            var response = responseTask.Result;
+            var response = await ExecuteRequest(request);
             return new RestResponse(request, response);
         }
 
         public async Task<RestResponse<T>> Execute<T>(RestRequest request)
         {
-            var responseTask = ExecuteRequest(request);
-            responseTask.Wait();
-            if (responseTask.IsFaulted)
-                throw new AggregateException(responseTask.Exception);
-            var response = responseTask.Result;
+            var response = await ExecuteRequest(request);
             return new RestResponse<T>(request, response);
         }
     }
