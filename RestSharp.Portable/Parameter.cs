@@ -8,11 +8,11 @@ namespace RestSharp.Portable
 {
     public enum ParameterType
     {
-        Body,
         GetOrPost,
         UrlSegment,
         QueryString,
         HttpHeader,
+        RequestBody,
     }
 
     public class Parameter
@@ -22,5 +22,7 @@ namespace RestSharp.Portable
         public object Value { get; set; }
 
         public ParameterType Type { get; set; }
+
+        public string ContentType { get; set; }
     }
 }

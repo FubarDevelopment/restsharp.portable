@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestSharp.Portable.Deserializers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,21 +10,37 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
-    public class RestClient
+    public class RestClient : IRestClient
     {
+        private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
+        private readonly IList<string> _acceptTypes = new List<string>();
+        private readonly List<Parameter> _defaultParameters = new List<Parameter>();
+
         public Uri BaseUrl { get; set; }
 
         public IAuthenticator Authenticator { get; set; }
+
+        public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
 
         public RestClient(Uri baseUrl)
         {
             BaseUrl = baseUrl;
         }
 
-        private async Task<HttpWebResponse> ExecuteRequest(RestRequest request)
+        private void ConfigureRequest(IRestRequest request)
         {
+            foreach (var parameter in DefaultParameters)
+            {
+                if (request.Parameters.Contains(parameter, ParameterNameComparer.Default))
+                    continue;
+                request.Parameters.Add(parameter);
+            }
             if (Authenticator != null)
                 Authenticator.Authenticate(this, request);
+        }
+
+        private Uri BuildUri(IRestRequest request)
+        {
             var urlBuilder = new UriBuilder(new Uri(BaseUrl, new Uri(request.Resource, UriKind.RelativeOrAbsolute)));
             var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
             var startsWithQuestionmark = queryString.ToString().StartsWith("?");
@@ -44,17 +61,44 @@ namespace RestSharp.Portable
             }
             urlBuilder.Query = queryString.ToString();
             var url = urlBuilder.Uri;
-            var http = WebRequest.CreateHttp(url);
-            if (request.Method != null)
-                http.Method = request.Method.Method;
-            var bodyData = new MemoryStream();
-            var bodyParameter = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.Body);
-            if (bodyParameter != null)
+            return url;
+        }
+
+        private void AddHttpHeaders(HttpWebRequest http, IRestRequest request)
+        {
+            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
-                var buffer = (byte[])bodyParameter.Value;
+                if (string.Equals(param.Name, "accept", StringComparison.OrdinalIgnoreCase))
+                {
+                    http.Accept = (string)param.Value;
+                }
+                else
+                {
+                    http.Headers[param.Name] = string.Format("{0}", param.Value);
+                }
+            }
+        }
+
+        private byte[] GetBodyData(HttpWebRequest http, IRestRequest request)
+        {
+            var bodyData = new MemoryStream();
+            var body = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
+            if (body != null)
+            {
+                byte[] buffer;
+                if (body.Value is byte[])
+                {
+                    buffer = (byte[])body.Value;
+                    http.ContentType = body.ContentType;
+                }
+                else
+                {
+                    buffer = request.Serializer.Serialize(body.Value);
+                    http.ContentType = request.Serializer.ContentType;
+                }
                 bodyData.Write(buffer, 0, buffer.Length);
             }
-            if (request.Method == HttpMethod.Post)
+            else if (request.Method == HttpMethod.Post)
             {
                 var bodyDataWriter = new StreamWriter(bodyData);
                 bodyDataWriter.NewLine = "&";
@@ -66,6 +110,24 @@ namespace RestSharp.Portable
                 }
                 bodyDataWriter.Flush();
             }
+            return bodyData.ToArray();
+        }
+
+        private HttpWebRequest CreateHttpRequest(IRestRequest request)
+        {
+            var url = BuildUri(request);
+            var http = HttpWebRequest.CreateHttp(url);
+            if (request.Method != null)
+                http.Method = request.Method.Method;
+            AddHttpHeaders(http, request);
+            return http;
+        }
+
+        private async Task<HttpWebResponse> ExecuteRequest(IRestRequest request)
+        {
+            ConfigureRequest(request);
+            var http = CreateHttpRequest(request);
+            var bodyData = GetBodyData(http, request);
             if (bodyData.Length != 0)
             {
                 var bodyBuffer = bodyData.ToArray();
@@ -78,16 +140,72 @@ namespace RestSharp.Portable
             return response;
         }
 
-        public async Task<RestResponse> Execute(RestRequest request)
+        public async Task<IRestResponse> Execute(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
             return new RestResponse(request, response);
         }
 
-        public async Task<RestResponse<T>> Execute<T>(RestRequest request)
+        public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
             return new RestResponse<T>(request, response);
         }
+
+        private void UpdateAcceptsHeader()
+        {
+            this.RemoveDefaultParameter("Accept");
+            if (_acceptTypes.Count != 0)
+            {
+                var accepts = string.Join(", ", _acceptTypes);
+                this.AddDefaultParameter("Accept", accepts, ParameterType.HttpHeader);
+            }
+        }
+
+        public IRestClient AddHandler(string contentType, IDeserializer deserializer)
+        {
+            _contentHandlers[contentType] = deserializer;
+            if (contentType != "*")
+            {
+                _acceptTypes.Add(contentType);
+                UpdateAcceptsHeader();
+            }
+            return this;
+        }
+
+        public IRestClient RemoveHandler(string contentType)
+        {
+            _contentHandlers.Remove(contentType);
+            if (contentType != "*")
+            {
+                _acceptTypes.Remove(contentType);
+                UpdateAcceptsHeader();
+            }
+            return this;
+        }
+
+        public IRestClient ClearHandlers()
+        {
+            _contentHandlers.Clear();
+            _acceptTypes.Clear();
+            UpdateAcceptsHeader();
+            return this;
+        }
+
+        public Deserializers.IDeserializer GetHandler(string contentType)
+        {
+            if (string.IsNullOrEmpty(contentType) && _contentHandlers.ContainsKey("*"))
+                return _contentHandlers["*"];
+            var semicolonIndex = contentType.IndexOf(';');
+            if (semicolonIndex != -1)
+                contentType = contentType.Substring(0, semicolonIndex).TrimEnd();
+            if (_contentHandlers.ContainsKey(contentType))
+                return _contentHandlers[contentType];
+            if (_contentHandlers.ContainsKey("*"))
+                return _contentHandlers["*"];
+            return null;
+        }
+
+        public IWebProxy Proxy { get; set; }
     }
 }

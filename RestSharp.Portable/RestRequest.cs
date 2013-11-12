@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
-    public class RestRequest
+    public class RestRequest : IRestRequest
     {
         private List<Parameter> _parameters = new List<Parameter>();
 
@@ -17,39 +17,42 @@ namespace RestSharp.Portable
         {
             Method = method;
             Resource = resource;
+            Serializer = new Serializers.JsonSerializer();
         }
 
         public HttpMethod Method { get; set; }
 
         public string Resource { get; private set; }
 
-        public List<Parameter> Parameters { get { return _parameters; } }
+        public IList<Parameter> Parameters { get { return _parameters; } }
 
-        public RestRequest AddBody(object obj)
+        public IRestRequest AddBody(object obj)
         {
-            var output = new MemoryStream();
-            var serializer = new JsonSerializer();
-            using (var writer = new StreamWriter(output))
-            {
-                serializer.Serialize(writer, obj);
-            }
-            return AddParameter(null, output.ToArray(), ParameterType.Body);
+            var data = Serializer.Serialize(obj);
+            return AddParameter(null, data, ParameterType.RequestBody, Serializer.ContentType);
         }
 
-        public RestRequest AddParameter(string name, object value)
+        public IRestRequest AddParameter(string name, object value)
         {
             return AddParameter(name, value, ParameterType.GetOrPost);
         }
 
-        public RestRequest AddParameter(string name, object value, ParameterType type)
+        public IRestRequest AddParameter(string name, object value, ParameterType type)
         {
             return AddParameter(new Parameter { Name = name, Value = value, Type = type });
         }
 
-        public RestRequest AddParameter(Parameter parameter)
+        public IRestRequest AddParameter(string name, object value, ParameterType type, string contentType)
+        {
+            return AddParameter(new Parameter { Name = name, Value = value, Type = type, ContentType = contentType });
+        }
+
+        public IRestRequest AddParameter(Parameter parameter)
         {
             _parameters.Add(parameter);
             return this;
         }
+
+        public Serializers.ISerializer Serializer { get; set; }
     }
 }

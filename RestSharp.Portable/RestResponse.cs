@@ -8,13 +8,13 @@ using System.Text;
 
 namespace RestSharp.Portable
 {
-    public class RestResponse
+    public class RestResponse : IRestResponse
     {
-        public RestRequest Request { get; private set; }
+        public IRestRequest Request { get; private set; }
 
         public Uri ResponseUri { get; private set; }
 
-        public RestResponse(RestRequest request, HttpWebResponse response)
+        public RestResponse(IRestRequest request, HttpWebResponse response)
         {
             ResponseUri = response.ResponseUri;
             Request = request;
@@ -27,9 +27,9 @@ namespace RestSharp.Portable
         public byte[] RawBytes { get; private set; }
     }
 
-    public class RestResponse<T> : RestResponse
+    public class RestResponse<T> : RestResponse, IRestResponse<T>
     {
-        public RestResponse(RestRequest request, HttpWebResponse response)
+        public RestResponse(IRestRequest request, HttpWebResponse response)
             : base(request, response)
         {
             var input = new MemoryStream(RawBytes);
