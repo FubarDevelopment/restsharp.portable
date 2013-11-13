@@ -52,7 +52,14 @@ namespace RestSharp.Portable
 
         private Uri BuildUri(IRestRequest request)
         {
-            var urlBuilder = new UriBuilder(new Uri(BaseUrl, new Uri(request.Resource, UriKind.RelativeOrAbsolute)));
+            var resource = request.Resource;
+            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.UrlSegment))
+            {
+                var searchText = string.Format("{{{0}}}", param.Name);
+                var replaceText = string.Format("{0}", param.Value);
+                resource = resource.Replace(searchText, replaceText);
+            }
+            var urlBuilder = new UriBuilder(new Uri(BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
             var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
             var startsWithQuestionmark = queryString.ToString().StartsWith("?");
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.QueryString))
