@@ -71,13 +71,13 @@ namespace RestSharp.Portable
                 }
             }
             urlBuilder.Query = queryString.ToString();
-            var url = urlBuilder.Uri;
+            var url = BaseUrl.MakeRelativeUri(urlBuilder.Uri);
             return url;
         }
 
         private HttpRequestMessage CreateHttpRequestMessage(IRestRequest request)
         {
-            var message = new HttpRequestMessage(request.Method ?? HttpMethod.Get, request.Resource);
+            var message = new HttpRequestMessage(request.Method ?? HttpMethod.Get, BuildUri(request));
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (message.Headers.Contains(param.Name))
@@ -90,7 +90,6 @@ namespace RestSharp.Portable
         private HttpClient CreateHttpClient(IRestRequest request)
         {
             HttpClient httpClient;
-            var url = BuildUri(request);
             if (Proxy != null)
             {
                 var handler = new HttpClientHandler();
