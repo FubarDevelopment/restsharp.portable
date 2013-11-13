@@ -9,6 +9,31 @@ namespace RestSharp.Portable
 {
     public static class RestRequestExtensions
     {
+        public static IRestRequest AddUrlSegment(this IRestRequest request, string name, object value)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.UrlSegment });
+        }
+
+        public static IRestRequest AddHeader(this IRestRequest request, string name, object value)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.HttpHeader });
+        }
+
+        public static IRestRequest AddParameter(this IRestRequest request, string name, object value)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.GetOrPost });
+        }
+
+        public static IRestRequest AddParameter(this IRestRequest request, string name, object value, ParameterType type)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = type });
+        }
+
+        public static IRestRequest AddParameter(this IRestRequest request, string name, object value, ParameterType type, MediaTypeHeaderValue contentType)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = type, ContentType = contentType });
+        }
+
         public static HttpContent GetContent(this IRestRequest request)
         {
             HttpContent content;

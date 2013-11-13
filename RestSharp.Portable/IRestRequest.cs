@@ -15,9 +15,6 @@ namespace RestSharp.Portable
         string Resource { get; }
         IList<Parameter> Parameters { get; }
         IRestRequest AddBody(object obj);
-        IRestRequest AddParameter(string name, object value);
-        IRestRequest AddParameter(string name, object value, ParameterType type);
-        IRestRequest AddParameter(string name, object value, ParameterType type, MediaTypeHeaderValue contentType);
         IRestRequest AddParameter(Parameter parameter);
     }
 }

@@ -30,22 +30,7 @@ namespace RestSharp.Portable
         public IRestRequest AddBody(object obj)
         {
             var data = Serializer.Serialize(obj);
-            return AddParameter(null, data, ParameterType.RequestBody, Serializer.ContentType);
-        }
-
-        public IRestRequest AddParameter(string name, object value)
-        {
-            return AddParameter(name, value, ParameterType.GetOrPost);
-        }
-
-        public IRestRequest AddParameter(string name, object value, ParameterType type)
-        {
-            return AddParameter(new Parameter { Name = name, Value = value, Type = type });
-        }
-
-        public IRestRequest AddParameter(string name, object value, ParameterType type, MediaTypeHeaderValue contentType)
-        {
-            return AddParameter(new Parameter { Name = name, Value = value, Type = type, ContentType = contentType });
+            return AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = Serializer.ContentType });
         }
 
         public IRestRequest AddParameter(Parameter parameter)
