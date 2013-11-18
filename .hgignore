@@ -2,3 +2,4 @@ syntax: glob
 bin/
 obj/
 FubarCoder.RestSharp.Portable.*.nupkg
+*.suo
