@@ -52,33 +52,8 @@ namespace RestSharp.Portable
 
         private Uri BuildUri(IRestRequest request)
         {
-            var resource = request.Resource;
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.UrlSegment))
-            {
-                var searchText = string.Format("{{{0}}}", param.Name);
-                var replaceText = string.Format("{0}", param.Value);
-                resource = resource.Replace(searchText, replaceText);
-            }
-            var urlBuilder = new UriBuilder(new Uri(BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
-            var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
-            var startsWithQuestionmark = queryString.ToString().StartsWith("?");
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.QueryString))
-            {
-                if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
-                    queryString.Append("&");
-                queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
-            }
-            if (request.Method == HttpMethod.Get)
-            {
-                foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.GetOrPost))
-                {
-                    if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
-                        queryString.Append("&");
-                    queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
-                }
-            }
-            urlBuilder.Query = queryString.ToString();
-            var url = BaseUrl.MakeRelativeUri(urlBuilder.Uri);
+            var fullUrl = this.BuildUrl(request);
+            var url = BaseUrl.MakeRelativeUri(fullUrl);
             return url;
         }
 
