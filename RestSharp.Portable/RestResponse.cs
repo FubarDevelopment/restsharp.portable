@@ -26,7 +26,7 @@ namespace RestSharp.Portable
 
         protected internal async virtual Task LoadResponse(HttpResponseMessage response)
         {
-            ResponseUri = response.Headers.Location ?? new Uri(Client.BaseUrl, new Uri(Request.Resource, UriKind.RelativeOrAbsolute));
+            ResponseUri = response.Headers.Location ?? Client.BuildUrl(Request, false);
             RawBytes = await response.Content.ReadAsByteArrayAsync();
             var contentType = response.Content.Headers.ContentType;
             var mediaType = contentType == null ? string.Empty : contentType.MediaType;
