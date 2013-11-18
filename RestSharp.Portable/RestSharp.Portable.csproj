@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Deserializers\IDeserializer.cs" />
     <Compile Include="Deserializers\JsonDeserializer.cs" />
+    <Compile Include="Encodings\IEncoding.cs" />
     <Compile Include="IAuthenticator.cs" />
     <Compile Include="IRestClient.cs" />
     <Compile Include="IRestRequest.cs" />

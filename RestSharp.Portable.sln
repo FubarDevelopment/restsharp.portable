@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CF8184
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Test", "RestSharp.Portable.Test\RestSharp.Portable.Test.csproj", "{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.csproj", "{674469CC-9563-4618-A8E0-7C3A980647C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +26,14 @@ Global
 		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674469CC-9563-4618-A8E0-7C3A980647C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674469CC-9563-4618-A8E0-7C3A980647C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

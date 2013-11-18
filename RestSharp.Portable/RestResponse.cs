@@ -27,10 +27,17 @@ namespace RestSharp.Portable
         protected internal async virtual Task LoadResponse(HttpResponseMessage response)
         {
             ResponseUri = response.Headers.Location ?? Client.BuildUrl(Request, false);
-            RawBytes = await response.Content.ReadAsByteArrayAsync();
+            var data = await response.Content.ReadAsByteArrayAsync();
+            
             var contentType = response.Content.Headers.ContentType;
             var mediaType = contentType == null ? string.Empty : contentType.MediaType;
             ContentType = mediaType;
+
+            var encoding = Client.GetEncoding(response.Content.Headers.ContentEncoding);
+            if (encoding != null)
+                data = encoding.Decode(data);
+
+            RawBytes = data;
         }
 
         public byte[] RawBytes { get; private set; }

@@ -1,4 +1,5 @@
 ﻿using RestSharp.Portable.Deserializers;
+using RestSharp.Portable.Encodings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,11 @@ namespace RestSharp.Portable
         IRestClient RemoveHandler(string contentType);
         IRestClient ClearHandlers();
         IDeserializer GetHandler(string contentType);
+
+        IRestClient AddEncoding(string encodingId, IEncoding encoding);
+        IRestClient RemoveEncoding(string encodingId);
+        IRestClient ClearEncodings();
+        IEncoding GetEncoding(IEnumerable<string> encodingIds);
 
         IWebProxy Proxy { get; set; }
     }

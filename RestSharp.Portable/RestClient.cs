@@ -1,4 +1,5 @@
 ﻿using RestSharp.Portable.Deserializers;
+using RestSharp.Portable.Encodings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,10 @@ namespace RestSharp.Portable
     {
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
         private readonly IList<string> _acceptTypes = new List<string>();
+
+        private readonly IDictionary<string, IEncoding> _encodingHandlers = new Dictionary<string, IEncoding>(StringComparer.OrdinalIgnoreCase);
+        private readonly IList<string> _acceptEncodings = new List<string>();
+        
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
 
         public Uri BaseUrl { get; set; }
@@ -127,6 +132,16 @@ namespace RestSharp.Portable
             }
         }
 
+        private void UpdateAcceptsEncodingHeader()
+        {
+            this.RemoveDefaultParameter("Accept-Encoding");
+            if (_acceptEncodings.Count != 0)
+            {
+                var accepts = string.Join(", ", _acceptEncodings);
+                this.AddDefaultParameter("Accept-Encoding", accepts, ParameterType.HttpHeader);
+            }
+        }
+
         public IRestClient AddHandler(string contentType, IDeserializer deserializer)
         {
             _contentHandlers[contentType] = deserializer;
@@ -172,5 +187,44 @@ namespace RestSharp.Portable
         }
 
         public IWebProxy Proxy { get; set; }
+
+        public IRestClient AddEncoding(string encodingId, Encodings.IEncoding encoding)
+        {
+            _encodingHandlers[encodingId] = encoding;
+            _acceptEncodings.Add(encodingId);
+            UpdateAcceptsEncodingHeader();
+            return this;
+        }
+
+        public IRestClient RemoveEncoding(string encodingId)
+        {
+            _encodingHandlers.Remove(encodingId);
+            _acceptEncodings.Remove(encodingId);
+            UpdateAcceptsEncodingHeader();
+            return this;
+        }
+
+        public IRestClient ClearEncodings()
+        {
+            _encodingHandlers.Clear();
+            _acceptEncodings.Clear();
+            UpdateAcceptsEncodingHeader();
+            return this;
+        }
+
+        public Encodings.IEncoding GetEncoding(IEnumerable<string> encodingIds)
+        {
+            if (encodingIds != null)
+            {
+                foreach (var encodingId in encodingIds)
+                {
+                    if (_encodingHandlers.ContainsKey(encodingId))
+                        return _encodingHandlers[encodingId];
+                }
+            }
+            if (_encodingHandlers.ContainsKey("*"))
+                return _encodingHandlers["*"];
+            return null;
+        }
     }
 }
