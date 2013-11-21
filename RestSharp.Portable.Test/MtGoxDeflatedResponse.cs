@@ -11,18 +11,11 @@ namespace RestSharp.Portable.Test
         [TestMethod]
         public async Task TestGetTicker()
         {
-            try
-            {
-                var client = new RestClient(new Uri("https://data.mtgox.com/api/2/"));
-                client.AddEncoding("GZIP", new RestSharp.Portable.Encodings.GzipEncoding());
-                var request = new RestRequest("BTC{currency}/money/ticker", HttpMethod.Post);
-                request.AddUrlSegment("currency", BitCoin.Trade.MtGox.Currency.USD);
-                var tmp = await client.Execute(request);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            var client = new RestClient(new Uri("https://data.mtgox.com/api/2/"));
+            client.AddEncoding("GZIP", new RestSharp.Portable.Encodings.GzipEncoding());
+            var request = new RestRequest("BTC{currency}/money/ticker", HttpMethod.Post);
+            request.AddUrlSegment("currency", BitCoin.Trade.MtGox.Currency.USD);
+            var tmp = await client.Execute(request);
         }
     }
 }
