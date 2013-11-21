@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>FubarCoder.RestSharp.Portable</id>
+    <version>$version$</version>
+    <title>$id$</title>
+    <authors>Mark Junker</authors>
+    <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
+    <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!
+
+      Supported Platforms:
+      - .NET Framework 4
+      - .NET for Windows Store apps
+      - Windows Phone 8
+      - Silverlight 5
+      - Portable Class Libraries
+    </description>
+    <summary>Some kind of a RestSharp port to PCL</summary>
+    <releaseNotes>New content  encoding support</releaseNotes>
+    <copyright>Copyright © Mark Junker</copyright>
+    <language>en-US</language>
+    <tags>PCL RestSharp portable</tags>
+    <!--
+    <dependencies>
+      <dependency id="Microsoft.Net.Http" version="2.2.15" />
+      <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+      <dependency id="Newtonsoft.Json" version="5.0.6" />
+    </dependencies>
+    -->
+  </metadata>
+  <files>
+    <!-- <file src="..\license.txt" target="license.txt" /> -->
+  </files>
+</package>
