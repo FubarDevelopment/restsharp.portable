@@ -7,8 +7,17 @@ using System.Text;
 
 namespace RestSharp.Portable.Deserializers
 {
+    /// <summary>
+    /// The default JSON deserializer using Json.Net
+    /// </summary>
     public class JsonDeserializer : IDeserializer
     {
+        /// <summary>
+        /// Deserialize the response
+        /// </summary>
+        /// <typeparam name="T">Object type to deserialize the result to</typeparam>
+        /// <param name="response">The response to deserialize the result from</param>
+        /// <returns>The deserialized object</returns>
         public T Deserialize<T>(IRestResponse response)
         {
             var input = new MemoryStream(response.RawBytes);
@@ -19,6 +28,9 @@ namespace RestSharp.Portable.Deserializers
             }
         }
 
+        /// <summary>
+        /// The date format to use during the deserialization
+        /// </summary>
         public string DateFormat { get; set; }
     }
 }

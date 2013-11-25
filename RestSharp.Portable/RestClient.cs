@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// The default REST client
+    /// </summary>
     public class RestClient : IRestClient
     {
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
@@ -22,16 +25,37 @@ namespace RestSharp.Portable
         
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
 
+        /// <summary>
+        /// Base URL for all requests
+        /// </summary>
         public Uri BaseUrl { get; set; }
 
+        /// <summary>
+        /// Authenticator to use for all requests
+        /// </summary>
         public IAuthenticator Authenticator { get; set; }
 
+        /// <summary>
+        /// Cookies for all requests
+        /// </summary>
+        /// <remarks>
+        /// Cookies set by the server will be collected here.
+        /// </remarks>
         public CookieContainer CookieContainer { get; set; }
 
+        /// <summary>
+        /// Default parameters for all requests
+        /// </summary>
         public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
 
+        /// <summary>
+        /// Ignore the response status code?
+        /// </summary>
         public bool IgnoreResponseStatusCode { get; set; }
 
+        /// <summary>
+        /// Constructor that initializes some default content handlers
+        /// </summary>
         public RestClient()
         {
             // register default handlers
@@ -41,6 +65,9 @@ namespace RestSharp.Portable
             AddHandler("text/javascript", new JsonDeserializer());
         }
 
+        /// <summary>
+        /// Constructor that initializes the base URL and some default content handlers
+        /// </summary>
         public RestClient(Uri baseUrl)
             : this()
         {
@@ -140,6 +167,11 @@ namespace RestSharp.Portable
             return response;
         }
 
+        /// <summary>
+        /// Execute the given request
+        /// </summary>
+        /// <param name="request">Request to execute</param>
+        /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
@@ -148,6 +180,11 @@ namespace RestSharp.Portable
             return restResponse;
         }
 
+        /// <summary>
+        /// Execute the given request
+        /// </summary>
+        /// <param name="request">Request to execute</param>
+        /// <returns>Response returned, with a deserialized object</returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
             var response = await ExecuteRequest(request);
@@ -176,6 +213,12 @@ namespace RestSharp.Portable
             }
         }
 
+        /// <summary>
+        /// Add a new content type handler
+        /// </summary>
+        /// <param name="contentType">The Accept header value</param>
+        /// <param name="deserializer">The deserializer to decode the content</param>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient AddHandler(string contentType, IDeserializer deserializer)
         {
             _contentHandlers[contentType] = deserializer;
@@ -187,6 +230,11 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Remove a previously added content type handler
+        /// </summary>
+        /// <param name="contentType">The Accept header value that identifies the handler</param>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient RemoveHandler(string contentType)
         {
             _contentHandlers.Remove(contentType);
@@ -198,6 +246,10 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Remove all previously added content type handlers
+        /// </summary>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient ClearHandlers()
         {
             _contentHandlers.Clear();
@@ -206,6 +258,14 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Get a previously added content type handler
+        /// </summary>
+        /// <param name="contentType">The Accept header value that identifies the handler</param>
+        /// <returns>The deserializer that can handle the given content type.</returns>
+        /// <remarks>
+        /// This function returns NULL if the handler for the given content type cannot be found.
+        /// </remarks>
         public Deserializers.IDeserializer GetHandler(string contentType)
         {
             if (string.IsNullOrEmpty(contentType) && _contentHandlers.ContainsKey("*"))
@@ -220,8 +280,17 @@ namespace RestSharp.Portable
             return null;
         }
 
+        /// <summary>
+        /// Proxy to use for the requests
+        /// </summary>
         public IWebProxy Proxy { get; set; }
 
+        /// <summary>
+        /// Add a new content encoding handler
+        /// </summary>
+        /// <param name="encodingId">The Accept-Encoding header value</param>
+        /// <param name="encoding">The encoding engine to decode the content</param>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient AddEncoding(string encodingId, Encodings.IEncoding encoding)
         {
             _encodingHandlers[encodingId] = encoding;
@@ -230,6 +299,11 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Remove a previously added content encoding handler
+        /// </summary>
+        /// <param name="encodingId">The Accept-Encoding header value that identifies the handler</param>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient RemoveEncoding(string encodingId)
         {
             _encodingHandlers.Remove(encodingId);
@@ -238,6 +312,10 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Remove all previously added content encoding handlers
+        /// </summary>
+        /// <returns>The client itself, to allow call chains</returns>
         public IRestClient ClearEncodings()
         {
             _encodingHandlers.Clear();
@@ -246,6 +324,14 @@ namespace RestSharp.Portable
             return this;
         }
 
+        /// <summary>
+        /// Get a previously added content encoding handler
+        /// </summary>
+        /// <param name="encodingIds">The Accept-Encoding header value that identifies the handler</param>
+        /// <returns>The handler that can decode the given content encoding.</returns>
+        /// <remarks>
+        /// This function returns NULL if the handler for the given content encoding cannot be found.
+        /// </remarks>
         public Encodings.IEncoding GetEncoding(IEnumerable<string> encodingIds)
         {
             if (encodingIds != null)

@@ -8,13 +8,38 @@ using System.Text;
 
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// Defines a REST request
+    /// </summary>
     public interface IRestRequest
     {
+        /// <summary>
+        /// The serializer that should serialize the body
+        /// </summary>
         ISerializer Serializer { get; set; }
+        /// <summary>
+        /// HTTP request method (GET, POST, etc...)
+        /// </summary>
         HttpMethod Method { get; set; }
+        /// <summary>
+        /// The resource relative to the REST clients base URL
+        /// </summary>
         string Resource { get; }
+        /// <summary>
+        /// REST request parameters
+        /// </summary>
         IList<Parameter> Parameters { get; }
+        /// <summary>
+        /// Body to add to the parameters
+        /// </summary>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <returns>The request object to allow call chains</returns>
         IRestRequest AddBody(object obj);
+        /// <summary>
+        /// Generic add parameters function
+        /// </summary>
+        /// <param name="parameter">Parameter to add</param>
+        /// <returns>The request object to allow call chains</returns>
         IRestRequest AddParameter(Parameter parameter);
     }
 }

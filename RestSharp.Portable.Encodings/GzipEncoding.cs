@@ -6,8 +6,16 @@ using System.Text;
 
 namespace RestSharp.Portable.Encodings
 {
+    /// <summary>
+    /// GZIP content encoding handler
+    /// </summary>
     public class GzipEncoding : IEncoding
     {
+        /// <summary>
+        /// Encode the content
+        /// </summary>
+        /// <param name="data">Content to encode</param>
+        /// <returns>Encoded content</returns>
         public byte[] Encode(byte[] data)
         {
             var output = new MemoryStream();
@@ -16,6 +24,11 @@ namespace RestSharp.Portable.Encodings
             return output.ToArray();
         }
 
+        /// <summary>
+        /// Decode the content
+        /// </summary>
+        /// <param name="data">Content to decode</param>
+        /// <returns>Decoded content</returns>
         public byte[] Decode(byte[] data)
         {
             var output = new MemoryStream();
