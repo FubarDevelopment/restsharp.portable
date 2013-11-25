@@ -17,6 +17,8 @@ namespace RestSharp.Portable
 
         IList<Parameter> DefaultParameters { get; }
 
+        CookieContainer CookieContainer { get; set; }
+
         Task<IRestResponse> Execute(IRestRequest request);
         Task<IRestResponse<T>> Execute<T>(IRestRequest request);
 
@@ -31,5 +33,7 @@ namespace RestSharp.Portable
         IEncoding GetEncoding(IEnumerable<string> encodingIds);
 
         IWebProxy Proxy { get; set; }
+
+        bool IgnoreResponseStatusCode { get; set; }
     }
 }

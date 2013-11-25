@@ -14,6 +14,7 @@ namespace RestSharp.Portable
         QueryString,
         HttpHeader,
         RequestBody,
+        Cookie,
     }
 
     public class Parameter

@@ -26,6 +26,8 @@ namespace RestSharp.Portable
 
         public IAuthenticator Authenticator { get; set; }
 
+        public CookieContainer CookieContainer { get; set; }
+
         public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
 
         public RestClient()
@@ -74,14 +76,42 @@ namespace RestSharp.Portable
             return message;
         }
 
+        private bool HasCookies
+        {
+            get
+            {
+                return CookieContainer != null;
+            }
+        }
+
+        private bool HasProxy
+        {
+            get
+            {
+                return Proxy != null;
+            }
+        }
+
         private HttpClient CreateHttpClient(IRestRequest request)
         {
             HttpClient httpClient;
-            if (Proxy != null)
+            var hasCookies = HasCookies || request.Parameters.Any(x => x.Type == ParameterType.Cookie);
+            if (HasProxy || hasCookies)
             {
                 var handler = new HttpClientHandler();
-                if (handler.SupportsProxy)
+                if (handler.SupportsProxy && HasProxy)
                     handler.Proxy = Proxy;
+                if (hasCookies)
+                {
+                    CookieContainer = handler.CookieContainer = CookieContainer ?? new CookieContainer();
+                    handler.UseCookies = true;
+                    var cookies = handler.CookieContainer.GetCookies(BaseUrl)
+                        .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
+                    foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !cookies.ContainsKey(x.Name)))
+                        handler.CookieContainer.Add(BaseUrl, new Cookie(cookieParameter.Name, string.Format("{0}", cookieParameter.Value)));
+                }
+                //if (handler.SupportsAutomaticDecompression)
+                //    handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
                 httpClient = new HttpClient(handler, true);
             }
             else
