@@ -21,9 +21,6 @@ Supported Platforms:
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
-            <dependency id="Microsoft.Net.Http" version="2.2.15" />
-            <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
-            <dependency id="Newtonsoft.Json" version="5.0.6" />
             <dependency id="FubarCoder.RestSharp.Portable" version="1.0.8.0" />
             <dependency id="Microsoft.Bcl.Compression" version="3.9.73" />
         </dependencies>
