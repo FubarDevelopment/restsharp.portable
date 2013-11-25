@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FubarCoder.RestSharp.Portable</id>
-        <version>1.0.8.0</version>
+        <version>1.0.9.0</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
