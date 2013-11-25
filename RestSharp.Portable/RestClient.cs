@@ -30,6 +30,8 @@ namespace RestSharp.Portable
 
         public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
 
+        public bool IgnoreResponseStatusCode { get; set; }
+
         public RestClient()
         {
             // register default handlers
@@ -133,6 +135,8 @@ namespace RestSharp.Portable
                 message.Content = bodyData;
 
             var response = await httpClient.SendAsync(message);
+            if (!IgnoreResponseStatusCode)
+                response.EnsureSuccessStatusCode();
             return response;
         }
 
