@@ -19,6 +19,15 @@ namespace RestSharp.Portable
         private List<Parameter> _parameters = new List<Parameter>();
 
         /// <summary>
+        /// Constructor that initializes the resource path, HTTP GET request method and the JSON serializer as default serializer
+        /// </summary>
+        /// <param name="resource"></param>
+        public RestRequest(string resource)
+            : this(resource, HttpMethod.Get)
+        {
+        }
+
+        /// <summary>
         /// Constructor that initializes the resource path, HTTP request method and the JSON serializer as default serializer
         /// </summary>
         /// <param name="resource"></param>
@@ -28,6 +37,25 @@ namespace RestSharp.Portable
             Method = method;
             Resource = resource;
             Serializer = new Serializers.JsonSerializer();
+        }
+
+        /// <summary>
+        /// Constructor that initializes the resource path, HTTP GET request method and the JSON serializer as default serializer
+        /// </summary>
+        /// <param name="resource"></param>
+        public RestRequest(Uri resource)
+            : this(resource, HttpMethod.Get)
+        {
+        }
+
+        /// <summary>
+        /// Constructor that initializes the resource path, HTTP request method and the JSON serializer as default serializer
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="method"></param>
+        public RestRequest(Uri resource, HttpMethod method)
+            : this((resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString), method)
+        {
         }
 
         /// <summary>
