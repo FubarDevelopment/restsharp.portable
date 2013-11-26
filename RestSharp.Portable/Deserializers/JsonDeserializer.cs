@@ -24,13 +24,17 @@ namespace RestSharp.Portable.Deserializers
             using (var reader = new StreamReader(input))
             {
                 var serializer = new JsonSerializer();
+                ConfigureSerializer(serializer);
                 return serializer.Deserialize<T>(new JsonTextReader(reader));
             }
         }
 
         /// <summary>
-        /// The date format to use during the deserialization
+        /// Configure the JsonSerializer
         /// </summary>
-        public string DateFormat { get; set; }
+        /// <param name="serializer">The serializer to configure</param>
+        protected virtual void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
+        {
+        }
     }
 }

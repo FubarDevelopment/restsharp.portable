@@ -18,10 +18,6 @@ namespace RestSharp.Portable.Serializers
         /// <returns>Byte array to send in the request body</returns>
         byte[] Serialize(object obj);
         /// <summary>
-        /// The date format to use during the serialization
-        /// </summary>
-        string DateFormat { get; set; }
-        /// <summary>
         /// Content type produced by the serializer
         /// </summary>
         MediaTypeHeaderValue ContentType { get; set; }

@@ -25,6 +25,14 @@ namespace RestSharp.Portable.Serializers
         }
 
         /// <summary>
+        /// Configure the JsonSerializer
+        /// </summary>
+        /// <param name="serializer">The serializer to configure</param>
+        protected virtual void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
+        {
+        }
+
+        /// <summary>
         /// Serialize the object into a byte array
         /// </summary>
         /// <param name="obj">Object to serialize</param>
@@ -32,16 +40,12 @@ namespace RestSharp.Portable.Serializers
         public byte[] Serialize(object obj)
         {
             var serializer = new Newtonsoft.Json.JsonSerializer();
+            ConfigureSerializer(serializer);
             var output = new System.IO.MemoryStream();
             using (var writer = new System.IO.StreamWriter(output))
                 serializer.Serialize(writer, obj);
             return output.ToArray();
         }
-
-        /// <summary>
-        /// The date format to use during the serialization
-        /// </summary>
-        public string DateFormat { get; set; }
 
         /// <summary>
         /// Content type produced by the serializer

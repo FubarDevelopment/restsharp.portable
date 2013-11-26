@@ -17,9 +17,5 @@ namespace RestSharp.Portable.Deserializers
         /// <param name="response">The response to deserialize the result from</param>
         /// <returns>The deserialized object</returns>
         T Deserialize<T>(IRestResponse response);
-        /// <summary>
-        /// The date format to use during the deserialization
-        /// </summary>
-        string DateFormat { get; set; }
     }
 }
