@@ -59,11 +59,12 @@ namespace RestSharp.Portable
         /// </summary>
         public RestClient()
         {
+            var jsonDeserializer = new JsonDeserializer();
             // register default handlers
-            AddHandler("application/json", new JsonDeserializer());
-            AddHandler("text/json", new JsonDeserializer());
-            AddHandler("text/x-json", new JsonDeserializer());
-            AddHandler("text/javascript", new JsonDeserializer());
+            AddHandler("application/json", jsonDeserializer);
+            AddHandler("text/json", jsonDeserializer);
+            AddHandler("text/x-json", jsonDeserializer);
+            AddHandler("text/javascript", jsonDeserializer);
         }
 
         /// <summary>
@@ -283,6 +284,24 @@ namespace RestSharp.Portable
             if (_contentHandlers.ContainsKey("*"))
                 return _contentHandlers["*"];
             return null;
+        }
+
+        /// <summary>
+        /// Replace all handlers of a given type with a new deserializer
+        /// </summary>
+        /// <param name="oldType">The type of the old deserializer</param>
+        /// <param name="deserializer">The new deserializer</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        public IRestClient ReplaceHandler(Type oldType, IDeserializer deserializer)
+        {
+            var contentHandlersToReplace = _contentHandlers.Where(x => oldType.IsAssignableFrom(x.Value.GetType())).ToList();
+            foreach (var contentHandlerToReplace in contentHandlersToReplace)
+            {
+                _contentHandlers.Remove(contentHandlerToReplace.Key);
+                _contentHandlers.Add(contentHandlerToReplace.Key, deserializer);
+            }
+            UpdateAcceptsHeader();
+            return this;
         }
 
         /// <summary>

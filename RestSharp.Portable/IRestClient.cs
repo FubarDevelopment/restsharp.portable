@@ -78,6 +78,13 @@ namespace RestSharp.Portable
         /// This function returns NULL if the handler for the given content type cannot be found.
         /// </remarks>
         IDeserializer GetHandler(string contentType);
+        /// <summary>
+        /// Replace all handlers of a given type with a new deserializer
+        /// </summary>
+        /// <param name="oldType">The type of the old deserializer</param>
+        /// <param name="deserializer">The new deserializer</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        IRestClient ReplaceHandler(Type oldType, IDeserializer deserializer);
 
         /// <summary>
         /// Add a new content encoding handler
