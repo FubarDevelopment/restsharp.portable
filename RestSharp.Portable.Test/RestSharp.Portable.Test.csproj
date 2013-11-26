@@ -80,6 +80,7 @@
     <Compile Include="ResponseData\Currency.cs" />
     <Compile Include="ResponseData\CurrencyValue.cs" />
     <Compile Include="ResponseData\TickerData.cs" />
+    <Compile Include="Deserializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
