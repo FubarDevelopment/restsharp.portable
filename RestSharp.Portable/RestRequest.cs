@@ -45,28 +45,6 @@ namespace RestSharp.Portable
         public IList<Parameter> Parameters { get { return _parameters; } }
 
         /// <summary>
-        /// Body to add to the parameters
-        /// </summary>
-        /// <param name="obj">Object to serialize to the request body</param>
-        /// <returns>The request object to allow call chains</returns>
-        public IRestRequest AddBody(object obj)
-        {
-            var data = Serializer.Serialize(obj);
-            return AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = Serializer.ContentType });
-        }
-
-        /// <summary>
-        /// Generic add parameters function
-        /// </summary>
-        /// <param name="parameter">Parameter to add</param>
-        /// <returns>The request object to allow call chains</returns>
-        public IRestRequest AddParameter(Parameter parameter)
-        {
-            _parameters.Add(parameter);
-            return this;
-        }
-
-        /// <summary>
         /// The serializer that should serialize the body
         /// </summary>
         public Serializers.ISerializer Serializer { get; set; }

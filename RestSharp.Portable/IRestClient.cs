@@ -1,4 +1,5 @@
-﻿using RestSharp.Portable.Deserializers;
+﻿using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Encodings;
 using System;
 using System.Collections.Generic;

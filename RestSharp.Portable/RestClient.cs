@@ -1,4 +1,5 @@
-﻿using RestSharp.Portable.Deserializers;
+﻿using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Encodings;
 using System;
 using System.Collections.Generic;
@@ -105,12 +106,9 @@ namespace RestSharp.Portable
             return message;
         }
 
-        private bool HasCookies
+        private bool HasCookies(IRestRequest request)
         {
-            get
-            {
-                return CookieContainer != null;
-            }
+            return CookieContainer != null || request.Parameters.Any(x => x.Type == ParameterType.Cookie);
         }
 
         private bool HasProxy
@@ -124,7 +122,7 @@ namespace RestSharp.Portable
         private HttpClient CreateHttpClient(IRestRequest request)
         {
             HttpClient httpClient;
-            var hasCookies = HasCookies || request.Parameters.Any(x => x.Type == ParameterType.Cookie);
+            var hasCookies = HasCookies(request);
             if (HasProxy || hasCookies)
             {
                 var handler = new HttpClientHandler();

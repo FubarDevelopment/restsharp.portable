@@ -11,12 +11,6 @@ namespace RestSharp.Portable.Encodings
     public interface IEncoding
     {
         /// <summary>
-        /// Encode the content
-        /// </summary>
-        /// <param name="data">Content to encode</param>
-        /// <returns>Encoded content</returns>
-        byte[] Encode(byte[] data);
-        /// <summary>
         /// Decode the content
         /// </summary>
         /// <param name="data">Content to decode</param>

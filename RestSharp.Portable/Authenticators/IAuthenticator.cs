@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
     /// The authenticator interface

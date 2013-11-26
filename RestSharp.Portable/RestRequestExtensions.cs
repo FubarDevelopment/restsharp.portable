@@ -13,6 +13,30 @@ namespace RestSharp.Portable
     public static class RestRequestExtensions
     {
         /// <summary>
+        /// Body to add to the parameters
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddBody(this IRestRequest request, object obj)
+        {
+            var data = request.Serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = request.Serializer.ContentType });
+        }
+
+        /// <summary>
+        /// Generic add parameters function
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="parameter">Parameter to add</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddParameter(this IRestRequest request, Parameter parameter)
+        {
+            request.Parameters.Add(parameter);
+            return request;
+        }
+
+        /// <summary>
         /// Add an URL segment parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
