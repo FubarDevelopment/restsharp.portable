@@ -43,6 +43,7 @@
     <Compile Include="Deserializers\JsonDeserializer.cs" />
     <Compile Include="Encodings\IEncoding.cs" />
     <Compile Include="Authenticators\IAuthenticator.cs" />
+    <Compile Include="FileParameter.cs" />
     <Compile Include="IRestClient.cs" />
     <Compile Include="IRestRequest.cs" />
     <Compile Include="IRestResponse.cs" />

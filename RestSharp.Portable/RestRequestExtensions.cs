@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -100,11 +101,97 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Gets the content for a request
+        /// Add a file parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="bytes">File content</param>
+        /// <param name="fileName">File name</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddFile(this IRestRequest request, string name, byte[] bytes, string fileName)
+        {
+            return request.AddParameter(FileParameter.Create(name, bytes, fileName));
+        }
+
+        /// <summary>
+        /// Add a file parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="bytes">File content</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="contentType">Content type for the parameter (only applicable to a Body parameter)</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddFile(this IRestRequest request, string name, byte[] bytes, string fileName, MediaTypeHeaderValue contentType)
+        {
+            return request.AddParameter(FileParameter.Create(name, bytes, fileName, contentType));
+        }
+
+        /// <summary>
+        /// Add a file parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="input">File content</param>
+        /// <param name="fileName">File name</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddFile(this IRestRequest request, string name, Stream input, string fileName)
+        {
+            return request.AddParameter(FileParameter.Create(name, input, fileName));
+        }
+
+        /// <summary>
+        /// Add a file parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="input">File content</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="contentType">Content type for the parameter (only applicable to a Body parameter)</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddFile(this IRestRequest request, string name, Stream input, string fileName, MediaTypeHeaderValue contentType)
+        {
+            return request.AddParameter(FileParameter.Create(name, input, fileName, contentType));
+        }
+
+        /// <summary>
+        /// Add a file parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="parameter">The new file parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddFile(this IRestRequest request, FileParameter parameter)
+        {
+            return request.AddParameter(parameter);
+        }
+
+        /// <summary>
+        /// Get the GetOrPost parameters (by default without file parameters, which are POST-only)
+        /// </summary>
+        /// <param name="request">The request to get the parameters from</param>
+        /// <param name="withFile">true == with file parameters, but those are POST-only!</param>
+        /// <returns>The list of GET or POST parameters</returns>
+        public static IEnumerable<Parameter> GetGetOrPostParameters(this IRestRequest request, bool withFile = false)
+        {
+            return request.Parameters.Where(x => x.Type == ParameterType.GetOrPost && (withFile || !(x is FileParameter)));
+        }
+
+        /// <summary>
+        /// Get the file parameters
+        /// </summary>
+        /// <param name="request">The request to get the parameters from</param>
+        /// <returns>The list of POST file parameters</returns>
+        public static IEnumerable<FileParameter> GetFileParameters(this IRestRequest request)
+        {
+            return request.Parameters.OfType<FileParameter>();
+        }
+
+        /// <summary>
+        /// Gets the basic content (without files) for a request
         /// </summary>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static HttpContent GetContent(this IRestRequest request)
+        private static HttpContent GetBasicContent(this IRestRequest request)
         {
             HttpContent content;
             var body = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
@@ -126,16 +213,50 @@ namespace RestSharp.Portable
                 content.Headers.ContentType = contentType;
                 content.Headers.ContentLength = buffer.Length;
             }
-            else if (request.Method == HttpMethod.Post)
-            {
-                var postData = request.Parameters.Where(x => x.Type == ParameterType.GetOrPost)
-                    .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
-                    .ToList();
-                content = new FormUrlEncodedContent(postData);
-            }
             else
             {
-                content = null;
+                var getOrPostParameters = request.GetGetOrPostParameters().ToList();
+                if (request.Method == HttpMethod.Post && getOrPostParameters.Count != 0)
+                {
+                    var postData = getOrPostParameters
+                        .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
+                        .ToList();
+                    content = new FormUrlEncodedContent(postData);
+                }
+                else
+                {
+                    content = null;
+                }
+            }
+            return content;
+        }
+
+        /// <summary>
+        /// Gets the content for a request
+        /// </summary>
+        /// <param name="request">REST request to get the content for</param>
+        /// <param name="withFiles">true = Creates a multipart form data content containing the file parameters (if any)</param>
+        /// <returns>The HTTP content to be sent</returns>
+        public static HttpContent GetContent(this IRestRequest request, bool withFiles = true)
+        {
+            var content = request.GetBasicContent();
+            if (withFiles)
+            {
+                var fileParameters = request.GetFileParameters().ToList();
+                if (fileParameters.Count != 0)
+                {
+                    var fileContent = new MultipartFormDataContent();
+                    if (content != null)
+                        fileContent.Add(content);
+                    foreach (var file in fileParameters)
+                    {
+                        var data = new ByteArrayContent((byte[])file.Value);
+                        data.Headers.ContentType = file.ContentType;
+                        data.Headers.ContentLength = file.ContentLength;
+                        fileContent.Add(data, file.Name, file.FileName);
+                    }
+                    content = fileContent;
+                }
             }
             return content;
         }

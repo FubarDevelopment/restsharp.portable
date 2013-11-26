@@ -98,7 +98,8 @@ namespace RestSharp.Portable
                 }
                 if (request.Method == HttpMethod.Get)
                 {
-                    foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.GetOrPost))
+                    var getOrPostParameters = request.GetGetOrPostParameters().ToList();
+                    foreach (var param in getOrPostParameters)
                     {
                         if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                             queryString.Append("&");
