@@ -75,7 +75,7 @@
     <Compile Include="Converters\UnixTimeConverterFactor.cs" />
     <Compile Include="Converters\UnixTimeConverterMicroSec.cs" />
     <Compile Include="Converters\YesNoConverter.cs" />
-    <Compile Include="MtGoxDeflatedResponse.cs" />
+    <Compile Include="Encodings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseData\Currency.cs" />
     <Compile Include="ResponseData\CurrencyValue.cs" />
