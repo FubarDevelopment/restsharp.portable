@@ -95,7 +95,7 @@ namespace RestSharp.Portable
 
         private HttpMethod GetDefaultMethod(IRestRequest request)
         {
-            if (request.GetFileParameters().Any())
+            if (request.GetFileParameters().Any() || request.Parameters.Any(x => x.Type == ParameterType.RequestBody))
                 return HttpMethod.Post;
             return HttpMethod.Get;
         }
