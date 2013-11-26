@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -48,5 +49,10 @@ namespace RestSharp.Portable
         /// The serializer that should serialize the body
         /// </summary>
         public Serializers.ISerializer Serializer { get; set; }
+
+        /// <summary>
+        /// The credentials used for the request (e.g. NTLM authentication)
+        /// </summary>
+        public ICredentials Credentials { get; set; }
     }
 }

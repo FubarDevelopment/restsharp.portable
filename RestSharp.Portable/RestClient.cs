@@ -83,8 +83,6 @@ namespace RestSharp.Portable
                     continue;
                 request.Parameters.Add(parameter);
             }
-            if (Authenticator != null)
-                Authenticator.Authenticate(this, request);
         }
 
         private Uri BuildUri(IRestRequest request)
@@ -123,7 +121,7 @@ namespace RestSharp.Portable
         {
             HttpClient httpClient;
             var hasCookies = HasCookies(request);
-            if (HasProxy || hasCookies)
+            if (HasProxy || hasCookies || request.Credentials != null)
             {
                 var handler = new HttpClientHandler();
                 if (handler.SupportsProxy && HasProxy)
@@ -137,6 +135,8 @@ namespace RestSharp.Portable
                     foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !cookies.ContainsKey(x.Name)))
                         handler.CookieContainer.Add(BaseUrl, new Cookie(cookieParameter.Name, string.Format("{0}", cookieParameter.Value)));
                 }
+                if (request.Credentials != null)
+                    handler.Credentials = request.Credentials;
                 //if (handler.SupportsAutomaticDecompression)
                 //    handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
                 httpClient = new HttpClient(handler, true);
@@ -149,9 +149,16 @@ namespace RestSharp.Portable
             return httpClient;
         }
 
+        private void AuthenticateRequest(IRestRequest request)
+        {
+            if (Authenticator != null)
+                Authenticator.Authenticate(this, request);
+        }
+
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request)
         {
             ConfigureRequest(request);
+            AuthenticateRequest(request);
             var httpClient = CreateHttpClient(request);
             var message = CreateHttpRequestMessage(request);
             
