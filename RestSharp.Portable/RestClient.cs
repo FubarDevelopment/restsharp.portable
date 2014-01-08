@@ -93,23 +93,9 @@ namespace RestSharp.Portable
             return url;
         }
 
-        private HttpMethod GetDefaultMethod(IRestRequest request)
-        {
-            if (request.GetFileParameters().Any() || request.Parameters.Any(x => x.Type == ParameterType.RequestBody))
-                return HttpMethod.Post;
-            return HttpMethod.Get;
-        }
-
-        private HttpMethod GetHttpMethod(IRestRequest request)
-        {
-            if (request.Method == null || request.Method == HttpMethod.Get)
-                return GetDefaultMethod(request);
-            return request.Method;
-        }
-
         private HttpRequestMessage CreateHttpRequestMessage(IRestRequest request)
         {
-            var message = new HttpRequestMessage(GetHttpMethod(request), BuildUri(request));
+            var message = new HttpRequestMessage(request.GetHttpMethod(), BuildUri(request));
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (message.Headers.Contains(param.Name))

@@ -34,6 +34,7 @@ namespace RestSharp.Portable
         /// <param name="method"></param>
         public RestRequest(string resource, HttpMethod method)
         {
+            ContentCollectionMode = Portable.ContentCollectionMode.MultiPartForFileParameters;
             Method = method;
             Resource = resource;
             Serializer = new Serializers.JsonSerializer();
@@ -82,5 +83,10 @@ namespace RestSharp.Portable
         /// The credentials used for the request (e.g. NTLM authentication)
         /// </summary>
         public ICredentials Credentials { get; set; }
+
+        /// <summary>
+        /// Controls if we use basic content or multi part content by default.
+        /// </summary>
+        public ContentCollectionMode ContentCollectionMode { get; set; }
     }
 }

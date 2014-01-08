@@ -96,7 +96,7 @@ namespace RestSharp.Portable
                         queryString.Append("&");
                     queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
                 }
-                if (request.Method == HttpMethod.Get)
+                if (request.GetHttpMethod() == HttpMethod.Get)
                 {
                     var getOrPostParameters = request.GetGetOrPostParameters().ToList();
                     foreach (var param in getOrPostParameters)

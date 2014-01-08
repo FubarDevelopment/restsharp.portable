@@ -34,5 +34,9 @@ namespace RestSharp.Portable
         /// The credentials used for the request (e.g. NTLM authentication)
         /// </summary>
         ICredentials Credentials { get; set; }
+        /// <summary>
+        /// Controls if we use basic content or multi part content by default.
+        /// </summary>
+        ContentCollectionMode ContentCollectionMode { get; set; }
     }
 }

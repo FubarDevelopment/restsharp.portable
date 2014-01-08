@@ -187,6 +187,59 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Returns the HTTP method GET or POST - depending on the parameters
+        /// </summary>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <returns>GET or POST</returns>
+        internal static HttpMethod GetDefaultMethod(this IRestRequest request)
+        {
+            if (request.GetFileParameters().Any() || request.Parameters.Any(x => x.Type == ParameterType.RequestBody))
+                return HttpMethod.Post;
+            return HttpMethod.Get;
+        }
+
+        /// <summary>
+        /// Returns the real HTTP method that must be used
+        /// </summary>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <returns>The real HTTP method that must be used</returns>
+        internal static HttpMethod GetHttpMethod(this IRestRequest request)
+        {
+            if (request.Method == null || request.Method == HttpMethod.Get)
+                return GetDefaultMethod(request);
+            return request.Method;
+        }
+
+        /// <summary>
+        /// Returns the HttpContent for the body parameter
+        /// </summary>
+        /// <param name="request">The request the body parameter belongs to</param>
+        /// <param name="body">The body parameter</param>
+        /// <returns>The resulting HttpContent</returns>
+        private static HttpContent GetBodyContent(this IRestRequest request, Parameter body)
+        {
+            if (body == null)
+                return null;
+
+            MediaTypeHeaderValue contentType;
+            byte[] buffer;
+            if (body.Value is byte[])
+            {
+                buffer = (byte[])body.Value;
+                contentType = body.ContentType;
+            }
+            else
+            {
+                buffer = request.Serializer.Serialize(body.Value);
+                contentType = request.Serializer.ContentType;
+            }
+            var content = new ByteArrayContent(buffer);
+            content.Headers.ContentType = contentType;
+            content.Headers.ContentLength = buffer.Length;
+            return content;
+        }
+
+        /// <summary>
         /// Gets the basic content (without files) for a request
         /// </summary>
         /// <param name="request">REST request to get the content for</param>
@@ -197,26 +250,12 @@ namespace RestSharp.Portable
             var body = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
             if (body != null)
             {
-                MediaTypeHeaderValue contentType;
-                byte[] buffer;
-                if (body.Value is byte[])
-                {
-                    buffer = (byte[])body.Value;
-                    contentType = body.ContentType;
-                }
-                else
-                {
-                    buffer = request.Serializer.Serialize(body.Value);
-                    contentType = request.Serializer.ContentType;
-                }
-                content = new ByteArrayContent(buffer);
-                content.Headers.ContentType = contentType;
-                content.Headers.ContentLength = buffer.Length;
+                content = request.GetBodyContent(body);
             }
             else
             {
                 var getOrPostParameters = request.GetGetOrPostParameters().ToList();
-                if (request.Method == HttpMethod.Post && getOrPostParameters.Count != 0)
+                if (request.GetHttpMethod() == HttpMethod.Post && getOrPostParameters.Count != 0)
                 {
                     var postData = getOrPostParameters
                         .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
@@ -232,31 +271,77 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Gets the multi-part content (with files) for a request
+        /// </summary>
+        /// <param name="request">REST request to get the content for</param>
+        /// <returns>The HTTP content to be sent</returns>
+        private static HttpContent GetMultiPartContent(this IRestRequest request)
+        {
+            var isPostMethod = request.GetHttpMethod() == HttpMethod.Post;
+            var multipartContent = new MultipartFormDataContent();
+            foreach (var parameter in request.Parameters)
+            {
+                if (parameter is FileParameter)
+                {
+                    var file = (FileParameter)parameter;
+                    var data = new ByteArrayContent((byte[])file.Value);
+                    data.Headers.ContentType = file.ContentType;
+                    data.Headers.ContentLength = file.ContentLength;
+                    multipartContent.Add(data, file.Name, file.FileName);
+                }
+                else if (isPostMethod && parameter.Type == ParameterType.GetOrPost)
+                {
+                    HttpContent data;
+                    if (parameter.Value is byte[])
+                    {
+                        var rawData = (byte[])parameter.Value;
+                        data = new ByteArrayContent(rawData);
+                        data.Headers.ContentType = parameter.ContentType ?? new MediaTypeHeaderValue("application/octet-stream");
+                        data.Headers.ContentLength = rawData.Length;
+                        multipartContent.Add(data, parameter.Name);
+                    }
+                    else
+                    {
+                        var value = string.Format("{0}", parameter.Value);
+                        data = new StringContent(value, Encoding.UTF8);
+                        if (parameter.ContentType != null)
+                            data.Headers.ContentType = parameter.ContentType;
+                        multipartContent.Add(data, parameter.Name);
+                    }
+                }
+                else if (parameter.Type == ParameterType.RequestBody)
+                {
+                    var data = request.GetBodyContent(parameter);
+                    multipartContent.Add(data, parameter.Name);
+                }
+            }
+            return multipartContent;
+        }
+
+        /// <summary>
         /// Gets the content for a request
         /// </summary>
         /// <param name="request">REST request to get the content for</param>
-        /// <param name="withFiles">true = Creates a multipart form data content containing the file parameters (if any)</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static HttpContent GetContent(this IRestRequest request, bool withFiles = true)
+        public static HttpContent GetContent(this IRestRequest request)
         {
-            var content = request.GetBasicContent();
-            if (withFiles)
+            HttpContent content;
+            var collectionMode = request.ContentCollectionMode;
+            if (collectionMode != ContentCollectionMode.BasicContent)
             {
                 var fileParameters = request.GetFileParameters().ToList();
-                if (fileParameters.Count != 0)
+                if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
                 {
-                    var fileContent = new MultipartFormDataContent();
-                    if (content != null)
-                        fileContent.Add(content);
-                    foreach (var file in fileParameters)
-                    {
-                        var data = new ByteArrayContent((byte[])file.Value);
-                        data.Headers.ContentType = file.ContentType;
-                        data.Headers.ContentLength = file.ContentLength;
-                        fileContent.Add(data, file.Name, file.FileName);
-                    }
-                    content = fileContent;
+                    content = request.GetMultiPartContent();
                 }
+                else
+                {
+                    content = request.GetBasicContent();
+                }
+            }
+            else
+            {
+                content = request.GetBasicContent();
             }
             return content;
         }
