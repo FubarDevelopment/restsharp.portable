@@ -36,6 +36,7 @@
     <DocumentationFile>bin\Release\RestSharp.Portable.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Authenticators\HttpDigestAuthenticator.cs" />
     <Compile Include="Authenticators\HttpBasicAuthenticator.cs" />
     <Compile Include="Authenticators\IRoundTripAuthenticator.cs" />
     <Compile Include="Authenticators\NtlmAuthenticator.cs" />
@@ -59,6 +60,13 @@
     <Compile Include="RestResponse.cs" />
     <Compile Include="Serializers\ISerializer.cs" />
     <Compile Include="Serializers\JsonSerializer.cs" />
+    <Compile Include="System\Security\Cryptography\CryptographicException.cs" />
+    <Compile Include="System\Security\Cryptography\CryptographicUnexpectedOperationException.cs" />
+    <Compile Include="System\Security\Cryptography\HashAlgorithm.cs" />
+    <Compile Include="System\Security\Cryptography\ICryptoTransform.cs" />
+    <Compile Include="System\Security\Cryptography\MD5.cs" />
+    <Compile Include="System\Security\Cryptography\MD5CryptoServiceProvider.cs" />
+    <Compile Include="System\Security\Cryptography\MD5Managed.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
