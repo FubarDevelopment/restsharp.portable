@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FubarCoder.RestSharp.Portable</id>
-        <version>1.3.0.0</version>
+        <version>1.3.1.0</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
@@ -18,7 +18,8 @@ Supported Platforms:
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
         <releaseNotes>- HTTP headers for responses
-- HTTP Digest authentication</releaseNotes>
+- HTTP digest authentication
+- Fixed bug where the HTTP digest authenticator used GET instead of POST</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
