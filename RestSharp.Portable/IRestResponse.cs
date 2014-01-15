@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable
@@ -26,6 +27,10 @@ namespace RestSharp.Portable
         /// Content type of the raw data
         /// </summary>
         string ContentType { get; }
+        /// <summary>
+        /// Response headers (without content headers)
+        /// </summary>
+        HttpHeaders Headers { get; }
     }
 
     /// <summary>

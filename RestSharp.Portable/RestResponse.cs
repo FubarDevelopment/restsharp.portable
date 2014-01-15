@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,6 +50,8 @@ namespace RestSharp.Portable
         /// <returns>Task, because this function runs asynchronously</returns>
         protected internal async virtual Task LoadResponse(HttpResponseMessage response)
         {
+            Headers = response.Headers;
+
             ResponseUri = response.Headers.Location ?? Client.BuildUrl(Request, false);
             var data = await response.Content.ReadAsByteArrayAsync();
             
@@ -72,6 +75,11 @@ namespace RestSharp.Portable
         /// Content type of the raw data
         /// </summary>
         public string ContentType { get; private set; }
+
+        /// <summary>
+        /// Response headers (without content headers)
+        /// </summary>
+        public HttpHeaders Headers { get; private set; }
     }
 
     /// <summary>
