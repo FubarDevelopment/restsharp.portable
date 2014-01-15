@@ -8,6 +8,9 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// The default HTTP Basic authenticator
     /// </summary>
+    /// <remarks>
+    /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
+    /// </remarks>
     public class HttpBasicAuthenticator : IAuthenticator
     {
         private readonly string _username;
