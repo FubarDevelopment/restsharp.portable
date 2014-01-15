@@ -101,7 +101,7 @@ namespace RestSharp.Portable.Authenticators
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
             var ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
-            var ha2 = CalculateMd5Hash(string.Format("{0}:{1}", restRequest.Method.Method, pathAndQuery));
+            var ha2 = CalculateMd5Hash(string.Format("{0}:{1}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery));
             var digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2:00000000}:{3}:{4}:{5}", ha1, _nonce, _nc, _cnonce, _qop, ha2));
 
             var result = new StringBuilder();
