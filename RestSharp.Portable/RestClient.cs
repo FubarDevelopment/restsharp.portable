@@ -95,7 +95,7 @@ namespace RestSharp.Portable
 
         private HttpRequestMessage CreateHttpRequestMessage(IRestRequest request)
         {
-            var message = new HttpRequestMessage(request.GetHttpMethod(), BuildUri(request));
+            var message = new HttpRequestMessage(request.GetEffectiveHttpMethod(), BuildUri(request));
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (message.Headers.Contains(param.Name))

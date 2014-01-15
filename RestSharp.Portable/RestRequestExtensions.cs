@@ -199,14 +199,14 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Returns the real HTTP method that must be used
+        /// Returns the real HTTP method that must be used to execute a request
         /// </summary>
         /// <param name="request">The request to determine the HTTP method for</param>
         /// <returns>The real HTTP method that must be used</returns>
-        internal static HttpMethod GetHttpMethod(this IRestRequest request)
+        public static HttpMethod GetEffectiveHttpMethod(this IRestRequest request)
         {
             if (request.Method == null || request.Method == HttpMethod.Get)
-                return GetDefaultMethod(request);
+                return request.GetDefaultMethod();
             return request.Method;
         }
 
@@ -255,7 +255,7 @@ namespace RestSharp.Portable
             else
             {
                 var getOrPostParameters = request.GetGetOrPostParameters().ToList();
-                if (request.GetHttpMethod() == HttpMethod.Post && getOrPostParameters.Count != 0)
+                if (request.GetEffectiveHttpMethod() == HttpMethod.Post && getOrPostParameters.Count != 0)
                 {
                     var postData = getOrPostParameters
                         .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
@@ -277,7 +277,7 @@ namespace RestSharp.Portable
         /// <returns>The HTTP content to be sent</returns>
         private static HttpContent GetMultiPartContent(this IRestRequest request)
         {
-            var isPostMethod = request.GetHttpMethod() == HttpMethod.Post;
+            var isPostMethod = request.GetEffectiveHttpMethod() == HttpMethod.Post;
             var multipartContent = new MultipartFormDataContent();
             foreach (var parameter in request.Parameters)
             {
