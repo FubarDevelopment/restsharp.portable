@@ -158,19 +158,35 @@ namespace RestSharp.Portable
 
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request)
         {
+            var retryWithAuthentication = true;
             ConfigureRequest(request);
-            AuthenticateRequest(request);
-            var httpClient = CreateHttpClient(request);
-            var message = CreateHttpRequestMessage(request);
-            
-            var bodyData = request.GetContent();
-            if (bodyData != null)
-                message.Content = bodyData;
+            for (; ; )
+            {
+                AuthenticateRequest(request);
+                var httpClient = CreateHttpClient(request);
+                var message = CreateHttpRequestMessage(request);
 
-            var response = await httpClient.SendAsync(message);
-            if (!IgnoreResponseStatusCode)
-                response.EnsureSuccessStatusCode();
-            return response;
+                var bodyData = request.GetContent();
+                if (bodyData != null)
+                    message.Content = bodyData;
+
+                var response = await httpClient.SendAsync(message);
+                if (response.StatusCode == HttpStatusCode.Unauthorized && retryWithAuthentication)
+                {
+                    var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+                    if (roundTripAuthenticator != null)
+                    {
+                        var restResponse = new RestResponse(this, request);
+                        await restResponse.LoadResponse(response);
+                        roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                        retryWithAuthentication = false;
+                        continue;
+                    }
+                }
+                if (!IgnoreResponseStatusCode)
+                    response.EnsureSuccessStatusCode();
+                return response;
+            }
         }
 
         /// <summary>
