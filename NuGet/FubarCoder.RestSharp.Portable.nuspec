@@ -17,9 +17,7 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>- HTTP headers for responses
-- HTTP digest authentication
-- Fixed bug where the HTTP digest authenticator used GET instead of POST</releaseNotes>
+        <releaseNotes>Support for C++/CLI</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
@@ -30,9 +28,13 @@ Supported Platforms:
         </dependencies>
     </metadata>
     <files>
-        <file src="RestSharp.Portable\bin\Release\RestSharp.Portable.dll" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll" />
-        <file src="RestSharp.Portable\bin\Release\RestSharp.Portable.dll.config" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll.config" />
-        <file src="RestSharp.Portable\bin\Release\RestSharp.Portable.XML" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.xml" />
+        <file src="_._" target="build\native\" />
+        <file src="RestSharp.Portable\install.ps1" target="tools\native\" />
+        <file src="RestSharp.Portable\uninstall.ps1" target="tools\native\" />
+		<file src="ensureRedirect.xml" target="lib\portable-net4+sl5+wp8+win8\" />
+        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll" target="lib\portable-net4+sl5+wp8+win8\" />
+        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll.config" target="lib\portable-net4+sl5+wp8+win8\" />
+        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.XML" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.xml" />
         <file src="license.txt" target="license.txt" />
     </files>
 </package>

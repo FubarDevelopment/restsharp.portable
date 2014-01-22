@@ -16,8 +16,7 @@ Supported Platforms:
 - Windows Phone 8
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
-        <releaseNotes>Breaking changes:
-- IEncoding doesn't contain Encode function any more (not needed)</releaseNotes>
+        <releaseNotes>Support for C++/CLI</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
@@ -27,8 +26,12 @@ Supported Platforms:
         </dependencies>
     </metadata>
     <files>
-        <file src="RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.dll" target="lib\portable-net45+wp8+win8\RestSharp.Portable.Encodings.dll" />
-        <file src="RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.XML" target="lib\portable-net45+wp8+win8\RestSharp.Portable.Encodings.xml" />
+        <file src="_._" target="build\native\" />
+        <file src="RestSharp.Portable.Encodings\install.ps1" target="tools\native\" />
+        <file src="RestSharp.Portable.Encodings\uninstall.ps1" target="tools\native\" />
+		<file src="ensureRedirect.xml" target="lib\portable-net4+sl5+wp8+win8\" />
+        <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.dll" target="lib\portable-net45+wp8+win8\" />
+        <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.XML" target="lib\portable-net45+wp8+win8\RestSharp.Portable.Encodings.xml" />
         <file src="license.txt" target="license.txt" />
     </files>
 </package>
