@@ -44,6 +44,14 @@ namespace RestSharp.Portable
     public class Parameter
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public Parameter()
+        {
+            ValidateOnAdd = true;
+        }
+
+        /// <summary>
         /// Name of the parameter
         /// </summary>
         public string Name { get; set; }
@@ -65,5 +73,13 @@ namespace RestSharp.Portable
         /// Only applicable when Type is Body.
         /// </remarks>
         public MediaTypeHeaderValue ContentType { get; set; }
+
+        /// <summary>
+        /// Should this parameter be validated?
+        /// </summary>
+        /// <remarks>
+        /// Applies only HTTP header parameters
+        /// </remarks>
+        public bool ValidateOnAdd { get; set; }
     }
 }
