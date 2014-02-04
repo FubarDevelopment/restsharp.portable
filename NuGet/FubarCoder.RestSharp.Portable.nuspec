@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FubarCoder.RestSharp.Portable</id>
-        <version>1.4.0.0</version>
+        <version>1.4.1.0</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
@@ -17,7 +17,7 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>Support for C++/CLI (.NET 4.0+)</releaseNotes>
+        <releaseNotes>Fixed support for C++/CLI (.NET 4.0+) and mono</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
@@ -28,12 +28,12 @@ Supported Platforms:
         </dependencies>
     </metadata>
     <files>
-        <file src="_._" target="lib\native\" />
-        <file src="RestSharp.Portable\install.ps1" target="tools\native\" />
-        <file src="RestSharp.Portable\uninstall.ps1" target="tools\native\" />
-        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll" target="lib\portable-net4+sl5+wp8+win8\" />
-        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll.config" target="lib\portable-net4+sl5+wp8+win8\" />
+        <file src="lib\native\_._" target="lib\native\_._" />
+        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll" />
+        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll.config" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll.config" />
         <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.XML" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.xml" />
+        <file src="RestSharp.Portable\install.ps1" target="tools\native\install.ps1" />
+        <file src="RestSharp.Portable\uninstall.ps1" target="tools\native\uninstall.ps1" />
         <file src="license.txt" target="license.txt" />
     </files>
 </package>
