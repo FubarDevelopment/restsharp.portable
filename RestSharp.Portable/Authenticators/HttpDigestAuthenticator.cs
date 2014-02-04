@@ -15,6 +15,9 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// HTTP Digest authenticator
     /// </summary>
+    /// <remarks>
+    /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
+    /// </remarks>
     public class HttpDigestAuthenticator : IRoundTripAuthenticator
     {
 
