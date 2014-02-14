@@ -72,6 +72,10 @@ namespace RestSharp.Portable
             AddHandler("text/json", jsonDeserializer);
             AddHandler("text/x-json", jsonDeserializer);
             AddHandler("text/javascript", jsonDeserializer);
+
+            var xmlDataContractDeserializer = new Deserializers.XmlDataContractDeserializer();
+            AddHandler("application/xml", xmlDataContractDeserializer);
+            AddHandler("text/xml", xmlDataContractDeserializer);
         }
 
         /// <summary>

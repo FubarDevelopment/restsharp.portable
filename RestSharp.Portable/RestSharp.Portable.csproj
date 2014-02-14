@@ -44,6 +44,7 @@
     <Compile Include="ContentCollectionMode.cs" />
     <Compile Include="Deserializers\IDeserializer.cs" />
     <Compile Include="Deserializers\JsonDeserializer.cs" />
+    <Compile Include="Deserializers\XmlDataContractDeserializer.cs" />
     <Compile Include="Encodings\IEncoding.cs" />
     <Compile Include="Authenticators\IAuthenticator.cs" />
     <Compile Include="FileParameter.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="RestRequest.cs" />
     <Compile Include="RestRequestExtensions.cs" />
     <Compile Include="RestResponse.cs" />
+    <Compile Include="Serializers\XmlDataContractSerializer.cs" />
     <Compile Include="Serializers\ISerializer.cs" />
     <Compile Include="Serializers\JsonSerializer.cs" />
     <Compile Include="System\Security\Cryptography\CryptographicException.cs" />
