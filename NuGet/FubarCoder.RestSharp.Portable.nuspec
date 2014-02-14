@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>FubarCoder.RestSharp.Portable</id>
-        <version>1.4.2.0</version>
+        <version>1.4.2.1</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
@@ -17,7 +17,7 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>Added a HTTP client factory</releaseNotes>
+        <releaseNotes>Added a HTTP client factory and made some minor tweaks.</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
