@@ -30,10 +30,9 @@ Supported Platforms:
     <files>
         <file src="lib\native\_._" target="lib\native\_._" />
         <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll" />
-        <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.dll.config" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.dll.config" />
         <file src="..\RestSharp.Portable\bin\Release\RestSharp.Portable.XML" target="lib\portable-net4+sl5+wp8+win8\RestSharp.Portable.xml" />
-        <file src="RestSharp.Portable\install.ps1" target="tools\native\install.ps1" />
-        <file src="RestSharp.Portable\uninstall.ps1" target="tools\native\uninstall.ps1" />
+        <file src="..\RestSharp.Portable\NuGet\install.ps1" target="tools\native\install.ps1" />
+        <file src="..\RestSharp.Portable\NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
         <file src="license.txt" target="license.txt" />
     </files>
 </package>

@@ -47,6 +47,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NuGet\install.ps1" />
+    <None Include="NuGet\uninstall.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

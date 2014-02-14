@@ -27,8 +27,8 @@ Supported Platforms:
     </metadata>
     <files>
         <file src="lib\native\_._" target="lib\native\_._" />
-        <file src="RestSharp.Portable.Encodings\install.ps1" target="tools\native\" />
-        <file src="RestSharp.Portable.Encodings\uninstall.ps1" target="tools\native\" />
+        <file src="..\RestSharp.Portable.Encodings\NuGet\install.ps1" target="tools\native\" />
+        <file src="..\RestSharp.Portable.Encodings\NuGet\uninstall.ps1" target="tools\native\" />
         <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.dll" target="lib\portable-net45+wp8+win8\" />
         <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.XML" target="lib\portable-net45+wp8+win8\RestSharp.Portable.Encodings.xml" />
         <file src="license.txt" target="license.txt" />

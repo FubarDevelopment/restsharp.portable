@@ -69,6 +69,8 @@
     <Compile Include="System\Security\Cryptography\MD5Managed.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="NuGet\install.ps1" />
+    <None Include="NuGet\uninstall.ps1" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

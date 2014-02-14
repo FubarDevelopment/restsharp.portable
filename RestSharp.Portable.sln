@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable", "RestSharp.Portable\RestSharp.Portable.csproj", "{59F07751-2987-43C0-B5E1-55128C5E2CC4}"
 EndProject
@@ -15,6 +15,21 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Test", "RestSharp.Portable.Test\RestSharp.Portable.Test.csproj", "{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.csproj", "{674469CC-9563-4618-A8E0-7C3A980647C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B-25BC-47D2-8D80-00BA0ADD9732}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\ensureRedirect.xml = NuGet\ensureRedirect.xml
+		NuGet\FubarCoder.RestSharp.Portable.Encodings.nuspec = NuGet\FubarCoder.RestSharp.Portable.Encodings.nuspec
+		NuGet\FubarCoder.RestSharp.Portable.nuspec = NuGet\FubarCoder.RestSharp.Portable.nuspec
+		NuGet\license.txt = NuGet\license.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "native", "native", "{888BC352-3848-4447-A098-FA4CD300892D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\lib\native\_._ = NuGet\lib\native\_._
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,5 +52,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD} = {E881237B-25BC-47D2-8D80-00BA0ADD9732}
+		{888BC352-3848-4447-A098-FA4CD300892D} = {378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}
 	EndGlobalSection
 EndGlobal
