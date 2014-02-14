@@ -17,7 +17,7 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>Fixed support for C++/CLI (.NET 4.0+) and mono</releaseNotes>
+        <releaseNotes>Added a HTTP client factory</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
