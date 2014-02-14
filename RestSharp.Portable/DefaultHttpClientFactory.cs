@@ -125,21 +125,15 @@ namespace RestSharp.Portable.HttpClientImpl
         }
 
         /// <summary>
-        /// Create the client
+        /// Create the client handler
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP client</param>
         /// <param name="request">The REST request for which the HTTP client is created</param>
-        /// <returns>A new HttpClient object</returns>
-        /// <remarks>
-        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
-        /// the data required for a proper configuration of the HttpClient.
-        /// </remarks>
-        public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
+        /// <returns>A new HttpClientHandler object</returns>
+        protected virtual HttpClientHandler CreateClientHandler(IRestClient client, IRestRequest request)
         {
-            HttpClient httpClient;
-
             var handler = new HttpClientHandler();
-            
+
             var proxy = GetProxy(client);
             if (handler.SupportsProxy && proxy != null)
                 handler.Proxy = proxy;
@@ -157,6 +151,25 @@ namespace RestSharp.Portable.HttpClientImpl
 
             //if (handler.SupportsAutomaticDecompression)
             //    handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+
+            return handler;
+        }
+
+        /// <summary>
+        /// Create the client
+        /// </summary>
+        /// <param name="client">The REST client that wants to create the HTTP client</param>
+        /// <param name="request">The REST request for which the HTTP client is created</param>
+        /// <returns>A new HttpClient object</returns>
+        /// <remarks>
+        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
+        /// the data required for a proper configuration of the HttpClient.
+        /// </remarks>
+        public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
+        {
+            HttpClient httpClient;
+
+            var handler = CreateClientHandler(client, request);
 
             httpClient = new HttpClient(handler, true);
             httpClient.BaseAddress = GetBaseAddress(client);
