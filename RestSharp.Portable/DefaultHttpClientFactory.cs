@@ -125,12 +125,12 @@ namespace RestSharp.Portable.HttpClientImpl
         }
 
         /// <summary>
-        /// Create the client handler
+        /// Create the message handler
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP client</param>
         /// <param name="request">The REST request for which the HTTP client is created</param>
-        /// <returns>A new HttpClientHandler object</returns>
-        protected virtual HttpClientHandler CreateClientHandler(IRestClient client, IRestRequest request)
+        /// <returns>A new HttpMessageHandler object</returns>
+        protected virtual HttpMessageHandler CreateMessageHandler(IRestClient client, IRestRequest request)
         {
             var handler = new HttpClientHandler();
 
@@ -169,7 +169,7 @@ namespace RestSharp.Portable.HttpClientImpl
         {
             HttpClient httpClient;
 
-            var handler = CreateClientHandler(client, request);
+            var handler = CreateMessageHandler(client, request);
 
             httpClient = new HttpClient(handler, true);
             httpClient.BaseAddress = GetBaseAddress(client);
