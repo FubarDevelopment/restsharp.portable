@@ -27,6 +27,11 @@ namespace RestSharp.Portable
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
 
         /// <summary>
+        /// HTTP client factory used to create IHttpClient implementations
+        /// </summary>
+        public IHttpClientFactory HttpClientFactory { get; set; }
+
+        /// <summary>
         /// Base URL for all requests
         /// </summary>
         public Uri BaseUrl { get; set; }
@@ -59,6 +64,8 @@ namespace RestSharp.Portable
         /// </summary>
         public RestClient()
         {
+            HttpClientFactory = new HttpClientImpl.DefaultHttpClientFactory();
+
             var jsonDeserializer = new JsonDeserializer();
             // register default handlers
             AddHandler("application/json", jsonDeserializer);
@@ -86,78 +93,6 @@ namespace RestSharp.Portable
             }
         }
 
-        private Uri BuildUri(IRestRequest request)
-        {
-            var fullUrl = this.BuildUrl(request);
-            var url = BaseUrl.MakeRelativeUri(fullUrl);
-            return url;
-        }
-
-        private HttpRequestMessage CreateHttpRequestMessage(IRestRequest request)
-        {
-            var message = new HttpRequestMessage(request.GetEffectiveHttpMethod(), BuildUri(request));
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
-            {
-                if (message.Headers.Contains(param.Name))
-                    message.Headers.Remove(param.Name);
-                var paramValue = string.Format("{0}", param.Value);
-                if (param.ValidateOnAdd)
-                {
-                    message.Headers.Add(param.Name, paramValue);
-                }
-                else
-                {
-                    message.Headers.TryAddWithoutValidation(param.Name, paramValue);
-                }
-            }
-            return message;
-        }
-
-        private bool HasCookies(IRestRequest request)
-        {
-            return CookieContainer != null || request.Parameters.Any(x => x.Type == ParameterType.Cookie);
-        }
-
-        private bool HasProxy
-        {
-            get
-            {
-                return Proxy != null;
-            }
-        }
-
-        private HttpClient CreateHttpClient(IRestRequest request)
-        {
-            HttpClient httpClient;
-            var hasCookies = HasCookies(request);
-            if (HasProxy || hasCookies || request.Credentials != null)
-            {
-                var handler = new HttpClientHandler();
-                if (handler.SupportsProxy && HasProxy)
-                    handler.Proxy = Proxy;
-                if (hasCookies)
-                {
-                    CookieContainer = handler.CookieContainer = CookieContainer ?? new CookieContainer();
-                    handler.UseCookies = true;
-                    var cookies = handler.CookieContainer.GetCookies(BaseUrl)
-                        .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
-                    foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !cookies.ContainsKey(x.Name)))
-                        handler.CookieContainer.Add(BaseUrl, new Cookie(cookieParameter.Name, string.Format("{0}", cookieParameter.Value)));
-                }
-                if (request.Credentials != null)
-                    handler.Credentials = request.Credentials;
-                //if (handler.SupportsAutomaticDecompression)
-                //    handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-                httpClient = new HttpClient(handler, true);
-            }
-            else
-            {
-                httpClient = new HttpClient();
-            }
-            httpClient.BaseAddress = BaseUrl;
-            return httpClient;
-        }
-
         private void AuthenticateRequest(IRestRequest request)
         {
             if (Authenticator != null)
@@ -171,8 +106,8 @@ namespace RestSharp.Portable
             for (; ; )
             {
                 AuthenticateRequest(request);
-                var httpClient = CreateHttpClient(request);
-                var message = CreateHttpRequestMessage(request);
+                var httpClient = HttpClientFactory.CreateClient(this, request);
+                var message = HttpClientFactory.CreateRequestMessage(this, request);
 
                 var bodyData = request.GetContent();
                 if (bodyData != null)
