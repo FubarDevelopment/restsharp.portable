@@ -52,6 +52,9 @@ namespace RestSharp.Portable
         {
             Headers = response.Headers;
 
+            StatusCode = response.StatusCode;
+            StatusDescription = response.ReasonPhrase;
+
             ResponseUri = response.Headers.Location ?? Client.BuildUrl(Request, false);
             var data = await response.Content.ReadAsByteArrayAsync();
             
@@ -80,6 +83,16 @@ namespace RestSharp.Portable
         /// Response headers (without content headers)
         /// </summary>
         public HttpHeaders Headers { get; private set; }
+
+        /// <summary>
+        /// HTTP status code
+        /// </summary>
+        public HttpStatusCode StatusCode { get; private set; }
+
+        /// <summary>
+        /// Description for the HTTP status code
+        /// </summary>
+        public string StatusDescription { get; private set; }
     }
 
     /// <summary>

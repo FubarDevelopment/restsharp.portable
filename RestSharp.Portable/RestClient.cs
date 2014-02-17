@@ -81,10 +81,21 @@ namespace RestSharp.Portable
         /// <summary>
         /// Constructor that initializes the base URL and some default content handlers
         /// </summary>
+        /// <param name="baseUrl">Base URL</param>
         public RestClient(Uri baseUrl)
             : this()
         {
             BaseUrl = baseUrl;
+        }
+
+        /// <summary>
+        /// Constructor that initializes the base URL and some default content handlers
+        /// </summary>
+        /// <param name="baseUrl">Base URL</param>
+        public RestClient(string baseUrl)
+            : this(new Uri(baseUrl))
+        {
+
         }
 
         private void ConfigureRequest(IRestRequest request)
