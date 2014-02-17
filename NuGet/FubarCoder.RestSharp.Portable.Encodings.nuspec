@@ -22,7 +22,7 @@ Supported Platforms:
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
-            <dependency id="FubarCoder.RestSharp.Portable" version="1.5.0.0" />
+            <dependency id="FubarCoder.RestSharp.Portable" version="1.5.0.1" />
             <dependency id="Microsoft.Bcl.Compression" version="3.9.73" />
         </dependencies>
     </metadata>
