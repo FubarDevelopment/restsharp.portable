@@ -54,7 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FubarCoder.RestSharp.Portable.Encodings.nuspec" />
+    <None Include="FubarCoder.RestSharp.Portable.Encodings.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NuGet\install.ps1" />
     <None Include="NuGet\uninstall.ps1" />
     <None Include="packages.config" />
