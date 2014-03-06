@@ -4,3 +4,4 @@ obj/
 FubarCoder.RestSharp.Portable.*.nupkg
 *.suo
 packages/
+*.user
