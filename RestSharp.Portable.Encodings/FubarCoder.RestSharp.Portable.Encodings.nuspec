@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>FubarCoder.RestSharp.Portable.Encodings</id>
-        <version>1.5.0.1</version>
+        <id>FubarCoder.$id$</id>
+        <version>$version$</version>
         <title>RestSharp.Portable.Encodings</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
@@ -22,16 +22,13 @@ Supported Platforms:
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
-            <dependency id="FubarCoder.RestSharp.Portable" version="1.5.0.1" />
-            <dependency id="Microsoft.Bcl.Compression" version="3.9.73" />
+            <dependency id="FubarCoder.RestSharp.Portable" version="$version$" />
         </dependencies>
     </metadata>
     <files>
-        <file src="lib\native\_._" target="lib\native\_._" />
-        <file src="..\RestSharp.Portable.Encodings\NuGet\install.ps1" target="tools\native\" />
-        <file src="..\RestSharp.Portable.Encodings\NuGet\uninstall.ps1" target="tools\native\" />
-        <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.dll" target="lib\portable-net45+wp8+win8\" />
-        <file src="..\RestSharp.Portable.Encodings\bin\Release\RestSharp.Portable.Encodings.XML" target="lib\portable-net45+wp8+win8\RestSharp.Portable.Encodings.xml" />
-        <file src="license.txt" target="license.txt" />
+      <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
+      <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
+      <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
+      <file src="..\NuGet\license.txt" target="license.txt" />
     </files>
 </package>
