@@ -13,11 +13,13 @@
 Supported Platforms:
 - .NET Framework 4
 - .NET for Windows Store apps
+- .NET Native for Windows Store apps
 - Windows Phone 8
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>Fixed C++/CLI targets</releaseNotes>
+        <releaseNotes>- Fixed Android target which doesn't support the Proxy property
+- Support for .NET Native</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
@@ -27,5 +29,8 @@ Supported Platforms:
         <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
         <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
         <file src="..\NuGet\license.txt" target="license.txt" />
+        <file src="RestSharp.Portable.rd.xml" target="content\netcore" />
+        <file src="$OutDir$$TargetFileName$" target="lib\netcore" />
+        <file src="$OutDir$$TargetName$.XML" target="lib\netcore" />
     </files>
 </package>
