@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+  <Library Name="RestSharp.Portable">
+    <!-- Add your library directives here -->
+  </Library>
+  <Library Name="System.Net.Http">
+    <!-- Add your library directives here -->
+    <Namespace Name="System.Net.Http">
+      <Type Name="HttpClientHandler">
+        <Property Name="Proxy" Dynamic="Required" Browse="Required" />
+      </Type>
+    </Namespace>
+  </Library>
+</Directives>
