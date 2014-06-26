@@ -16,6 +16,16 @@ namespace RestSharp.Portable.HttpClientImpl
     /// </remarks>
     public class DefaultHttpClientFactory : IHttpClientFactory
     {
+        private readonly System.Reflection.PropertyInfo _proxyProperty;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public DefaultHttpClientFactory()
+        {
+            _proxyProperty = typeof(HttpClientHandler).GetProperty("Proxy");
+        }
+
         /// <summary>
         /// Returns if the HTTP client should be aware of cookies
         /// </summary>
@@ -135,8 +145,8 @@ namespace RestSharp.Portable.HttpClientImpl
             var handler = new HttpClientHandler();
 
             var proxy = GetProxy(client);
-            if (handler.SupportsProxy && proxy != null)
-                handler.Proxy = proxy;
+            if (handler.SupportsProxy && _proxyProperty != null && proxy != null)
+                _proxyProperty.SetValue(handler, proxy, null);
 
             var cookieContainer = GetCookies(client, request);
             if (cookieContainer != null)
