@@ -124,7 +124,7 @@ namespace RestSharp.Portable
         {
             await base.LoadResponse(response);
             var handler = Client.GetHandler(ContentType);
-            Data = handler.Deserialize<T>(this);
+            Data = (handler != null) ? handler.Deserialize<T>(this) : default(T);
         }
 
         /// <summary>
