@@ -4,9 +4,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace RestSharp.Portable.Test
 {
     [TestClass]
-    public class Deserializer
+    public class CustomDeserializer
     {
-        class CustomDeserializer : RestSharp.Portable.Deserializers.JsonDeserializer
+        class TestDeserializer : RestSharp.Portable.Deserializers.JsonDeserializer
         {
             protected override void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
             {
@@ -19,7 +19,7 @@ namespace RestSharp.Portable.Test
         public void TestReplaceContentTypeDeserializer()
         {
             var restClient = new RestClient();
-            var deserializer = new CustomDeserializer();
+            var deserializer = new TestDeserializer();
             restClient.ReplaceHandler(typeof(RestSharp.Portable.Deserializers.IDeserializer), deserializer);
             Assert.AreSame(deserializer, restClient.GetHandler("application/json"));
             Assert.AreSame(deserializer, restClient.GetHandler("text/json"));

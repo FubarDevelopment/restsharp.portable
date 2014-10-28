@@ -80,15 +80,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Converters\PriceConverter.cs" />
-    <Compile Include="Converters\UnixTimeConverterFactor.cs" />
-    <Compile Include="Converters\UnixTimeConverterMicroSec.cs" />
-    <Compile Include="Converters\YesNoConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResponseData\Currency.cs" />
-    <Compile Include="ResponseData\CurrencyValue.cs" />
-    <Compile Include="ResponseData\TickerData.cs" />
-    <Compile Include="Deserializer.cs" />
+    <Compile Include="CustomDeserializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
