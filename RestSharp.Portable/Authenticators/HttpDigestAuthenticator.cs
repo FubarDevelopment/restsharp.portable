@@ -77,10 +77,16 @@ namespace RestSharp.Portable.Authenticators
 
         private string GrabHeaderVar(string varName, string header, string defaultValue = null)
         {
-            var regHeader = new Regex(string.Format(@"{0}=""([^""]*)""", varName));
+            var regHeader = new Regex(string.Format(@"{0}\s*=\s*((""(?<qval>[^""]*)"")|(?<val>[^,]+))", varName));
             var matchHeader = regHeader.Match(header);
             if (matchHeader.Success)
-                return matchHeader.Groups[1].Value;
+            {
+                var qval = matchHeader.Groups["qval"];
+                if (qval.Success)
+                    return qval.Value;
+                var val = matchHeader.Groups["val"];
+                return val.Value.Trim();
+            }
             if (defaultValue == null)
                 throw new System.Net.WebException(string.Format("Header {0} not found", varName), WebExceptionStatus.UnknownError);
             return defaultValue;
