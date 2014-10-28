@@ -81,7 +81,6 @@
     <Compile Include="System\Security\Cryptography\MD5Managed.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FubarCoder.RestSharp.Portable.nuspec" />
     <None Include="NuGet\install.ps1" />
     <None Include="NuGet\uninstall.ps1" />
     <None Include="packages.config" />
@@ -116,6 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="RestSharp.Portable.nuspec" />
     <None Include="RestSharp.Portable.rd.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
