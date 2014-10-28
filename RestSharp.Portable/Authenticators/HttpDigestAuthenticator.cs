@@ -20,13 +20,28 @@ namespace RestSharp.Portable.Authenticators
     /// </remarks>
     public class HttpDigestAuthenticator : IRoundTripAuthenticator
     {
+        [Flags]
+        enum QualityOfProtection
+        {
+            Undefined = 0,
+            Auth = 1,
+            AuthInt = 2,
+        }
+
+        enum Algorithm
+        {
+            Undefined = 0,
+            MD5,
+            MD5sess,
+        }
 
         private readonly ICredentials _credentials;
         private string _realm;
         private string _nonce;
-        private string _qop;
+        private QualityOfProtection _qop = QualityOfProtection.Undefined;
         private string _cnonce;
         private string _opaque;
+        private Algorithm _algorithm = Algorithm.Undefined;
         private DateTime _cnonceDate;
         private int _nc;
 
@@ -38,7 +53,6 @@ namespace RestSharp.Portable.Authenticators
         {
             _credentials = credentials;
         }
-
 
         /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
@@ -68,6 +82,11 @@ namespace RestSharp.Portable.Authenticators
         private string CalculateMd5Hash(string input)
         {
             var inputBytes = Encoding.UTF8.GetBytes(input);
+            return CalculateMd5Hash(inputBytes);
+        }
+
+        private string CalculateMd5Hash(byte[] inputBytes)
+        {
             var hash = new MD5Managed().ComputeHash(inputBytes);
             var sb = new StringBuilder();
             foreach (var b in hash)
@@ -109,25 +128,101 @@ namespace RestSharp.Portable.Authenticators
 
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
-            var ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
-            var ha2 = CalculateMd5Hash(string.Format("{0}:{1}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery));
-            var digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2:00000000}:{3}:{4}:{5}", ha1, _nonce, _nc, _cnonce, _qop, ha2));
+            if (_algorithm == Algorithm.Undefined)
+                throw new InvalidOperationException("Algorithm not set");
+
+            string ha1, ha2, digestResponse;
+
+            ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
+
+            string algorithm;
+            switch (_algorithm)
+            {
+                case Algorithm.MD5sess:
+                    ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, _cnonce));
+                    algorithm = "MD5-sess";
+                    break;
+                case Algorithm.MD5:
+                default:
+                    algorithm = "MD5";
+                    break;
+            }
+
+            string qop;
+            switch (_qop)
+            {
+                case QualityOfProtection.Auth:
+                    qop = "auth";
+                    break;
+                case QualityOfProtection.AuthInt:
+                    qop = "auth-int";
+                    break;
+                case QualityOfProtection.Undefined:
+                default:
+                    qop = null;
+                    break;
+            }
+
+            switch (_qop)
+            {
+                case QualityOfProtection.AuthInt:
+                    {
+                        var content = restRequest.GetContent();
+                        byte[] entityBody;
+                        if (content == null)
+                        {
+                            entityBody = new byte[0];
+                        }
+                        else
+                        {
+                            var readTask = content.ReadAsByteArrayAsync();
+                            readTask.Wait();
+                            entityBody = readTask.Result;
+                        }
+                        ha2 = CalculateMd5Hash(entityBody);
+                    }
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery, ha2));
+                    break;
+                case QualityOfProtection.Undefined:
+                case QualityOfProtection.Auth:
+                default:
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery));
+                    break;
+            }
+
+            switch (_qop)
+            {
+                case QualityOfProtection.AuthInt:
+                case QualityOfProtection.Auth:
+                    digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2:D8}:{3}:{4}:{5}", ha1, _nonce, _nc, _cnonce, qop, ha2));
+                    break;
+                case QualityOfProtection.Undefined:
+                default:
+                    digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, ha2));
+                    break;
+            }
 
             var result = new StringBuilder();
             result
                 .AppendFormat("Digest username=\"{0}\"", credential.UserName)
-                .AppendFormat(",realm=\"{0}\"", _realm)
-                .AppendFormat(",nonce=\"{0}\"", _nonce)
-                .AppendFormat(",uri=\"{0}\"", pathAndQuery)
-                .AppendFormat(",algorithm=\"{0}\"", "MD5")
-                .AppendFormat(",cnonce=\"{0}\"", _cnonce)
-                .AppendFormat(",nc={0:D08}", _nc)
-                .AppendFormat(",qop=\"{0}\"", _qop);
+                .AppendFormat(", realm=\"{0}\"", _realm)
+                .AppendFormat(", nonce=\"{0}\"", _nonce)
+                .AppendFormat(", uri=\"{0}\"", pathAndQuery)
+                .AppendFormat(", nc={0:D08}", _nc);
+            if (algorithm != "MD5")
+                result.AppendFormat(", algorithm=\"{0}\"", algorithm);
+            if (!string.IsNullOrEmpty(qop))
+            {
+                result
+                    .AppendFormat(", cnonce=\"{0}\"", _cnonce)
+                    .AppendFormat(", qop={0}", qop);
+            }
+
             if (!string.IsNullOrEmpty(_opaque))
                 result
-                    .AppendFormat(",opaque=\"{0}\"", _opaque);
+                    .AppendFormat(", opaque=\"{0}\"", _opaque);
             result
-                .AppendFormat(",response=\"{0}\"", digestResponse);
+                .AppendFormat(", response=\"{0}\"", digestResponse);
             return result.ToString();
         }
 
@@ -136,7 +231,39 @@ namespace RestSharp.Portable.Authenticators
             var wwwAuthenticateHeader = response.Headers.GetValues("WWW-Authenticate").First();
             _realm = GrabHeaderVar("realm", wwwAuthenticateHeader);
             _nonce = GrabHeaderVar("nonce", wwwAuthenticateHeader);
-            _qop = GrabHeaderVar("qop", wwwAuthenticateHeader);
+
+            var algorithm = GrabHeaderVar("algorithm", wwwAuthenticateHeader, "MD5");
+            switch (algorithm.ToLower())
+            {
+                case "md5":
+                    _algorithm = Algorithm.MD5;
+                    break;
+                case "md5-sess":
+                    _algorithm = Algorithm.MD5sess;
+                    break;
+                default:
+                    throw new NotSupportedException(string.Format("Unsupported algorithm {0}", algorithm));
+            }
+            
+            var qopParts = GrabHeaderVar("qop", wwwAuthenticateHeader, "")
+                .Split(',');
+            _qop = QualityOfProtection.Undefined;
+            foreach (var qopPart in qopParts.Select(x => x.Trim().ToLower()))
+            {
+                switch (qopPart)
+                {
+                    case "auth":
+                        _qop |= QualityOfProtection.Auth;
+                        break;
+                    case "auth-int":
+                        _qop |= QualityOfProtection.AuthInt;
+                        break;
+                    case "":
+                        break;
+                    default:
+                        throw new NotSupportedException(string.Format("Unsupported QOP {0}", qopPart));
+                }
+            }
 
             _nc = 0;
             _opaque = GrabHeaderVar("opaque", wwwAuthenticateHeader, string.Empty);
