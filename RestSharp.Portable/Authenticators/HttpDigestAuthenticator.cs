@@ -35,6 +35,11 @@ namespace RestSharp.Portable.Authenticators
             MD5sess,
         }
 
+        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
+        {
+            HttpStatusCode.Unauthorized,
+        };
+
         private readonly ICredentials _credentials;
         private string _realm;
         private string _nonce;
@@ -269,6 +274,14 @@ namespace RestSharp.Portable.Authenticators
             _opaque = GrabHeaderVar("opaque", wwwAuthenticateHeader, string.Empty);
             _cnonce = new Random().Next(123400, 9999999).ToString(CultureInfo.InvariantCulture);
             _cnonceDate = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Returns all the status codes where a round trip is allowed
+        /// </summary>
+        public IEnumerable<HttpStatusCode> StatusCodes
+        {
+            get { return _statusCodes; }
         }
     }
 }

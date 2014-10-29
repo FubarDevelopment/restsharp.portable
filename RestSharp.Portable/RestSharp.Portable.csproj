@@ -48,6 +48,7 @@
     <Compile Include="Authenticators\HttpBasicAuthenticator.cs" />
     <Compile Include="Authenticators\IRoundTripAuthenticator.cs" />
     <Compile Include="Authenticators\NtlmAuthenticator.cs" />
+    <Compile Include="Authenticators\OptionalHttpBasicAuthenticator.cs" />
     <Compile Include="Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="ContentCollectionMode.cs" />
     <Compile Include="Deserializers\IDeserializer.cs" />

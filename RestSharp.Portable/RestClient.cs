@@ -129,15 +129,15 @@ namespace RestSharp.Portable
                     message.Content = bodyData;
 
                 var response = await httpClient.SendAsync(message);
-                if (response.StatusCode == HttpStatusCode.Unauthorized && retryWithAuthentication)
+                if (retryWithAuthentication)
                 {
+                    retryWithAuthentication = false;
                     var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-                    if (roundTripAuthenticator != null)
+                    if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
                     {
                         var restResponse = new RestResponse(this, request);
                         await restResponse.LoadResponse(response);
                         roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                        retryWithAuthentication = false;
                         continue;
                     }
                 }
