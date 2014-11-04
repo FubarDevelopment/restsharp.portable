@@ -15,6 +15,7 @@ Supported Platforms:
 - .NET for Windows Store apps
 - .NET Native for Windows Store apps
 - Windows Phone 8
+- Windows Phone 8.1
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>

@@ -14,6 +14,7 @@ Supported Platforms:
 - .NET Framework 4.5
 - .NET for Windows Store apps
 - Windows Phone 8
+- Windows Phone 8.1
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
         <releaseNotes>
