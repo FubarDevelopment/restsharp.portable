@@ -16,7 +16,16 @@ namespace RestSharp.Portable.Authenticators.OAuth
         private const string Upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static readonly Random _random;
         private static readonly object _randomLock = new object();
-        private static readonly Org.BouncyCastle.Crypto.Prng.IRandomGenerator _rng = new Org.BouncyCastle.Crypto.Prng.VmpcRandomGenerator();
+        private static readonly Org.BouncyCastle.Crypto.Prng.IRandomGenerator _rng = CreateRandom();
+
+        private static Org.BouncyCastle.Crypto.Prng.IRandomGenerator CreateRandom()
+        {
+            var digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
+            var key = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
+            digest.BlockUpdate(key, 0, key.Length);
+            return new Org.BouncyCastle.Crypto.Prng.DigestRandomGenerator(digest);
+        }
+
         static OAuthTools()
         {
             var bytes = new byte[4];
