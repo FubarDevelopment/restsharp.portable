@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace RestSharp.Portable.Test
 {
@@ -83,6 +85,24 @@ namespace RestSharp.Portable.Test
 
             Assert.AreEqual(true, response.Data.Authenticated);
             Assert.AreEqual(username, response.Data.User);
+        }
+
+        [TestMethod]
+        public async Task TestBitbucketOAuth10()
+        {
+#pragma warning disable 618
+            var secret = System.Configuration.ConfigurationSettings.AppSettings.GetValues("bitbucket-api-secret").Single();
+            var key = System.Configuration.ConfigurationSettings.AppSettings.GetValues("bitbucket-api-key").Single();
+#pragma warning restore 618
+
+            var client = new RestClient("https://bitbucket.org/api/");
+            var auth = Authenticators.OAuth1Authenticator.ForRequestToken(key, secret, "https://testapp.local/callback");
+            auth.ParameterHandling = Authenticators.OAuth.OAuthParameterHandling.UrlOrPostParameters;
+            client.Authenticator = auth;
+
+            var request = new RestRequest("1.0/oauth/request_token", HttpMethod.Post);
+            var response = await client.Execute(request);
+
         }
     }
 }

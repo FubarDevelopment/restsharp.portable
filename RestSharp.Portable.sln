@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RestSharp.Portable.snk = RestSharp.Portable.snk
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth", "RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj", "{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{674469CC-9563-4618-A8E0-7C3A980647C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
