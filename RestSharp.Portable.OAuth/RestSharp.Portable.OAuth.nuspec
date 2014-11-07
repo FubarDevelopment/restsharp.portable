@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>FubarCoder.$id$</id>
+        <version>$version$</version>
+        <title>RestSharp.Portable OAuth 1.0 authenticator</title>
+        <authors>Mark Junker</authors>
+        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git/wiki/BSD%202-Clause%20License</licenseUrl>
+        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>This library contains the OAuth 1.0 authenticator for RestSharp.Portable. The 
+authenticator was moved to a different library, to keep the number of dependencies
+of the RestSharp.Portable package as small as possible.
+
+Supported Platforms:
+- .NET Framework 4
+- .NET for Windows Store apps
+- .NET Native for Windows Store apps
+- Windows Phone 8
+- Windows Phone 8.1
+- Silverlight 5
+- Portable Class Libraries</description>
+        <summary>OAuth authenticator</summary>
+        <releaseNotes>
+          - Initial release
+        </releaseNotes>
+        <copyright>Copyright © Mark Junker</copyright>
+        <language>en-US</language>
+        <tags>PCL RestSharp portable OAuth</tags>
+        <dependencies>
+            <dependency id="FubarCoder.RestSharp.Portable" version="$version$" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
+        <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
+        <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
+        <file src="..\NuGet\license.txt" target="license.txt" />
+    </files>
+</package>
