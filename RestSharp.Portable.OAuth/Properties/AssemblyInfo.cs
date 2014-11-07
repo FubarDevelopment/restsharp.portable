@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("de")]
+[assembly: NeutralResourcesLanguage("en")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //
@@ -26,5 +26,6 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.8.0")]
+[assembly: AssemblyFileVersion("1.8.0")]
+[assembly: AssemblyInformationalVersion("1.8.0")]
