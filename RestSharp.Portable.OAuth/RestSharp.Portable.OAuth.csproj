@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OAuth1Authenticator.cs" />
+    <Compile Include="OAuth2Authenticator.cs" />
     <Compile Include="OAuth\Extensions\CollectionExtensions.cs" />
     <Compile Include="OAuth\Extensions\OAuthExtensions.cs" />
     <Compile Include="OAuth\Extensions\StringExtensions.cs" />
