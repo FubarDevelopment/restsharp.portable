@@ -47,4 +47,4 @@ var result = await client.Execute<TickerResult>(request);
 
 # Profressional Support #
 
-You can ask for professional support here (currently for german only): [Fubar Development Junker](https://www.fubar-dev.de)
+You can get professional support here: [Fubar Development Junker](https://www.fubar-dev.de)
