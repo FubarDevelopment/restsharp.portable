@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -114,7 +115,7 @@ namespace RestSharp.Portable
                 Authenticator.Authenticate(this, request);
         }
 
-        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request)
+        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
             var retryWithAuthentication = true;
             ConfigureRequest(request);
@@ -128,7 +129,7 @@ namespace RestSharp.Portable
                 if (bodyData != null)
                     message.Content = bodyData;
 
-                var response = await httpClient.SendAsync(message);
+                var response = await httpClient.SendAsync(message, ct);
                 if (retryWithAuthentication)
                 {
                     retryWithAuthentication = false;
@@ -154,10 +155,13 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request)
         {
-            var response = await ExecuteRequest(request);
-            var restResponse = new RestResponse(this, request);
-            await restResponse.LoadResponse(response);
-            return restResponse;
+            using (var cts = new CancellationTokenSource())
+            {
+                var response = await ExecuteRequest(request, cts.Token);
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                return restResponse;
+            }
         }
 
         /// <summary>
@@ -167,7 +171,39 @@ namespace RestSharp.Portable
         /// <returns>Response returned, with a deserialized object</returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
-            var response = await ExecuteRequest(request);
+            using (var cts = new CancellationTokenSource())
+            {
+                var response = await ExecuteRequest(request, cts.Token);
+                var restResponse = new RestResponse<T>(this, request);
+                await restResponse.LoadResponse(response);
+                return restResponse;
+            }
+        }
+
+        /// <summary>
+        /// Cancellable request execution
+        /// </summary>
+        /// <param name="request">Request to execute</param>
+        /// <param name="ct">The cancellation token</param>
+        /// <returns>Response returned</returns>
+        public async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
+        {
+            var response = await ExecuteRequest(request, ct);
+            var restResponse = new RestResponse(this, request);
+            await restResponse.LoadResponse(response);
+            return restResponse;
+        }
+
+        /// <summary>
+        /// Cancellable request execution
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize to</typeparam>
+        /// <param name="request">Request to execute</param>
+        /// <param name="ct">The cancellation token</param>
+        /// <returns>Response returned, with a deserialized object</returns>
+        public async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
+        {
+            var response = await ExecuteRequest(request, ct);
             var restResponse = new RestResponse<T>(this, request);
             await restResponse.LoadResponse(response);
             return restResponse;

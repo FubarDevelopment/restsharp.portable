@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -47,9 +48,27 @@ namespace RestSharp.Portable
         /// <summary>
         /// Execute the given request
         /// </summary>
+        /// <typeparam name="T">The type to deserialize to</typeparam>
         /// <param name="request">Request to execute</param>
         /// <returns>Response returned, with a deserialized object</returns>
         Task<IRestResponse<T>> Execute<T>(IRestRequest request);
+
+        /// <summary>
+        /// Cancellable request execution
+        /// </summary>
+        /// <param name="request">Request to execute</param>
+        /// <param name="ct">The cancellation token</param>
+        /// <returns>Response returned</returns>
+        Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct);
+
+        /// <summary>
+        /// Cancellable request execution
+        /// </summary>
+        /// <typeparam name="T">The type to deserialize to</typeparam>
+        /// <param name="request">Request to execute</param>
+        /// <param name="ct">The cancellation token</param>
+        /// <returns>Response returned, with a deserialized object</returns>
+        Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct);
 
         /// <summary>
         /// Add a new content type handler
