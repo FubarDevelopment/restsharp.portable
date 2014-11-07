@@ -5,10 +5,11 @@
         <version>$version$</version>
         <title>RestSharp.Portable OAuth 1.0 authenticator</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git/wiki/BSD%202-Clause%20License</licenseUrl>
+        <licenseUrl>https://github.com/restsharp/RestSharp/blob/master/LICENSE.txt</licenseUrl>
         <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>This library contains the OAuth 1.0 authenticator for RestSharp.Portable. The 
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>This library contains the OAuth 1.0 authenticator for RestSharp.Portable, which
+is a port of the OAuth 1.0 authenticator from the original RestSharp project. The 
 authenticator was moved to a different library, to keep the number of dependencies
 of the RestSharp.Portable package as small as possible.
 
