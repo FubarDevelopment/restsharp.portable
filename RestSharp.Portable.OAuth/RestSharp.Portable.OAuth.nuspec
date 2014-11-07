@@ -4,7 +4,8 @@
         <id>FubarCoder.$id$</id>
         <version>$version$</version>
         <title>RestSharp.Portable OAuth 1.0 authenticator</title>
-        <authors>Mark Junker</authors>
+        <authors>RestSharp project</authors>
+        <owners>Mark Junker</owners>
         <licenseUrl>https://github.com/restsharp/RestSharp/blob/master/LICENSE.txt</licenseUrl>
         <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
