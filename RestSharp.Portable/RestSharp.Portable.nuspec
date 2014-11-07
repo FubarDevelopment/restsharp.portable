@@ -5,8 +5,8 @@
         <version>$version$</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
-        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable</projectUrl>
+        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git/wiki/BSD%202-Clause%20License</licenseUrl>
+        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!
 
@@ -20,8 +20,8 @@ Supported Platforms:
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
         <releaseNotes>
-          - Update of the NuGet dependencies
-          - C++/CLI fixes
+          - Cancellable requests
+          - New OAuth package available
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
@@ -32,8 +32,7 @@ Supported Platforms:
         <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
         <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
         <file src="..\NuGet\license.txt" target="license.txt" />
-        <file src="RestSharp.Portable.rd.xml" target="content\netcore" />
-        <file src="$OutDir$$TargetFileName$" target="lib\netcore" />
-        <file src="$OutDir$$TargetName$.XML" target="lib\netcore" />
+        <file src="RestSharp.Portable.rd.xml" target="content\win" />
+        <file src="RestSharp.Portable.rd.xml" target="content\wpa81" />
     </files>
 </package>

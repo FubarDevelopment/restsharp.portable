@@ -5,8 +5,8 @@
         <version>$version$</version>
         <title>RestSharp.Portable.Encodings</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable/raw/3e896dc5e7ec050aa1622c4000d7b17e583d3b86/license.txt</licenseUrl>
-        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable</projectUrl>
+        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git/wiki/BSD%202-Clause%20License</licenseUrl>
+        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This library contains the GZIP content encoding handler. Others may follow.
 
@@ -18,12 +18,11 @@ Supported Platforms:
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
         <releaseNotes>
-          - Update of the NuGet dependencies
-          - C++/CLI fixes
+          - Parallel release for the current version
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
-        <tags>PCL RestSharp portable</tags>
+        <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>
             <dependency id="FubarCoder.RestSharp.Portable" version="$version$" />
         </dependencies>
