@@ -222,7 +222,7 @@ namespace RestSharp.Portable.Authenticators
                     (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))))
                     {
                         var v = parameter.Value;
-                        v = Uri.UnescapeDataString(v).Replace('+', ' ');
+                        v = Uri.UnescapeDataString(v.Replace('+', ' '));
                         request.AddParameter(parameter.Name, v);
                     }
                     break;
