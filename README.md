@@ -6,7 +6,8 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-Version 1.8.0 is coming soon - with support for OAuth 1.0
+* A port of an OAuth 2.0 library will be available soon!
+* Version 1.8.0 is available now!
 
 # Supported platforms
 
