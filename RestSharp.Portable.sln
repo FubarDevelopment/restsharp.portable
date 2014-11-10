@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encoding
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B-25BC-47D2-8D80-00BA0ADD9732}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\license-oauth2.txt = NuGet\license-oauth2.txt
+		NuGet\license-restsharp.txt = NuGet\license-restsharp.txt
 		NuGet\license.txt = NuGet\license.txt
 	EndProjectSection
 EndProject
@@ -27,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth", "RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj", "{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2", "RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.csproj", "{8BCC8467-7805-49E3-AD67-1D322FA3D54D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +54,10 @@ Global
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

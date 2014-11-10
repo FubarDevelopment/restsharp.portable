@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>FubarCoder.$id$</id>
+        <version>$version$</version>
+        <title>RestSharp.Portable OAuth 2.0 authenticators/clients</title>
+        <authors>OAuth2 project</authors>
+        <owners>Mark Junker</owners>
+        <licenseUrl>https://github.com/fubar-coder/OAuth2/wiki/License</licenseUrl>
+        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>This library contains the OAuth 2.0 authenticators and clients
+for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the 
+original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project
+made by Constantin Titarenko and others.
+
+Supported Platforms:
+- .NET Framework 4.0.3
+- .NET for Windows Store apps
+- .NET Native for Windows Store apps
+- Windows Phone 8
+- Windows Phone 8.1
+- Silverlight 5
+- Portable Class Libraries</description>
+        <summary>OAuth 2.0 authenticators and clients</summary>
+        <releaseNotes>
+- Initial release
+        </releaseNotes>
+        <copyright>Copyright © Constantin Titarenko and others</copyright>
+        <language>en-US</language>
+        <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
+        <dependencies>
+            <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
+            <dependency id="Newtonsoft.Json" version="6.0.5" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
+        <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
+        <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
+        <file src="..\NuGet\license-oauth2.txt" target="license.txt" />
+    </files>
+</package>

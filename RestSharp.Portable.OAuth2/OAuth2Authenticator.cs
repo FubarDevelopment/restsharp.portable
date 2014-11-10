@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -32,33 +33,18 @@ namespace RestSharp.Portable.Authenticators
     /// Any other OAuth2 authenticators must derive from this
     /// abstract class.
     /// </remarks>
-    public abstract class OAuth2Authenticator : IAuthenticator
+    public abstract class OAuth2Authenticator : AsyncAuthenticator
     {
-        /// <summary>
-        /// Access token to be used when authenticating.
-        /// </summary>
-        private readonly string _accessToken;
+        protected readonly OAuth2.OAuth2Client _client;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Authenticator"/> class.
         /// </summary>
-        /// <param name="accessToken">
-        /// The access token.
-        /// </param>
-        protected OAuth2Authenticator(string accessToken)
+        /// <param name="client">The OAuth2 client</param>
+        protected OAuth2Authenticator(OAuth2.OAuth2Client client)
         {
-            _accessToken = accessToken;
+            _client = client;
         }
-
-        /// <summary>
-        /// Gets the access token.
-        /// </summary>
-        public string AccessToken
-        {
-            get { return _accessToken; }
-        }
-
-        public abstract void Authenticate(IRestClient client, IRestRequest request);
     }
 
     /// <summary>
@@ -72,15 +58,13 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2UriQueryParameterAuthenticator"/> class.
         /// </summary>
-        /// <param name="accessToken">
-        /// The access token.
-        /// </param>
-        public OAuth2UriQueryParameterAuthenticator(string accessToken)
-            : base(accessToken) { }
+        /// <param name="client">The OAuth2 client</param>
+        public OAuth2UriQueryParameterAuthenticator(OAuth2.OAuth2Client client)
+            : base(client) { }
 
-        public override void Authenticate(IRestClient client, IRestRequest request)
+        public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
-            request.AddParameter("oauth_token", AccessToken, ParameterType.GetOrPost);
+            request.AddParameter("oauth_token", await _client.GetCurrentToken(), ParameterType.GetOrPost);
         }
     }
 
@@ -92,43 +76,36 @@ namespace RestSharp.Portable.Authenticators
     /// </remarks>
     public class OAuth2AuthorizationRequestHeaderAuthenticator : OAuth2Authenticator
     {
-        /// <summary>
-        /// Stores the Authorization header value as "[tokenType] accessToken". used for performance.
-        /// </summary>
-        private readonly string _authorizationValue;
+        private readonly string _tokenType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2AuthorizationRequestHeaderAuthenticator"/> class.
         /// </summary>
-        /// <param name="accessToken">
-        /// The access token.
-        /// </param>
-        public OAuth2AuthorizationRequestHeaderAuthenticator(string accessToken)
-            : this(accessToken, "OAuth") { }
+        /// <param name="client">The OAuth2 client</param>
+        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2.OAuth2Client client)
+            : this(client, (string.IsNullOrEmpty(client.TokenType) ? "OAuth" : client.TokenType)) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2AuthorizationRequestHeaderAuthenticator"/> class.
         /// </summary>
-        /// <param name="accessToken">
-        /// The access token.
-        /// </param>
+        /// <param name="client">The OAuth2 client</param>
         /// <param name="tokenType">
         /// The token type.
         /// </param>
-        public OAuth2AuthorizationRequestHeaderAuthenticator(string accessToken, string tokenType)
-            : base(accessToken)
+        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2.OAuth2Client client, string tokenType)
+            : base(client)
         {
-            // Conatenate during constructor so that it is only done once. can improve performance.
-            _authorizationValue = tokenType + " " + accessToken;
+            _tokenType = tokenType;
         }
 
-        public override void Authenticate(IRestClient client, IRestRequest request)
+        public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
             // only add the Authorization parameter if it hasn't been added.
-            if (!request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
-            {
-                request.AddParameter("Authorization", _authorizationValue, ParameterType.HttpHeader);
-            }
+            if (request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            var authValue = string.Format("{0} {1}", _tokenType, await _client.GetCurrentToken());
+            request.AddParameter("Authorization", authValue, ParameterType.HttpHeader);
         }
     }
 }
