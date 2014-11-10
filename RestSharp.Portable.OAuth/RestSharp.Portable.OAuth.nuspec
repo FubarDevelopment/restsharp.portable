@@ -24,19 +24,20 @@ Supported Platforms:
 - Portable Class Libraries</description>
         <summary>OAuth authenticator</summary>
         <releaseNotes>
-          - Initial release
+- Workaround for NuGet bug
         </releaseNotes>
-        <copyright>Copyright © Mark Junker</copyright>
+        <copyright>Copyright © John Sheehan</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth</tags>
         <dependencies>
             <dependency id="FubarCoder.RestSharp.Portable" version="$version$" />
+            <dependency id="Newtonsoft.Json" version="6.0.5" />
         </dependencies>
     </metadata>
     <files>
         <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
         <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
         <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
-        <file src="..\NuGet\license.txt" target="license.txt" />
+        <file src="..\NuGet\license-restsharp.txt" target="license.txt" />
     </files>
 </package>
