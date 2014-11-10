@@ -44,8 +44,11 @@
     <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Authenticators\AsyncAuthenticator.cs" />
     <Compile Include="Authenticators\HttpDigestAuthenticator.cs" />
     <Compile Include="Authenticators\HttpBasicAuthenticator.cs" />
+    <Compile Include="Authenticators\IAsyncAuthenticator.cs" />
+    <Compile Include="Authenticators\IAsyncRoundTripAuthenticator.cs" />
     <Compile Include="Authenticators\IRoundTripAuthenticator.cs" />
     <Compile Include="Authenticators\NtlmAuthenticator.cs" />
     <Compile Include="Authenticators\SimpleAuthenticator.cs" />

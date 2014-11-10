@@ -109,10 +109,20 @@ namespace RestSharp.Portable
             }
         }
 
-        private void AuthenticateRequest(IRestRequest request)
+        private async Task AuthenticateRequest(IRestRequest request)
         {
-            if (Authenticator != null)
+            if (Authenticator == null)
+                return;
+
+            var asyncAuth = this.Authenticator as IAsyncAuthenticator;
+            if (asyncAuth != null)
+            {
+                await asyncAuth.Authenticate(this, request);
+            }
+            else
+            {
                 Authenticator.Authenticate(this, request);
+            }
         }
 
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
@@ -121,7 +131,7 @@ namespace RestSharp.Portable
             ConfigureRequest(request);
             for (; ; )
             {
-                AuthenticateRequest(request);
+                await AuthenticateRequest(request);
                 var httpClient = HttpClientFactory.CreateClient(this, request);
                 var message = HttpClientFactory.CreateRequestMessage(this, request);
 
@@ -133,13 +143,24 @@ namespace RestSharp.Portable
                 if (retryWithAuthentication)
                 {
                     retryWithAuthentication = false;
-                    var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-                    if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+                    var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
+                    if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
                     {
                         var restResponse = new RestResponse(this, request);
                         await restResponse.LoadResponse(response);
-                        roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                        await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
                         continue;
+                    }
+                    else
+                    {
+                        var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+                        if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+                        {
+                            var restResponse = new RestResponse(this, request);
+                            await restResponse.LoadResponse(response);
+                            roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                            continue;
+                        }
                     }
                 }
                 if (!IgnoreResponseStatusCode)
