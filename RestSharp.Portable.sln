@@ -32,6 +32,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2", "RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.csproj", "{8BCC8467-7805-49E3-AD67-1D322FA3D54D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Tests", "RestSharp.Portable.OAuth2.Tests\RestSharp.Portable.OAuth2.Tests.csproj", "{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Configuration", "RestSharp.Portable.OAuth2.Configuration\RestSharp.Portable.OAuth2.Configuration.csproj", "{C781ADFC-06D5-4C49-8600-8E361288A7D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +62,14 @@ Global
 		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BCC8467-7805-49E3-AD67-1D322FA3D54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
