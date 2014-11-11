@@ -19,7 +19,7 @@ namespace RestSharp.Portable.Test
         [TestMethod]
         public async Task TestHttpBasicAuth()
         {
-            const string username = "user";
+            const string username = "user name";
             const string password = "passwd";
 
             var client = new RestClient("http://httpbin.org");
@@ -30,14 +30,14 @@ namespace RestSharp.Portable.Test
             request.AddUrlSegment("password", password);
             var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.AreEqual(true, response.Data.Authenticated);
+            Assert.IsTrue(response.Data.Authenticated);
             Assert.AreEqual(username, response.Data.User);
         }
 
         [TestMethod]
         public async Task TestHttpBasicAuthHidden()
         {
-            const string username = "user";
+            const string username = "user name";
             const string password = "passwd";
 
             var client = new RestClient("http://httpbin.org");
@@ -48,14 +48,14 @@ namespace RestSharp.Portable.Test
             request.AddUrlSegment("password", password);
             var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.AreEqual(true, response.Data.Authenticated);
+            Assert.IsTrue(response.Data.Authenticated);
             Assert.AreEqual(username, response.Data.User);
         }
 
         [TestMethod]
         public async Task TestHttpDigestAuth()
         {
-            const string username = "user";
+            const string username = "user name";
             const string password = "passwd";
 
             var client = new RestClient("http://httpbin.org");
@@ -66,14 +66,14 @@ namespace RestSharp.Portable.Test
             request.AddUrlSegment("password", password);
             var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.AreEqual(true, response.Data.Authenticated);
+            Assert.IsTrue(response.Data.Authenticated);
             Assert.AreEqual(username, response.Data.User);
         }
 
         [TestMethod]
         public async Task TestHttpDigestAuthInt()
         {
-            const string username = "user";
+            const string username = "user name";
             const string password = "passwd";
 
             var client = new RestClient("http://httpbin.org");
@@ -84,7 +84,7 @@ namespace RestSharp.Portable.Test
             request.AddUrlSegment("password", password);
             var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.AreEqual(true, response.Data.Authenticated);
+            Assert.IsTrue(response.Data.Authenticated);
             Assert.AreEqual(username, response.Data.User);
         }
 

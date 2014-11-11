@@ -257,10 +257,22 @@ namespace RestSharp.Portable
                 var getOrPostParameters = request.GetGetOrPostParameters().ToList();
                 if (request.GetEffectiveHttpMethod() == HttpMethod.Post && getOrPostParameters.Count != 0)
                 {
-                    var postData = getOrPostParameters
-                        .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
-                        .ToList();
-                    content = new FormUrlEncodedContent(postData);
+                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && x.Encoding != ParameterExtensions.DefaultEncoding);
+                    if (hasEncoding)
+                    {
+                        var postData = string.Join("&", getOrPostParameters
+                            .Select(x => string.Format("{0}={1}", Uri.EscapeDataString(x.Name), x.ToEncodedString(request))));
+                        var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
+                        content = new ByteArrayContent(bytes);
+                        content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                    }
+                    else
+                    {
+                        var postData = getOrPostParameters
+                            .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
+                            .ToList();
+                        content = new FormUrlEncodedContent(postData);
+                    }
                 }
                 else
                 {
@@ -303,7 +315,7 @@ namespace RestSharp.Portable
                     else
                     {
                         var value = string.Format("{0}", parameter.Value);
-                        data = new StringContent(value, Encoding.UTF8);
+                        data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
                         if (parameter.ContentType != null)
                             data.Headers.ContentType = parameter.ContentType;
                         multipartContent.Add(data, parameter.Name);

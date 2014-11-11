@@ -82,7 +82,7 @@ namespace RestSharp.Portable
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.UrlSegment))
             {
                 var searchText = string.Format("{{{0}}}", param.Name);
-                var replaceText = string.Format("{0}", param.Value);
+                var replaceText = param.ToEncodedString(request);
                 resource = resource.Replace(searchText, replaceText);
             }
             var urlBuilder = new UriBuilder(new Uri(client.BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
@@ -94,7 +94,7 @@ namespace RestSharp.Portable
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                         queryString.Append("&");
-                    queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
+                    queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString(request));
                 }
                 if (request.GetEffectiveHttpMethod() == HttpMethod.Get)
                 {
@@ -103,7 +103,7 @@ namespace RestSharp.Portable
                     {
                         if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                             queryString.Append("&");
-                        queryString.AppendFormat("{0}={1}", Uri.EscapeUriString(param.Name), Uri.EscapeUriString(string.Format("{0}", param.Value)));
+                        queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString(request));
                     }
                 }
                 urlBuilder.Query = queryString.ToString();

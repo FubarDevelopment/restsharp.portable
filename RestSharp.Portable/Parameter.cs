@@ -70,7 +70,8 @@ namespace RestSharp.Portable
         /// Content type of the parameter
         /// </summary>
         /// <remarks>
-        /// Only applicable when Type is Body.
+        /// Applies to the following parameter types:
+        /// - RequestBody
         /// </remarks>
         public MediaTypeHeaderValue ContentType { get; set; }
 
@@ -78,8 +79,20 @@ namespace RestSharp.Portable
         /// Should this parameter be validated?
         /// </summary>
         /// <remarks>
-        /// Applies only HTTP header parameters
+        /// Applies to the following parameter types:
+        /// - HttpHeader
         /// </remarks>
         public bool ValidateOnAdd { get; set; }
+
+        /// <summary>
+        /// Encoding of this parameters value
+        /// </summary>
+        /// <remarks>
+        /// Applies to the following parameter types:
+        /// - GetOrPost
+        /// - QueryString
+        /// - UrlSegment
+        /// </remarks>
+        public Encoding Encoding { get; set; }
     }
 }
