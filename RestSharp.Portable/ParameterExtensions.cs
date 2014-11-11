@@ -10,12 +10,12 @@ namespace RestSharp.Portable
         private static readonly string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static readonly string _mark = "-_.!~*'()";
 
+        internal static readonly Encoding DefaultEncoding = Encoding.UTF8;
+
         private static readonly IDictionary<byte, bool> _allowedBytes = DefaultEncoding.GetBytes(_alphanum + _mark)
             .ToDictionary(x => x, x => true);
         private static readonly IDictionary<char, bool> _allowedChars = (_alphanum + _mark).Cast<char>()
             .ToDictionary(x => x, x => true);
-
-        internal static readonly Encoding DefaultEncoding = Encoding.UTF8;
 
         internal static string UrlDecode(string s)
         {
