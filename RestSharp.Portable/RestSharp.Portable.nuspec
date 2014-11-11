@@ -22,6 +22,7 @@ Supported Platforms:
         <releaseNotes>
 - Async. authenticators
 - New OAuth2 package
+- Encodings for parameters (get/post/url/query)
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
