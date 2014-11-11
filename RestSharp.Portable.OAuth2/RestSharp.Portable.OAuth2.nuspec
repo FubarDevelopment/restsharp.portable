@@ -9,10 +9,7 @@
         <licenseUrl>https://github.com/fubar-coder/OAuth2/wiki/License</licenseUrl>
         <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
-        <description>This library contains the OAuth 2.0 authenticators and clients
-for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the 
-original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project
-made by Constantin Titarenko and others.
+        <description>This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.
 
 Supported Platforms:
 - .NET Framework 4.0.3
