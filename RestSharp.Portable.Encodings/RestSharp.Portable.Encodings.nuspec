@@ -5,8 +5,8 @@
         <version>$version$</version>
         <title>RestSharp.Portable.Encodings</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git/wiki/BSD%202-Clause%20License</licenseUrl>
-        <projectUrl>https://bitbucket.org/fubar-coder/restsharp.portable-git</projectUrl>
+        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
+        <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This library contains the GZIP content encoding handler. Others may follow.
 
