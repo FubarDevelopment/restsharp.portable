@@ -215,12 +215,6 @@ namespace RestSharp.Portable.Authenticators.OAuth2
 
             var response = await client.ExecuteAndVerify(request);
 
-            AfterGetAccessToken(new BeforeAfterRequestArgs
-            {
-                Response = response,
-                Parameters = parameters
-            });
-
             var content = response.GetContent();
             AccessToken = ParseAccessTokenResponse(content);
 
@@ -230,6 +224,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2
 
             var expiresIn = ParseStringResponse(content, new[] { ExpiresKey })[ExpiresKey].Select(x => Convert.ToInt32(x, 10)).FirstOrDefault();
             ExpiresAt = (expiresIn != 0 ? (DateTime?)DateTime.Now.AddSeconds(expiresIn) : null);
+
+            AfterGetAccessToken(new BeforeAfterRequestArgs
+            {
+                Response = response,
+                Parameters = parameters
+            });
         }
 
         /// <summary>
