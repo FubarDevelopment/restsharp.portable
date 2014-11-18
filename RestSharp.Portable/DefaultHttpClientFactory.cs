@@ -44,7 +44,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <returns>The base URL</returns>
         protected virtual Uri GetBaseAddress(IRestClient client)
         {
-            return client.BaseUrl;
+            return client.BuildUrl(null, false);
         }
 
         /// <summary>
