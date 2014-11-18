@@ -172,7 +172,7 @@ namespace RestSharp.Portable.Authenticators
             {
                 case QualityOfProtection.AuthInt:
                     {
-                        var content = restRequest.GetContent();
+                        var content = client.GetContent(restRequest);
                         byte[] entityBody;
                         if (content == null)
                         {
@@ -186,12 +186,12 @@ namespace RestSharp.Portable.Authenticators
                         }
                         ha2 = CalculateMd5Hash(entityBody);
                     }
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery, ha2));
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery, ha2));
                     break;
                 case QualityOfProtection.Undefined:
                 case QualityOfProtection.Auth:
                 default:
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", restRequest.GetEffectiveHttpMethod().Method, pathAndQuery));
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery));
                     break;
             }
 

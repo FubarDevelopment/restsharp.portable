@@ -171,6 +171,7 @@ namespace RestSharp.Portable
         /// <param name="request">The request to get the parameters from</param>
         /// <param name="withFile">true == with file parameters, but those are POST-only!</param>
         /// <returns>The list of GET or POST parameters</returns>
+        [Obsolete("Use GetGetOrPostParameters(IRestClient, IRestRequest, bool)")]
         public static IEnumerable<Parameter> GetGetOrPostParameters(this IRestRequest request, bool withFile = false)
         {
             return request.Parameters.Where(x => x.Type == ParameterType.GetOrPost && (withFile || !(x is FileParameter)));
@@ -181,6 +182,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="request">The request to get the parameters from</param>
         /// <returns>The list of POST file parameters</returns>
+        [Obsolete("Use GetFileParameters(IRestClient, IRestRequest)")]
         public static IEnumerable<FileParameter> GetFileParameters(this IRestRequest request)
         {
             return request.Parameters.OfType<FileParameter>();
@@ -191,9 +193,10 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="request">The request to determine the HTTP method for</param>
         /// <returns>GET or POST</returns>
+        [Obsolete("User GetDefaultMethod(IRestClient, IRestRequest)")]
         internal static HttpMethod GetDefaultMethod(this IRestRequest request)
         {
-            if (request.GetFileParameters().Any() || request.Parameters.Any(x => x.Type == ParameterType.RequestBody))
+            if (request.Parameters.GetFileParameters().Any() || request.Parameters.Any(x => x.Type == ParameterType.RequestBody))
                 return HttpMethod.Post;
             return HttpMethod.Get;
         }
@@ -203,6 +206,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="request">The request to determine the HTTP method for</param>
         /// <returns>The real HTTP method that must be used</returns>
+        [Obsolete("Use GetEffectiveHttpMethod(IRestClient, IRestRequest)")]
         public static HttpMethod GetEffectiveHttpMethod(this IRestRequest request)
         {
             if (request.Method == null || request.Method == HttpMethod.Get)
@@ -216,7 +220,7 @@ namespace RestSharp.Portable
         /// <param name="request">The request the body parameter belongs to</param>
         /// <param name="body">The body parameter</param>
         /// <returns>The resulting HttpContent</returns>
-        private static HttpContent GetBodyContent(this IRestRequest request, Parameter body)
+        internal static HttpContent GetBodyContent(this IRestRequest request, Parameter body)
         {
             if (body == null)
                 return null;
@@ -240,103 +244,14 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Gets the basic content (without files) for a request
-        /// </summary>
-        /// <param name="request">REST request to get the content for</param>
-        /// <returns>The HTTP content to be sent</returns>
-        private static HttpContent GetBasicContent(this IRestRequest request)
-        {
-            HttpContent content;
-            var body = request.Parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
-            if (body != null)
-            {
-                content = request.GetBodyContent(body);
-            }
-            else
-            {
-                var getOrPostParameters = request.GetGetOrPostParameters().ToList();
-                if (request.GetEffectiveHttpMethod() == HttpMethod.Post && getOrPostParameters.Count != 0)
-                {
-                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && x.Encoding != ParameterExtensions.DefaultEncoding);
-                    if (hasEncoding)
-                    {
-                        var postData = string.Join("&", getOrPostParameters
-                            .Select(x => string.Format("{0}={1}", Uri.EscapeDataString(x.Name), x.ToEncodedString(request))));
-                        var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
-                        content = new ByteArrayContent(bytes);
-                        content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                    }
-                    else
-                    {
-                        var postData = getOrPostParameters
-                            .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
-                            .ToList();
-                        content = new FormUrlEncodedContent(postData);
-                    }
-                }
-                else
-                {
-                    content = null;
-                }
-            }
-            return content;
-        }
-
-        /// <summary>
-        /// Gets the multi-part content (with files) for a request
-        /// </summary>
-        /// <param name="request">REST request to get the content for</param>
-        /// <returns>The HTTP content to be sent</returns>
-        private static HttpContent GetMultiPartContent(this IRestRequest request)
-        {
-            var isPostMethod = request.GetEffectiveHttpMethod() == HttpMethod.Post;
-            var multipartContent = new MultipartFormDataContent();
-            foreach (var parameter in request.Parameters)
-            {
-                if (parameter is FileParameter)
-                {
-                    var file = (FileParameter)parameter;
-                    var data = new ByteArrayContent((byte[])file.Value);
-                    data.Headers.ContentType = file.ContentType;
-                    data.Headers.ContentLength = file.ContentLength;
-                    multipartContent.Add(data, file.Name, file.FileName);
-                }
-                else if (isPostMethod && parameter.Type == ParameterType.GetOrPost)
-                {
-                    HttpContent data;
-                    if (parameter.Value is byte[])
-                    {
-                        var rawData = (byte[])parameter.Value;
-                        data = new ByteArrayContent(rawData);
-                        data.Headers.ContentType = parameter.ContentType ?? new MediaTypeHeaderValue("application/octet-stream");
-                        data.Headers.ContentLength = rawData.Length;
-                        multipartContent.Add(data, parameter.Name);
-                    }
-                    else
-                    {
-                        var value = string.Format("{0}", parameter.Value);
-                        data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
-                        if (parameter.ContentType != null)
-                            data.Headers.ContentType = parameter.ContentType;
-                        multipartContent.Add(data, parameter.Name);
-                    }
-                }
-                else if (parameter.Type == ParameterType.RequestBody)
-                {
-                    var data = request.GetBodyContent(parameter);
-                    multipartContent.Add(data, parameter.Name);
-                }
-            }
-            return multipartContent;
-        }
-
-        /// <summary>
         /// Gets the content for a request
         /// </summary>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
+        [Obsolete("Use GetContent(IRestClient, IRestRequest)")]
         public static HttpContent GetContent(this IRestRequest request)
         {
+            IRestClient client = null;
             HttpContent content;
             var collectionMode = request.ContentCollectionMode;
             if (collectionMode != ContentCollectionMode.BasicContent)
@@ -344,16 +259,16 @@ namespace RestSharp.Portable
                 var fileParameters = request.GetFileParameters().ToList();
                 if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
                 {
-                    content = request.GetMultiPartContent();
+                    content = client.GetMultiPartContent(request);
                 }
                 else
                 {
-                    content = request.GetBasicContent();
+                    content = client.GetBasicContent(request);
                 }
             }
             else
             {
-                content = request.GetBasicContent();
+                content = client.GetBasicContent(request);
             }
             return content;
         }

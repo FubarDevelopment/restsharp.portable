@@ -56,7 +56,7 @@ namespace RestSharp.Portable.HttpClientImpl
         protected virtual Uri GetMessageAddress(IRestClient client, IRestRequest request)
         {
             var fullUrl = client.BuildUrl(request);
-            var url = client.BaseUrl.MakeRelativeUri(fullUrl);
+            var url = client.BuildUrl(null, false).MakeRelativeUri(fullUrl);
             return url;
         }
 
@@ -102,11 +102,23 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <summary>
         /// Returns the HTTP method for the request message.
         /// </summary>
+        /// <param name="client">The REST client that wants to create the HTTP client</param>
         /// <param name="request">REST request</param>
         /// <returns>HTTP method</returns>
+        protected virtual HttpMethod GetHttpMethod(IRestClient client, IRestRequest request)
+        {
+            return client.GetEffectiveHttpMethod(request);
+        }
+
+        /// <summary>
+        /// Returns the HTTP method for the request message.
+        /// </summary>
+        /// <param name="request">REST request</param>
+        /// <returns>HTTP method</returns>
+        [Obsolete("Use DefaultHttpClientFactory.GetHttpMethod(IRestClient, IRestRequest)")]
         protected virtual HttpMethod GetHttpMethod(IRestRequest request)
         {
-            return request.GetEffectiveHttpMethod();
+            return GetHttpMethod(null, request);
         }
 
         /// <summary>
@@ -199,7 +211,7 @@ namespace RestSharp.Portable.HttpClientImpl
         public virtual HttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
         {
             var address = GetMessageAddress(client, request);
-            var method = GetHttpMethod(request);
+            var method = GetHttpMethod(client, request);
             var message = new HttpRequestMessage(method, address);
             message = AddHttpHeaderParameters(message, request);
             return message;

@@ -89,6 +89,7 @@ namespace RestSharp.Portable.Test
         }
 
         [TestMethod]
+        [Ignore]
         public async Task TestBitbucketOAuth10()
         {
             var secret = System.Configuration.ConfigurationManager.AppSettings["bitbucket-api-secret"];

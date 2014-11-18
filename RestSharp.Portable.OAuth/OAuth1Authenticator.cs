@@ -163,18 +163,13 @@ namespace RestSharp.Portable.Authenticators
             // or implement a seperate class for each OAuth version
 
             var useMultiPart = request.ContentCollectionMode == ContentCollectionMode.MultiPart
-                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters && request.GetFileParameters().Any());
+                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
             if (!useMultiPart)
             {
-                foreach (var p in client.DefaultParameters.Where(p => p.Type == ParameterType.GetOrPost))
-                {
+                var getOrPostParameters = client.MergeParameters(request).GetGetOrPostParameters();
+                foreach (var p in getOrPostParameters)
                     parameters.Add(new WebPair(p.Name, p.Value.ToString()));
-                }
-                foreach (var p in request.Parameters.Where(p => p.Type == ParameterType.GetOrPost))
-                {
-                    parameters.Add(new WebPair(p.Name, p.Value.ToString()));
-                }
             }
             else
             {

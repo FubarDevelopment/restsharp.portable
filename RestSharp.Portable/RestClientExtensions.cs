@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable
@@ -65,6 +66,45 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Merge parameters from client and request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The REST request</param>
+        /// <returns>A list of merged parameters</returns>
+        public static IList<Parameter> MergeParameters(this IRestClient client, IRestRequest request)
+        {
+            var result = new List<Parameter>();
+            if (request == null)
+            {
+                result.AddRange(client.DefaultParameters);
+            }
+            else if (client == null)
+            {
+                result.AddRange(request.Parameters);
+            }
+            else
+            {
+                var requestParameters = request.Parameters.ToDictionary(x => x, ParameterNameComparer.Default);
+                result.AddRange(request.Parameters);
+                foreach (var param in client.DefaultParameters)
+                    if (!requestParameters.ContainsKey(param))
+                        result.Add(param);
+            }
+            return result;
+        }
+
+        private static string ReplaceUrlSegments(string url, IEnumerable<Parameter> parameters)
+        {
+            foreach (var param in parameters.Where(x => x.Type == ParameterType.UrlSegment))
+            {
+                var searchText = string.Format("{{{0}}}", param.Name);
+                var replaceText = param.ToEncodedString();
+                url = url.Replace(searchText, replaceText);
+            }
+            return url;
+        }
+
+        /// <summary>
         /// Build the full URL for a request
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
@@ -78,38 +118,42 @@ namespace RestSharp.Portable
         /// </remarks>
         public static Uri BuildUrl(this IRestClient client, IRestRequest request, bool withQuery = true)
         {
-            var resource = request.Resource;
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.UrlSegment))
-            {
-                var searchText = string.Format("{{{0}}}", param.Name);
-                var replaceText = param.ToEncodedString(request);
-                resource = resource.Replace(searchText, replaceText);
-            }
+            var parameters = client.MergeParameters(request);
             UriBuilder urlBuilder;
             if (client.BaseUrl == null)
+            {
+                var resource = ReplaceUrlSegments(request.Resource, parameters);
                 urlBuilder = new UriBuilder(resource);
-            else if (string.IsNullOrEmpty(resource))
-                urlBuilder = new UriBuilder(client.BaseUrl);
+            }
+            else if (request == null || string.IsNullOrEmpty(request.Resource))
+            {
+                var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
+                urlBuilder = new UriBuilder(baseUrl);
+            }
             else
-                urlBuilder = new UriBuilder(new Uri(client.BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
+            {
+                var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
+                var resource = ReplaceUrlSegments(request.Resource, parameters);
+                urlBuilder = new UriBuilder(new Uri(new Uri(baseUrl), new Uri(resource, UriKind.RelativeOrAbsolute)));
+            }
             if (withQuery)
             {
                 var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
                 var startsWithQuestionmark = queryString.ToString().StartsWith("?");
-                foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.QueryString))
+                foreach (var param in parameters.Where(x => x.Type == ParameterType.QueryString))
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                         queryString.Append("&");
-                    queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString(request));
+                    queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString());
                 }
-                if (request.GetEffectiveHttpMethod() == HttpMethod.Get)
+                if (client.GetEffectiveHttpMethod(request) == HttpMethod.Get)
                 {
-                    var getOrPostParameters = request.GetGetOrPostParameters().ToList();
+                    var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
                     foreach (var param in getOrPostParameters)
                     {
                         if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                             queryString.Append("&");
-                        queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString(request));
+                        queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString());
                     }
                 }
                 urlBuilder.Query = queryString.ToString();
@@ -119,6 +163,158 @@ namespace RestSharp.Portable
                 urlBuilder.Query = string.Empty;
             }
             return urlBuilder.Uri;
+        }
+
+        /// <summary>
+        /// Gets the basic content (without files) for a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">REST request to get the content for</param>
+        /// <returns>The HTTP content to be sent</returns>
+        internal static HttpContent GetBasicContent(this IRestClient client, IRestRequest request)
+        {
+            HttpContent content;
+            var parameters = client.MergeParameters(request);
+            var body = parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
+            if (body != null)
+            {
+                content = request.GetBodyContent(body);
+            }
+            else
+            {
+                var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
+                if (client.GetEffectiveHttpMethod(request) == HttpMethod.Post && getOrPostParameters.Count != 0)
+                {
+                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && x.Encoding != ParameterExtensions.DefaultEncoding);
+                    if (hasEncoding)
+                    {
+                        var postData = string.Join("&", getOrPostParameters
+                            .Select(x => string.Format("{0}={1}", Uri.EscapeDataString(x.Name), x.ToEncodedString())));
+                        var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
+                        content = new ByteArrayContent(bytes);
+                        content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                    }
+                    else
+                    {
+                        var postData = getOrPostParameters
+                            .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
+                            .ToList();
+                        content = new FormUrlEncodedContent(postData);
+                    }
+                }
+                else
+                {
+                    content = null;
+                }
+            }
+            return content;
+        }
+
+        /// <summary>
+        /// Gets the content for a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">REST request to get the content for</param>
+        /// <returns>The HTTP content to be sent</returns>
+        public static HttpContent GetContent(this IRestClient client, IRestRequest request)
+        {
+            HttpContent content;
+            var parameters = client.MergeParameters(request);
+            var collectionMode = request.ContentCollectionMode;
+            if (collectionMode != ContentCollectionMode.BasicContent)
+            {
+                var fileParameters = parameters.GetFileParameters().ToList();
+                if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
+                {
+                    content = client.GetMultiPartContent(request);
+                }
+                else
+                {
+                    content = client.GetBasicContent(request);
+                }
+            }
+            else
+            {
+                content = client.GetBasicContent(request);
+            }
+            return content;
+        }
+
+        /// <summary>
+        /// Gets the multi-part content (with files) for a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">REST request to get the content for</param>
+        /// <returns>The HTTP content to be sent</returns>
+        internal static HttpContent GetMultiPartContent(this IRestClient client, IRestRequest request)
+        {
+            var isPostMethod = client.GetEffectiveHttpMethod(request) == HttpMethod.Post;
+            var multipartContent = new MultipartFormDataContent();
+            var parameters = client.MergeParameters(request);
+            foreach (var parameter in parameters)
+            {
+                if (parameter is FileParameter)
+                {
+                    var file = (FileParameter)parameter;
+                    var data = new ByteArrayContent((byte[])file.Value);
+                    data.Headers.ContentType = file.ContentType;
+                    data.Headers.ContentLength = file.ContentLength;
+                    multipartContent.Add(data, file.Name, file.FileName);
+                }
+                else if (isPostMethod && parameter.Type == ParameterType.GetOrPost)
+                {
+                    HttpContent data;
+                    if (parameter.Value is byte[])
+                    {
+                        var rawData = (byte[])parameter.Value;
+                        data = new ByteArrayContent(rawData);
+                        data.Headers.ContentType = parameter.ContentType ?? new MediaTypeHeaderValue("application/octet-stream");
+                        data.Headers.ContentLength = rawData.Length;
+                        multipartContent.Add(data, parameter.Name);
+                    }
+                    else
+                    {
+                        var value = string.Format("{0}", parameter.Value);
+                        data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
+                        if (parameter.ContentType != null)
+                            data.Headers.ContentType = parameter.ContentType;
+                        multipartContent.Add(data, parameter.Name);
+                    }
+                }
+                else if (parameter.Type == ParameterType.RequestBody)
+                {
+                    var data = request.GetBodyContent(parameter);
+                    multipartContent.Add(data, parameter.Name);
+                }
+            }
+            return multipartContent;
+        }
+
+        /// <summary>
+        /// Returns the HTTP method GET or POST - depending on the parameters
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <returns>GET or POST</returns>
+        internal static HttpMethod GetDefaultMethod(this IRestClient client, IRestRequest request)
+        {
+            var parameters = client.MergeParameters(request);
+            if (parameters.Any(x => x.Type == ParameterType.RequestBody || (x is FileParameter)))
+                return HttpMethod.Post;
+            return HttpMethod.Get;
+        }
+
+        /// <summary>
+        /// Returns the real HTTP method that must be used to execute a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <returns>The real HTTP method that must be used</returns>
+        public static HttpMethod GetEffectiveHttpMethod(this IRestClient client, IRestRequest request)
+        {
+            if (request.Method == null || request.Method == HttpMethod.Get)
+                return client.GetDefaultMethod(request);
+            return request.Method;
         }
     }
 }

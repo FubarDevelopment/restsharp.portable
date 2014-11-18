@@ -135,7 +135,7 @@ namespace RestSharp.Portable
                 var httpClient = HttpClientFactory.CreateClient(this, request);
                 var message = HttpClientFactory.CreateRequestMessage(this, request);
 
-                var bodyData = request.GetContent();
+                var bodyData = this.GetContent(request);
                 if (bodyData != null)
                     message.Content = bodyData;
 

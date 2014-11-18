@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RestSharp.Portable
 {
-    static class ParameterExtensions
+    public static class ParameterExtensions
     {
         private static readonly string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static readonly string _mark = "-_.!~*'()";
@@ -71,7 +71,7 @@ namespace RestSharp.Portable
             return UrlEncode(string.Format("{0}", v), encoding, spaceAsPlus);
         }
 
-        internal static string ToEncodedString(this Parameter parameter, IRestRequest request, bool spaceAsPlus = false)
+        internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)
         {
             switch (parameter.Type)
             {
@@ -81,6 +81,27 @@ namespace RestSharp.Portable
                     return UrlEncode(parameter.Value, parameter.Encoding ?? DefaultEncoding, spaceAsPlus);
             }
             throw new NotSupportedException(string.Format("Parameter of type {0} doesn't support an encoding.", parameter.Type));
+        }
+
+        /// <summary>
+        /// Get the GetOrPost parameters (by default without file parameters, which are POST-only)
+        /// </summary>
+        /// <param name="parameters">The list of parameters to filter</param>
+        /// <param name="withFile">true == with file parameters, but those are POST-only!</param>
+        /// <returns>The list of GET or POST parameters</returns>
+        public static IEnumerable<Parameter> GetGetOrPostParameters(this IEnumerable<Parameter> parameters, bool withFile = false)
+        {
+            return parameters.Where(x => x.Type == ParameterType.GetOrPost && (withFile || !(x is FileParameter)));
+        }
+
+        /// <summary>
+        /// Get the file parameters
+        /// </summary>
+        /// <param name="parameters">The list of parameters to filter</param>
+        /// <returns>The list of POST file parameters</returns>
+        public static IEnumerable<FileParameter> GetFileParameters(this IEnumerable<Parameter> parameters)
+        {
+            return parameters.OfType<FileParameter>();
         }
     }
 }
