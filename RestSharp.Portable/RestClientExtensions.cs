@@ -85,7 +85,13 @@ namespace RestSharp.Portable
                 var replaceText = param.ToEncodedString(request);
                 resource = resource.Replace(searchText, replaceText);
             }
-            var urlBuilder = new UriBuilder(new Uri(client.BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
+            UriBuilder urlBuilder;
+            if (client.BaseUrl == null)
+                urlBuilder = new UriBuilder(resource);
+            else if (string.IsNullOrEmpty(resource))
+                urlBuilder = new UriBuilder(client.BaseUrl);
+            else
+                urlBuilder = new UriBuilder(new Uri(client.BaseUrl, new Uri(resource, UriKind.RelativeOrAbsolute)));
             if (withQuery)
             {
                 var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
