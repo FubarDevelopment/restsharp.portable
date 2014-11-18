@@ -226,7 +226,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
 
             if (GrantType != GrantTypeRefreshTokenKey)
                 RefreshToken = ParseStringResponse(content, new[] { RefreshTokenKey })[RefreshTokenKey].FirstOrDefault();
-            TokenType = ParseStringResponse(content, new[] { TokenTypeKey })[TokenType].FirstOrDefault();
+            TokenType = ParseStringResponse(content, new[] { TokenTypeKey })[TokenTypeKey].FirstOrDefault();
 
             var expiresIn = ParseStringResponse(content, new[] { ExpiresKey })[ExpiresKey].Select(x => Convert.ToInt32(x, 10)).FirstOrDefault();
             ExpiresAt = (expiresIn != 0 ? (DateTime?)DateTime.Now.AddSeconds(expiresIn) : null);
