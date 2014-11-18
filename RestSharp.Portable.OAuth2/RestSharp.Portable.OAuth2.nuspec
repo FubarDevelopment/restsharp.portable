@@ -20,8 +20,8 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-        <releaseNotes>
-- Initial release
+        <releaseNotes>- Signed assembly
+- Using Portable.BouncyCastle-Signed
         </releaseNotes>
         <copyright>Copyright © Constantin Titarenko and others</copyright>
         <language>en-US</language>
