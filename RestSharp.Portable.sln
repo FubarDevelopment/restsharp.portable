@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable", "RestSharp.Portable\RestSharp.Portable.csproj", "{59F07751-2987-43C0-B5E1-55128C5E2CC4}"
 EndProject
@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B
 		NuGet\license-oauth2.txt = NuGet\license-oauth2.txt
 		NuGet\license-restsharp.txt = NuGet\license-restsharp.txt
 		NuGet\license.txt = NuGet\license.txt
+		nuget-pack.ps1 = nuget-pack.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}"
