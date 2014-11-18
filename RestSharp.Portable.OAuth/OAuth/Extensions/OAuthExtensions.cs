@@ -41,6 +41,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
                     return OAuthSignatureMethod.PlainText;
             }
         }
+
         public static string HashWith(this string input, Org.BouncyCastle.Crypto.IMac algorithm)
         {
             var data = Encoding.UTF8.GetBytes(input);
