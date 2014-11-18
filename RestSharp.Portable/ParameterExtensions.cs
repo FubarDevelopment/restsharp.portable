@@ -5,6 +5,9 @@ using System.Text;
 
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// Extension methods for Parameter(s)
+    /// </summary>
     public static class ParameterExtensions
     {
         private static readonly string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
