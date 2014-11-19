@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "native", "native", "{888BC3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB865725-99C5-4672-9F54-0F208E6D5401}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 		RestSharp.Portable.snk = RestSharp.Portable.snk
 	EndProjectSection
 EndProject

@@ -6,8 +6,33 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* A port of an OAuth 2.0 library will be available soon!
-* Version 1.8.0 is available now!
+* Version 1.8.4 is available now!
+
+# Changes #
+
+## 1.8.4 ##
+
+* Support for parameters in IRestClient.BaseUrl
+* Signed OAuth1/OAuth2 assemblies
+* Increased compatibility for empty IRestClient.BaseUrl
+
+## 1.8.3 ##
+
+* Workaround for NuGet pack bug
+
+## 1.8.2 ##
+
+* Encodings for parameters (get/post/url/query)
+
+## 1.8.1 ##
+
+* Async. authenticators
+* New OAuth2 package
+
+## 1.8.0 ##
+
+* Cancellable requests
+* New OAuth 1.0 package
 
 # Supported platforms
 
@@ -23,8 +48,7 @@ This is some kind of a RestSharp port to PCL.
 The following is an example to get the ticker from the bitstamp.net website.
 
 ## The result class
-```
-#!csharp
+```csharp
 public class TickerResult
 {
 	public decimal Last { get; set; }
@@ -38,8 +62,7 @@ public class TickerResult
 
 We use the class with:
 
-```
-#!csharp
+```csharp
 
 var client = new RestClient(new Uri("https://www.bitstamp.net/api/"));
 var request = new RestRequest("ticker", HttpMethod.Get);
