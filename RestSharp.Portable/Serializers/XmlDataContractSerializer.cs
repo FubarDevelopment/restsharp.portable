@@ -14,7 +14,7 @@ namespace RestSharp.Portable.Serializers
     /// </summary>
     public class XmlDataContractSerializer : ISerializer
     {
-        private static Encoding _defaultEncoding = Encoding.UTF8;
+        private static Encoding _defaultEncoding = new UTF8Encoding(false);
 
         /// <summary>
         /// The configuration used to create an XML writer
