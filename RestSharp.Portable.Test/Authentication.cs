@@ -76,10 +76,10 @@ namespace RestSharp.Portable.Test
             const string username = "user name";
             const string password = "passwd";
 
-            var client = new RestClient("http://httpbin.org");
+            var client = new RestClient("http://httpbin.org/digest-auth");
             client.CookieContainer = new System.Net.CookieContainer();
             client.Authenticator = new Authenticators.HttpDigestAuthenticator(new System.Net.NetworkCredential(username, password));
-            var request = new RestRequest("digest-auth/auth-int/{username}/{password}", System.Net.Http.HttpMethod.Get);
+            var request = new RestRequest("auth-int/{username}/{password}", System.Net.Http.HttpMethod.Get);
             request.AddUrlSegment("username", username);
             request.AddUrlSegment("password", password);
             var response = await client.Execute<AuthenticationResult>(request);

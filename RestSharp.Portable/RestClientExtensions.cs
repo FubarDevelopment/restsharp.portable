@@ -134,7 +134,20 @@ namespace RestSharp.Portable
             {
                 var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
-                urlBuilder = new UriBuilder(new Uri(new Uri(baseUrl), new Uri(resource, UriKind.RelativeOrAbsolute)));
+                if (string.IsNullOrEmpty(resource))
+                {
+                    urlBuilder = new UriBuilder(baseUrl);
+                }
+                else if (string.IsNullOrEmpty(baseUrl))
+                {
+                    urlBuilder = new UriBuilder(resource);
+                }
+                else
+                {
+                    if (!baseUrl.EndsWith("/", StringComparison.Ordinal))
+                        baseUrl += "/";
+                    urlBuilder = new UriBuilder(new Uri(new Uri(baseUrl), new Uri(resource, UriKind.RelativeOrAbsolute)));
+                }
             }
             if (withQuery)
             {
