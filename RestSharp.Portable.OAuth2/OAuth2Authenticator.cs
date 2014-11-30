@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,9 +34,15 @@ namespace RestSharp.Portable.Authenticators
     /// Any other OAuth2 authenticators must derive from this
     /// abstract class.
     /// </remarks>
-    public abstract class OAuth2Authenticator : AsyncAuthenticator
+    public abstract class OAuth2Authenticator : AsyncAuthenticator, IAsyncRoundTripAuthenticator, IRoundTripAuthenticator
     {
         protected readonly OAuth2.OAuth2Client _client;
+
+        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
+        {
+            HttpStatusCode.Unauthorized,
+        };
+        private static readonly IEnumerable<HttpStatusCode> _noStatusCodes = new List<HttpStatusCode>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Authenticator"/> class.
@@ -44,6 +51,44 @@ namespace RestSharp.Portable.Authenticators
         protected OAuth2Authenticator(OAuth2.OAuth2Client client)
         {
             _client = client;
+        }
+
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        /// <returns>Task where the handler for a failed authentication gets executed</returns>
+        public virtual async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        {
+            if (string.IsNullOrEmpty(_client.RefreshToken))
+                return;
+            await _client.GetCurrentToken(forceUpdate: true);
+        }
+
+        /// <summary>
+        /// Returns all the status codes where a round trip is allowed
+        /// </summary>
+        public virtual IEnumerable<System.Net.HttpStatusCode> StatusCodes
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_client.RefreshToken))
+                    return _noStatusCodes;
+                return _statusCodes;
+            }
+        }
+
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        void IRoundTripAuthenticator.AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        {
+            AuthenticationFailed(client, request, response).Wait();
         }
     }
 
