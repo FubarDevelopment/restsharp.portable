@@ -61,7 +61,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// The time when the access token expires
         /// </summary>
-        public DateTime? ExpiresAt { get; private set; }
+        public DateTime? ExpiresAt { get; protected set; }
 
         /// <summary>
         /// A safety margin that's used to see if an access token is expired
