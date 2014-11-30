@@ -10,6 +10,15 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
+## 1.8.5 ##
+
+* BuildUrl adds a "/" between a base URL and resource 
+  if neither of them is empty and the "/" is missing
+* Fix BOM for XmlDataContractSerializer
+* Better support for OAuth2 refresh tokens by supporting
+  a HTTP 401 by the OAuth2 authenticator (when a refresh 
+  token was set)
+
 ## 1.8.4 ##
 
 * Support for parameters in IRestClient.BaseUrl
@@ -63,7 +72,6 @@ public class TickerResult
 We use the class with:
 
 ```csharp
-
 var client = new RestClient(new Uri("https://www.bitstamp.net/api/"));
 var request = new RestRequest("ticker", HttpMethod.Get);
 var result = await client.Execute<TickerResult>(request);
