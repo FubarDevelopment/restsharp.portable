@@ -18,6 +18,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
+        /// <returns>Task where the handler for a failed authentication gets executed</returns>
         Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response);
 
         /// <summary>
