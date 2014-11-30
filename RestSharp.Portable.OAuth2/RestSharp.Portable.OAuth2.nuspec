@@ -22,6 +22,7 @@ Supported Platforms:
         <summary>OAuth 2.0 authenticators and clients</summary>
         <releaseNotes>- Signed assembly
 - Using Portable.BouncyCastle-Signed
+- Try to refresh the access token on a HTTP 401
         </releaseNotes>
         <copyright>Copyright © Constantin Titarenko and others</copyright>
         <language>en-US</language>

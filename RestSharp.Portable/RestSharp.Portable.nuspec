@@ -22,6 +22,8 @@ Supported Platforms:
         <releaseNotes>- Support for parameters in IRestClient.BaseUrl
 - Signed OAuth1/OAuth2 assemblies
 - Increased compatibility for empty IRestClient.BaseUrl
+- BuildUrl adds a &quot;/&quot; between a base URL and resource if neither of them is empty and the &quot;/&quot; is missing
+- Fix BOM for XmlDataContractSerializer
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
