@@ -132,40 +132,56 @@ namespace RestSharp.Portable
             for (; ; )
             {
                 await AuthenticateRequest(request);
-                var httpClient = HttpClientFactory.CreateClient(this, request);
-                var message = HttpClientFactory.CreateRequestMessage(this, request);
-
-                var bodyData = this.GetContent(request);
-                if (bodyData != null)
-                    message.Content = bodyData;
-
-                var response = await httpClient.SendAsync(message, ct);
-                if (retryWithAuthentication)
+                using (var httpClient = HttpClientFactory.CreateClient(this, request))
                 {
-                    retryWithAuthentication = false;
-                    var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
-                    if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+                    using (var message = HttpClientFactory.CreateRequestMessage(this, request))
                     {
-                        var restResponse = new RestResponse(this, request);
-                        await restResponse.LoadResponse(response);
-                        await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                        continue;
-                    }
-                    else
-                    {
-                        var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-                        if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+
+                        var bodyData = this.GetContent(request);
+                        if (bodyData != null)
+                            message.Content = bodyData;
+
+                        bool failed = true;
+                        var response = await httpClient.SendAsync(message, ct);
+                        try
                         {
-                            var restResponse = new RestResponse(this, request);
-                            await restResponse.LoadResponse(response);
-                            roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                            continue;
+                            if (retryWithAuthentication)
+                            {
+                                retryWithAuthentication = false;
+                                var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
+                                if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+                                {
+                                    var restResponse = new RestResponse(this, request);
+                                    await restResponse.LoadResponse(response);
+                                    await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                                    failed = false;
+                                    continue;
+                                }
+                                else
+                                {
+                                    var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+                                    if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+                                    {
+                                        var restResponse = new RestResponse(this, request);
+                                        await restResponse.LoadResponse(response);
+                                        roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                                        failed = false;
+                                        continue;
+                                    }
+                                }
+                            }
+                            if (!IgnoreResponseStatusCode)
+                                response.EnsureSuccessStatusCode();
+                            failed = false;
                         }
+                        finally
+                        {
+                            if (failed && response != null)
+                                response.Dispose();
+                        }
+                        return response;
                     }
                 }
-                if (!IgnoreResponseStatusCode)
-                    response.EnsureSuccessStatusCode();
-                return response;
             }
         }
 
@@ -178,10 +194,12 @@ namespace RestSharp.Portable
         {
             using (var cts = new CancellationTokenSource())
             {
-                var response = await ExecuteRequest(request, cts.Token);
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                return restResponse;
+                using (var response = await ExecuteRequest(request, cts.Token))
+                {
+                    var restResponse = new RestResponse(this, request);
+                    await restResponse.LoadResponse(response);
+                    return restResponse;
+                }
             }
         }
 
@@ -194,10 +212,12 @@ namespace RestSharp.Portable
         {
             using (var cts = new CancellationTokenSource())
             {
-                var response = await ExecuteRequest(request, cts.Token);
-                var restResponse = new RestResponse<T>(this, request);
-                await restResponse.LoadResponse(response);
-                return restResponse;
+                using (var response = await ExecuteRequest(request, cts.Token))
+                {
+                    var restResponse = new RestResponse<T>(this, request);
+                    await restResponse.LoadResponse(response);
+                    return restResponse;
+                }
             }
         }
 
@@ -209,10 +229,12 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
         {
-            var response = await ExecuteRequest(request, ct);
-            var restResponse = new RestResponse(this, request);
-            await restResponse.LoadResponse(response);
-            return restResponse;
+            using (var response = await ExecuteRequest(request, ct))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                return restResponse;
+            }
         }
 
         /// <summary>
@@ -224,10 +246,12 @@ namespace RestSharp.Portable
         /// <returns>Response returned, with a deserialized object</returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
         {
-            var response = await ExecuteRequest(request, ct);
-            var restResponse = new RestResponse<T>(this, request);
-            await restResponse.LoadResponse(response);
-            return restResponse;
+            using (var response = await ExecuteRequest(request, ct))
+            {
+                var restResponse = new RestResponse<T>(this, request);
+                await restResponse.LoadResponse(response);
+                return restResponse;
+            }
         }
 
         private static bool? _isMono;
