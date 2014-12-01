@@ -73,23 +73,33 @@ namespace RestSharp.Portable
         /// <returns>A list of merged parameters</returns>
         public static IList<Parameter> MergeParameters(this IRestClient client, IRestRequest request)
         {
-            var result = new List<Parameter>();
-            if (request == null)
+            var parameters = new List<Parameter>();
+
+            // Add default parameters first
+            if (client != null)
             {
-                result.AddRange(client.DefaultParameters);
+                parameters.AddRange(client.DefaultParameters);
             }
-            else if (client == null)
+
+            // Now the client parameters
+            if (request != null)
             {
-                result.AddRange(request.Parameters);
+                parameters.AddRange(request.Parameters);
             }
-            else
-            {
-                var requestParameters = request.Parameters.ToDictionary(x => x, ParameterNameComparer.Default);
-                result.AddRange(request.Parameters);
-                foreach (var param in client.DefaultParameters)
-                    if (!requestParameters.ContainsKey(param))
-                        result.Add(param);
-            }
+
+            var comparer = new ParameterComparer(client, request);
+
+            var result = parameters
+                .Select((p, i) => new { Parameter = p, Index = i })
+                // Group by parameter type/name
+                .GroupBy(x => x.Parameter, comparer)
+                // Select only the last of all duplicate parameters
+                .Select(x => new { Parameter = x.Last().Parameter, Index = x.First().Index })
+                // Sort by appearance
+                .OrderBy(x => x.Index)
+                .Select(x => x.Parameter)
+                .ToList();
+
             return result;
         }
 
@@ -330,7 +340,8 @@ namespace RestSharp.Portable
         /// <returns>GET or POST</returns>
         internal static HttpMethod GetDefaultMethod(this IRestClient client, IRestRequest request)
         {
-            var parameters = client.MergeParameters(request);
+            var parameters = (client == null ? new List<Parameter>() : client.DefaultParameters)
+                .Union(request == null ? new List<Parameter>() : request.Parameters);
             if (parameters.Any(x => x.Type == ParameterType.RequestBody || (x is FileParameter)))
                 return HttpMethod.Post;
             return HttpMethod.Get;

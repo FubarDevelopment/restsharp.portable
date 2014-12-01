@@ -99,13 +99,20 @@ namespace RestSharp.Portable
 
         }
 
-        private void ConfigureRequest(IRestRequest request)
+        /// <summary>
+        /// Add non-overriden default parameters to the request
+        /// </summary>
+        /// <param name="request"></param>
+        private void AddDefaultParameters(IRestRequest request)
         {
+            var comparer = new ParameterComparer(this, request);
+
+            var startIndex = 0;
             foreach (var parameter in DefaultParameters)
             {
-                if (request.Parameters.Contains(parameter, ParameterNameComparer.Default))
+                if (request.Parameters.Contains(parameter, comparer))
                     continue;
-                request.Parameters.Add(parameter);
+                request.Parameters.Insert(startIndex++, parameter);
             }
         }
 
@@ -128,7 +135,7 @@ namespace RestSharp.Portable
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
             var retryWithAuthentication = true;
-            ConfigureRequest(request);
+            AddDefaultParameters(request);
             for (; ; )
             {
                 await AuthenticateRequest(request);

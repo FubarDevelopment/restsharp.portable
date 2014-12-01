@@ -19,6 +19,25 @@ namespace RestSharp.Portable
         private List<Parameter> _parameters = new List<Parameter>();
 
         /// <summary>
+        /// Constructor that initializes with the HTTP GET request method and the JSON serializer as default serializer
+        /// </summary>
+        public RestRequest()
+            : this((string)null, HttpMethod.Get)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor that initializes with the HTTP request method and the JSON serializer as default serializer
+        /// </summary>
+        /// <param name="method">The HTTP request method to use</param>
+        public RestRequest(HttpMethod method)
+            : this((string)null, method)
+        {
+
+        }
+
+        /// <summary>
         /// Constructor that initializes the resource path, HTTP GET request method and the JSON serializer as default serializer
         /// </summary>
         /// <param name="resource"></param>
@@ -67,7 +86,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// The resource relative to the REST clients base URL
         /// </summary>
-        public string Resource { get; private set; }
+        public string Resource { get; set; }
 
         /// <summary>
         /// REST request parameters

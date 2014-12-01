@@ -8,7 +8,7 @@ using System.Net.Http;
 namespace RestSharp.Portable.Test
 {
     [TestClass]
-    public class Authentication
+    public class AuthenticationTests
     {
         class AuthenticationResult
         {
