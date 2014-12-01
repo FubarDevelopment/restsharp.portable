@@ -20,9 +20,8 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>OAuth authenticator</summary>
-        <releaseNotes>- Signed assembly
-- Using Portable.BouncyCastle-Signed
-        </releaseNotes>
+      <releaseNotes>- Parallel release for the current version
+      </releaseNotes>
         <copyright>Copyright © John Sheehan</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth</tags>

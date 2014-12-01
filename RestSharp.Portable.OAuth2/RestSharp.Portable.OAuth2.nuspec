@@ -20,11 +20,9 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-        <releaseNotes>- Signed assembly
-- Using Portable.BouncyCastle-Signed
-- Try to refresh the access token on a HTTP 401
-        </releaseNotes>
-        <copyright>Copyright © Constantin Titarenko and others</copyright>
+      <releaseNotes>- Parallel release for the current version
+      </releaseNotes>
+      <copyright>Copyright © Constantin Titarenko and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
         <dependencies>

@@ -6,15 +6,18 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 1.8.5 is available now!
+* Version 1.9.0 is available now!
 
 # Changes #
 
-## 1.8.6 (not released yet) ##
+## 1.9.0 ##
 
 * Increased compatibility with the original RestSharp project
     * BuildUri instead of BuildUrl (deprecated)
     * Added AddJsonBody, AddXmlBody, AddQueryParameter, AddObject
+* Graceful handling of duplicate parameters
+  (might be a breaking change)
+* Dispose HttpClient, HttpRequestMessage and the HttpResponseMessage
 
 ## 1.8.5 ##
 
