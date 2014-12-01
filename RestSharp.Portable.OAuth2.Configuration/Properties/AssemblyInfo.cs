@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("OAuth2.Configuration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community")]
 [assembly: AssemblyProduct("OAuth2.Configuration")]
-[assembly: AssemblyCopyright("Copyright (c) Constantin Titarenko, Andrew Semack and others")]
+[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project, Constantin Titarenko, Andrew Semack and others 2012-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
