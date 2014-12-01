@@ -23,7 +23,14 @@ namespace RestSharp.Portable
         public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer = null)
         {
             _isGetRequest = (request == null || client.GetEffectiveHttpMethod(request) == HttpMethod.Get);
-            _stringComparer = stringComparer ?? StringComparer.Ordinal;
+            var nameComparer = stringComparer;
+            if (nameComparer == null && request != null)
+                nameComparer = request.ParameterNameComparer;
+            if (nameComparer == null && client != null)
+                nameComparer = client.DefaultParameterNameComparer;
+            if (nameComparer == null)
+                nameComparer = StringComparer.Ordinal;
+            _stringComparer = nameComparer;
         }
 
         /// <summary>
@@ -52,7 +59,7 @@ namespace RestSharp.Portable
             if (isGetParameter)
                 paramType = ParameterType.QueryString;
 
-            return obj.GetType().FullName.GetHashCode() 
+            return obj.GetType().FullName.GetHashCode()
                 ^ _stringComparer.GetHashCode(obj.Name ?? string.Empty)
                 ^ paramType.GetHashCode();
         }
@@ -89,7 +96,10 @@ namespace RestSharp.Portable
             if (x.Type == ParameterType.RequestBody)
                 return 0;
 
-            result = _stringComparer.Compare((x.Name ?? string.Empty), (y.Name ?? string.Empty));
+            var nameX = x.Name ?? string.Empty;
+            var nameY = y.Name ?? string.Empty;
+
+            result = _stringComparer.Compare(nameX, nameY);
             return result;
         }
     }

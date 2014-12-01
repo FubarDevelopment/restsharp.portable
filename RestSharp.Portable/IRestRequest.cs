@@ -38,5 +38,12 @@ namespace RestSharp.Portable
         /// Controls if we use basic content or multi part content by default.
         /// </summary>
         ContentCollectionMode ContentCollectionMode { get; set; }
+        /// <summary>
+        /// The <see cref="StringComparer"/> to be used for this request.
+        /// </summary>
+        /// <remarks>
+        /// If this property is null, the <see cref="IRestClient.DefaultParameterNameComparer"/> is used.
+        /// </remarks>
+        StringComparer ParameterNameComparer { get; set; }
     }
 }

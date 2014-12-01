@@ -142,5 +142,13 @@ namespace RestSharp.Portable
         /// Ignore the response status code?
         /// </summary>
         bool IgnoreResponseStatusCode { get; set; }
+
+        /// <summary>
+        /// The default <see cref="StringComparer"/> to be used for the requests.
+        /// </summary>
+        /// <remarks>
+        /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
+        /// </remarks>
+        StringComparer DefaultParameterNameComparer { get; set; }
     }
 }
