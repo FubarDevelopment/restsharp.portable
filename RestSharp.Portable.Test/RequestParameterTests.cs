@@ -24,6 +24,24 @@ namespace RestSharp.Portable.Test
         }
 
         [TestMethod]
+        public void TestParameterCaseInsensitive()
+        {
+            var client = new RestClient("http://localhost")
+            {
+                DefaultParameterNameComparer = StringComparer.OrdinalIgnoreCase,
+            };
+            client.AddDefaultParameter("param1", "value1");
+
+            var request = new RestRequest();
+            request
+                .AddParameter("param2", "value2")
+                .AddParameter("Param1", "value1.1");
+
+            var uri = client.BuildUri(request).ToString();
+            Assert.AreEqual("http://localhost/?Param1=value1.1&param2=value2", uri);
+        }
+
+        [TestMethod]
         public void TestParameterOverride()
         {
             var client = new RestClient("http://localhost");
