@@ -148,6 +148,18 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Add a query parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddQueryParameter(this IRestRequest request, string name, object value)
+        {
+            return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.QueryString });
+        }
+
+        /// <summary>
         /// Add an URL segment parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
