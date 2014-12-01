@@ -152,7 +152,7 @@ namespace RestSharp.Portable.Authenticators
         }
         private void AddOAuthData(IRestClient client, IRestRequest request, OAuthWorkflow workflow)
         {
-            var url = client.BuildUrl(request, false).ToString();
+            var url = client.BuildUri(request, false).ToString();
             OAuthWebQueryInfo oauth;
             var method = request.Method.Method;
             var parameters = new WebParameterCollection();

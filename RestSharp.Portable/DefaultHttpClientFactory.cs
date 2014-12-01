@@ -44,7 +44,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <returns>The base URL</returns>
         protected virtual Uri GetBaseAddress(IRestClient client)
         {
-            return client.BuildUrl(null, false);
+            return client.BuildUri(null, false);
         }
 
         /// <summary>
@@ -55,8 +55,8 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <returns>The relative request message URL</returns>
         protected virtual Uri GetMessageAddress(IRestClient client, IRestRequest request)
         {
-            var fullUrl = client.BuildUrl(request);
-            var url = client.BuildUrl(null, false).MakeRelativeUri(fullUrl);
+            var fullUrl = client.BuildUri(request);
+            var url = client.BuildUri(null, false).MakeRelativeUri(fullUrl);
             return url;
         }
 

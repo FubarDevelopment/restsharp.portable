@@ -107,7 +107,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 Request = request,
                 Configuration = Configuration,
             });
-            return await Task<string>.Factory.StartNew(() => client.BuildUrl(request).ToString());
+            return await Task<string>.Factory.StartNew(() => client.BuildUri(request).ToString());
         }
 
         /// <summary>

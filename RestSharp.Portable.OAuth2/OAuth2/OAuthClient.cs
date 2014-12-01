@@ -150,7 +150,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 request.AddParameter("state", state);
             }
 
-            return client.BuildUrl(request).ToString();
+            return client.BuildUri(request).ToString();
         }
 
         /// <summary>

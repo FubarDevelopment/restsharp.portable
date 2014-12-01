@@ -55,7 +55,7 @@ namespace RestSharp.Portable
             StatusCode = response.StatusCode;
             StatusDescription = response.ReasonPhrase;
 
-            ResponseUri = response.Headers.Location ?? Client.BuildUrl(Request, false);
+            ResponseUri = response.Headers.Location ?? Client.BuildUri(Request, false);
             var data = await response.Content.ReadAsByteArrayAsync();
             
             var contentType = response.Content.Headers.ContentType;

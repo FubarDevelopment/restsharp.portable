@@ -128,7 +128,7 @@ namespace RestSharp.Portable.Authenticators
         {
             _nc = _nc + 1;
 
-            var uri = client.BuildUrl(restRequest);
+            var uri = client.BuildUri(restRequest);
             var credential = _credentials.GetCredential(uri, "Digest");
 
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
