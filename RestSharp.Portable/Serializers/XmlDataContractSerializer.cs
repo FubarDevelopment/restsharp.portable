@@ -17,6 +17,16 @@ namespace RestSharp.Portable.Serializers
         private static Encoding _defaultEncoding = new UTF8Encoding(false);
 
         /// <summary>
+        /// Default XML serializer for AddXmlBody
+        /// </summary>
+        internal static XmlDataContractSerializer Default { get; private set; }
+
+        static XmlDataContractSerializer()
+        {
+            Default = new XmlDataContractSerializer();
+        }
+
+        /// <summary>
         /// The configuration used to create an XML writer
         /// </summary>
         protected XmlWriterSettings XmlWriterSettings { get; set; }

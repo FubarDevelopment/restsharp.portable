@@ -14,15 +14,43 @@ namespace RestSharp.Portable
     public static class RestRequestExtensions
     {
         /// <summary>
-        /// Body to add to the parameters
+        /// Body to add to the parameters using the <see cref="RestSharp.Portable.IRestRequest.Serializer" />
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
         /// <param name="obj">Object to serialize to the request body</param>
         /// <returns>The request object to allow call chains</returns>
         public static IRestRequest AddBody(this IRestRequest request, object obj)
         {
-            var data = request.Serializer.Serialize(obj);
-            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = request.Serializer.ContentType });
+            var serializer = request.Serializer;
+            var data = serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
+        }
+
+        /// <summary>
+        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.JsonSerializer"/>.
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddJsonBody(this IRestRequest request, object obj)
+        {
+            var serializer = Serializers.JsonSerializer.Default;
+            var data = serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
+        }
+
+
+        /// <summary>
+        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.XmlDataContractSerializer"/>.
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddXmlBody(this IRestRequest request, object obj)
+        {
+            var serializer = Serializers.XmlDataContractSerializer.Default;
+            var data = serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
         }
 
         /// <summary>
