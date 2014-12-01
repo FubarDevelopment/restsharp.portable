@@ -83,11 +83,9 @@
     <Compile Include="OAuth2\Infrastructure\IRequestFactory.cs" />
     <Compile Include="OAuth2\Infrastructure\LookupExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\ObjectExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\PropertyFilterMode.cs" />
     <Compile Include="OAuth2\Infrastructure\RequestFactory.cs" />
     <Compile Include="OAuth2\Infrastructure\RequestFactoryExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\RestClientExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RestRequestExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\RestResponseExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\SafeExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\StringExtensions.cs" />

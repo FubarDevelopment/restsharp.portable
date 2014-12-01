@@ -54,6 +54,88 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Port of AddObject to RestSharp.Portable
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <param name="includedProperties">Properties to include</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddObject(this IRestRequest request, object obj, params string[] includedProperties)
+        {
+            return AddObject(request, obj, ((includedProperties == null || includedProperties.Length == 0) ? null : includedProperties), PropertyFilterMode.Include);
+        }
+
+        /// <summary>
+        /// Port of AddObject to RestSharp.Portable
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <param name="objProperties">The object properties</param>
+        /// <param name="filterMode">Include or exclude the properties?</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddObject(this IRestRequest request, object obj, IEnumerable<string> objProperties, PropertyFilterMode filterMode)
+        {
+            // automatically create parameters from object props
+            var type = obj.GetType();
+            var props = type.GetProperties();
+
+            var objProps = (objProperties == null ? null : objProperties.Where(x => x != null).ToList());
+
+            foreach (var prop in props)
+            {
+                bool isAllowed;
+
+                if (objProps == null)
+                {
+                    isAllowed = true;
+                }
+                else
+                {
+                    if (filterMode == PropertyFilterMode.Include)
+                    {
+                        isAllowed = objProps.Contains(prop.Name);
+                    }
+                    else
+                    {
+                        isAllowed = !objProps.Contains(prop.Name);
+                    }
+                }
+
+                if (!isAllowed)
+                    continue;
+
+                var propType = prop.PropertyType;
+                var val = prop.GetValue(obj, null);
+
+                if (val != null)
+                {
+                    if (propType.IsArray)
+                    {
+                        var elementType = propType.GetElementType();
+
+                        if (((Array)val).Length > 0 &&
+                            (elementType.IsPrimitive || elementType.IsValueType || elementType == typeof(string)))
+                        {
+                            // convert the array to an array of strings
+                            var values =
+                                (from object item in ((Array)val) select item.ToString()).ToArray<string>();
+                            val = string.Join(",", values);
+                        }
+                        else
+                        {
+                            // try to cast it
+                            val = string.Join(",", (string[])val);
+                        }
+                    }
+
+                    request.AddParameter(prop.Name, val);
+                }
+            }
+
+            return request;
+        }
+
+        /// <summary>
         /// Generic add parameters function
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
