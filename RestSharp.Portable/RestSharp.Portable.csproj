@@ -67,6 +67,7 @@
     <Compile Include="Parameter.cs" />
     <Compile Include="ParameterExtensions.cs" />
     <Compile Include="ParameterNameComparer.cs" />
+    <Compile Include="ParameterType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestClient.cs" />
     <Compile Include="RestClientExtensions.cs" />
