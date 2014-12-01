@@ -24,6 +24,18 @@ namespace RestSharp.Portable.Test
         }
 
         [TestMethod]
+        public void TestOnlyDefaultParameter()
+        {
+            var client = new RestClient("http://localhost");
+            client.AddDefaultParameter("param1", "value1");
+
+            var request = new RestRequest();
+
+            var uri = client.BuildUri(request).ToString();
+            Assert.AreEqual("http://localhost/?param1=value1", uri);
+        }
+
+        [TestMethod]
         public void TestParameterCaseInsensitive()
         {
             var client = new RestClient("http://localhost")
