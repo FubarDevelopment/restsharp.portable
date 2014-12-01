@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+
+namespace RestSharp.Portable
+{
+    /// <summary>
+    /// Compares parameters by name
+    /// </summary>
+    public class ParameterComparer : IEqualityComparer<Parameter>, IComparer<Parameter>
+    {
+        private readonly StringComparer _stringComparer;
+        private readonly bool _isGetRequest;
+
+        /// <summary>
+        /// Constructor to create a parameter comparer variant
+        /// </summary>
+        /// <param name="client">The client this parameter comparer is for</param>
+        /// <param name="request">The request this parameter comparer is for</param>
+        /// <param name="stringComparer">The string comparer to use (default: Ordinal)</param>
+        public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer = null)
+        {
+            _isGetRequest = (request == null || client.GetEffectiveHttpMethod(request) == HttpMethod.Get);
+            _stringComparer = stringComparer ?? StringComparer.Ordinal;
+        }
+
+        /// <summary>
+        /// Parameters have the same name?
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public bool Equals(Parameter x, Parameter y)
+        {
+            return Compare(x, y) == 0;
+        }
+
+        /// <summary>
+        /// Calculate the hash code for a given parameter
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int GetHashCode(Parameter obj)
+        {
+            var paramType = obj.Type;
+            if (paramType == ParameterType.RequestBody)
+                return paramType.GetHashCode();
+
+            var isGetParameter = obj.Type == ParameterType.QueryString || (_isGetRequest && obj.Type == ParameterType.GetOrPost);
+            if (isGetParameter)
+                paramType = ParameterType.QueryString;
+
+            return obj.GetType().FullName.GetHashCode() 
+                ^ _stringComparer.GetHashCode(obj.Name ?? string.Empty)
+                ^ paramType.GetHashCode();
+        }
+
+        /// <summary>
+        /// Compare two parameters
+        /// </summary>
+        /// <param name="x">The first parameter</param>
+        /// <param name="y">The second parameter</param>
+        /// <returns></returns>
+        public int Compare(Parameter x, Parameter y)
+        {
+            int result;
+
+            // Both must be parameters of the same type
+            var xTypeName = x.GetType().FullName;
+            var yTypeName = y.GetType().FullName;
+            result = xTypeName.CompareTo(yTypeName);
+            if (result != 0)
+                return result;
+
+            // Types don't match?
+            result = x.Type.CompareTo(y.Type);
+            if (result != 0)
+            {
+                // When we have a GET request, we treat QueryString and GetOrPost as the same!
+                var isGetParameterX = x.Type == ParameterType.QueryString || (_isGetRequest && x.Type == ParameterType.GetOrPost);
+                var isGetParameterY = y.Type == ParameterType.QueryString || (_isGetRequest && y.Type == ParameterType.GetOrPost);
+                if (isGetParameterX != isGetParameterY)
+                    return result;
+            }
+
+            // When the parameter type is "RequestBody", then the name is irrelevant
+            if (x.Type == ParameterType.RequestBody)
+                return 0;
+
+            result = _stringComparer.Compare((x.Name ?? string.Empty), (y.Name ?? string.Empty));
+            return result;
+        }
+    }
+}
