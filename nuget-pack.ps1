@@ -1,11 +1,11 @@
 [OutputType([void])]
 param(
 	[Parameter()]
-	$version = "1.9.0",
+	$version = "1.9.1",
 	[Parameter()]
 	$config = "Release",
 	[Parameter()]
-	$oauth2version = "0.8.34.6"
+	$oauth2version = "0.8.34.7"
 )
 
 & nuget pack .\RestSharp.Portable\RestSharp.Portable.csproj -Properties Configuration=$config -Version $version
