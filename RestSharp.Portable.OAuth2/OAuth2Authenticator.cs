@@ -146,7 +146,7 @@ namespace RestSharp.Portable.Authenticators
         public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
             // only add the Authorization parameter if it hasn't been added.
-            if (request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
+            if (request.Parameters.Any(p => p.Type == ParameterType.HttpHeader && p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
                 return;
 
             var authValue = string.Format("{0} {1}", _tokenType, await _client.GetCurrentToken());
