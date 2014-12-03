@@ -6,9 +6,15 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 1.9.0 is available now!
+* Version 1.9.1 is available now!
 
 # Changes #
+
+## 1.9.1 ##
+
+* OAuth2AuthorizationRequestHeaderAuthenticator should only check for Authorization
+  header parameter
+* Better handling of refresh tokens in the OAuth2AuthorizationRequestHeaderAuthenticator
 
 ## 1.9.0 ##
 
