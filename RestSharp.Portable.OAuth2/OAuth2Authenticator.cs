@@ -122,6 +122,7 @@ namespace RestSharp.Portable.Authenticators
     public class OAuth2AuthorizationRequestHeaderAuthenticator : OAuth2Authenticator
     {
         private readonly string _tokenType;
+        private bool _authFailed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2AuthorizationRequestHeaderAuthenticator"/> class.
@@ -143,14 +144,41 @@ namespace RestSharp.Portable.Authenticators
             _tokenType = tokenType;
         }
 
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        /// <returns>Task where the handler for a failed authentication gets executed</returns>
+        public override async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        {
+            if (string.IsNullOrEmpty(_client.RefreshToken))
+                return;
+            // Set this variable only if we have a refresh token
+            _authFailed = true;
+            await _client.GetCurrentToken(forceUpdate: true);
+        }
+
         public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
-            // only add the Authorization parameter if it hasn't been added.
-            if (request.Parameters.Any(p => p.Type == ParameterType.HttpHeader && p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
+            // Only add the Authorization parameter if it hasn't been added and the authorization didn't fail previously
+            var authParam = request.Parameters.LastOrDefault(p => p.Type == ParameterType.HttpHeader && p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase));
+            if (!_authFailed && authParam != null)
                 return;
 
+            // When the authorization failed or when the Authorization header is missing, we're just adding it (again) with the
+            // new AccessToken.
+            _authFailed = false;
             var authValue = string.Format("{0} {1}", _tokenType, await _client.GetCurrentToken());
-            request.AddParameter("Authorization", authValue, ParameterType.HttpHeader);
+            if (authParam == null)
+            {
+                request.AddParameter("Authorization", authValue, ParameterType.HttpHeader);
+            }
+            else
+            {
+                authParam.Value = authValue;
+            }
         }
     }
 }
