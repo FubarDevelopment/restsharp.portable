@@ -20,7 +20,8 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-      <releaseNotes>- Parallel release for the current version
+      <releaseNotes>- OAuth2AuthorizationRequestHeaderAuthenticator should only check for Authorization header parameter
+- Better handling of refresh tokens in the OAuth2AuthorizationRequestHeaderAuthenticator
       </releaseNotes>
       <copyright>Copyright © Constantin Titarenko and others</copyright>
         <language>en-US</language>
