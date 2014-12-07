@@ -2,7 +2,7 @@
 
 This is some kind of a RestSharp port to PCL.
 
-# [BSD 2-Clause License](BSD 2-Clause License) #
+# [BSD 2-Clause License](LICENSE.md) #
 
 # News #
 
@@ -19,8 +19,8 @@ This is some kind of a RestSharp port to PCL.
 ## 1.9.0 ##
 
 * Increased compatibility with the original RestSharp project
-    * BuildUri instead of BuildUrl (deprecated)
-    * Added AddJsonBody, AddXmlBody, AddQueryParameter, AddObject
+	* BuildUri instead of BuildUrl (deprecated)
+	* Added AddJsonBody, AddXmlBody, AddQueryParameter, AddObject
 * Graceful handling of duplicate parameters
   (might be a breaking change)
 * Dispose HttpClient, HttpRequestMessage and the HttpResponseMessage
