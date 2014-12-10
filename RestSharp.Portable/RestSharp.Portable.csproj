@@ -58,6 +58,7 @@
     <Compile Include="Deserializers\XmlDataContractDeserializer.cs" />
     <Compile Include="Encodings\IEncoding.cs" />
     <Compile Include="Authenticators\IAuthenticator.cs" />
+    <Compile Include="EnvironmentUtilities.cs" />
     <Compile Include="FileParameter.cs" />
     <Compile Include="DefaultHttpClientFactory.cs" />
     <Compile Include="IHttpClientFactory.cs" />

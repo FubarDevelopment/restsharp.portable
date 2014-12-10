@@ -260,22 +260,11 @@ namespace RestSharp.Portable
                 return restResponse;
             }
         }
-
-        private static bool? _isMono;
-        private static bool IsMono
-        {
-            get
-            {
-                if (_isMono == null)
-                    _isMono = Type.GetType("Mono.Runtime") != null;
-                return _isMono.Value;
-            }
-        }
-
+    
         private void UpdateAcceptsHeader()
         {
             this.RemoveDefaultParameter("Accept");
-            if (_acceptTypes.Count != 0)
+            if (_acceptTypes.Count != 0 && !EnvironmentUtilities.IsSilverlight)
             {
                 var accepts = string.Join(", ", _acceptTypes);
                 this.AddDefaultParameter(new Parameter
@@ -283,7 +272,7 @@ namespace RestSharp.Portable
                     Name = "Accept",
                     Value = accepts,
                     Type = ParameterType.HttpHeader,
-                    ValidateOnAdd = !IsMono,
+                    ValidateOnAdd = !EnvironmentUtilities.IsMono,
                 });
             }
         }
