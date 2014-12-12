@@ -49,9 +49,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp.Portable">
-      <HintPath>..\packages\FubarCoder.RestSharp.Portable.1.8.0\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\RestSharp.Portable.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -105,6 +102,10 @@
     <ProjectReference Include="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.csproj">
       <Project>{8bcc8467-7805-49e3-ad67-1d322fa3d54d}</Project>
       <Name>RestSharp.Portable.OAuth2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
+      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
+      <Name>RestSharp.Portable.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

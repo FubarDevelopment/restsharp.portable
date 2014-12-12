@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable", "RestSharp.Portable\RestSharp.Portable.csproj", "{59F07751-2987-43C0-B5E1-55128C5E2CC4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Test", "RestSharp.Portable.Test\RestSharp.Portable.Test.csproj", "{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.csproj", "{674469CC-9563-4618-A8E0-7C3A980647C5}"
@@ -39,16 +37,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Configuration", "RestSharp.Portable.OAuth2.Configuration\RestSharp.Portable.OAuth2.Configuration.csproj", "{C781ADFC-06D5-4C49-8600-8E361288A7D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.PCL", "RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj", "{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59F07751-2987-43C0-B5E1-55128C5E2CC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,6 +69,10 @@ Global
 		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

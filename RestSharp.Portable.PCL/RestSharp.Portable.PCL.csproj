@@ -5,17 +5,17 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8BCC8467-7805-49E3-AD67-1D322FA3D54D}</ProjectGuid>
+    <ProjectGuid>{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
-    <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
+    <RootNamespace>RestSharp.Portable</RootNamespace>
+    <AssemblyName>RestSharp.Portable</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile336</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>56b8df64</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>3e1f5d11</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,69 +42,64 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj">
-      <Project>{331f6cb6-0d1a-4af2-b3af-258218cde213}</Project>
-      <Name>RestSharp.Portable.OAuth</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
-      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
-      <Name>RestSharp.Portable.PCL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="OAuth2Authenticator.cs" />
-    <Compile Include="OAuth2\AuthorizationRoot.cs" />
-    <Compile Include="OAuth2\BeforeAfterRequestArgs.cs" />
-    <Compile Include="OAuth2\Endpoint.cs" />
-    <Compile Include="OAuth2\IClient.cs" />
-    <Compile Include="OAuth2\Client\AsanaClient.cs" />
-    <Compile Include="OAuth2\Client\DigitalOceanClient.cs" />
-    <Compile Include="OAuth2\Client\FacebookClient.cs" />
-    <Compile Include="OAuth2\Client\FoursquareClient.cs" />
-    <Compile Include="OAuth2\Client\GitHubClient.cs" />
-    <Compile Include="OAuth2\Client\GoogleClient.cs" />
-    <Compile Include="OAuth2\Client\InstagramClient.cs" />
-    <Compile Include="OAuth2\Client\LinkedinClient.cs" />
-    <Compile Include="OAuth2\Client\MailRuClient.cs" />
-    <Compile Include="OAuth2\Client\OdnoklassnikiClient.cs" />
-    <Compile Include="OAuth2\Client\SalesforceClient.cs" />
-    <Compile Include="OAuth2\Client\TwitterClient.cs" />
-    <Compile Include="OAuth2\Client\VkClient.cs" />
-    <Compile Include="OAuth2\Client\WindowsLiveClient.cs" />
-    <Compile Include="OAuth2\Client\YandexClient.cs" />
-    <Compile Include="OAuth2\OAuth2Client.cs" />
-    <Compile Include="OAuth2\OAuthClient.cs" />
-    <Compile Include="OAuth2\UnexpectedResponseException.cs" />
-    <Compile Include="OAuth2\Configuration\IClientConfiguration.cs" />
-    <Compile Include="OAuth2\Configuration\IConfigurationManager.cs" />
-    <Compile Include="OAuth2\Configuration\IOAuth2Configuration.cs" />
-    <Compile Include="OAuth2\Configuration\RuntimeClientConfiguration.cs" />
-    <Compile Include="OAuth2\Infrastructure\EnumerableExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\IRequestFactory.cs" />
-    <Compile Include="OAuth2\Infrastructure\LookupExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\ObjectExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RequestFactory.cs" />
-    <Compile Include="OAuth2\Infrastructure\RequestFactoryExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RestClientExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RestResponseExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\SafeExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\StringExtensions.cs" />
-    <Compile Include="OAuth2\Models\UserInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="NuGet\install.ps1" />
     <None Include="NuGet\uninstall.ps1" />
     <None Include="packages.config" />
-    <None Include="RestSharp.Portable.OAuth2.nuspec">
+    <None Include="RestSharp.Portable.PCL.nuspec">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="crypto">
-      <HintPath>..\packages\Portable.BouncyCastle-Signed.1.7.0.1\lib\portable-net4+sl5+wp8+win8+wpa81\crypto.dll</HintPath>
-    </Reference>
+    <Compile Include="Authenticators\AsyncAuthenticator.cs" />
+    <Compile Include="Authenticators\HttpBasicAuthenticator.cs" />
+    <Compile Include="Authenticators\HttpDigestAuthenticator.cs" />
+    <Compile Include="Authenticators\IAsyncAuthenticator.cs" />
+    <Compile Include="Authenticators\IAsyncRoundTripAuthenticator.cs" />
+    <Compile Include="Authenticators\IAuthenticator.cs" />
+    <Compile Include="Authenticators\IRoundTripAuthenticator.cs" />
+    <Compile Include="Authenticators\NtlmAuthenticator.cs" />
+    <Compile Include="Authenticators\SimpleAuthenticator.cs" />
+    <Compile Include="ContentCollectionMode.cs" />
+    <Compile Include="DefaultHttpClientFactory.cs" />
+    <Compile Include="Deserializers\IDeserializer.cs" />
+    <Compile Include="Deserializers\JsonDeserializer.cs" />
+    <Compile Include="Deserializers\XmlDataContractDeserializer.cs" />
+    <Compile Include="Encodings\IEncoding.cs" />
+    <Compile Include="EnvironmentUtilities.cs" />
+    <Compile Include="FileParameter.cs" />
+    <Compile Include="IHttpClientFactory.cs" />
+    <Compile Include="IRestClient.cs" />
+    <Compile Include="IRestRequest.cs" />
+    <Compile Include="IRestResponse.cs" />
+    <Compile Include="Parameter.cs" />
+    <Compile Include="ParameterComparer.cs" />
+    <Compile Include="ParameterExtensions.cs" />
+    <Compile Include="ParameterType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyFilterMode.cs" />
+    <Compile Include="RestClient.cs" />
+    <Compile Include="RestClientExtensions.cs" />
+    <Compile Include="RestRequest.cs" />
+    <Compile Include="RestRequestExtensions.cs" />
+    <Compile Include="RestResponse.cs" />
+    <Compile Include="Serializers\ISerializer.cs" />
+    <Compile Include="Serializers\JsonSerializer.cs" />
+    <Compile Include="Serializers\XmlDataContractSerializer.cs" />
+    <Compile Include="System\Security\Cryptography\CryptographicException.cs" />
+    <Compile Include="System\Security\Cryptography\CryptographicUnexpectedOperationException.cs" />
+    <Compile Include="System\Security\Cryptography\HashAlgorithm.cs" />
+    <Compile Include="System\Security\Cryptography\ICryptoTransform.cs" />
+    <Compile Include="System\Security\Cryptography\MD5.cs" />
+    <Compile Include="System\Security\Cryptography\MD5CryptoServiceProvider.cs" />
+    <Compile Include="System\Security\Cryptography\MD5Managed.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RestSharp.Portable.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net40+sl4+win8+wp71+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
