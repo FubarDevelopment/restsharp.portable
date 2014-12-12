@@ -60,9 +60,6 @@
     <Compile Include="System.Security.Cryptography\MD5.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="RestSharp.Portable.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net40+sl4+win8+wp71+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>

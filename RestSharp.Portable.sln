@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.md = LICENSE.md
 		README.md = README.md
+		RestSharp.Portable.rd.xml = RestSharp.Portable.rd.xml
 		RestSharp.Portable.snk = RestSharp.Portable.snk
 	EndProjectSection
 EndProject
@@ -45,18 +46,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.SL5", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Android", "RestSharp.Portable.Android\RestSharp.Portable.Android.csproj", "{83366AF6-7732-403F-8956-66DF977F139B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.iOS", "RestSharp.Portable.iOS\RestSharp.Portable.iOS.csproj", "{BE999C56-C4E4-4AE0-8092-1D12FD9BE7F7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.NET4", "RestSharp.Portable.NET4\RestSharp.Portable.NET4.csproj", "{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.iOS", "RestSharp.Portable.iOS\RestSharp.Portable.iOS.csproj", "{1075B06B-B84F-4A86-B975-733EED6F2DE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.MonoTouch", "RestSharp.Portable.MonoTouch\RestSharp.Portable.MonoTouch.csproj", "{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
+		RestSharp.Portable\RestSharp.Portable.projitems*{1075b06b-b84f-4a86-b975-733eed6f2de5}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{be999c56-c4e4-4ae0-8092-1d12fd9be7f7}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,14 +103,18 @@ Global
 		{83366AF6-7732-403F-8956-66DF977F139B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83366AF6-7732-403F-8956-66DF977F139B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83366AF6-7732-403F-8956-66DF977F139B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE999C56-C4E4-4AE0-8092-1D12FD9BE7F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE999C56-C4E4-4AE0-8092-1D12FD9BE7F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE999C56-C4E4-4AE0-8092-1D12FD9BE7F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE999C56-C4E4-4AE0-8092-1D12FD9BE7F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1075B06B-B84F-4A86-B975-733EED6F2DE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1075B06B-B84F-4A86-B975-733EED6F2DE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1075B06B-B84F-4A86-B975-733EED6F2DE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1075B06B-B84F-4A86-B975-733EED6F2DE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
