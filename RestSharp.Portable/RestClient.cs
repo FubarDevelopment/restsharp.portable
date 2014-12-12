@@ -148,6 +148,9 @@ namespace RestSharp.Portable
                         if (bodyData != null)
                             message.Content = bodyData;
 
+                        if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
+                            message.Headers.Accept.Clear();
+
                         bool failed = true;
                         var response = await httpClient.SendAsync(message, ct);
                         try
@@ -264,7 +267,7 @@ namespace RestSharp.Portable
         private void UpdateAcceptsHeader()
         {
             this.RemoveDefaultParameter("Accept");
-            if (_acceptTypes.Count != 0 && !EnvironmentUtilities.IsSilverlight)
+            if (_acceptTypes.Count != 0)
             {
                 var accepts = string.Join(", ", _acceptTypes);
                 this.AddDefaultParameter(new Parameter
