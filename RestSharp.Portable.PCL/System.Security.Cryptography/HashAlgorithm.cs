@@ -41,7 +41,9 @@ namespace System.Security.Cryptography
 
         protected internal byte[] HashValue;
         protected int HashSizeValue;
+#pragma warning disable 649
         protected int State;
+#pragma warning restore 649
         private bool disposed;
 
         protected HashAlgorithm()
