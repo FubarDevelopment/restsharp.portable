@@ -23,7 +23,7 @@ Supported Platforms:
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>
-            <dependency id="FubarCoder.RestSharp.Portable" version="$version$" />
+            <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
         </dependencies>
     </metadata>
     <files>
