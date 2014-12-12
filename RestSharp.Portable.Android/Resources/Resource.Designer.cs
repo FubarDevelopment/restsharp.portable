@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("RestSharp.Portable.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("RestSharp.Portable.Resource", IsApplication=false)]
 
-namespace RestSharp.Portable.Android
+namespace RestSharp.Portable
 {
 	
 	

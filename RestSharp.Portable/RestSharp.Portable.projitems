@@ -42,5 +42,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System.Security.Cryptography\MD5Managed.cs" />
   </ItemGroup>
 </Project>
