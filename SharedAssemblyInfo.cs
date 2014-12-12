@@ -1,8 +1,5 @@
-﻿#if FALSE
+﻿using System.Reflection;
 using System.Resources;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über folgende 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
@@ -30,4 +27,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.9.0")]
 [assembly: AssemblyFileVersion("1.9.1")]
 [assembly: AssemblyInformationalVersion("1.9.1")]
-#endif
