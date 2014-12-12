@@ -43,9 +43,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable", "RestS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.SL5", "RestSharp.Portable.SL5\RestSharp.Portable.SL5.csproj", "{B4417474-7393-40DC-8AB5-7115990C6F8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Android", "RestSharp.Portable.Android\RestSharp.Portable.Android.csproj", "{83366AF6-7732-403F-8956-66DF977F139B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
+		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 	EndGlobalSection
@@ -86,6 +89,10 @@ Global
 		{B4417474-7393-40DC-8AB5-7115990C6F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4417474-7393-40DC-8AB5-7115990C6F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4417474-7393-40DC-8AB5-7115990C6F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83366AF6-7732-403F-8956-66DF977F139B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83366AF6-7732-403F-8956-66DF977F139B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83366AF6-7732-403F-8956-66DF977F139B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83366AF6-7732-403F-8956-66DF977F139B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
