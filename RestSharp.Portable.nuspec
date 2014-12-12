@@ -22,6 +22,7 @@ Supported Platforms:
         <releaseNotes>- Increased compatibility with RestSharp API
 - Graceful handling of duplicate parameters
 - Dispose HttpClient, HttpRequestMessage and the HttpResponseMessage
+- Clear Accept HTTP header parameter for the SL5 platform for GET requests
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>

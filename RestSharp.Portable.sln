@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B
 		NuGet\license-restsharp.txt = NuGet\license-restsharp.txt
 		NuGet\license.txt = NuGet\license.txt
 		nuget-pack.ps1 = nuget-pack.ps1
+		RestSharp.Portable.nuspec = RestSharp.Portable.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}"
