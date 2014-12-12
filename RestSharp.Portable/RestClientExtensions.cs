@@ -94,7 +94,7 @@ namespace RestSharp.Portable
                 // Group by parameter type/name
                 .GroupBy(x => x.Parameter, comparer)
                 // Select only the last of all duplicate parameters
-                .Select(x => new { Parameter = x.Last().Parameter, Index = x.First().Index })
+                .Select(x => new {x.Last().Parameter, x.First().Index })
                 // Sort by appearance
                 .OrderBy(x => x.Index)
                 .Select(x => x.Parameter)
@@ -227,7 +227,7 @@ namespace RestSharp.Portable
                 var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
                 if (client.GetEffectiveHttpMethod(request) == HttpMethod.Post && getOrPostParameters.Count != 0)
                 {
-                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && x.Encoding != ParameterExtensions.DefaultEncoding);
+                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && !Equals(x.Encoding, ParameterExtensions.DefaultEncoding));
                     if (hasEncoding)
                     {
                         var postData = string.Join("&", getOrPostParameters
@@ -295,9 +295,10 @@ namespace RestSharp.Portable
             var parameters = client.MergeParameters(request);
             foreach (var parameter in parameters)
             {
-                if (parameter is FileParameter)
+                var fileParameter = parameter as FileParameter;
+                if (fileParameter != null)
                 {
-                    var file = (FileParameter)parameter;
+                    var file = fileParameter;
                     var data = new ByteArrayContent((byte[])file.Value);
                     data.Headers.ContentType = file.ContentType;
                     data.Headers.ContentLength = file.ContentLength;
@@ -306,9 +307,10 @@ namespace RestSharp.Portable
                 else if (isPostMethod && parameter.Type == ParameterType.GetOrPost)
                 {
                     HttpContent data;
-                    if (parameter.Value is byte[])
+                    var bytes = parameter.Value as byte[];
+                    if (bytes != null)
                     {
-                        var rawData = (byte[])parameter.Value;
+                        var rawData = bytes;
                         data = new ByteArrayContent(rawData);
                         data.Headers.ContentType = parameter.ContentType ?? new MediaTypeHeaderValue("application/octet-stream");
                         data.Headers.ContentLength = rawData.Length;

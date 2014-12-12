@@ -373,7 +373,6 @@ namespace RestSharp.Portable
         [Obsolete("Use GetContent(IRestClient, IRestRequest)")]
         public static HttpContent GetContent(this IRestRequest request)
         {
-            IRestClient client = null;
             HttpContent content;
             var collectionMode = request.ContentCollectionMode;
             if (collectionMode != ContentCollectionMode.BasicContent)
@@ -381,16 +380,16 @@ namespace RestSharp.Portable
                 var fileParameters = request.GetFileParameters().ToList();
                 if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
                 {
-                    content = client.GetMultiPartContent(request);
+                    content = RestClientExtensions.GetMultiPartContent(null, request);
                 }
                 else
                 {
-                    content = client.GetBasicContent(request);
+                    content = RestClientExtensions.GetBasicContent(null, request);
                 }
             }
             else
             {
-                content = client.GetBasicContent(request);
+                content = RestClientExtensions.GetBasicContent(null, request);
             }
             return content;
         }

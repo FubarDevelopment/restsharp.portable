@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 
 namespace RestSharp.Portable.HttpClientImpl
 {
@@ -189,12 +187,12 @@ namespace RestSharp.Portable.HttpClientImpl
         /// </remarks>
         public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
         {
-            HttpClient httpClient;
-
             var handler = CreateMessageHandler(client, request);
 
-            httpClient = new HttpClient(handler, true);
-            httpClient.BaseAddress = GetBaseAddress(client);
+            var httpClient = new HttpClient(handler, true)
+            {
+                BaseAddress = GetBaseAddress(client)
+            };
             return httpClient;
         }
 

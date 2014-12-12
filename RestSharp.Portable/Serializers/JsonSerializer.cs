@@ -11,7 +11,7 @@ namespace RestSharp.Portable.Serializers
     /// </summary>
     public class JsonSerializer : ISerializer
     {
-        private static Encoding _encoding = Encoding.UTF8;
+        private static readonly Encoding _encoding = Encoding.UTF8;
 
         /// <summary>
         /// Default JSON serializer for AddJsonBody

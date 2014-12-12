@@ -33,7 +33,7 @@ namespace RestSharp.Portable.Deserializers
         /// Configure the JsonSerializer
         /// </summary>
         /// <param name="serializer">The serializer to configure</param>
-        protected virtual void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
+        protected virtual void ConfigureSerializer(JsonSerializer serializer)
         {
         }
     }

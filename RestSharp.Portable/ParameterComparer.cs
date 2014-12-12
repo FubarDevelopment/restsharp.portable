@@ -72,12 +72,10 @@ namespace RestSharp.Portable
         /// <returns></returns>
         public int Compare(Parameter x, Parameter y)
         {
-            int result;
-
             // Both must be parameters of the same type
             var xTypeName = x.GetType().FullName;
             var yTypeName = y.GetType().FullName;
-            result = xTypeName.CompareTo(yTypeName);
+            var result = String.Compare(xTypeName, yTypeName, StringComparison.Ordinal);
             if (result != 0)
                 return result;
 

@@ -11,7 +11,7 @@ namespace RestSharp.Portable.Authenticators
     /// </summary>
     public class NtlmAuthenticator : IAuthenticator
     {
-        private readonly ICredentials credentials;
+        private readonly ICredentials _credentials;
 
         /// <summary>
         /// Authenticate by impersonation
@@ -31,7 +31,7 @@ namespace RestSharp.Portable.Authenticators
         {
             if (credentials == null)
                 throw new ArgumentNullException("credentials");
-            this.credentials = credentials;
+            _credentials = credentials;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         public void Authenticate(IRestClient client, IRestRequest request)
         {
-            request.Credentials = credentials;
+            request.Credentials = _credentials;
         }
     }
 }

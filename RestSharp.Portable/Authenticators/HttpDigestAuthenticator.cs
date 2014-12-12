@@ -112,7 +112,7 @@ namespace RestSharp.Portable.Authenticators
                 return val.Value.Trim();
             }
             if (defaultValue == null)
-                throw new System.Net.WebException(string.Format("Header {0} not found", varName), WebExceptionStatus.UnknownError);
+                throw new WebException(string.Format("Header {0} not found", varName), WebExceptionStatus.UnknownError);
             return defaultValue;
         }
 
@@ -136,9 +136,9 @@ namespace RestSharp.Portable.Authenticators
             if (_algorithm == Algorithm.Undefined)
                 throw new InvalidOperationException("Algorithm not set");
 
-            string ha1, ha2, digestResponse;
+            string ha2, digestResponse;
 
-            ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
+            var ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
 
             string algorithm;
             switch (_algorithm)
@@ -147,7 +147,6 @@ namespace RestSharp.Portable.Authenticators
                     ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, _cnonce));
                     algorithm = "MD5-sess";
                     break;
-                case Algorithm.MD5:
                 default:
                     algorithm = "MD5";
                     break;
@@ -162,7 +161,6 @@ namespace RestSharp.Portable.Authenticators
                 case QualityOfProtection.AuthInt:
                     qop = "auth-int";
                     break;
-                case QualityOfProtection.Undefined:
                 default:
                     qop = null;
                     break;
@@ -188,8 +186,6 @@ namespace RestSharp.Portable.Authenticators
                     }
                     ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery, ha2));
                     break;
-                case QualityOfProtection.Undefined:
-                case QualityOfProtection.Auth:
                 default:
                     ha2 = CalculateMd5Hash(string.Format("{0}:{1}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery));
                     break;
@@ -201,7 +197,6 @@ namespace RestSharp.Portable.Authenticators
                 case QualityOfProtection.Auth:
                     digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2:D8}:{3}:{4}:{5}", ha1, _nonce, _nc, _cnonce, qop, ha2));
                     break;
-                case QualityOfProtection.Undefined:
                 default:
                     digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, ha2));
                     break;

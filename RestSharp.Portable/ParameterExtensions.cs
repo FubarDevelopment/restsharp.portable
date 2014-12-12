@@ -67,10 +67,12 @@ namespace RestSharp.Portable
         {
             if (v == null)
                 return string.Empty;
-            if (v is string)
-                return UrlEncode((string)v, encoding, spaceAsPlus);
-            if (v is byte[])
-                return UrlEncode((byte[])v, spaceAsPlus);
+            var s = v as string;
+            if (s != null)
+                return UrlEncode(s, encoding, spaceAsPlus);
+            var bytes = v as byte[];
+            if (bytes != null)
+                return UrlEncode(bytes, spaceAsPlus);
             return UrlEncode(string.Format("{0}", v), encoding, spaceAsPlus);
         }
 

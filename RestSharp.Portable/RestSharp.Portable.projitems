@@ -19,12 +19,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\NtlmAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ContentCollectionMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DefaultHttpClientFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Deserializers\IDeserializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Deserializers\JsonDeserializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Deserializers\XmlDataContractDeserializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Encodings\IEncoding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpClientImpl\DefaultHttpClientFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IHttpClientFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />

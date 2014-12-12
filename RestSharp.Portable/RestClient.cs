@@ -3,12 +3,9 @@ using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Encodings;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,7 +71,7 @@ namespace RestSharp.Portable
             AddHandler("text/x-json", jsonDeserializer);
             AddHandler("text/javascript", jsonDeserializer);
 
-            var xmlDataContractDeserializer = new Deserializers.XmlDataContractDeserializer();
+            var xmlDataContractDeserializer = new XmlDataContractDeserializer();
             AddHandler("application/xml", xmlDataContractDeserializer);
             AddHandler("text/xml", xmlDataContractDeserializer);
         }
@@ -121,7 +118,7 @@ namespace RestSharp.Portable
             if (Authenticator == null)
                 return;
 
-            var asyncAuth = this.Authenticator as IAsyncAuthenticator;
+            var asyncAuth = Authenticator as IAsyncAuthenticator;
             if (asyncAuth != null)
             {
                 await asyncAuth.Authenticate(this, request);
@@ -343,7 +340,7 @@ namespace RestSharp.Portable
         /// <remarks>
         /// This function returns NULL if the handler for the given content type cannot be found.
         /// </remarks>
-        public Deserializers.IDeserializer GetHandler(string contentType)
+        public IDeserializer GetHandler(string contentType)
         {
             if (string.IsNullOrEmpty(contentType) && _contentHandlers.ContainsKey("*"))
                 return _contentHandlers["*"];
@@ -386,7 +383,7 @@ namespace RestSharp.Portable
         /// <param name="encodingId">The Accept-Encoding header value</param>
         /// <param name="encoding">The encoding engine to decode the content</param>
         /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient AddEncoding(string encodingId, Encodings.IEncoding encoding)
+        public IRestClient AddEncoding(string encodingId, IEncoding encoding)
         {
             _encodingHandlers[encodingId] = encoding;
             _acceptEncodings.Add(encodingId);
@@ -427,7 +424,7 @@ namespace RestSharp.Portable
         /// <remarks>
         /// This function returns NULL if the handler for the given content encoding cannot be found.
         /// </remarks>
-        public Encodings.IEncoding GetEncoding(IEnumerable<string> encodingIds)
+        public IEncoding GetEncoding(IEnumerable<string> encodingIds)
         {
             if (encodingIds != null)
             {

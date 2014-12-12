@@ -53,7 +53,7 @@ namespace RestSharp.Portable
         /// <param name="method"></param>
         public RestRequest(string resource, HttpMethod method)
         {
-            ContentCollectionMode = Portable.ContentCollectionMode.MultiPartForFileParameters;
+            ContentCollectionMode = ContentCollectionMode.MultiPartForFileParameters;
             Method = method;
             Resource = resource;
             Serializer = new Serializers.JsonSerializer();

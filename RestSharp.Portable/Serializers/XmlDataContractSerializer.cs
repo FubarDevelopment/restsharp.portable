@@ -14,7 +14,7 @@ namespace RestSharp.Portable.Serializers
     /// </summary>
     public class XmlDataContractSerializer : ISerializer
     {
-        private static Encoding _defaultEncoding = new UTF8Encoding(false);
+        private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
 
         /// <summary>
         /// Default XML serializer for AddXmlBody
@@ -36,7 +36,7 @@ namespace RestSharp.Portable.Serializers
         /// </summary>
         public XmlDataContractSerializer()
         {
-            XmlWriterSettings = new System.Xml.XmlWriterSettings
+            XmlWriterSettings = new XmlWriterSettings
             {
                 Encoding = _defaultEncoding,
             };
@@ -52,9 +52,9 @@ namespace RestSharp.Portable.Serializers
             var serializer = CreateSerializer(obj);
             using (var temp = new MemoryStream())
             {
-                using (var writer = System.Xml.XmlWriter.Create(temp, XmlWriterSettings))
+                using (var writer = XmlWriter.Create(temp, XmlWriterSettings))
                 {
-                    serializer.WriteObject(temp, obj);
+                    serializer.WriteObject(writer, obj);
                 }
                 var result = temp.ToArray();
                 return result;
