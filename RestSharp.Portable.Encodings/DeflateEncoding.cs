@@ -3,10 +3,7 @@ using System.IO.Compression;
 
 namespace RestSharp.Portable.Encodings
 {
-    /// <summary>
-    /// GZIP content encoding handler
-    /// </summary>
-    public class GzipEncoding : IEncoding
+    public class DeflateEncoding : IEncoding
     {
         /// <summary>
         /// Decode the content
@@ -17,7 +14,7 @@ namespace RestSharp.Portable.Encodings
         {
             var output = new MemoryStream();
             var input = new MemoryStream(data);
-            using (var stream = new GZipStream(input, CompressionMode.Decompress))
+            using (var stream = new DeflateStream(input, CompressionMode.Decompress))
                 stream.CopyTo(output);
             return output.ToArray();
         }

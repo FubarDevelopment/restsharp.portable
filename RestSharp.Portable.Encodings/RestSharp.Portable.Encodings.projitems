@@ -9,6 +9,7 @@
     <Import_RootNamespace>RestSharp.Portable.Encodings</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DeflateEncoding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GzipEncoding.cs" />
   </ItemGroup>
 </Project>
