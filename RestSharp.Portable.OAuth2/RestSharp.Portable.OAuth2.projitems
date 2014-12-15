@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>71d709e1-0669-4bdd-b85b-4291831b2eaf</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RestSharp.Portable.Authenticators</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2Authenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\AuthorizationRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\BeforeAfterRequestArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\AsanaClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\DigitalOceanClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\FacebookClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\FoursquareClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\GitHubClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\GoogleClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\InstagramClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\LinkedinClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\MailRuClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\OdnoklassnikiClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\SalesforceClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\TwitterClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\VkClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\WindowsLiveClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\YandexClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\IClientConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\IConfigurationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\IOAuth2Configuration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\RuntimeClientConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Endpoint.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\IClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\IRequestFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\LookupExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RequestFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RequestFactoryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RestClientExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RestResponseExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\SafeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Models\UserInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\OAuth2Client.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\OAuthClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\UnexpectedResponseException.cs" />
+  </ItemGroup>
+</Project>

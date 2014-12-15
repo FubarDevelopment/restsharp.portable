@@ -8,7 +8,7 @@
     <ProjectGuid>{89550987-88EB-4DF3-9969-EE6E673DAE88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.OAuth2</RootNamespace>
+    <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
     <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -40,44 +40,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OAuth2Authenticator.cs" />
-    <Compile Include="OAuth2\AuthorizationRoot.cs" />
-    <Compile Include="OAuth2\BeforeAfterRequestArgs.cs" />
-    <Compile Include="OAuth2\Client\AsanaClient.cs" />
-    <Compile Include="OAuth2\Client\DigitalOceanClient.cs" />
-    <Compile Include="OAuth2\Client\FacebookClient.cs" />
-    <Compile Include="OAuth2\Client\FoursquareClient.cs" />
-    <Compile Include="OAuth2\Client\GitHubClient.cs" />
-    <Compile Include="OAuth2\Client\GoogleClient.cs" />
-    <Compile Include="OAuth2\Client\InstagramClient.cs" />
-    <Compile Include="OAuth2\Client\LinkedinClient.cs" />
-    <Compile Include="OAuth2\Client\MailRuClient.cs" />
-    <Compile Include="OAuth2\Client\OdnoklassnikiClient.cs" />
-    <Compile Include="OAuth2\Client\SalesforceClient.cs" />
-    <Compile Include="OAuth2\Client\TwitterClient.cs" />
-    <Compile Include="OAuth2\Client\VkClient.cs" />
-    <Compile Include="OAuth2\Client\WindowsLiveClient.cs" />
-    <Compile Include="OAuth2\Client\YandexClient.cs" />
-    <Compile Include="OAuth2\Configuration\IClientConfiguration.cs" />
-    <Compile Include="OAuth2\Configuration\IConfigurationManager.cs" />
-    <Compile Include="OAuth2\Configuration\IOAuth2Configuration.cs" />
-    <Compile Include="OAuth2\Configuration\RuntimeClientConfiguration.cs" />
-    <Compile Include="OAuth2\Endpoint.cs" />
-    <Compile Include="OAuth2\IClient.cs" />
-    <Compile Include="OAuth2\Infrastructure\EnumerableExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\IRequestFactory.cs" />
-    <Compile Include="OAuth2\Infrastructure\LookupExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\ObjectExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RequestFactory.cs" />
-    <Compile Include="OAuth2\Infrastructure\RequestFactoryExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RestClientExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\RestResponseExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\SafeExtensions.cs" />
-    <Compile Include="OAuth2\Infrastructure\StringExtensions.cs" />
-    <Compile Include="OAuth2\Models\UserInfo.cs" />
-    <Compile Include="OAuth2\OAuth2Client.cs" />
-    <Compile Include="OAuth2\OAuthClient.cs" />
-    <Compile Include="OAuth2\UnexpectedResponseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +84,7 @@
       <Name>RestSharp.Portable.PCL</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
