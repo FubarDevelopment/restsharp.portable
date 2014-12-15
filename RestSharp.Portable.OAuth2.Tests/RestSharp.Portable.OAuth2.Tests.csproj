@@ -80,6 +80,7 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -100,6 +101,11 @@
     <Compile Include="Client\EndpointTests.cs" />
     <Compile Include="Client\OAuthClientTests.cs" />
     <Compile Include="Configuration\OAuth2ConfigurationSectionTests.cs" />
+    <Compile Include="Helpers\ClientConfiguration.cs" />
+    <Compile Include="Helpers\ConfigurationManager.cs" />
+    <Compile Include="Helpers\OAuth2ConfigurationSection.cs" />
+    <Compile Include="Helpers\ServiceCollection.cs" />
+    <Compile Include="Helpers\UriUtility.cs" />
     <Compile Include="Infrastructure\ConfigurationManagerTests.cs" />
     <Compile Include="Infrastructure\EnumerableExtensionsTests.cs" />
     <Compile Include="Infrastructure\ObjectExtensionsTests.cs" />
@@ -115,13 +121,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj">
+      <Project>{6e25753f-f37d-4c32-931f-d4025546743d}</Project>
+      <Name>RestSharp.Portable.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth.NET45\RestSharp.Portable.OAuth.NET45.csproj">
+      <Project>{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}</Project>
+      <Name>RestSharp.Portable.OAuth.NET45</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.csproj">
       <Project>{8bcc8467-7805-49e3-ad67-1d322fa3d54d}</Project>
       <Name>RestSharp.Portable.OAuth2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
-      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
-      <Name>RestSharp.Portable.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
