@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+#if !PCL
 using System.Xml.Linq;
+#endif
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;
@@ -102,6 +104,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// <param name="content">The content which is received from third-party service.</param>
         protected override UserInfo ParseUserInfo(string content)
         {
+#if !PCL
             var document  = XDocument.Parse(content);
             var avatarUri = document.Element("person").Elements("picture-url").Select(x => x.Value).SingleOrDefault();
             var avatarSizeTemplate = "{0}_{0}";
@@ -125,6 +128,9 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
                         Large  = avatarUri.Replace(avatarDefaultSize, string.Format(avatarSizeTemplate, AvatarInfo.LargeSize))
                     }
             };
+#else
+            throw new NotImplementedException();
+#endif
         }
 
 

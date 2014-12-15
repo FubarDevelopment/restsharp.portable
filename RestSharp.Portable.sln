@@ -104,6 +104,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.P
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.OAuth2", "RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.shproj", "{71D709E1-0669-4BDD-B85B-4291831B2EAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.NET4", "RestSharp.Portable.OAuth2.NET4\RestSharp.Portable.OAuth2.NET4.csproj", "{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.NET45", "RestSharp.Portable.OAuth2.NET45\RestSharp.Portable.OAuth2.NET45.csproj", "{01150EB4-311C-46A1-8C5B-CC5667DA38AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Android", "RestSharp.Portable.OAuth2.Android\RestSharp.Portable.OAuth2.Android.csproj", "{01DCC8DA-1B20-47AA-BB06-70933046435B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.MonoTouch", "RestSharp.Portable.OAuth2.MonoTouch\RestSharp.Portable.OAuth2.MonoTouch.csproj", "{CCAAF69C-4B14-450D-BD09-AC525849B154}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.iOS", "RestSharp.Portable.OAuth2.iOS\RestSharp.Portable.OAuth2.iOS.csproj", "{3CD384AF-547E-40E7-A210-3B134C0CE422}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -116,7 +126,10 @@ Global
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{89550987-88eb-4df3-9969-ee6e673dae88}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{23041120-0054-41d1-8fa7-d66acef22a44}*SharedItemsImports = 13
+		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01150eb4-311c-46a1-8c5b-cc5667da38ab}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{846592b7-3dc7-4c76-a04b-a224cda0a2bb}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
+		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{0d67161a-4283-4918-8f38-7ec5bed359be}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
@@ -124,9 +137,11 @@ Global
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{2975bd7e-d038-4340-af3a-c0a94109142a}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{3cd384af-547e-40e7-a210-3b134c0ce422}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{4b247f85-b30f-490f-a241-a7270ac5fa13}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
+		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01dcc8da-1b20-47aa-bb06-70933046435b}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{e3604084-ff58-4d32-97f5-70a0e0ef9c33}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{c40e9edf-c716-491f-a47b-7c872cf6acfe}*SharedItemsImports = 4
@@ -220,6 +235,26 @@ Global
 		{89550987-88EB-4DF3-9969-EE6E673DAE88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89550987-88EB-4DF3-9969-EE6E673DAE88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89550987-88EB-4DF3-9969-EE6E673DAE88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01150EB4-311C-46A1-8C5B-CC5667DA38AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01150EB4-311C-46A1-8C5B-CC5667DA38AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01150EB4-311C-46A1-8C5B-CC5667DA38AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01150EB4-311C-46A1-8C5B-CC5667DA38AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01DCC8DA-1B20-47AA-BB06-70933046435B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01DCC8DA-1B20-47AA-BB06-70933046435B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01DCC8DA-1B20-47AA-BB06-70933046435B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01DCC8DA-1B20-47AA-BB06-70933046435B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCAAF69C-4B14-450D-BD09-AC525849B154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCAAF69C-4B14-450D-BD09-AC525849B154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCAAF69C-4B14-450D-BD09-AC525849B154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCAAF69C-4B14-450D-BD09-AC525849B154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CD384AF-547E-40E7-A210-3B134C0CE422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CD384AF-547E-40E7-A210-3B134C0CE422}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CD384AF-547E-40E7-A210-3B134C0CE422}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CD384AF-547E-40E7-A210-3B134C0CE422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,5 +291,10 @@ Global
 		{23041120-0054-41D1-8FA7-D66ACEF22A44} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{89550987-88EB-4DF3-9969-EE6E673DAE88} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
 		{71D709E1-0669-4BDD-B85B-4291831B2EAF} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
+		{846592B7-3DC7-4C76-A04B-A224CDA0A2BB} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
+		{01150EB4-311C-46A1-8C5B-CC5667DA38AB} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
+		{01DCC8DA-1B20-47AA-BB06-70933046435B} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
+		{CCAAF69C-4B14-450D-BD09-AC525849B154} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
+		{3CD384AF-547E-40E7-A210-3B134C0CE422} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
 	EndGlobalSection
 EndGlobal
