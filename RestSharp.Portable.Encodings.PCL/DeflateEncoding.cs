@@ -1,4 +1,4 @@
-﻿using Ionic.Zlib;
+﻿using Zlib.Portable;
 
 namespace RestSharp.Portable.Encodings
 {

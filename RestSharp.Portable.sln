@@ -34,8 +34,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Tests", "RestSharp.Portable.OAuth2.Tests\RestSharp.Portable.OAuth2.Tests.csproj", "{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Configuration", "RestSharp.Portable.OAuth2.Configuration\RestSharp.Portable.OAuth2.Configuration.csproj", "{C781ADFC-06D5-4C49-8600-8E361288A7D6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.PCL", "RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj", "{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable", "RestSharp.Portable\RestSharp.Portable.shproj", "{6E125AED-4FF9-4294-BB38-ADB498132A14}"
@@ -102,6 +100,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth.iO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth.MonoTouch", "RestSharp.Portable.OAuth.MonoTouch\RestSharp.Portable.OAuth.MonoTouch.csproj", "{056664A4-4180-416F-BB22-68B7984DDEC9}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Zlib.Portable", "Zlib.Portable\Zlib.Portable.shproj", "{23041120-0054-41D1-8FA7-D66ACEF22A44}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -112,6 +112,7 @@ Global
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
+		Zlib.Portable\Zlib.Portable.projitems*{23041120-0054-41d1-8fa7-d66acef22a44}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{0d67161a-4283-4918-8f38-7ec5bed359be}*SharedItemsImports = 4
@@ -120,6 +121,7 @@ Global
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{2975bd7e-d038-4340-af3a-c0a94109142a}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
+		Zlib.Portable\Zlib.Portable.projitems*{4b247f85-b30f-490f-a241-a7270ac5fa13}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{e3604084-ff58-4d32-97f5-70a0e0ef9c33}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
@@ -142,10 +144,6 @@ Global
 		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C781ADFC-06D5-4C49-8600-8E361288A7D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -228,7 +226,6 @@ Global
 		{888BC352-3848-4447-A098-FA4CD300892D} = {378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}
 		{8BCC8467-7805-49E3-AD67-1D322FA3D54D} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
 		{0DA9F405-2F79-4F37-AB44-4FE54CB661F8} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
-		{C781ADFC-06D5-4C49-8600-8E361288A7D6} = {6FFAE482-B7D2-4B3B-A9CB-11D1CC59233A}
 		{CF7A2DF4-2638-4991-81F5-DCF7A68A5911} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{6E125AED-4FF9-4294-BB38-ADB498132A14} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{B4417474-7393-40DC-8AB5-7115990C6F8D} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
@@ -253,5 +250,6 @@ Global
 		{98442F49-58CB-48FA-97C0-9B77D82C49D7} = {8AE32A84-9132-473F-AA04-802DE7F21920}
 		{96CACB80-F0BF-4953-B2BB-50A59CE1B5B3} = {8AE32A84-9132-473F-AA04-802DE7F21920}
 		{056664A4-4180-416F-BB22-68B7984DDEC9} = {8AE32A84-9132-473F-AA04-802DE7F21920}
+		{23041120-0054-41D1-8FA7-D66ACEF22A44} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 	EndGlobalSection
 EndGlobal
