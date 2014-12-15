@@ -5,7 +5,7 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}</ProjectGuid>
+    <ProjectGuid>{99A06C44-0C23-496A-BBB5-FB86F19DC52D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
@@ -15,7 +15,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>9880e0c3</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>f69c9828</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,31 +34,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OAuth1Authenticator.cs" />
-    <Compile Include="OAuth\Extensions\CollectionExtensions.cs" />
-    <Compile Include="OAuth\Extensions\OAuthExtensions.cs" />
-    <Compile Include="OAuth\Extensions\StringExtensions.cs" />
-    <Compile Include="OAuth\Extensions\TimeExtensions.cs" />
-    <Compile Include="OAuth\HttpPostParameter.cs" />
-    <Compile Include="OAuth\HttpPostParameterType.cs" />
-    <Compile Include="OAuth\OAuthParameterHandling.cs" />
-    <Compile Include="OAuth\OAuthSignatureMethod.cs" />
-    <Compile Include="OAuth\OAuthSignatureTreatment.cs" />
-    <Compile Include="OAuth\OAuthTools.cs" />
-    <Compile Include="OAuth\OAuthType.cs" />
-    <Compile Include="OAuth\OAuthWebQueryInfo.cs" />
-    <Compile Include="OAuth\OAuthWorkflow.cs" />
-    <Compile Include="OAuth\WebPair.cs" />
-    <Compile Include="OAuth\WebPairCollection.cs" />
-    <Compile Include="OAuth\WebParameter.cs" />
-    <Compile Include="OAuth\WebParameterCollection.cs" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="app.config" />
+    <None Include="NuGet\install.ps1" />
+    <None Include="NuGet\uninstall.ps1" />
+    <None Include="packages.config" />
+    <None Include="RestSharp.Portable.OAuth.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,20 +77,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="NuGet\install.ps1" />
-    <None Include="NuGet\uninstall.ps1" />
-    <None Include="packages.config" />
-    <None Include="RestSharp.Portable.OAuth.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
       <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
       <Name>RestSharp.Portable.PCL</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

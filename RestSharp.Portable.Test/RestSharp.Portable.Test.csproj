@@ -95,10 +95,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj">
-      <Project>{331f6cb6-0d1a-4af2-b3af-258218cde213}</Project>
-      <Name>RestSharp.Portable.OAuth</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
       <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
       <Name>RestSharp.Portable.PCL</Name>

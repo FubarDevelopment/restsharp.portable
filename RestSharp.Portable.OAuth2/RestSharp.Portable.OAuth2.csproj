@@ -42,9 +42,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj">
-      <Project>{331f6cb6-0d1a-4af2-b3af-258218cde213}</Project>
-      <Name>RestSharp.Portable.OAuth</Name>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth.PCL\RestSharp.Portable.OAuth.PCL.csproj">
+      <Project>{99a06c44-0c23-496a-bbb5-fb86f19dc52d}</Project>
+      <Name>RestSharp.Portable.OAuth.PCL</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
       <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
