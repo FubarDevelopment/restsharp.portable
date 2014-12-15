@@ -72,11 +72,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encoding
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.NET45", "RestSharp.Portable.Encodings.NET45\RestSharp.Portable.Encodings.NET45.csproj", "{0D67161A-4283-4918-8F38-7EC5BED359BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.Android", "RestSharp.Portable.Encodings.Android\RestSharp.Portable.Encodings.Android.csproj", "{C7564C30-F9EC-48EA-92F6-A95FAF766A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.MonoTouch", "RestSharp.Portable.Encodings.MonoTouch\RestSharp.Portable.Encodings.MonoTouch.csproj", "{E3604084-FF58-4D32-97F5-70A0E0EF9C33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.iOS", "RestSharp.Portable.Encodings.iOS\RestSharp.Portable.Encodings.iOS.csproj", "{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{c7564c30-f9ec-48ea-92f6-a95faf766a73}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
@@ -85,6 +92,8 @@ Global
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{2975bd7e-d038-4340-af3a-c0a94109142a}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{e3604084-ff58-4d32-97f5-70a0e0ef9c33}*SharedItemsImports = 4
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{c40e9edf-c716-491f-a47b-7c872cf6acfe}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +160,18 @@ Global
 		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7564C30-F9EC-48EA-92F6-A95FAF766A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7564C30-F9EC-48EA-92F6-A95FAF766A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7564C30-F9EC-48EA-92F6-A95FAF766A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7564C30-F9EC-48EA-92F6-A95FAF766A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3604084-FF58-4D32-97F5-70A0E0EF9C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3604084-FF58-4D32-97F5-70A0E0EF9C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3604084-FF58-4D32-97F5-70A0E0EF9C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3604084-FF58-4D32-97F5-70A0E0EF9C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,5 +196,8 @@ Global
 		{81F196F3-0E46-4B0C-98CF-E8A43E8C5AF4} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{2975BD7E-D038-4340-AF3A-C0A94109142A} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{0D67161A-4283-4918-8F38-7EC5BED359BE} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{C7564C30-F9EC-48EA-92F6-A95FAF766A73} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{E3604084-FF58-4D32-97F5-70A0E0EF9C33} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 	EndGlobalSection
 EndGlobal
