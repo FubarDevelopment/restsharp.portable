@@ -6,15 +6,15 @@ using System.Runtime.InteropServices;
 // Allgemeine Informationen über eine Assembly werden über folgende 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("RestSharp.Portable.OAuth2")]
+[assembly: AssemblyTitle("RestSharp.Portable.OAuth2.PCL")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community")]
-[assembly: AssemblyProduct("RestSharp.Portable.OAuth2")]
-[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project, Constantin Titarenko, Andrew Semack and others 2012-2014")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("RestSharp.Portable.OAuth2.PCL")]
+[assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: NeutralResourcesLanguage("de")]
 
 // Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 //
@@ -26,6 +26,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.8.0")]
-[assembly: AssemblyFileVersion("0.8.34.8")]
-[assembly: AssemblyInformationalVersion("0.8.34.8")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

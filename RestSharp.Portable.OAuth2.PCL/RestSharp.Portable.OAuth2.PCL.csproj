@@ -5,17 +5,17 @@
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8BCC8467-7805-49E3-AD67-1D322FA3D54D}</ProjectGuid>
+    <ProjectGuid>{89550987-88EB-4DF3-9969-EE6E673DAE88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
+    <RootNamespace>RestSharp.Portable.OAuth2</RootNamespace>
     <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile336</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>56b8df64</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>b9ded742</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,29 +34,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\RestSharp.Portable.OAuth.PCL\RestSharp.Portable.OAuth.PCL.csproj">
-      <Project>{99a06c44-0c23-496a-bbb5-fb86f19dc52d}</Project>
-      <Name>RestSharp.Portable.OAuth.PCL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
-      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
-      <Name>RestSharp.Portable.PCL</Name>
-    </ProjectReference>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OAuth2Authenticator.cs" />
     <Compile Include="OAuth2\AuthorizationRoot.cs" />
     <Compile Include="OAuth2\BeforeAfterRequestArgs.cs" />
-    <Compile Include="OAuth2\Endpoint.cs" />
-    <Compile Include="OAuth2\IClient.cs" />
     <Compile Include="OAuth2\Client\AsanaClient.cs" />
     <Compile Include="OAuth2\Client\DigitalOceanClient.cs" />
     <Compile Include="OAuth2\Client\FacebookClient.cs" />
@@ -72,13 +58,12 @@
     <Compile Include="OAuth2\Client\VkClient.cs" />
     <Compile Include="OAuth2\Client\WindowsLiveClient.cs" />
     <Compile Include="OAuth2\Client\YandexClient.cs" />
-    <Compile Include="OAuth2\OAuth2Client.cs" />
-    <Compile Include="OAuth2\OAuthClient.cs" />
-    <Compile Include="OAuth2\UnexpectedResponseException.cs" />
     <Compile Include="OAuth2\Configuration\IClientConfiguration.cs" />
     <Compile Include="OAuth2\Configuration\IConfigurationManager.cs" />
     <Compile Include="OAuth2\Configuration\IOAuth2Configuration.cs" />
     <Compile Include="OAuth2\Configuration\RuntimeClientConfiguration.cs" />
+    <Compile Include="OAuth2\Endpoint.cs" />
+    <Compile Include="OAuth2\IClient.cs" />
     <Compile Include="OAuth2\Infrastructure\EnumerableExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\IRequestFactory.cs" />
     <Compile Include="OAuth2\Infrastructure\LookupExtensions.cs" />
@@ -90,16 +75,10 @@
     <Compile Include="OAuth2\Infrastructure\SafeExtensions.cs" />
     <Compile Include="OAuth2\Infrastructure\StringExtensions.cs" />
     <Compile Include="OAuth2\Models\UserInfo.cs" />
+    <Compile Include="OAuth2\OAuth2Client.cs" />
+    <Compile Include="OAuth2\OAuthClient.cs" />
+    <Compile Include="OAuth2\UnexpectedResponseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="NuGet\install.ps1" />
-    <None Include="NuGet\uninstall.ps1" />
-    <None Include="packages.config" />
-    <None Include="RestSharp.Portable.OAuth2.nuspec">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="crypto">
@@ -132,6 +111,16 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth.PCL\RestSharp.Portable.OAuth.PCL.csproj">
+      <Project>{99a06c44-0c23-496a-bbb5-fb86f19dc52d}</Project>
+      <Name>RestSharp.Portable.OAuth.PCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
+      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
+      <Name>RestSharp.Portable.PCL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

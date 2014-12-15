@@ -129,9 +129,9 @@
       <Project>{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}</Project>
       <Name>RestSharp.Portable.OAuth.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.csproj">
-      <Project>{8bcc8467-7805-49e3-ad67-1d322fa3d54d}</Project>
-      <Name>RestSharp.Portable.OAuth2</Name>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth2.PCL\RestSharp.Portable.OAuth2.PCL.csproj">
+      <Project>{89550987-88eb-4df3-9969-ee6e673dae88}</Project>
+      <Name>RestSharp.Portable.OAuth2.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
