@@ -66,6 +66,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC37F7F1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.PCL", "RestSharp.Portable.Encodings.PCL\RestSharp.Portable.Encodings.PCL.csproj", "{4B247F85-B30F-490F-A241-A7270AC5FA13}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.shproj", "{81F196F3-0E46-4B0C-98CF-E8A43E8C5AF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.NET4", "RestSharp.Portable.Encodings.NET4\RestSharp.Portable.Encodings.NET4.csproj", "{2975BD7E-D038-4340-AF3A-C0A94109142A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.NET45", "RestSharp.Portable.Encodings.NET45\RestSharp.Portable.Encodings.NET45.csproj", "{0D67161A-4283-4918-8F38-7EC5BED359BE}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -74,8 +80,11 @@ Global
 		RestSharp.Portable\RestSharp.Portable.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{0d67161a-4283-4918-8f38-7ec5bed359be}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{2975bd7e-d038-4340-af3a-c0a94109142a}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
+		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,6 +143,14 @@ Global
 		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2975BD7E-D038-4340-AF3A-C0A94109142A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2975BD7E-D038-4340-AF3A-C0A94109142A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2975BD7E-D038-4340-AF3A-C0A94109142A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2975BD7E-D038-4340-AF3A-C0A94109142A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D67161A-4283-4918-8F38-7EC5BED359BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,5 +172,8 @@ Global
 		{01DE8F74-819F-4F49-969F-1AA7C4B65D61} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{6E25753F-F37D-4C32-931F-D4025546743D} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{4B247F85-B30F-490F-A241-A7270AC5FA13} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{81F196F3-0E46-4B0C-98CF-E8A43E8C5AF4} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{2975BD7E-D038-4340-AF3A-C0A94109142A} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{0D67161A-4283-4918-8F38-7EC5BED359BE} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 	EndGlobalSection
 EndGlobal

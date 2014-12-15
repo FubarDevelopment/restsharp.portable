@@ -1,4 +1,8 @@
-﻿using Ionic.Zlib;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace RestSharp.Portable.Encodings
 {
@@ -14,7 +18,11 @@ namespace RestSharp.Portable.Encodings
         /// <returns>Decoded content</returns>
         public byte[] Decode(byte[] data)
         {
-            return GZipStream.UncompressBuffer(data);
+            var output = new MemoryStream();
+            var input = new MemoryStream(data);
+            using (var stream = new System.IO.Compression.GZipStream(input, System.IO.Compression.CompressionMode.Decompress))
+                stream.CopyTo(output);
+            return output.ToArray();
         }
     }
 }

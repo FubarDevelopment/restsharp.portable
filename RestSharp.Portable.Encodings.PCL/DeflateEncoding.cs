@@ -3,9 +3,9 @@
 namespace RestSharp.Portable.Encodings
 {
     /// <summary>
-    /// GZIP content encoding handler
+    /// Deflate content encoding handler
     /// </summary>
-    public class GzipEncoding : IEncoding
+    public class DeflateEncoding : IEncoding
     {
         /// <summary>
         /// Decode the content
@@ -14,7 +14,7 @@ namespace RestSharp.Portable.Encodings
         /// <returns>Decoded content</returns>
         public byte[] Decode(byte[] data)
         {
-            return GZipStream.UncompressBuffer(data);
+            return DeflateStream.UncompressBuffer(data);
         }
     }
 }
