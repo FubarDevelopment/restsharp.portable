@@ -26,9 +26,10 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
         public static string ToRequestValue(this OAuthSignatureMethod signatureMethod)
         {
             var value = signatureMethod.ToString().ToUpper();
-            var shaIndex = value.IndexOf("SHA1");
+            var shaIndex = value.IndexOf("SHA1", StringComparison.Ordinal);
             return shaIndex > -1 ? value.Insert(shaIndex, "-") : value;
         }
+
         public static OAuthSignatureMethod FromRequestValue(this string signatureMethod)
         {
             switch (signatureMethod)
@@ -42,6 +43,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             }
         }
 
+#if USE_BOUNCYCASTLE
         public static string HashWith(this string input, Org.BouncyCastle.Crypto.IMac algorithm)
         {
             var data = Encoding.UTF8.GetBytes(input);
@@ -49,5 +51,13 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             var hash = Org.BouncyCastle.Security.MacUtilities.DoFinal(algorithm);
             return Convert.ToBase64String(hash);
         }
+#else
+        public static string HashWith(this string input, System.Security.Cryptography.HMAC algorithm)
+        {
+            var data = Encoding.UTF8.GetBytes(input);
+            var hash = algorithm.ComputeHash(data);
+            return Convert.ToBase64String(hash);
+        }
+#endif
     }
 }

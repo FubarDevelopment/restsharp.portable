@@ -32,30 +32,12 @@ namespace RestSharp.Portable.Authenticators.OAuth
         private const string Upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private static readonly Random _random;
         private static readonly object _randomLock = new object();
-        private static readonly Org.BouncyCastle.Crypto.Prng.IRandomGenerator _rng = CreateRandom();
-
-        private static Org.BouncyCastle.Crypto.Prng.IRandomGenerator CreateRandom()
-        {
-            var digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
-            var key = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
-            digest.BlockUpdate(key, 0, key.Length);
-            return new Org.BouncyCastle.Crypto.Prng.DigestRandomGenerator(digest);
-        }
 
         static OAuthTools()
         {
-            var bytes = new byte[4];
-
-            var temp = new byte[1];
-            var index = 0;
-            while (index != 4)
-            {
-                _rng.NextBytes(temp);
-                if (temp[0] != 0)
-                    bytes[index++] = temp[0];
-            }
-
-            _random = new Random(BitConverter.ToInt32(bytes, 0));
+            var key = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
+            var seed = BitConverter.ToInt32(key, 0);
+            _random = new Random(seed);
         }
         /// <summary>
         /// All text parameters are UTF-8 encoded (per section 5.1).
@@ -293,29 +275,35 @@ namespace RestSharp.Portable.Authenticators.OAuth
             }
             consumerSecret = UrlEncodeRelaxed(consumerSecret);
             tokenSecret = UrlEncodeRelaxed(tokenSecret);
+            var key = "{0}&{1}".FormatWith(consumerSecret, tokenSecret);
             string signature;
             switch (signatureMethod)
             {
                 case OAuthSignatureMethod.HmacSha1:
-                    {
-                        var digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
-                        var crypto = new Org.BouncyCastle.Crypto.Macs.HMac(digest);
-                        var key = "{0}&{1}".FormatWith(consumerSecret, tokenSecret);
-                        crypto.Init(new Org.BouncyCastle.Crypto.Parameters.KeyParameter(_encoding.GetBytes(key)));
-                        signature = signatureBase.HashWith(crypto);
-                        break;
-                    }
+                {
+                    var keyData = _encoding.GetBytes(key);
+#if USE_BOUNCYCASTLE
+                    var digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
+                    var crypto = new Org.BouncyCastle.Crypto.Macs.HMac(digest);
+                    crypto.Init(new Org.BouncyCastle.Crypto.Parameters.KeyParameter(keyData));
+                    signature = signatureBase.HashWith(crypto);
+#else
+                    using (var digest = new System.Security.Cryptography.HMACSHA1(keyData))
+                        signature = signatureBase.HashWith(digest);
+#endif
+                    break;
+                }
                 case OAuthSignatureMethod.PlainText:
-                    {
-                        signature = "{0}&{1}".FormatWith(consumerSecret, tokenSecret);
-                        break;
-                    }
+                {
+                    signature = key;
+                    break;
+                }
                 default:
                     throw new NotImplementedException("Only HMAC-SHA1 is currently supported.");
             }
             var result = signatureTreatment == OAuthSignatureTreatment.Escaped
-            ? UrlEncodeRelaxed(signature)
-            : signature;
+                ? UrlEncodeRelaxed(signature)
+                : signature;
             return result;
         }
     }
