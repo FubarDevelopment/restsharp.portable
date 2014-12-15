@@ -78,6 +78,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encoding
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.iOS", "RestSharp.Portable.Encodings.iOS\RestSharp.Portable.Encodings.iOS.csproj", "{C40E9EDF-C716-491F-A47B-7C872CF6ACFE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{01EA5D7B-8BBB-476F-871D-965B566B8D70}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable", "RestSharp.Portable", "{16C3FD47-B862-4355-8658-80EE1DA72985}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Scripts\RestSharp.Portable\install.ps1 = NuGet\Scripts\RestSharp.Portable\install.ps1
+		NuGet\Scripts\RestSharp.Portable\uninstall.ps1 = NuGet\Scripts\RestSharp.Portable\uninstall.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings", "{239C87E3-CAC4-4FAC-A727-E966CFCAB9A4}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Scripts\RestSharp.Portable.Encodings\install.ps1 = NuGet\Scripts\RestSharp.Portable.Encodings\install.ps1
+		NuGet\Scripts\RestSharp.Portable.Encodings\uninstall.ps1 = NuGet\Scripts\RestSharp.Portable.Encodings\uninstall.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -199,5 +213,8 @@ Global
 		{C7564C30-F9EC-48EA-92F6-A95FAF766A73} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{E3604084-FF58-4D32-97F5-70A0E0EF9C33} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{C40E9EDF-C716-491F-A47B-7C872CF6ACFE} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{01EA5D7B-8BBB-476F-871D-965B566B8D70} = {E881237B-25BC-47D2-8D80-00BA0ADD9732}
+		{16C3FD47-B862-4355-8658-80EE1DA72985} = {01EA5D7B-8BBB-476F-871D-965B566B8D70}
+		{239C87E3-CAC4-4FAC-A727-E966CFCAB9A4} = {01EA5D7B-8BBB-476F-871D-965B566B8D70}
 	EndGlobalSection
 EndGlobal

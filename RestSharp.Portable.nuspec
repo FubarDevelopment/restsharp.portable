@@ -23,12 +23,13 @@ Supported Platforms:
 - Graceful handling of duplicate parameters
 - Dispose HttpClient, HttpRequestMessage and the HttpResponseMessage
 - Clear Accept HTTP header parameter for the SL5 platform for GET requests
+- Add platform specific assemblies
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
-            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10">
+            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
@@ -72,8 +73,8 @@ Supported Platforms:
     </metadata>
     <files>
         <file src="NuGet\lib\native\_._" target="lib\native\_._" />
-        <file src="RestSharp.Portable.NET4\NuGet\install.ps1" target="tools\native\install.ps1" />
-        <file src="RestSharp.Portable.NET4\NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
+        <file src="NuGet\Scripts\RestSharp.Portable\install.ps1" target="tools\native\install.ps1" />
+        <file src="NuGet\Scripts\RestSharp.Portable\uninstall.ps1" target="tools\native\uninstall.ps1" />
         <file src="NuGet\license.txt" target="license.txt" />
         <file src="RestSharp.Portable.rd.xml" target="content\win\" />
         <file src="RestSharp.Portable.rd.xml" target="content\wpa81\" />

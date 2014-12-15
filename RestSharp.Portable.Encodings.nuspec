@@ -1,35 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
-        <id>FubarCoder.$id$</id>
+        <id>FubarCoder.RestSharp.Portable.Encodings</id>
         <version>$version$</version>
         <title>RestSharp.Portable.Encodings</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>This library contains the GZIP content encoding handler. Others may follow.
+        <description>This library contains the GZIP and Deflate content encoding handlers.
 
 Supported Platforms:
-- .NET Framework 4.5
+- .NET Framework 4
 - .NET for Windows Store apps
+- .NET Native for Windows Store apps
 - Windows Phone 8
 - Windows Phone 8.1
+- Silverlight 5
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
         <releaseNotes>- Parallel release for the current version
+- Add platform specific assemblies
+- Add Deflate encoding
         </releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>
-            <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+                <dependency id="Zlib.Portable" version="1.10.0" />
+            </group>
+            <group targetFramework="sl50">
+                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+                <dependency id="Zlib.Portable" version="1.10.0" />
+            </group>
+            <group>
+                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            </group>
         </dependencies>
     </metadata>
     <files>
-      <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
-      <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
-      <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="..\NuGet\license.txt" target="license.txt" />
+      <file src="NuGet\lib\native\_._" target="lib\native\_._" />
+      <file src="NuGet\Scripts\RestSharp.Portable.Encodings\install.ps1" target="tools\native\install.ps1" />
+      <file src="NuGet\Scripts\RestSharp.Portable.Encodings\uninstall.ps1" target="tools\native\uninstall.ps1" />
+      <file src="NuGet\license.txt" target="license.txt" />
+      <file src="RestSharp.Portable.Encodings.NET4\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net40\" />
+      <file src="RestSharp.Portable.Encodings.NET45\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net45\" />
+      <file src="RestSharp.Portable.Encodings.PCL\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Encodings.Android\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\MonoAndroid10\" />
+      <file src="RestSharp.Portable.Encodings.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Encodings.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\MonoTouch10\" />
     </files>
 </package>
