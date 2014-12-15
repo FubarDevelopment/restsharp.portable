@@ -4,11 +4,9 @@ using System.Resources;
 // Allgemeine Informationen über eine Assembly werden über folgende 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die einer Assembly zugeordnet sind.
-[assembly: AssemblyTitle("RestSharp.Portable")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community")]
-[assembly: AssemblyProduct("RestSharp.Portable")]
+[assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community and others")]
 [assembly: AssemblyCopyright("Copyright © RestSharp.Portable project 2013-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

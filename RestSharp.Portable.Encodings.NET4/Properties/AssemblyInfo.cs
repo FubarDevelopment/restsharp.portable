@@ -1,4 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Reflection;
+using System.Runtime.InteropServices;
+
+// Allgemeine Informationen über eine Assembly werden über folgende 
+// Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
+// die einer Assembly zugeordnet sind.
+[assembly: AssemblyTitle("RestSharp.Portable.Encodings")]
+[assembly: AssemblyProduct("RestSharp.Portable.Encodings")]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
 // für COM-Komponenten.  Wenn Sie auf einen Typ in dieser Assembly von 
