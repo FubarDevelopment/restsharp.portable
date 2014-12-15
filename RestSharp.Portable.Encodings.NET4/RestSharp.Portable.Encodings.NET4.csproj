@@ -7,8 +7,8 @@
     <ProjectGuid>{2975BD7E-D038-4340-AF3A-C0A94109142A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.Encodings.NET4</RootNamespace>
-    <AssemblyName>RestSharp.Portable.Encodings.NET4</AssemblyName>
+    <RootNamespace>RestSharp.Portable.Encodings</RootNamespace>
+    <AssemblyName>RestSharp.Portable.Encodings</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>42400161</NuGetPackageImportStamp>
