@@ -5,14 +5,13 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Test", "RestSharp.Portable.Test\RestSharp.Portable.Test.csproj", "{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.csproj", "{674469CC-9563-4618-A8E0-7C3A980647C5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B-25BC-47D2-8D80-00BA0ADD9732}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\license-oauth2.txt = NuGet\license-oauth2.txt
 		NuGet\license-restsharp.txt = NuGet\license-restsharp.txt
 		NuGet\license.txt = NuGet\license.txt
 		nuget-pack.ps1 = nuget-pack.ps1
+		RestSharp.Portable.Encodings.nuspec = RestSharp.Portable.Encodings.nuspec
 		RestSharp.Portable.nuspec = RestSharp.Portable.nuspec
 	EndProjectSection
 EndProject
@@ -65,6 +64,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth2", "OAuth2", "{6FFAE4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.PCL", "RestSharp.Portable.Encodings.PCL\RestSharp.Portable.Encodings.PCL.csproj", "{4B247F85-B30F-490F-A241-A7270AC5FA13}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -85,10 +86,6 @@ Global
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{674469CC-9563-4618-A8E0-7C3A980647C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{674469CC-9563-4618-A8E0-7C3A980647C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{674469CC-9563-4618-A8E0-7C3A980647C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -133,13 +130,16 @@ Global
 		{6E25753F-F37D-4C32-931F-D4025546743D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E25753F-F37D-4C32-931F-D4025546743D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E25753F-F37D-4C32-931F-D4025546743D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B247F85-B30F-490F-A241-A7270AC5FA13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B88EBEB8-329D-49F5-A00F-EE2104AA3DB5} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
-		{674469CC-9563-4618-A8E0-7C3A980647C5} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 		{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD} = {E881237B-25BC-47D2-8D80-00BA0ADD9732}
 		{888BC352-3848-4447-A098-FA4CD300892D} = {378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}
 		{331F6CB6-0D1A-4AF2-B3AF-258218CDE213} = {8AE32A84-9132-473F-AA04-802DE7F21920}
@@ -154,5 +154,6 @@ Global
 		{C8C1A1BC-95B4-4417-9E23-D1255ECC2782} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{01DE8F74-819F-4F49-969F-1AA7C4B65D61} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{6E25753F-F37D-4C32-931F-D4025546743D} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
+		{4B247F85-B30F-490F-A241-A7270AC5FA13} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
 	EndGlobalSection
 EndGlobal

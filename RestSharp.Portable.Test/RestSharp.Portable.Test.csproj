@@ -95,10 +95,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.csproj">
-      <Project>{674469cc-9563-4618-a8e0-7c3a980647c5}</Project>
-      <Name>RestSharp.Portable.Encodings</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.csproj">
       <Project>{331f6cb6-0d1a-4af2-b3af-258218cde213}</Project>
       <Name>RestSharp.Portable.OAuth</Name>
