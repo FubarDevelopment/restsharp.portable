@@ -3,6 +3,9 @@ using System.IO.Compression;
 
 namespace RestSharp.Portable.Encodings
 {
+    /// <summary>
+    /// Handler for the "deflate" encoding
+    /// </summary>
     public class DeflateEncoding : IEncoding
     {
         /// <summary>

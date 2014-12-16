@@ -21,9 +21,18 @@ using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
+    /// <summary>
+    /// The kind of OAuth signature
+    /// </summary>
     public enum OAuthSignatureTreatment
     {
+        /// <summary>
+        /// Escaped OAuth signature
+        /// </summary>
         Escaped,
+        /// <summary>
+        /// Unescaped OAuth signature
+        /// </summary>
         Unescaped
     }
 }

@@ -36,6 +36,9 @@ namespace RestSharp.Portable.Authenticators
     /// </remarks>
     public abstract class OAuth2Authenticator : AsyncAuthenticator, IAsyncRoundTripAuthenticator, IRoundTripAuthenticator
     {
+        /// <summary>
+        /// The OAuth client that is used by this authenticator
+        /// </summary>
         protected readonly OAuth2.OAuth2Client _client;
 
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
@@ -107,6 +110,12 @@ namespace RestSharp.Portable.Authenticators
         public OAuth2UriQueryParameterAuthenticator(OAuth2.OAuth2Client client)
             : base(client) { }
 
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <returns></returns>
         public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
             request.AddParameter("oauth_token", await _client.GetCurrentToken(), ParameterType.GetOrPost);
@@ -160,6 +169,12 @@ namespace RestSharp.Portable.Authenticators
             await _client.GetCurrentToken(forceUpdate: true);
         }
 
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <returns></returns>
         public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
             // Only add the Authorization parameter if it hasn't been added and the authorization didn't fail previously

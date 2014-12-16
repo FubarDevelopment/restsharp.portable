@@ -13,7 +13,7 @@
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile336</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>b9ded742</NuGetPackageImportStamp>
   </PropertyGroup>
@@ -25,6 +25,7 @@
     <DefineConstants>TRACE;DEBUG;PCL;USE_BOUNCYCASTLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\RestSharp.Portable.OAuth2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <DefineConstants>TRACE;PCL;USE_BOUNCYCASTLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\RestSharp.Portable.OAuth2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

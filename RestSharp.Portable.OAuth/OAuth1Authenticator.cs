@@ -24,11 +24,26 @@ namespace RestSharp.Portable.Authenticators
     using OAuth;
     using OAuth.Extensions;
 
+    /// <summary>
+    /// OAuth 1.0a authenticator
+    /// </summary>
     public class OAuth1Authenticator : IAuthenticator
     {
+        /// <summary>
+        /// Realm
+        /// </summary>
         public virtual string Realm { get; set; }
+        /// <summary>
+        /// OAuth parameter handling
+        /// </summary>
         public virtual OAuthParameterHandling ParameterHandling { get; set; }
+        /// <summary>
+        /// OAuth signature method
+        /// </summary>
         public virtual OAuthSignatureMethod SignatureMethod { get; set; }
+        /// <summary>
+        /// OAuth signature treatment
+        /// </summary>
         public virtual OAuthSignatureTreatment SignatureTreatment { get; set; }
         internal virtual OAuthType Type { get; set; }
         internal virtual string ConsumerKey { get; set; }
@@ -41,6 +56,13 @@ namespace RestSharp.Portable.Authenticators
         internal virtual string SessionHandle { get; set; }
         internal virtual string ClientUsername { get; set; }
         internal virtual string ClientPassword { get; set; }
+
+        /// <summary>
+        /// Create an authenticator to gather a request token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <returns></returns>
         public static OAuth1Authenticator ForRequestToken(string consumerKey, string consumerSecret)
         {
             var authenticator = new OAuth1Authenticator
@@ -54,14 +76,30 @@ namespace RestSharp.Portable.Authenticators
             };
             return authenticator;
         }
+
+        /// <summary>
+        /// Create an authenticator to gather a request token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="callbackUrl"></param>
+        /// <returns></returns>
         public static OAuth1Authenticator ForRequestToken(string consumerKey, string consumerSecret, string callbackUrl)
         {
             var authenticator = ForRequestToken(consumerKey, consumerSecret);
             authenticator.CallbackUrl = callbackUrl;
             return authenticator;
         }
-        public static OAuth1Authenticator ForAccessToken(string consumerKey, string consumerSecret, string token,
-        string tokenSecret)
+
+        /// <summary>
+        /// Create an authenticator to gather an access token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="token"></param>
+        /// <param name="tokenSecret"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForAccessToken(string consumerKey, string consumerSecret, string token, string tokenSecret)
         {
             var authenticator = new OAuth1Authenticator
             {
@@ -76,30 +114,66 @@ namespace RestSharp.Portable.Authenticators
             };
             return authenticator;
         }
-        public static OAuth1Authenticator ForAccessToken(string consumerKey, string consumerSecret, string token,
-        string tokenSecret, string verifier)
+
+        /// <summary>
+        /// Create an authenticator to gather an access token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="token"></param>
+        /// <param name="tokenSecret"></param>
+        /// <param name="verifier"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForAccessToken(string consumerKey, string consumerSecret, string token, string tokenSecret, string verifier)
         {
             var authenticator = ForAccessToken(consumerKey, consumerSecret, token, tokenSecret);
             authenticator.Verifier = verifier;
             return authenticator;
         }
-        public static OAuth1Authenticator ForAccessTokenRefresh(string consumerKey, string consumerSecret, string token,
-        string tokenSecret, string sessionHandle)
+
+        /// <summary>
+        /// Create an authenticator to refresh an access token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="token"></param>
+        /// <param name="tokenSecret"></param>
+        /// <param name="sessionHandle"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForAccessTokenRefresh(string consumerKey, string consumerSecret, string token, string tokenSecret, string sessionHandle)
         {
             var authenticator = ForAccessToken(consumerKey, consumerSecret, token, tokenSecret);
             authenticator.SessionHandle = sessionHandle;
             return authenticator;
         }
-        public static OAuth1Authenticator ForAccessTokenRefresh(string consumerKey, string consumerSecret, string token,
-        string tokenSecret, string verifier, string sessionHandle)
+
+        /// <summary>
+        /// Create an authenticator to refresh an access token
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="token"></param>
+        /// <param name="tokenSecret"></param>
+        /// <param name="verifier"></param>
+        /// <param name="sessionHandle"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForAccessTokenRefresh(string consumerKey, string consumerSecret, string token, string tokenSecret, string verifier, string sessionHandle)
         {
             var authenticator = ForAccessToken(consumerKey, consumerSecret, token, tokenSecret);
             authenticator.SessionHandle = sessionHandle;
             authenticator.Verifier = verifier;
             return authenticator;
         }
-        public static OAuth1Authenticator ForClientAuthentication(string consumerKey, string consumerSecret,
-        string username, string password)
+
+        /// <summary>
+        /// Create an authenticator to authenticate the client
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForClientAuthentication(string consumerKey, string consumerSecret, string username, string password)
         {
             var authenticator = new OAuth1Authenticator
             {
@@ -114,8 +188,16 @@ namespace RestSharp.Portable.Authenticators
             };
             return authenticator;
         }
-        public static OAuth1Authenticator ForProtectedResource(string consumerKey, string consumerSecret,
-        string accessToken, string accessTokenSecret)
+
+        /// <summary>
+        /// Create an authenticator to access a protected resource
+        /// </summary>
+        /// <param name="consumerKey"></param>
+        /// <param name="consumerSecret"></param>
+        /// <param name="accessToken"></param>
+        /// <param name="accessTokenSecret"></param>
+        /// <returns></returns>
+        public static OAuth1Authenticator ForProtectedResource(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret)
         {
             var authenticator = new OAuth1Authenticator
             {
@@ -130,6 +212,12 @@ namespace RestSharp.Portable.Authenticators
             };
             return authenticator;
         }
+
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
         public void Authenticate(IRestClient client, IRestRequest request)
         {
             var workflow = new OAuthWorkflow
@@ -232,7 +320,7 @@ namespace RestSharp.Portable.Authenticators
             {
                 sb.Append("realm=\"{0}\",".FormatWith(OAuthTools.UrlEncodeRelaxed(Realm)));
             }
-            parameters.Sort((l, r) => l.Name.CompareTo(r.Name));
+            parameters.Sort((l, r) => String.Compare(l.Name, r.Name, StringComparison.Ordinal));
             var parameterCount = 0;
             var oathParameters = parameters.Where(parameter =>
             !parameter.Name.IsNullOrBlank() &&

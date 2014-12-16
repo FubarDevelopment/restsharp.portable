@@ -12,30 +12,44 @@
         <description>This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.
 
 Supported Platforms:
-- .NET Framework 4.0.3
+- .NET Framework 4
 - .NET for Windows Store apps
 - .NET Native for Windows Store apps
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
-- Portable Class Libraries</description>
+- Portable Class Libraries (.NET 4.0.3+)</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-      <releaseNotes>- OAuth2AuthorizationRequestHeaderAuthenticator should only check for Authorization header parameter
-- Better handling of refresh tokens in the OAuth2AuthorizationRequestHeaderAuthenticator
-      </releaseNotes>
+      <releaseNotes>- Add platform specific assemblies</releaseNotes>
       <copyright>Copyright © Constantin Titarenko and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
         <dependencies>
+          <group targetFramework="portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
-            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
-            <dependency id="Newtonsoft.Json" version="6.0.5" />
+            <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
+          </group>
+          <group>
+            <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+          </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="..\NuGet\lib\native\_._" target="lib\native\_._" />
-        <file src="NuGet\install.ps1" target="tools\native\install.ps1" />
-        <file src="NuGet\uninstall.ps1" target="tools\native\uninstall.ps1" />
-        <file src="..\NuGet\license-oauth2.txt" target="license.txt" />
+      <file src="NuGet\lib\native\_._" target="lib\native\_._" />
+      <file src="NuGet\license-restsharp.txt" target="license.txt" />
+      <file src="NuGet\Scripts\RestSharp.Portable.OAuth2\install.ps1" target="tools\native\install.ps1" />
+      <file src="NuGet\Scripts\RestSharp.Portable.OAuth2\uninstall.ps1" target="tools\native\uninstall.ps1" />
+      <file src="RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net40\" />
+      <file src="RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net40\" />
+      <file src="RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net45\" />
+      <file src="RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net45\" />
+      <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoAndroid10\" />
+      <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoAndroid10\" />
+      <file src="RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoTouch10\" />
+      <file src="RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoTouch10\" />
     </files>
 </package>

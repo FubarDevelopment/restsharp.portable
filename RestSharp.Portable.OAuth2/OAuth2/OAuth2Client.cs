@@ -242,6 +242,13 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             return ParseStringResponse(content, AccessTokenKey);
         }
 
+        /// <summary>
+        /// Parse the response, search for a key and return its value.
+        /// </summary>
+        /// <param name="content">The content to parse</param>
+        /// <param name="key">The key to query</param>
+        /// <returns></returns>
+        /// <exception cref="UnexpectedResponseException">Thrown when the key wasn't found</exception>
         protected static string ParseStringResponse(string content, string key)
         {
             var values = ParseStringResponse(content, new[] { key })[key].ToList();

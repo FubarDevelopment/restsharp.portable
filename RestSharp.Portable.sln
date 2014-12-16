@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B
 		RestSharp.Portable.nuspec = RestSharp.Portable.nuspec
 		RestSharp.Portable.OAuth.nuspec = RestSharp.Portable.OAuth.nuspec
 		RestSharp.Portable.OAuth2.nuspec = RestSharp.Portable.OAuth2.nuspec
+		RestSharp.Portable.rd.xml = RestSharp.Portable.rd.xml
+		RestSharp.Portable.snk = RestSharp.Portable.snk
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}"
@@ -28,8 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		LICENSE.md = LICENSE.md
 		README.md = README.md
-		RestSharp.Portable.rd.xml = RestSharp.Portable.rd.xml
-		RestSharp.Portable.snk = RestSharp.Portable.snk
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Tests", "RestSharp.Portable.OAuth2.Tests\RestSharp.Portable.OAuth2.Tests.csproj", "{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}"

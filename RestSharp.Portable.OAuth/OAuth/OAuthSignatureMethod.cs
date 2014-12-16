@@ -21,10 +21,22 @@ using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
+    /// <summary>
+    /// The signature method for OAuth
+    /// </summary>
     public enum OAuthSignatureMethod
     {
+        /// <summary>
+        /// HMAC-SHA1
+        /// </summary>
         HmacSha1,
+        /// <summary>
+        /// Plain text
+        /// </summary>
         PlainText,
+        /// <summary>
+        /// RSA-SHA1 (not supported yet)
+        /// </summary>
         RsaSha1
     }
 }

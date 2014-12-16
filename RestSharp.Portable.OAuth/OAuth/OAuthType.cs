@@ -21,11 +21,26 @@ using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
+    /// <summary>
+    /// OAuth state
+    /// </summary>
     public enum OAuthType
     {
+        /// <summary>
+        /// Request token
+        /// </summary>
         RequestToken,
+        /// <summary>
+        /// Access token
+        /// </summary>
         AccessToken,
+        /// <summary>
+        /// Access to a protected resource
+        /// </summary>
         ProtectedResource,
+        /// <summary>
+        /// Client authentication
+        /// </summary>
         ClientAuthentication
     }
 }

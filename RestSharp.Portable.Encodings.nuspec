@@ -19,10 +19,8 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
-        <releaseNotes>- Parallel release for the current version
-- Add platform specific assemblies
-- Add Deflate encoding
-        </releaseNotes>
+        <releaseNotes>- Add platform specific assemblies
+- Add Deflate encoding</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
@@ -36,10 +34,16 @@ Supported Platforms:
       <file src="NuGet\Scripts\RestSharp.Portable.Encodings\install.ps1" target="tools\native\install.ps1" />
       <file src="NuGet\Scripts\RestSharp.Portable.Encodings\uninstall.ps1" target="tools\native\uninstall.ps1" />
       <file src="RestSharp.Portable.Encodings.NET4\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net40\" />
+      <file src="RestSharp.Portable.Encodings.NET4\bin\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\net40\" />
       <file src="RestSharp.Portable.Encodings.NET45\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net45\" />
+      <file src="RestSharp.Portable.Encodings.NET45\bin\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\net45\" />
       <file src="RestSharp.Portable.Encodings.PCL\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Encodings.PCL\bin\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.Encodings.Android\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\MonoAndroid10\" />
+      <file src="RestSharp.Portable.Encodings.Android\bin\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\MonoAndroid10\" />
       <file src="RestSharp.Portable.Encodings.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Encodings.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\Xamarin.iOS10\" />
       <file src="RestSharp.Portable.Encodings.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\MonoTouch10\" />
+      <file src="RestSharp.Portable.Encodings.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.Encodings.XML" target="lib\MonoTouch10\" />
     </files>
 </package>

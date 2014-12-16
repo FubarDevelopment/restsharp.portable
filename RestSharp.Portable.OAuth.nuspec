@@ -20,7 +20,7 @@ Supported Platforms:
 - Silverlight 5
 - Portable Class Libraries</description>
     <summary>OAuth authenticator</summary>
-    <releaseNotes>- Parallel release for the current version</releaseNotes>
+    <releaseNotes>- Add platform specific assemblies</releaseNotes>
     <copyright>Copyright © John Sheehan</copyright>
     <language>en-US</language>
     <tags>PCL RestSharp portable OAuth</tags>
@@ -40,10 +40,16 @@ Supported Platforms:
     <file src="NuGet\Scripts\RestSharp.Portable.OAuth\install.ps1" target="tools\native\install.ps1" />
     <file src="NuGet\Scripts\RestSharp.Portable.OAuth\uninstall.ps1" target="tools\native\uninstall.ps1" />
     <file src="RestSharp.Portable.OAuth.NET4\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\net40\" />
+    <file src="RestSharp.Portable.OAuth.NET4\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\net40\" />
     <file src="RestSharp.Portable.OAuth.NET45\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\net45\" />
+    <file src="RestSharp.Portable.OAuth.NET45\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\net45\" />
     <file src="RestSharp.Portable.OAuth.PCL\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.PCL\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
     <file src="RestSharp.Portable.OAuth.Android\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\MonoAndroid10\" />
+    <file src="RestSharp.Portable.OAuth.Android\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\MonoAndroid10\" />
     <file src="RestSharp.Portable.OAuth.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\Xamarin.iOS10\" />
     <file src="RestSharp.Portable.OAuth.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\MonoTouch10\" />
+    <file src="RestSharp.Portable.OAuth.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\MonoTouch10\" />
   </files>
 </package>

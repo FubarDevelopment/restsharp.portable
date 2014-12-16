@@ -21,9 +21,18 @@ using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
+    /// <summary>
+    /// Where are the OAuth parameters stored?
+    /// </summary>
     public enum OAuthParameterHandling
     {
+        /// <summary>
+        /// The OAuth parameter is stored in the HTTP header
+        /// </summary>
         HttpAuthorizationHeader,
+        /// <summary>
+        /// The OAuth parameter is stored in the URL or as POST parameter
+        /// </summary>
         UrlOrPostParameters
     }
 }

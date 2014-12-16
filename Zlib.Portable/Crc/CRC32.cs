@@ -655,7 +655,7 @@ namespace Zlib.Portable.Crc
         /// </summary>
         /// <remarks>
         ///   <para>
-        ///     Set this at any point before calling <see cref="Close()"/>.
+        ///     Set this at any point before calling Close/Dispose.
         ///   </para>
         /// </remarks>
         public bool LeaveOpen
