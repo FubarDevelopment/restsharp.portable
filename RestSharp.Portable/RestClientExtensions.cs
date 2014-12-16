@@ -114,25 +114,6 @@ namespace RestSharp.Portable
             return url;
         }
 
-
-        /// <summary>
-        /// Build the full URL for a request
-        /// </summary>
-        /// <param name="client">The REST client that will execute the request</param>
-        /// <param name="request">The REST request</param>
-        /// <param name="withQuery">Should the resulting URL contain the query?</param>
-        /// <returns>Resulting URL</returns>
-        /// <remarks>
-        /// The resulting URL is a combination of the REST client's BaseUrl and the REST requests
-        /// Resource, where all URL segments are replaced and - optionally - the query parameters
-        /// added.
-        /// </remarks>
-        [Obsolete("Use BuildUri instead (to be compatible with the original RestSharp)")]
-        public static Uri BuildUrl(this IRestClient client, IRestRequest request, bool withQuery = true)
-        {
-            return BuildUri(client, request, withQuery);
-        }
-
         /// <summary>
         /// Build the full URL for a request
         /// </summary>

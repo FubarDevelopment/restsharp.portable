@@ -109,17 +109,6 @@ namespace RestSharp.Portable.HttpClientImpl
         }
 
         /// <summary>
-        /// Returns the HTTP method for the request message.
-        /// </summary>
-        /// <param name="request">REST request</param>
-        /// <returns>HTTP method</returns>
-        [Obsolete("Use DefaultHttpClientFactory.GetHttpMethod(IRestClient, IRestRequest)")]
-        protected virtual HttpMethod GetHttpMethod(IRestRequest request)
-        {
-            return GetHttpMethod(null, request);
-        }
-
-        /// <summary>
         /// Returns a modified HTTP request message object with HTTP header parameters
         /// </summary>
         /// <param name="message">HTTP request message</param>
