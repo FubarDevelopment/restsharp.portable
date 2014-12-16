@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{846592B7-3DC7-4C76-A04B-A224CDA0A2BB}</ProjectGuid>
+    <ProjectGuid>{F0C273E4-854D-4140-86EB-7DC4834999B3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
-    <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
+    <RootNamespace>RestSharp.Portable.OAuth.NET4</RootNamespace>
+    <AssemblyName>RestSharp.Portable.OAuth.NET4</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>f3b0288e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>38e8d516</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,10 +45,6 @@
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -85,9 +80,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,16 +87,12 @@
       <Project>{8df2addf-ebaf-4559-9429-85b5b8c2dcab}</Project>
       <Name>RestSharp.Portable.NET4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.OAuth.NET4\RestSharp.Portable.OAuth.NET4.csproj">
-      <Project>{f0c273e4-854d-4140-86eb-7dc4834999b3}</Project>
-      <Name>RestSharp.Portable.OAuth.NET4</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems')" />
+  <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

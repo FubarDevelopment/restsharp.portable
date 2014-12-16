@@ -3,7 +3,7 @@
     <metadata>
         <id>FubarCoder.RestSharp.Portable.Encodings</id>
         <version>$version$</version>
-        <title>RestSharp.Portable.Encodings</title>
+        <title>RestSharp.Portable Encodings</title>
         <authors>Mark Junker</authors>
         <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
@@ -27,24 +27,14 @@ Supported Platforms:
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>
-            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
-                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
-                <dependency id="Zlib.Portable" version="1.10.0" />
-            </group>
-            <group targetFramework="sl50">
-                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
-                <dependency id="Zlib.Portable" version="1.10.0" />
-            </group>
-            <group>
-                <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
-            </group>
+            <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
         </dependencies>
     </metadata>
     <files>
       <file src="NuGet\lib\native\_._" target="lib\native\_._" />
+      <file src="NuGet\license.txt" target="license.txt" />
       <file src="NuGet\Scripts\RestSharp.Portable.Encodings\install.ps1" target="tools\native\install.ps1" />
       <file src="NuGet\Scripts\RestSharp.Portable.Encodings\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="NuGet\license.txt" target="license.txt" />
       <file src="RestSharp.Portable.Encodings.NET4\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net40\" />
       <file src="RestSharp.Portable.Encodings.NET45\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\net45\" />
       <file src="RestSharp.Portable.Encodings.PCL\bin\$Configuration$\RestSharp.Portable.Encodings.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />

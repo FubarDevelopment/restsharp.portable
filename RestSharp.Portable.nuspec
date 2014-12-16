@@ -73,9 +73,9 @@ Supported Platforms:
     </metadata>
     <files>
         <file src="NuGet\lib\native\_._" target="lib\native\_._" />
+        <file src="NuGet\license.txt" target="license.txt" />
         <file src="NuGet\Scripts\RestSharp.Portable\install.ps1" target="tools\native\install.ps1" />
         <file src="NuGet\Scripts\RestSharp.Portable\uninstall.ps1" target="tools\native\uninstall.ps1" />
-        <file src="NuGet\license.txt" target="license.txt" />
         <file src="RestSharp.Portable.rd.xml" target="content\win\" />
         <file src="RestSharp.Portable.rd.xml" target="content\wpa81\" />
         <file src="RestSharp.Portable.NET4\bin\$Configuration$\RestSharp.Portable.dll" target="lib\net40\" />

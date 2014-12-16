@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>FubarCoder.RestSharp.Portable.OAuth</id>
+    <version>$version$</version>
+    <title>RestSharp.Portable OAuth 1.0 authenticator</title>
+    <authors>RestSharp project</authors>
+    <owners>Mark Junker</owners>
+    <licenseUrl>https://github.com/restsharp/RestSharp/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>This library contains the OAuth 1.0 authenticator for RestSharp.Portable, which is a port of the OAuth 1.0 authenticator from the original RestSharp project. The authenticator was moved to a different library, to keep the number of dependencies of the RestSharp.Portable package as small as possible.
+
+Supported Platforms:
+- .NET Framework 4
+- .NET for Windows Store apps
+- .NET Native for Windows Store apps
+- Windows Phone 8
+- Windows Phone 8.1
+- Silverlight 5
+- Portable Class Libraries</description>
+    <summary>OAuth authenticator</summary>
+    <releaseNotes>- Parallel release for the current version</releaseNotes>
+    <copyright>Copyright © John Sheehan</copyright>
+    <language>en-US</language>
+    <tags>PCL RestSharp portable OAuth</tags>
+    <dependencies>
+      <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+        <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
+      </group>
+      <group>
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="NuGet\lib\native\_._" target="lib\native\_._" />
+    <file src="NuGet\license-restsharp.txt" target="license.txt" />
+    <file src="NuGet\Scripts\RestSharp.Portable.OAuth\install.ps1" target="tools\native\install.ps1" />
+    <file src="NuGet\Scripts\RestSharp.Portable.OAuth\uninstall.ps1" target="tools\native\uninstall.ps1" />
+    <file src="RestSharp.Portable.OAuth.NET4\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\net40\" />
+    <file src="RestSharp.Portable.OAuth.NET45\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\net45\" />
+    <file src="RestSharp.Portable.OAuth.PCL\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.Android\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\MonoAndroid10\" />
+    <file src="RestSharp.Portable.OAuth.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\MonoTouch10\" />
+  </files>
+</package>
