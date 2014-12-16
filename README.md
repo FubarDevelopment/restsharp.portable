@@ -6,9 +6,17 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 1.9.1 is available now!
+* Version 2.0.0 is available now!
 
 # Changes #
+
+## 2.0.0 ##
+
+* Removed all deprecated methods
+* Starting from this version, I'll use [Semantic Versioning 2.0.0](http://semver.org/)
+* Optimizing NuGet dependencies for several platforms
+* Clear Accept HTTP header parameter for the SL5 platform for GET requests ([Issue #9](https://github.com/FubarDevelopment/restsharp.portable/issues/9))
+* Add Deflate encoding
 
 ## 1.9.1 ##
 
