@@ -40,6 +40,18 @@ Supported Platforms:
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
+            <group targetFramework="net45">
+                <dependency id="Newtonsoft.Json" version="6.0.5" />
+            </group>
+            <group targetFramework="MonoAndroid10">
+                <dependency id="Newtonsoft.Json" version="6.0.5" />
+            </group>
+            <group targetFramework="MonoTouch10">
+                <dependency id="Newtonsoft.Json" version="6.0.5" />
+            </group>
+            <group targetFramework="Xamarin.iOS10">
+                <dependency id="Newtonsoft.Json" version="6.0.5" />
+            </group>
             <group>
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>

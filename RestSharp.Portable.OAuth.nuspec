@@ -29,7 +29,19 @@ Supported Platforms:
         <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
         <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
       </group>
-      <group>
+      <group targetFramework="net40">
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+      </group>
+      <group targetFramework="net45">
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+      </group>
+      <group targetFramework="MonoAndroid10">
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+      </group>
+      <group targetFramework="MonoTouch10">
+        <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+      </group>
+      <group targetFramework="Xamarin.iOS10">
         <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
       </group>
     </dependencies>
