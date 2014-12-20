@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace RestSharp.Portable.Test
 {
     [TestClass]
     public class CustomDeserializer
     {
-        class TestDeserializer : RestSharp.Portable.Deserializers.JsonDeserializer
+        class TestDeserializer : Deserializers.JsonDeserializer
         {
             protected override void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
             {
@@ -20,7 +19,7 @@ namespace RestSharp.Portable.Test
         {
             var restClient = new RestClient();
             var deserializer = new TestDeserializer();
-            restClient.ReplaceHandler(typeof(RestSharp.Portable.Deserializers.JsonDeserializer), deserializer);
+            restClient.ReplaceHandler(typeof(Deserializers.JsonDeserializer), deserializer);
             Assert.AreSame(deserializer, restClient.GetHandler("application/json"));
             Assert.AreSame(deserializer, restClient.GetHandler("text/json"));
         }
