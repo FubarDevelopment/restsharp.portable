@@ -344,6 +344,8 @@ namespace RestSharp.Portable
         {
             if (string.IsNullOrEmpty(contentType) && _contentHandlers.ContainsKey("*"))
                 return _contentHandlers["*"];
+            if (contentType == null)
+                contentType = string.Empty;
             var semicolonIndex = contentType.IndexOf(';');
             if (semicolonIndex != -1)
                 contentType = contentType.Substring(0, semicolonIndex).TrimEnd();
