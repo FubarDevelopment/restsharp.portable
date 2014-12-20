@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace RestSharp.Portable.Authenticators.OAuth.Extensions
 {
@@ -96,12 +95,13 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             {
                 return new Dictionary<string, string>();
             }
-            var parts = query.Split(new[] { '&' });
-            return parts.Select(
-            part => part.Split(new[] { '=' })).ToDictionary(
-            pair => pair[0], pair => pair[1]
-            );
+            var parts = query.Split('&');
+            return (from part in parts
+                let equalIndex = part.IndexOf('=')
+                let name = (equalIndex == -1 ? part : part.Substring(0, equalIndex))
+                let value = (equalIndex == -1 ? string.Empty : part.Substring(equalIndex + 1))
+                select new KeyValuePair<string, string>(name, value))
+                .ToDictionary(x => x.Key, x => x.Value);
         }
-        private const RegexOptions Options = RegexOptions.IgnoreCase;
     }
 }

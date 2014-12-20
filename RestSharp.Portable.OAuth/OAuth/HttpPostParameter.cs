@@ -14,11 +14,7 @@
 // limitations under the License.
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {

@@ -15,7 +15,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -25,11 +24,11 @@ namespace RestSharp.Portable.Authenticators.OAuth
 
     internal static class OAuthTools
     {
-        private const string AlphaNumeric = Upper + Lower + Digit;
-        private const string Digit = "1234567890";
-        private const string Lower = "abcdefghijklmnopqrstuvwxyz";
-        private const string Unreserved = AlphaNumeric + "-._~";
-        private const string Upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string _digit = "1234567890";
+        private const string _lower = "abcdefghijklmnopqrstuvwxyz";
+        private const string _upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string _alphaNumeric = _upper + _lower + _digit;
+        private const string _unreserved = _alphaNumeric + "-._~";
         private static readonly Random _random;
         private static readonly object _randomLock = new object();
 
@@ -51,7 +50,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <returns></returns>
         public static string GetNonce()
         {
-            const string chars = (Lower + Digit);
+            const string chars = (_lower + _digit);
             var nonce = new char[16];
             lock (_randomLock)
             {
@@ -86,8 +85,8 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// The set of characters that are unreserved in RFC 2396 but are NOT unreserved in RFC 3986.
         /// </summary>
         /// <a href="http://stackoverflow.com/questions/846487/how-to-get-uri-escapedatastring-to-comply-with-rfc-3986" />
-        private static readonly string[] UriRfc3986CharsToEscape = new[] { "!", "*", "'", "(", ")" };
-        private static readonly string[] UriRfc3968EscapedHex = new[] { "%21", "%2A", "%27", "%28", "%29" };
+        private static readonly string[] _uriRfc3986CharsToEscape = { "!", "*", "'", "(", ")" };
+        private static readonly string[] _uriRfc3968EscapedHex = { "%21", "%2A", "%27", "%28", "%29" };
         /// <summary>
         /// URL encodes a string based on section 5.1 of the OAuth spec.
         /// Namely, percent encoding with [RFC3986], avoiding unreserved characters,
@@ -111,10 +110,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
             // characters we search for to replace can't possibly exist in the string.
             StringBuilder escaped = new StringBuilder(Uri.EscapeDataString(value));
             // Upgrade the escaping to RFC 3986, if necessary.
-            for (int i = 0; i < UriRfc3986CharsToEscape.Length; i++)
+            for (int i = 0; i < _uriRfc3986CharsToEscape.Length; i++)
             {
-                string t = UriRfc3986CharsToEscape[i];
-                escaped.Replace(t, UriRfc3968EscapedHex[i]);
+                string t = _uriRfc3986CharsToEscape[i];
+                escaped.Replace(t, _uriRfc3968EscapedHex[i]);
             }
             // Return the fully-RFC3986-escaped string.
             return escaped.ToString();
@@ -131,7 +130,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             // [JD]: We need to escape the apostrophe as well or the signature will fail
             var original = value;
             var ret = original.ToCharArray()
-                .Where(c => Unreserved.IndexOf(c) == -1 && c != '%')
+                .Where(c => _unreserved.IndexOf(c) == -1 && c != '%')
                 .Aggregate(value, (current, c) => current.Replace(c.ToString(), c.ToString().PercentEncode()));
             return ret.Replace("%%", "%25%"); // Revisit to encode actual %'s
         }
