@@ -20,7 +20,7 @@ namespace RestSharp.Portable.Test
         {
             var restClient = new RestClient();
             var deserializer = new TestDeserializer();
-            restClient.ReplaceHandler(typeof(RestSharp.Portable.Deserializers.IDeserializer), deserializer);
+            restClient.ReplaceHandler(typeof(RestSharp.Portable.Deserializers.JsonDeserializer), deserializer);
             Assert.AreSame(deserializer, restClient.GetHandler("application/json"));
             Assert.AreSame(deserializer, restClient.GetHandler("text/json"));
         }
