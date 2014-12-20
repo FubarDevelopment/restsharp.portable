@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -39,6 +38,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// The OAuth client that is used by this authenticator
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         protected readonly OAuth2.OAuth2Client _client;
 
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
@@ -73,14 +73,9 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Returns all the status codes where a round trip is allowed
         /// </summary>
-        public virtual IEnumerable<System.Net.HttpStatusCode> StatusCodes
+        public virtual IEnumerable<HttpStatusCode> StatusCodes
         {
-            get
-            {
-                if (string.IsNullOrEmpty(_client.RefreshToken))
-                    return _noStatusCodes;
-                return _statusCodes;
-            }
+            get { return string.IsNullOrEmpty(_client.RefreshToken) ? _noStatusCodes : _statusCodes; }
         }
 
         /// <summary>
