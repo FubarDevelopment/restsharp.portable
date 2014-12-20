@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RestSharp.Portable
+﻿namespace RestSharp.Portable
 {
     /// <summary>
     /// Controls if basic content or multi part content is used

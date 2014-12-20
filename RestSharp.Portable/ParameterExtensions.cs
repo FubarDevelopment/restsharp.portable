@@ -10,13 +10,15 @@ namespace RestSharp.Portable
     /// </summary>
     public static class ParameterExtensions
     {
-        private static readonly string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private static readonly string _mark = "-_.!~*'()";
+        private const string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string _mark = "-_.!~*'()";
 
         internal static readonly Encoding DefaultEncoding = Encoding.UTF8;
 
         private static readonly IDictionary<byte, bool> _allowedBytes = DefaultEncoding.GetBytes(_alphanum + _mark)
             .ToDictionary(x => x, x => true);
+        // ReSharper disable once RedundantEnumerableCastCall
+        // We have to disable it, because there is no IEnumerable<char> in a .NET 4.0 compatible PCL
         private static readonly IDictionary<char, bool> _allowedChars = (_alphanum + _mark).Cast<char>()
             .ToDictionary(x => x, x => true);
 

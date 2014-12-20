@@ -161,7 +161,7 @@ namespace RestSharp.Portable
             }
             if (withQuery)
             {
-                var queryString = new StringBuilder(urlBuilder.Query ?? string.Empty);
+                var queryString = new StringBuilder(urlBuilder.Query);
                 var startsWithQuestionmark = queryString.ToString().StartsWith("?");
                 foreach (var param in parameters.Where(x => x.Type == ParameterType.QueryString))
                 {

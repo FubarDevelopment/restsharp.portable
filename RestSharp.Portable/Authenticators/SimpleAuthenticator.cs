@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RestSharp.Portable.Authenticators
+﻿namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
     /// Simple authenticator that adds the authentication information as GetOrPost parameter

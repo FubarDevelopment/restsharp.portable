@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
@@ -16,7 +10,7 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestRequest : IRestRequest
     {
-        private List<Parameter> _parameters = new List<Parameter>();
+        private readonly List<Parameter> _parameters = new List<Parameter>();
 
         /// <summary>
         /// Constructor that initializes with the HTTP GET request method and the JSON serializer as default serializer

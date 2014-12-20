@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RestSharp.Portable.Deserializers
+﻿namespace RestSharp.Portable.Deserializers
 {
     /// <summary>
     /// Deserialize for a content type

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace RestSharp.Portable.Encodings
+﻿namespace RestSharp.Portable.Encodings
 {
     /// <summary>
     /// Content encoding handler interface
