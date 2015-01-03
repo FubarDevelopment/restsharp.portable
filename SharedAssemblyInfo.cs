@@ -7,7 +7,7 @@ using System.Resources;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community and others")]
-[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project 2013-2014")]
+[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project 2013-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
@@ -23,5 +23,5 @@ using System.Resources;
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.0")]
-[assembly: AssemblyInformationalVersion("2.0.0")]
+[assembly: AssemblyFileVersion("2.0.1")]
+[assembly: AssemblyInformationalVersion("2.0.1")]
