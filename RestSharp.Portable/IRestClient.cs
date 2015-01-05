@@ -49,7 +49,7 @@ namespace RestSharp.Portable
         /// <typeparam name="T">The type to deserialize to</typeparam>
         /// <param name="request">Request to execute</param>
         /// <returns>Response returned, with a deserialized object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "No other solution for async/await API")]
         Task<IRestResponse<T>> Execute<T>(IRestRequest request);
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace RestSharp.Portable
         /// <param name="request">Request to execute</param>
         /// <param name="ct">The cancellation token</param>
         /// <returns>Response returned, with a deserialized object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "No other solution for async/await API")]
         Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct);
 
         /// <summary>
@@ -76,14 +76,14 @@ namespace RestSharp.Portable
         /// <param name="contentType">The Accept header value</param>
         /// <param name="deserializer">The deserializer to decode the content</param>
         /// <returns>The client itself, to allow call chains</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "AddHandler")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "AddHandler", Justification = "Required for RestSharp compatibility")]
         IRestClient AddHandler(string contentType, IDeserializer deserializer);
         /// <summary>
         /// Remove a previously added content type handler
         /// </summary>
         /// <param name="contentType">The Accept header value that identifies the handler</param>
         /// <returns>The client itself, to allow call chains</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "RemoveHandler")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "RemoveHandler", Justification = "Required for RestSharp compatibility")]
         IRestClient RemoveHandler(string contentType);
         /// <summary>
         /// Remove all previously added content type handlers

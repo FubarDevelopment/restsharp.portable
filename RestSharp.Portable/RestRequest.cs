@@ -45,7 +45,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource"></param>
         /// <param name="method"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null")]
         public RestRequest(string resource, HttpMethod method)
         {
             ContentCollectionMode = ContentCollectionMode.MultiPartForFileParameters;
