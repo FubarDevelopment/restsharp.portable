@@ -24,8 +24,8 @@ using System.Resources;
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.1")]
-[assembly: AssemblyInformationalVersion("2.0.1")]
+[assembly: AssemblyFileVersion("2.0.2")]
+[assembly: AssemblyInformationalVersion("2.0.2")]
 
 #if !PCL && !SILVERLIGHT
 [assembly: CLSCompliant(true)]
