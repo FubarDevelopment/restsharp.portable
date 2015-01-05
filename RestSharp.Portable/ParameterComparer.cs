@@ -18,7 +18,7 @@ namespace RestSharp.Portable
         /// <param name="client">The client this parameter comparer is for</param>
         /// <param name="request">The request this parameter comparer is for</param>
         public ParameterComparer(IRestClient client, IRestRequest request)
-            : this(client, request, StringComparer.Ordinal)
+            : this(client, request, null)
         {
         }
 
