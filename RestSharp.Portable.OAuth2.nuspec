@@ -23,7 +23,8 @@ Supported Platforms:
 - Portable Class Libraries (.NET 4.0.3+)</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
       <releaseNotes>- Add platform specific assemblies
-- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant
+- Added required dependency on OAuth</releaseNotes>
       <copyright>Copyright © Constantin Titarenko, RestSharp.Portable project and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
