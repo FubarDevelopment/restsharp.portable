@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD 2-Clause License</licenseUrl>
+        <licenseUrl>http://choosealicense.com/licenses/bsd-2-clause/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!

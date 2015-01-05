@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>RestSharp.Portable Encodings</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD 2-Clause License</licenseUrl>
+        <licenseUrl>http://choosealicense.com/licenses/bsd-2-clause/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This library contains the GZIP and Deflate content encoding handlers.

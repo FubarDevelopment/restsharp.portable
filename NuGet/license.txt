@@ -1,4 +1,4 @@
-Copyright (c) 2013, Mark Junker
+Copyright (c) 2013-2015, RestSharp.Portable project
  All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, 

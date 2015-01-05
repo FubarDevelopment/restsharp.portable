@@ -6,7 +6,7 @@
         <title>RestSharp.Portable OAuth 2.0 authenticators/clients</title>
         <authors>OAuth2 project</authors>
         <owners>Mark Junker</owners>
-        <licenseUrl>https://github.com/fubar-coder/OAuth2/wiki/License</licenseUrl>
+        <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.
