@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>RestSharp.Portable Encodings</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
+        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD 2-Clause License</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This library contains the GZIP and Deflate content encoding handlers.
@@ -24,7 +24,7 @@ Supported Platforms:
         <releaseNotes>- Add platform specific assemblies
 - Add Deflate encoding
 - Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
-        <copyright>Copyright © Mark Junker</copyright>
+        <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>

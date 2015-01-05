@@ -24,7 +24,7 @@ Supported Platforms:
         <summary>OAuth 2.0 authenticators and clients</summary>
       <releaseNotes>- Add platform specific assemblies
 - Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
-      <copyright>Copyright © Constantin Titarenko and others</copyright>
+      <copyright>Copyright © Constantin Titarenko, RestSharp.Portable project and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
         <dependencies>

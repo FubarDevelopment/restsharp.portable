@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>RestSharp.Portable</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
+        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD 2-Clause License</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!
@@ -26,7 +26,7 @@ Supported Platforms:
 - Fixed the Xamarin.iOS target
 - Fixed dependencies by explicitly specifying Microsoft.Bcl and Microsoft.Bcl.Build
 - Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
-        <copyright>Copyright © Mark Junker</copyright>
+        <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
