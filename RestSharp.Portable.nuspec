@@ -17,10 +17,13 @@ Supported Platforms:
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
+- Xamarin Android
+- Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
         <releaseNotes>- Clear Accept HTTP header parameter for the SL5 platform for GET requests
-- Add platform specific assemblies</releaseNotes>
+- Add platform specific assemblies
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>

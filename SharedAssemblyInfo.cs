@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Resources;
 
 // Allgemeine Informationen über eine Assembly werden über folgende 
@@ -25,3 +26,7 @@ using System.Resources;
 [assembly: AssemblyVersion("2.0.0")]
 [assembly: AssemblyFileVersion("2.0.0")]
 [assembly: AssemblyInformationalVersion("2.0.0")]
+
+#if !PCL && !SILVERLIGHT
+[assembly: CLSCompliant(true)]
+#endif

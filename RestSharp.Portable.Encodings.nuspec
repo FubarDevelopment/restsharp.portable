@@ -17,10 +17,13 @@ Supported Platforms:
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
+- Xamarin Android
+- Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
         <releaseNotes>- Add platform specific assemblies
-- Add Deflate encoding</releaseNotes>
+- Add Deflate encoding
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
