@@ -1,6 +1,4 @@
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
-using RestSharp.Portable;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RestSharp.Portable.Authenticators.OAuth2

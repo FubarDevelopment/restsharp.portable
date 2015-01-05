@@ -39,18 +39,15 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             }
             yield return item;
         }
-        public static K TryWithKey<T, K>(this IDictionary<T, K> dictionary, T key)
+        public static TValue TryWithKey<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
         {
-            return dictionary.ContainsKey(key) ? dictionary[key] : default(K);
+            return dictionary.ContainsKey(key) ? dictionary[key] : default(TValue);
         }
         public static IEnumerable<T> ToEnumerable<T>(this object[] items) where T : class
         {
-            foreach (var item in items)
-            {
-                var record = item as T;
-                yield return record;
-            }
+            return items.Select(item => item as T);
         }
+
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             foreach (var item in items)

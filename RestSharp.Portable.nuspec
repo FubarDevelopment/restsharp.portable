@@ -23,22 +23,30 @@ Supported Platforms:
         <summary>Some kind of a RestSharp port to PCL</summary>
         <releaseNotes>- Clear Accept HTTP header parameter for the SL5 platform for GET requests
 - Add platform specific assemblies
+- Fixed the Xamarin.iOS target
+- Fixed dependencies by explicitly specifying Microsoft.Bcl and Microsoft.Bcl.Build
 - Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
         <copyright>Copyright © Mark Junker</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
             <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+                <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="net40">
+                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+                <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="sl50">
+                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+                <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />

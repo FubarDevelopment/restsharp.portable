@@ -1,6 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+// ReSharper disable InconsistentNaming
 
+// ReSharper disable once CheckNamespace
 namespace System.Security.Cryptography
 {
     /// <summary>
@@ -145,24 +146,25 @@ namespace System.Security.Cryptography
         ///////////////////////////////////////////////
 
         /* MD5 context. */
+        // ReSharper disable once InconsistentNaming
         private class MD5_CTX
         {
-            public readonly uint[] state;   /* state (ABCD) */
-            public readonly uint[] count;   /* number of bits, modulo 2^64 (lsb first) */
-            public readonly byte[] buffer;  /* input buffer */
+            public readonly uint[] State;   /* state (ABCD) */
+            public readonly uint[] Count;   /* number of bits, modulo 2^64 (lsb first) */
+            public readonly byte[] Buffer;  /* input buffer */
 
             public MD5_CTX()
             {
-                state = new uint[4];
-                count = new uint[2];
-                buffer = new byte[64];
+                State = new uint[4];
+                Count = new uint[2];
+                Buffer = new byte[64];
             }
 
             public void Clear()
             {
-                Array.Clear(state, 0, state.Length);
-                Array.Clear(count, 0, count.Length);
-                Array.Clear(buffer, 0, buffer.Length);
+                Array.Clear(State, 0, State.Length);
+                Array.Clear(Count, 0, Count.Length);
+                Array.Clear(Buffer, 0, Buffer.Length);
             }
         }
 
@@ -184,7 +186,7 @@ namespace System.Security.Cryptography
         private const int S43 = 15;
         private const int S44 = 21;
 
-        private static byte[] PADDING;
+        private static readonly byte[] PADDING;
 
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "More compact this way")]
         static MD5Managed()
@@ -206,25 +208,25 @@ namespace System.Security.Cryptography
            Rotation is separate from addition to prevent recomputation. */
         private static void FF(ref uint a, uint b, uint c, uint d, uint x, int s, uint ac)
         {
-            (a) += F((b), (c), (d)) + (x) + (uint)(ac);
+            (a) += F((b), (c), (d)) + (x) + ac;
             (a) = ROTATE_LEFT((a), (s));
             (a) += (b);
         }
         private static void GG(ref uint a, uint b, uint c, uint d, uint x, int s, uint ac)
         {
-            (a) += G((b), (c), (d)) + (x) + (uint)(ac);
+            (a) += G((b), (c), (d)) + (x) + ac;
             (a) = ROTATE_LEFT((a), (s));
             (a) += (b);
         }
         private static void HH(ref uint a, uint b, uint c, uint d, uint x, int s, uint ac)
         {
-            (a) += H((b), (c), (d)) + (x) + (uint)(ac);
+            (a) += H((b), (c), (d)) + (x) + ac;
             (a) = ROTATE_LEFT((a), (s));
             (a) += (b);
         }
         private static void II(ref uint a, uint b, uint c, uint d, uint x, int s, uint ac)
         {
-            (a) += I((b), (c), (d)) + (x) + (uint)(ac);
+            (a) += I((b), (c), (d)) + (x) + ac;
             (a) = ROTATE_LEFT((a), (s));
             (a) += (b);
         }
@@ -232,13 +234,13 @@ namespace System.Security.Cryptography
         /* MD5 initialization. Begins an MD5 operation, writing a new context. */
         private static void MD5Init(MD5_CTX context)  /* context */
         {
-            context.count[0] = context.count[1] = 0;
+            context.Count[0] = context.Count[1] = 0;
 
             /* Load magic initialization constants. */
-            context.state[0] = 0x67452301;
-            context.state[1] = 0xefcdab89;
-            context.state[2] = 0x98badcfe;
-            context.state[3] = 0x10325476;
+            context.State[0] = 0x67452301;
+            context.State[1] = 0xefcdab89;
+            context.State[2] = 0x98badcfe;
+            context.State[3] = 0x10325476;
         }
 
         /* MD5 block update operation. Continues an MD5 message-digest
@@ -250,14 +252,14 @@ namespace System.Security.Cryptography
                                       uint inputLen)    /* length of input block */
         {
             /* Compute number of bytes mod 64 */
-            uint index = (uint)((context.count[0] >> 3) & 0x3F);
+            uint index = (context.Count[0] >> 3) & 0x3F;
 
             /* Update number of bits */
-            if ((context.count[0] += ((uint)inputLen << 3)) < ((uint)inputLen << 3))
+            if ((context.Count[0] += (inputLen << 3)) < (inputLen << 3))
             {
-                context.count[1]++;
+                context.Count[1]++;
             }
-            context.count[1] += ((uint)inputLen >> 29);
+            context.Count[1] += (inputLen >> 29);
 
             uint partLen = 64 - index;
 
@@ -265,19 +267,19 @@ namespace System.Security.Cryptography
             uint i = 0;
             if (inputLen >= partLen)
             {
-                Buffer.BlockCopy(input, (int)inputIndex, context.buffer, (int)index, (int)partLen);
-                MD5Transform(context.state, context.buffer, 0);
+                Buffer.BlockCopy(input, (int)inputIndex, context.Buffer, (int)index, (int)partLen);
+                MD5Transform(context.State, context.Buffer, 0);
 
                 for (i = partLen; i + 63 < inputLen; i += 64)
                 {
-                    MD5Transform(context.state, input, inputIndex + i);
+                    MD5Transform(context.State, input, inputIndex + i);
                 }
 
                 index = 0;
             }
 
             /* Buffer remaining input */
-            Buffer.BlockCopy(input, (int)(inputIndex + i), context.buffer, (int)index, (int)(inputLen - i));
+            Buffer.BlockCopy(input, (int)(inputIndex + i), context.Buffer, (int)index, (int)(inputLen - i));
         }
 
         /* MD5 finalization. Ends an MD5 message-digest operation, writing the
@@ -288,10 +290,10 @@ namespace System.Security.Cryptography
             byte[] bits = new byte[8];
 
             /* Save number of bits */
-            Encode(bits, context.count, 8);
+            Encode(bits, context.Count, 8);
 
             /* Pad out to 56 mod 64. */
-            uint index = (uint)((context.count[0] >> 3) & 0x3f);
+            uint index = (context.Count[0] >> 3) & 0x3f;
             uint padLen = (index < 56) ? (56 - index) : (120 - index);
             MD5Update(context, PADDING, 0, padLen);
 
@@ -299,7 +301,7 @@ namespace System.Security.Cryptography
             MD5Update(context, bits, 0, 8);
 
             /* Store state in digest */
-            Encode(digest, context.state, 16);
+            Encode(digest, context.State, 16);
 
             /* Zeroize sensitive information. */
             context.Clear();
@@ -420,7 +422,7 @@ namespace System.Security.Cryptography
         {
             for (uint i = 0, j = 0; j < len; i++, j += 4)
             {
-                output[i] = ((uint)input[inputIndex + j]) |
+                output[i] = input[inputIndex + j] |
                     (((uint)input[inputIndex + j + 1]) << 8) |
                     (((uint)input[inputIndex + j + 2]) << 16) |
                     (((uint)input[inputIndex + j + 3]) << 24);

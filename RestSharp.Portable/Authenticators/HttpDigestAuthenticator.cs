@@ -1,11 +1,8 @@
-﻿using RestSharp.Portable;
-using RestSharp.Portable.Authenticators;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -32,6 +29,7 @@ namespace RestSharp.Portable.Authenticators
         {
             Undefined = 0,
             MD5,
+            // ReSharper disable once InconsistentNaming
             MD5sess,
         }
 

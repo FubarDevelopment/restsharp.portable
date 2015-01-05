@@ -4,9 +4,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;
-using RestSharp.Portable;
 using System.Net.Http;
-using RestSharp.Portable.Authenticators;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
@@ -100,7 +98,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 redirect_uri = Configuration.RedirectUri,
                 scope = Configuration.Scope,
                 state
-            }, new string[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) }, PropertyFilterMode.Exclude);
+            }, new[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) }, PropertyFilterMode.Exclude);
             await BeforeGetLoginLinkUri(new BeforeAfterRequestArgs()
             {
                 Client = client,

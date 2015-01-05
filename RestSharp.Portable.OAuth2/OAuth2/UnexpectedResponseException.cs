@@ -1,5 +1,4 @@
 using System;
-using RestSharp.Portable;
 
 namespace RestSharp.Portable.Authenticators.OAuth2
 {
