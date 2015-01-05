@@ -41,9 +41,6 @@ namespace System.Security.Cryptography
 
         protected internal byte[] HashValue;
         protected int HashSizeValue;
-#pragma warning disable 649
-        protected int State;
-#pragma warning restore 649
         private bool disposed;
 
         protected HashAlgorithm()
@@ -59,12 +56,6 @@ namespace System.Security.Cryptography
         public virtual bool CanReuseTransform
         {
             get { return true; }
-        }
-
-        public void Clear()
-        {
-            // same as System.IDisposable.Dispose() which is documented
-            Dispose(true);
         }
 
         public byte[] ComputeHash(byte[] buffer)
@@ -84,35 +75,17 @@ namespace System.Security.Cryptography
             if (offset < 0)
                 throw new ArgumentOutOfRangeException("offset", "< 0");
             if (count < 0)
-                throw new ArgumentException("count", "< 0");
+                throw new ArgumentException("< 0", "count");
             // ordered to avoid possible integer overflow
             if (offset > buffer.Length - count)
             {
-                throw new ArgumentException("offset + count", "Overflow");
+                throw new ArgumentException("Overflow", "offset");
             }
 
             HashCore(buffer, offset, count);
             HashValue = HashFinal();
             Initialize();
 
-            return HashValue;
-        }
-
-        public byte[] ComputeHash(Stream inputStream)
-        {
-            // don't read stream unless object is ready to use
-            if (disposed)
-                throw new ObjectDisposedException("HashAlgorithm");
-
-            byte[] buffer = new byte[4096];
-            int len = inputStream.Read(buffer, 0, 4096);
-            while (len > 0)
-            {
-                HashCore(buffer, 0, len);
-                len = inputStream.Read(buffer, 0, 4096);
-            }
-            HashValue = HashFinal();
-            Initialize();
             return HashValue;
         }
 
@@ -174,11 +147,11 @@ namespace System.Security.Cryptography
             if (inputOffset < 0)
                 throw new ArgumentOutOfRangeException("inputOffset", "< 0");
             if (inputCount < 0)
-                throw new ArgumentException("inputCount");
+                throw new ArgumentOutOfRangeException("inputCount", "< 0");
 
             // ordered to avoid possible integer overflow
             if ((inputOffset < 0) || (inputOffset > inputBuffer.Length - inputCount))
-                throw new ArgumentException("inputBuffer");
+                throw new ArgumentOutOfRangeException("inputBuffer");
 
             if (outputBuffer != null)
             {
@@ -189,7 +162,7 @@ namespace System.Security.Cryptography
                 // ordered to avoid possible integer overflow
                 if (outputOffset > outputBuffer.Length - inputCount)
                 {
-                    throw new ArgumentException("outputOffset + inputCount", "Overflow");
+                    throw new ArgumentException("Overflow", "outputOffset");
                 }
             }
 
@@ -206,11 +179,11 @@ namespace System.Security.Cryptography
             if (inputBuffer == null)
                 throw new ArgumentNullException("inputBuffer");
             if (inputCount < 0)
-                throw new ArgumentException("inputCount");
+                throw new ArgumentOutOfRangeException("inputCount", "< 0");
             // ordered to avoid possible integer overflow
             if (inputOffset > inputBuffer.Length - inputCount)
             {
-                throw new ArgumentException("inputOffset + inputCount", "Overflow");
+                throw new ArgumentException("Overflow", "inputOffset");
             }
 
             byte[] outputBuffer = new byte[inputCount];

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -22,16 +23,11 @@ namespace RestSharp.Portable
         private static readonly IDictionary<char, bool> _allowedChars = (_alphanum + _mark).Cast<char>()
             .ToDictionary(x => x, x => true);
 
-        internal static string UrlDecode(string s)
-        {
-            return Uri.UnescapeDataString(s.Replace('+', ' '));
-        }
-
         internal static string UrlEncode(string s, Encoding encoding, bool spaceAsPlus)
         {
             var buffer = new char[1];
             var result = new StringBuilder();
-            foreach (var ch in s)
+            foreach (char ch in s)
             {
                 if (spaceAsPlus && ch == ' ')
                     result.Append('+');
@@ -94,9 +90,19 @@ namespace RestSharp.Portable
         /// Get the GetOrPost parameters (by default without file parameters, which are POST-only)
         /// </summary>
         /// <param name="parameters">The list of parameters to filter</param>
+        /// <returns>The list of GET or POST parameters</returns>
+        public static IEnumerable<Parameter> GetGetOrPostParameters(this IEnumerable<Parameter> parameters)
+        {
+            return GetGetOrPostParameters(parameters, false);
+        }
+
+        /// <summary>
+        /// Get the GetOrPost parameters (by default without file parameters, which are POST-only)
+        /// </summary>
+        /// <param name="parameters">The list of parameters to filter</param>
         /// <param name="withFile">true == with file parameters, but those are POST-only!</param>
         /// <returns>The list of GET or POST parameters</returns>
-        public static IEnumerable<Parameter> GetGetOrPostParameters(this IEnumerable<Parameter> parameters, bool withFile = false)
+        public static IEnumerable<Parameter> GetGetOrPostParameters(this IEnumerable<Parameter> parameters, bool withFile)
         {
             return parameters.Where(x => x.Type == ParameterType.GetOrPost && (withFile || !(x is FileParameter)));
         }

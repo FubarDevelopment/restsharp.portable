@@ -35,6 +35,7 @@ using System.Runtime.InteropServices;
 namespace System.Security.Cryptography
 {
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
     class CryptographicException : Exception
     {
         public CryptographicException()
@@ -45,25 +46,8 @@ namespace System.Security.Cryptography
             HResult = unchecked((int)0x80131430);
         }
 
-        public CryptographicException(int hr)
-        {
-            HResult = hr;
-        }
-
         public CryptographicException(string message)
             : base(message)
-        {
-            HResult = unchecked((int)0x80131430);
-        }
-
-        public CryptographicException(string message, Exception inner)
-            : base(message, inner)
-        {
-            HResult = unchecked((int)0x80131430);
-        }
-
-        public CryptographicException(string format, string insert)
-            : base(String.Format(format, insert))
         {
             HResult = unchecked((int)0x80131430);
         }
