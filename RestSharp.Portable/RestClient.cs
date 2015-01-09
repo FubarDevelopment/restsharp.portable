@@ -23,6 +23,7 @@ namespace RestSharp.Portable
         private readonly IList<string> _acceptEncodings = new List<string>();
         
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
+        private HttpClient _httpClient;
 
         /// <summary>
         /// HTTP client factory used to create IHttpClient implementations
@@ -129,6 +130,34 @@ namespace RestSharp.Portable
             }
         }
 
+        /// <summary>
+        /// Notify the authenticator about a failed request to be able to retry the request
+        /// with updated authentication information.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns>true == Authenticator notified</returns>
+        private async Task<bool> NotifyAuthenticatorAboutFailedRequest(IRestRequest request, HttpResponseMessage response)
+        {
+            var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
+            if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+            var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+            if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+            return false;
+        }
+
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
             var retryWithAuthentication = true;
@@ -136,58 +165,42 @@ namespace RestSharp.Portable
             for (; ; )
             {
                 await AuthenticateRequest(request);
-                using (var httpClient = HttpClientFactory.CreateClient(this, request))
+                if (_httpClient == null)
+                    _httpClient = HttpClientFactory.CreateClient(this, request);
+                using (var message = HttpClientFactory.CreateRequestMessage(this, request))
                 {
-                    using (var message = HttpClientFactory.CreateRequestMessage(this, request))
+
+                    var bodyData = this.GetContent(request);
+                    if (bodyData != null)
+                        message.Content = bodyData;
+
+                    if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
+                        message.Headers.Accept.Clear();
+
+                    bool failed = true;
+                    var response = await _httpClient.SendAsync(message, ct);
+                    try
                     {
-
-                        var bodyData = this.GetContent(request);
-                        if (bodyData != null)
-                            message.Content = bodyData;
-
-                        if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
-                            message.Headers.Accept.Clear();
-
-                        bool failed = true;
-                        var response = await httpClient.SendAsync(message, ct);
-                        try
+                        if (retryWithAuthentication)
                         {
-                            if (retryWithAuthentication)
+                            retryWithAuthentication = false;
+                            var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
+                            if (retry)
                             {
-                                retryWithAuthentication = false;
-                                var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
-                                if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
-                                {
-                                    var restResponse = new RestResponse(this, request);
-                                    await restResponse.LoadResponse(response);
-                                    await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                                    failed = false;
-                                    continue;
-                                }
-                                else
-                                {
-                                    var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-                                    if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
-                                    {
-                                        var restResponse = new RestResponse(this, request);
-                                        await restResponse.LoadResponse(response);
-                                        roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                                        failed = false;
-                                        continue;
-                                    }
-                                }
+                                failed = false;
+                                continue;
                             }
-                            if (!IgnoreResponseStatusCode)
-                                response.EnsureSuccessStatusCode();
-                            failed = false;
                         }
-                        finally
-                        {
-                            if (failed && response != null)
-                                response.Dispose();
-                        }
-                        return response;
+                        if (!IgnoreResponseStatusCode)
+                            response.EnsureSuccessStatusCode();
+                        failed = false;
                     }
+                    finally
+                    {
+                        if (failed && response != null)
+                            response.Dispose();
+                    }
+                    return response;
                 }
             }
         }
@@ -448,5 +461,16 @@ namespace RestSharp.Portable
         /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
         /// </remarks>
         public StringComparer DefaultParameterNameComparer { get; set; }
+
+        /// <summary>
+        /// Close the used HTTP client
+        /// </summary>
+        public void Dispose()
+        {
+            if (_httpClient == null)
+                return;
+            _httpClient.Dispose();
+            _httpClient = null;
+        }
     }
 }

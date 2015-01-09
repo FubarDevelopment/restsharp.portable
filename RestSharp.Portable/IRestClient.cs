@@ -12,7 +12,7 @@ namespace RestSharp.Portable
     /// <summary>
     /// REST client
     /// </summary>
-    public interface IRestClient
+    public interface IRestClient : IDisposable
     {
         /// <summary>
         /// Authenticator to use for all requests

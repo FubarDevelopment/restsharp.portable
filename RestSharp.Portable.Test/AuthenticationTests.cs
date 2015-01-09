@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -10,6 +9,8 @@ namespace RestSharp.Portable.Test
     [TestClass]
     public class AuthenticationTests
     {
+        [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         class AuthenticationResult
         {
             public bool Authenticated { get; set; }
@@ -22,16 +23,20 @@ namespace RestSharp.Portable.Test
             const string username = "user name";
             const string password = "passwd";
 
-            var client = new RestClient("http://httpbin.org");
-            client.CookieContainer = new System.Net.CookieContainer();
-            client.Authenticator = new Authenticators.OptionalHttpBasicAuthenticator(username, password);
-            var request = new RestRequest("basic-auth/{username}/{password}", System.Net.Http.HttpMethod.Get);
-            request.AddUrlSegment("username", username);
-            request.AddUrlSegment("password", password);
-            var response = await client.Execute<AuthenticationResult>(request);
+            using (var client = new RestClient("http://httpbin.org")
+            {
+                CookieContainer = new System.Net.CookieContainer(),
+                Authenticator = new Authenticators.OptionalHttpBasicAuthenticator(username, password),
+            })
+            {
+                var request = new RestRequest("basic-auth/{username}/{password}", HttpMethod.Get);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
+                var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.IsTrue(response.Data.Authenticated);
-            Assert.AreEqual(username, response.Data.User);
+                Assert.IsTrue(response.Data.Authenticated);
+                Assert.AreEqual(username, response.Data.User);
+            }
         }
 
         [TestMethod]
@@ -40,16 +45,20 @@ namespace RestSharp.Portable.Test
             const string username = "user name";
             const string password = "passwd";
 
-            var client = new RestClient("http://httpbin.org");
-            client.CookieContainer = new System.Net.CookieContainer();
-            client.Authenticator = new Authenticators.OptionalHttpBasicAuthenticator(username, password);
-            var request = new RestRequest("hidden-basic-auth/{username}/{password}", System.Net.Http.HttpMethod.Get);
-            request.AddUrlSegment("username", username);
-            request.AddUrlSegment("password", password);
-            var response = await client.Execute<AuthenticationResult>(request);
+            using (var client = new RestClient("http://httpbin.org")
+            {
+                CookieContainer = new System.Net.CookieContainer(),
+                Authenticator = new Authenticators.OptionalHttpBasicAuthenticator(username, password),
+            })
+            {
+                var request = new RestRequest("hidden-basic-auth/{username}/{password}", HttpMethod.Get);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
+                var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.IsTrue(response.Data.Authenticated);
-            Assert.AreEqual(username, response.Data.User);
+                Assert.IsTrue(response.Data.Authenticated);
+                Assert.AreEqual(username, response.Data.User);
+            }
         }
 
         [TestMethod]
@@ -58,16 +67,20 @@ namespace RestSharp.Portable.Test
             const string username = "user name";
             const string password = "passwd";
 
-            var client = new RestClient("http://httpbin.org");
-            client.CookieContainer = new System.Net.CookieContainer();
-            client.Authenticator = new Authenticators.HttpDigestAuthenticator(new System.Net.NetworkCredential(username, password));
-            var request = new RestRequest("digest-auth/auth/{username}/{password}", System.Net.Http.HttpMethod.Get);
-            request.AddUrlSegment("username", username);
-            request.AddUrlSegment("password", password);
-            var response = await client.Execute<AuthenticationResult>(request);
+            using (var client = new RestClient("http://httpbin.org")
+            {
+                CookieContainer = new System.Net.CookieContainer(),
+                Authenticator = new Authenticators.HttpDigestAuthenticator(new System.Net.NetworkCredential(username, password))
+            })
+            {
+                var request = new RestRequest("digest-auth/auth/{username}/{password}", HttpMethod.Get);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
+                var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.IsTrue(response.Data.Authenticated);
-            Assert.AreEqual(username, response.Data.User);
+                Assert.IsTrue(response.Data.Authenticated);
+                Assert.AreEqual(username, response.Data.User);
+            }
         }
 
         [TestMethod]
@@ -76,16 +89,20 @@ namespace RestSharp.Portable.Test
             const string username = "user name";
             const string password = "passwd";
 
-            var client = new RestClient("http://httpbin.org/digest-auth");
-            client.CookieContainer = new System.Net.CookieContainer();
-            client.Authenticator = new Authenticators.HttpDigestAuthenticator(new System.Net.NetworkCredential(username, password));
-            var request = new RestRequest("auth-int/{username}/{password}", System.Net.Http.HttpMethod.Get);
-            request.AddUrlSegment("username", username);
-            request.AddUrlSegment("password", password);
-            var response = await client.Execute<AuthenticationResult>(request);
+            using (var client = new RestClient("http://httpbin.org/digest-auth")
+            {
+                CookieContainer = new System.Net.CookieContainer(),
+                Authenticator = new Authenticators.HttpDigestAuthenticator(new System.Net.NetworkCredential(username, password))
+            })
+            {
+                var request = new RestRequest("auth-int/{username}/{password}", HttpMethod.Get);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
+                var response = await client.Execute<AuthenticationResult>(request);
 
-            Assert.IsTrue(response.Data.Authenticated);
-            Assert.AreEqual(username, response.Data.User);
+                Assert.IsTrue(response.Data.Authenticated);
+                Assert.AreEqual(username, response.Data.User);
+            }
         }
 
         [TestMethod]
@@ -95,26 +112,29 @@ namespace RestSharp.Portable.Test
             var secret = System.Configuration.ConfigurationManager.AppSettings["bitbucket-api-secret"];
             var key = System.Configuration.ConfigurationManager.AppSettings["bitbucket-api-key"];
 
-            var client = new RestClient("https://bitbucket.org/api/");
-            client.CookieContainer = new System.Net.CookieContainer();
-            client.AddHandler("application/x-www-form-urlencoded", new DictionaryDeserializer());
-
-            var auth = Authenticators.OAuth1Authenticator.ForRequestToken(key, secret, "https://testapp.local/callback");
-            auth.ParameterHandling = Authenticators.OAuth.OAuthParameterHandling.UrlOrPostParameters;
-            client.Authenticator = auth;
-
-            string token, token_secret;
+            using (var client = new RestClient("https://bitbucket.org/api/")
             {
-                var request = new RestRequest("1.0/oauth/request_token", HttpMethod.Post);
-                var response = await client.Execute<IDictionary<string, string>>(request);
+                CookieContainer = new System.Net.CookieContainer()
+            })
+            {
+                client.AddHandler("application/x-www-form-urlencoded", new DictionaryDeserializer());
 
-                Assert.IsTrue(response.Data.ContainsKey("oauth_callback_confirmed"));
-                Assert.AreEqual("true", response.Data["oauth_callback_confirmed"]);
+                var auth = Authenticators.OAuth1Authenticator.ForRequestToken(key, secret, "https://testapp.local/callback");
+                auth.ParameterHandling = Authenticators.OAuth.OAuthParameterHandling.UrlOrPostParameters;
+                client.Authenticator = auth;
 
-                token_secret = response.Data["oauth_token_secret"];
-                token = response.Data["oauth_token"];
+                //string token, token_secret;
+                {
+                    var request = new RestRequest("1.0/oauth/request_token", HttpMethod.Post);
+                    var response = await client.Execute<IDictionary<string, string>>(request);
+
+                    Assert.IsTrue(response.Data.ContainsKey("oauth_callback_confirmed"));
+                    Assert.AreEqual("true", response.Data["oauth_callback_confirmed"]);
+
+                    //token_secret = response.Data["oauth_token_secret"];
+                    //token = response.Data["oauth_token"];
+                }
             }
-
         }
     }
 }
