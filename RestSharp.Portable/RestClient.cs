@@ -106,7 +106,7 @@ namespace RestSharp.Portable
             var comparer = new ParameterComparer(this, request);
 
             var startIndex = 0;
-            foreach (var parameter in DefaultParameters)
+            foreach (var parameter in DefaultParameters.Where(x => x.Type != ParameterType.HttpHeader))
             {
                 if (request.Parameters.Contains(parameter, comparer))
                     continue;

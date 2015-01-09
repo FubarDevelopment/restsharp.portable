@@ -72,6 +72,7 @@
     <Compile Include="CustomDeserializer.cs" />
     <Compile Include="SerializerTests.cs" />
     <Compile Include="RequestParameterTests.cs" />
+    <Compile Include="PostHeaderRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

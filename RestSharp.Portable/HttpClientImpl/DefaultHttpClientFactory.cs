@@ -134,6 +134,31 @@ namespace RestSharp.Portable.HttpClientImpl
         }
 
         /// <summary>
+        /// Returns a modified HTTP client object with the default HTTP header parameters
+        /// </summary>
+        /// <param name="httpClient">HTTP client</param>
+        /// <param name="restClient">REST client</param>
+        /// <returns>The modified HTTP request message</returns>
+        protected virtual HttpClient AddHttpHeaderParameters(HttpClient httpClient, IRestClient restClient)
+        {
+            foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
+            {
+                if (httpClient.DefaultRequestHeaders.Contains(param.Name))
+                    httpClient.DefaultRequestHeaders.Remove(param.Name);
+                var paramValue = string.Format("{0}", param.Value);
+                if (param.ValidateOnAdd)
+                {
+                    httpClient.DefaultRequestHeaders.Add(param.Name, paramValue);
+                }
+                else
+                {
+                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation(param.Name, paramValue);
+                }
+            }
+            return httpClient;
+        }
+
+        /// <summary>
         /// Create the message handler
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP client</param>
@@ -182,6 +207,7 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 BaseAddress = GetBaseAddress(client)
             };
+            httpClient = AddHttpHeaderParameters(httpClient, client);
             return httpClient;
         }
 
