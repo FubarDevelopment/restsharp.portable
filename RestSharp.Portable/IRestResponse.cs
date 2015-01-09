@@ -20,6 +20,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// The raw data
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required for RestSharp compatibility")]
         byte[] RawBytes { get; }
         /// <summary>
         /// Content type of the raw data

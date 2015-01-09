@@ -6,7 +6,7 @@
         <title>RestSharp.Portable OAuth 2.0 authenticators/clients</title>
         <authors>OAuth2 project</authors>
         <owners>Mark Junker</owners>
-        <licenseUrl>https://github.com/fubar-coder/OAuth2/wiki/License</licenseUrl>
+        <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>true</requireLicenseAcceptance>
         <description>This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.
@@ -18,31 +18,41 @@ Supported Platforms:
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
+- Xamarin Android
+- Xamarin iOS / MonoTouch
 - Portable Class Libraries (.NET 4.0.3+)</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-      <releaseNotes>- Add platform specific assemblies</releaseNotes>
-      <copyright>Copyright © Constantin Titarenko and others</copyright>
+      <releaseNotes>- Add platform specific assemblies
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant
+- Added required dependency on OAuth</releaseNotes>
+      <copyright>Copyright © Constantin Titarenko, RestSharp.Portable project and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
         <dependencies>
           <group targetFramework="portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
             <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
           </group>
           <group targetFramework="net40">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="net45">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="MonoAndroid10">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="MonoTouch10">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="Xamarin.iOS10">
             <dependency id="FubarCoder.RestSharp.Portable" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
         </dependencies>
     </metadata>

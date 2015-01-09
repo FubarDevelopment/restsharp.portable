@@ -82,13 +82,13 @@ namespace RestSharp.Portable.Authenticators
             ParseResponseHeader(response);
         }
 
-        private string CalculateMd5Hash(string input)
+        private static string CalculateMd5Hash(string input)
         {
             var inputBytes = Encoding.UTF8.GetBytes(input);
             return CalculateMd5Hash(inputBytes);
         }
 
-        private string CalculateMd5Hash(byte[] inputBytes)
+        private static string CalculateMd5Hash(byte[] inputBytes)
         {
             var hash = new MD5Managed().ComputeHash(inputBytes);
             var sb = new StringBuilder();
@@ -97,7 +97,7 @@ namespace RestSharp.Portable.Authenticators
             return sb.ToString();
         }
 
-        private string GrabHeaderVar(string varName, string header, string defaultValue = null)
+        private static string GrabHeaderVar(string varName, string header, string defaultValue = null)
         {
             var regHeader = new Regex(string.Format(@"{0}\s*=\s*((""(?<qval>[^""]*)"")|(?<val>[^,]+))", varName));
             var matchHeader = regHeader.Match(header);
@@ -246,7 +246,7 @@ namespace RestSharp.Portable.Authenticators
             var qopParts = GrabHeaderVar("qop", wwwAuthenticateHeader, "")
                 .Split(',');
             _qop = QualityOfProtection.Undefined;
-            foreach (var qopPart in qopParts.Select(x => x.Trim().ToLower()))
+            foreach (var qopPart in qopParts.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x.Trim().ToLower()))
             {
                 switch (qopPart)
                 {
@@ -255,8 +255,6 @@ namespace RestSharp.Portable.Authenticators
                         break;
                     case "auth-int":
                         _qop |= QualityOfProtection.AuthInt;
-                        break;
-                    case "":
                         break;
                     default:
                         throw new NotSupportedException(string.Format("Unsupported QOP {0}", qopPart));

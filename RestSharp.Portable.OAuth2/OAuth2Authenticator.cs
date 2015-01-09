@@ -38,8 +38,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// The OAuth client that is used by this authenticator
         /// </summary>
-        // ReSharper disable once InconsistentNaming
-        protected readonly OAuth2.OAuth2Client _client;
+        protected OAuth2.OAuth2Client Client { get; private set; }
 
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {
@@ -53,7 +52,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">The OAuth2 client</param>
         protected OAuth2Authenticator(OAuth2.OAuth2Client client)
         {
-            _client = client;
+            Client = client;
         }
 
         /// <summary>
@@ -65,9 +64,9 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
         public virtual async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
         {
-            if (string.IsNullOrEmpty(_client.RefreshToken))
+            if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
-            await _client.GetCurrentToken(forceUpdate: true);
+            await Client.GetCurrentToken(forceUpdate: true);
         }
 
         /// <summary>
@@ -75,7 +74,12 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         public virtual IEnumerable<HttpStatusCode> StatusCodes
         {
-            get { return string.IsNullOrEmpty(_client.RefreshToken) ? _noStatusCodes : _statusCodes; }
+            get
+            {
+                if (string.IsNullOrEmpty(Client.RefreshToken))
+                    return _noStatusCodes;
+                return _statusCodes;
+            }
         }
 
         /// <summary>
@@ -113,7 +117,7 @@ namespace RestSharp.Portable.Authenticators
         /// <returns></returns>
         public override async Task Authenticate(IRestClient client, IRestRequest request)
         {
-            request.AddParameter("oauth_token", await _client.GetCurrentToken(), ParameterType.GetOrPost);
+            request.AddParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
         }
     }
 
@@ -157,11 +161,11 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
         public override async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
         {
-            if (string.IsNullOrEmpty(_client.RefreshToken))
+            if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
             // Set this variable only if we have a refresh token
             _authFailed = true;
-            await _client.GetCurrentToken(forceUpdate: true);
+            await Client.GetCurrentToken(forceUpdate: true);
         }
 
         /// <summary>
@@ -180,7 +184,7 @@ namespace RestSharp.Portable.Authenticators
             // When the authorization failed or when the Authorization header is missing, we're just adding it (again) with the
             // new AccessToken.
             _authFailed = false;
-            var authValue = string.Format("{0} {1}", _tokenType, await _client.GetCurrentToken());
+            var authValue = string.Format("{0} {1}", _tokenType, await Client.GetCurrentToken());
             if (authParam == null)
             {
                 request.AddParameter("Authorization", authValue, ParameterType.HttpHeader);

@@ -119,6 +119,22 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">The REST request</param>
+        /// <returns>Resulting URL</returns>
+        /// <remarks>
+        /// The resulting URL is a combination of the REST client's BaseUrl and the REST requests
+        /// Resource, where all URL segments are replaced and - optionally - the query parameters
+        /// added.
+        /// </remarks>
+        public static Uri BuildUri(this IRestClient client, IRestRequest request)
+        {
+            return BuildUri(client, request, true);
+        }
+
+        /// <summary>
+        /// Build the full URL for a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The REST request</param>
         /// <param name="withQuery">Should the resulting URL contain the query?</param>
         /// <returns>Resulting URL</returns>
         /// <remarks>
@@ -126,19 +142,19 @@ namespace RestSharp.Portable
         /// Resource, where all URL segments are replaced and - optionally - the query parameters
         /// added.
         /// </remarks>
-        public static Uri BuildUri(this IRestClient client, IRestRequest request, bool withQuery = true)
+        public static Uri BuildUri(this IRestClient client, IRestRequest request, bool withQuery)
         {
             var parameters = client.MergeParameters(request);
             UriBuilder urlBuilder;
             if (client.BaseUrl == null)
             {
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
-                urlBuilder = new UriBuilder(resource);
+                urlBuilder = new UriBuilder(new Uri(resource, UriKind.RelativeOrAbsolute));
             }
             else if (request == null || string.IsNullOrEmpty(request.Resource))
             {
                 var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
-                urlBuilder = new UriBuilder(baseUrl);
+                urlBuilder = new UriBuilder(new Uri(baseUrl, UriKind.RelativeOrAbsolute));
             }
             else
             {
@@ -146,11 +162,11 @@ namespace RestSharp.Portable
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
                 if (string.IsNullOrEmpty(resource))
                 {
-                    urlBuilder = new UriBuilder(baseUrl);
+                    urlBuilder = new UriBuilder(new Uri(baseUrl, UriKind.RelativeOrAbsolute));
                 }
                 else if (string.IsNullOrEmpty(baseUrl))
                 {
-                    urlBuilder = new UriBuilder(resource);
+                    urlBuilder = new UriBuilder(new Uri(resource, UriKind.RelativeOrAbsolute));
                 }
                 else
                 {

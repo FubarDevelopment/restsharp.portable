@@ -281,6 +281,7 @@ namespace RestSharp.Portable
         /// <param name="request">The REST request to add this parameter to</param>
         /// <param name="parameter">The new file parameter</param>
         /// <returns>The REST request to allow call chains</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Communicate to the caller that a file parameter is required.")]
         public static IRestRequest AddFile(this IRestRequest request, FileParameter parameter)
         {
             return request.AddParameter(parameter);

@@ -17,8 +17,18 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">The client this parameter comparer is for</param>
         /// <param name="request">The request this parameter comparer is for</param>
+        public ParameterComparer(IRestClient client, IRestRequest request)
+            : this(client, request, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to create a parameter comparer variant
+        /// </summary>
+        /// <param name="client">The client this parameter comparer is for</param>
+        /// <param name="request">The request this parameter comparer is for</param>
         /// <param name="stringComparer">The string comparer to use (default: Ordinal)</param>
-        public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer = null)
+        public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer)
         {
             _isGetRequest = (request == null || client.GetEffectiveHttpMethod(request) == HttpMethod.Get);
             var nameComparer = stringComparer;

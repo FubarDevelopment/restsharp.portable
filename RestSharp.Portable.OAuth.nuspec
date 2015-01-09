@@ -6,7 +6,7 @@
     <title>RestSharp.Portable OAuth 1.0 authenticator</title>
     <authors>RestSharp project</authors>
     <owners>Mark Junker</owners>
-    <licenseUrl>https://github.com/restsharp/RestSharp/blob/master/LICENSE.txt</licenseUrl>
+    <licenseUrl>http://choosealicense.com/licenses/apache-2.0/</licenseUrl>
     <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>This library contains the OAuth 1.0 authenticator for RestSharp.Portable, which is a port of the OAuth 1.0 authenticator from the original RestSharp project. The authenticator was moved to a different library, to keep the number of dependencies of the RestSharp.Portable package as small as possible.
@@ -18,10 +18,13 @@ Supported Platforms:
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
+- Xamarin Android
+- Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
     <summary>OAuth authenticator</summary>
-    <releaseNotes>- Add platform specific assemblies</releaseNotes>
-    <copyright>Copyright © John Sheehan</copyright>
+    <releaseNotes>- Add platform specific assemblies
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
+    <copyright>Copyright © John Sheehan and RestSharp.Portable project</copyright>
     <language>en-US</language>
     <tags>PCL RestSharp portable OAuth</tags>
     <dependencies>

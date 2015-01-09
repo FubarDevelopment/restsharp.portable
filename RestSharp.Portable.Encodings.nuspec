@@ -5,7 +5,7 @@
         <version>$version$</version>
         <title>RestSharp.Portable Encodings</title>
         <authors>Mark Junker</authors>
-        <licenseUrl>https://github.com/FubarDevelopment/restsharp.portable/wiki/BSD%202-Clause%20License</licenseUrl>
+        <licenseUrl>http://choosealicense.com/licenses/bsd-2-clause/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>This library contains the GZIP and Deflate content encoding handlers.
@@ -17,11 +17,14 @@ Supported Platforms:
 - Windows Phone 8
 - Windows Phone 8.1
 - Silverlight 5
+- Xamarin Android
+- Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
         <releaseNotes>- Add platform specific assemblies
-- Add Deflate encoding</releaseNotes>
-        <copyright>Copyright © Mark Junker</copyright>
+- Add Deflate encoding
+- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
+        <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>
         <dependencies>

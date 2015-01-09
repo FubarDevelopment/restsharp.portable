@@ -48,18 +48,6 @@ namespace System.Security.Cryptography
         {
             HResult = unchecked((int)0x80131431);
         }
-
-        public CryptographicUnexpectedOperationException(string message, Exception inner)
-            : base(message, inner)
-        {
-            HResult = unchecked((int)0x80131431);
-        }
-
-        public CryptographicUnexpectedOperationException(string format, string insert)
-            : base(String.Format(format, insert))
-        {
-            HResult = unchecked((int)0x80131431);
-        }
     }
 }
 

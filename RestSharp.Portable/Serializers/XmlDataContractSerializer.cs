@@ -12,16 +12,12 @@ namespace RestSharp.Portable.Serializers
     public class XmlDataContractSerializer : ISerializer
     {
         private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
+        private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
 
         /// <summary>
         /// Default XML serializer for AddXmlBody
         /// </summary>
-        internal static XmlDataContractSerializer Default { get; private set; }
-
-        static XmlDataContractSerializer()
-        {
-            Default = new XmlDataContractSerializer();
-        }
+        internal static XmlDataContractSerializer Default { get { return _defaultXmlDataContractSerializer; } }
 
         /// <summary>
         /// The configuration used to create an XML writer
@@ -47,15 +43,13 @@ namespace RestSharp.Portable.Serializers
         public byte[] Serialize(object obj)
         {
             var serializer = CreateSerializer(obj);
-            using (var temp = new MemoryStream())
+            var temp = new MemoryStream();
+            using (var writer = XmlWriter.Create(temp, XmlWriterSettings))
             {
-                using (var writer = XmlWriter.Create(temp, XmlWriterSettings))
-                {
-                    serializer.WriteObject(writer, obj);
-                }
-                var result = temp.ToArray();
-                return result;
+                serializer.WriteObject(writer, obj);
             }
+            var result = temp.ToArray();
+            return result;
         }
 
         private MediaTypeHeaderValue _defaultContentType;
