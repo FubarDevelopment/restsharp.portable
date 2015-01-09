@@ -22,8 +22,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
     <summary>OAuth authenticator</summary>
-    <releaseNotes>- Add platform specific assemblies
-- Assemblies for most platforms (except PCL and SL5) are now CLSCompliant</releaseNotes>
+    <releaseNotes>- IRestClient now implements IDisposable (Fixes issue #11)</releaseNotes>
     <copyright>Copyright © John Sheehan and RestSharp.Portable project</copyright>
     <language>en-US</language>
     <tags>PCL RestSharp portable OAuth</tags>
