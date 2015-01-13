@@ -80,6 +80,7 @@
     <Compile Include="SerializerTests.cs" />
     <Compile Include="RequestParameterTests.cs" />
     <Compile Include="UrlEncodeTests.cs" />
+    <Compile Include="PostHeaderRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
