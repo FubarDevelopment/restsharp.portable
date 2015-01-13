@@ -24,47 +24,6 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
 {
     internal static class StringExtensions
     {
-        public static bool IsNullOrBlank(this string value)
-        {
-            return String.IsNullOrWhiteSpace(value);
-        }
-        public static bool EqualsIgnoreCase(this string left, string right)
-        {
-            return String.Compare(left, right, StringComparison.OrdinalIgnoreCase) == 0;
-        }
-        public static bool EqualsAny(this string input, params string[] args)
-        {
-            return args.Aggregate(false, (current, arg) => current | input.Equals(arg));
-        }
-        public static string FormatWith(this string format, params object[] args)
-        {
-            return String.Format(format, args);
-        }
-        public static string FormatWithInvariantCulture(this string format, params object[] args)
-        {
-            return String.Format(CultureInfo.InvariantCulture, format, args);
-        }
-        public static string Then(this string input, string value)
-        {
-            return String.Concat(input, value);
-        }
-        public static string UrlEncode(this string value)
-        {
-            // [DC] This is more correct than HttpUtility; it escapes spaces as %20, not +
-            return Uri.EscapeDataString(value);
-        }
-        public static string UrlDecode(this string value)
-        {
-            return Uri.UnescapeDataString(value);
-        }
-        public static Uri AsUri(this string value)
-        {
-            return new Uri(value);
-        }
-        public static string ToBase64String(this byte[] input)
-        {
-            return Convert.ToBase64String(input);
-        }
         public static byte[] GetBytes(this string input)
         {
             return Encoding.UTF8.GetBytes(input);

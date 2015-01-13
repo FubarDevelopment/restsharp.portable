@@ -299,9 +299,9 @@ namespace RestSharp.Portable.Authenticators
                     break;
                 case OAuthParameterHandling.UrlOrPostParameters:
                     parameters.Add("oauth_signature", oauth.Signature);
-                    foreach (var parameter in parameters.Where(parameter =>
-                    !parameter.Name.IsNullOrBlank() &&
-                    (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))))
+                    foreach (var parameter in parameters.Where(
+                        parameter => !string.IsNullOrEmpty(parameter.Name) 
+                            && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))))
                     {
                         var v = parameter.Value;
                         v = Uri.UnescapeDataString(v.Replace('+', ' '));
@@ -315,22 +315,22 @@ namespace RestSharp.Portable.Authenticators
         private string GetAuthorizationHeader(WebPairCollection parameters)
         {
             var sb = new StringBuilder("OAuth ");
-            if (!Realm.IsNullOrBlank())
+            if (!string.IsNullOrEmpty(Realm))
             {
-                sb.Append("realm=\"{0}\",".FormatWith(OAuthTools.UrlEncodeRelaxed(Realm)));
+                sb.Append(string.Format("realm=\"{0}\",", OAuthTools.UrlEncodeRelaxed(Realm)));
             }
             parameters.Sort((l, r) => String.Compare(l.Name, r.Name, StringComparison.Ordinal));
             var parameterCount = 0;
-            var oathParameters = parameters.Where(parameter =>
-            !parameter.Name.IsNullOrBlank() &&
-            !parameter.Value.IsNullOrBlank() &&
-            (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))
+            var oathParameters = parameters.Where(
+                parameter => !string.IsNullOrEmpty(parameter.Name) 
+                    && !string.IsNullOrEmpty(parameter.Value) 
+                    && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))
             ).ToList();
             foreach (var parameter in oathParameters)
             {
                 parameterCount++;
                 var format = parameterCount < oathParameters.Count ? "{0}=\"{1}\"," : "{0}=\"{1}\"";
-                sb.Append(format.FormatWith(parameter.Name, parameter.Value));
+                sb.Append(string.Format(format, parameter.Name, parameter.Value));
             }
             var authorization = sb.ToString();
             return authorization;

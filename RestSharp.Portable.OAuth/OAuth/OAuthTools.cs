@@ -156,7 +156,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         public static WebParameterCollection SortParametersExcludingSignature(WebParameterCollection parameters)
         {
             var copy = new WebParameterCollection(parameters);
-            var exclusions = copy.Where(n => n.Name.EqualsIgnoreCase("oauth_signature"));
+            var exclusions = copy.Where(n => string.Equals(n.Name, "oauth_signature", StringComparison.OrdinalIgnoreCase));
             copy.RemoveAll(exclusions);
             copy.ForEach(p => { p.Name = UrlEncodeStrict(p.Name); p.Value = UrlEncodeStrict(p.Value); });
             copy.Sort(
@@ -181,8 +181,8 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 throw new ArgumentNullException("url");
             }
             var sb = new StringBuilder();
-            var requestUrl = "{0}://{1}".FormatWith(url.Scheme, url.Host);
-            var qualified = ":{0}".FormatWith(url.Port);
+            var requestUrl = string.Format("{0}://{1}", url.Scheme, url.Host);
+            var qualified = string.Format(":{0}", url.Port);
             var basic = url.Scheme == "http" && url.Port == 80;
             var secure = url.Scheme == "https" && url.Port == 443;
             sb.Append(requestUrl);
@@ -204,8 +204,8 @@ namespace RestSharp.Portable.Authenticators.OAuth
         {
             var sb = new StringBuilder();
             // Separating &'s are not URL encoded
-            var requestMethod = method.ToUpper().Then("&");
-            var requestUrl = UrlEncodeRelaxed(ConstructRequestUrl(url.AsUri())).Then("&");
+            var requestMethod = string.Concat(method.ToUpper(), "&");
+            var requestUrl = string.Concat(UrlEncodeRelaxed(ConstructRequestUrl(new Uri(url))), "&");
             var requestParameters = UrlEncodeRelaxed(NormalizeRequestParameters(parameters));
             sb.Append(requestMethod);
             sb.Append(requestUrl);
@@ -268,13 +268,13 @@ namespace RestSharp.Portable.Authenticators.OAuth
         string consumerSecret,
         string tokenSecret)
         {
-            if (tokenSecret.IsNullOrBlank())
+            if (string.IsNullOrEmpty(tokenSecret))
             {
                 tokenSecret = String.Empty;
             }
             consumerSecret = UrlEncodeRelaxed(consumerSecret);
             tokenSecret = UrlEncodeRelaxed(tokenSecret);
-            var key = "{0}&{1}".FormatWith(consumerSecret, tokenSecret);
+            var key = string.Format("{0}&{1}", consumerSecret, tokenSecret);
             string signature;
             switch (signatureMethod)
             {

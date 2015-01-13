@@ -240,64 +240,64 @@ namespace RestSharp.Portable.Authenticators.OAuth
         }
         private void ValidateTokenRequestState()
         {
-            if (RequestTokenUrl.IsNullOrBlank())
+            if (string.IsNullOrEmpty(RequestTokenUrl))
             {
                 throw new ArgumentException("You must specify a request token URL");
             }
-            if (ConsumerKey.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerKey))
             {
                 throw new ArgumentException("You must specify a consumer key");
             }
-            if (ConsumerSecret.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerSecret))
             {
                 throw new ArgumentException("You must specify a consumer secret");
             }
         }
         private void ValidateAccessRequestState()
         {
-            if (AccessTokenUrl.IsNullOrBlank())
+            if (string.IsNullOrEmpty(AccessTokenUrl))
             {
                 throw new ArgumentException("You must specify an access token URL");
             }
-            if (ConsumerKey.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerKey))
             {
                 throw new ArgumentException("You must specify a consumer key");
             }
-            if (ConsumerSecret.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerSecret))
             {
                 throw new ArgumentException("You must specify a consumer secret");
             }
-            if (Token.IsNullOrBlank())
+            if (string.IsNullOrEmpty(Token))
             {
                 throw new ArgumentException("You must specify a token");
             }
         }
         private void ValidateClientAuthAccessRequestState()
         {
-            if (AccessTokenUrl.IsNullOrBlank())
+            if (string.IsNullOrEmpty(AccessTokenUrl))
             {
                 throw new ArgumentException("You must specify an access token URL");
             }
-            if (ConsumerKey.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerKey))
             {
                 throw new ArgumentException("You must specify a consumer key");
             }
-            if (ConsumerSecret.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerSecret))
             {
                 throw new ArgumentException("You must specify a consumer secret");
             }
-            if (ClientUsername.IsNullOrBlank() || ClientPassword.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ClientUsername) || string.IsNullOrEmpty(ClientPassword))
             {
                 throw new ArgumentException("You must specify user credentials");
             }
         }
         private void ValidateProtectedResourceState()
         {
-            if (ConsumerKey.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerKey))
             {
                 throw new ArgumentException("You must specify a consumer key");
             }
-            if (ConsumerSecret.IsNullOrBlank())
+            if (string.IsNullOrEmpty(ConsumerSecret))
             {
                 throw new ArgumentException("You must specify a consumer secret");
             }
@@ -312,19 +312,19 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 new WebPair("oauth_timestamp", timestamp),
                 new WebPair("oauth_version", Version ?? "1.0")
             };
-            if (!Token.IsNullOrBlank())
+            if (!string.IsNullOrEmpty(Token))
             {
                 authParameters.Add(new WebPair("oauth_token", Token));
             }
-            if (!CallbackUrl.IsNullOrBlank())
+            if (!string.IsNullOrEmpty(CallbackUrl))
             {
                 authParameters.Add(new WebPair("oauth_callback", CallbackUrl));
             }
-            if (!Verifier.IsNullOrBlank())
+            if (!string.IsNullOrEmpty(Verifier))
             {
                 authParameters.Add(new WebPair("oauth_verifier", Verifier));
             }
-            if (!SessionHandle.IsNullOrBlank())
+            if (!string.IsNullOrEmpty(SessionHandle))
             {
                 authParameters.Add(new WebPair("oauth_session_handle", SessionHandle));
             }
