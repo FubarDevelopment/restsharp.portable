@@ -183,7 +183,7 @@ namespace RestSharp.Portable
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                         queryString.Append("&");
-                    queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString());
+                    queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                 }
                 if (client.GetEffectiveHttpMethod(request) == HttpMethod.Get)
                 {
@@ -192,7 +192,7 @@ namespace RestSharp.Portable
                     {
                         if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                             queryString.Append("&");
-                        queryString.AppendFormat("{0}={1}", Uri.EscapeDataString(param.Name), param.ToEncodedString());
+                        queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                     }
                 }
                 urlBuilder.Query = queryString.ToString();
@@ -228,7 +228,7 @@ namespace RestSharp.Portable
                     if (hasEncoding)
                     {
                         var postData = string.Join("&", getOrPostParameters
-                            .Select(x => string.Format("{0}={1}", Uri.EscapeDataString(x.Name), x.ToEncodedString())));
+                            .Select(x => string.Format("{0}={1}", UrlUtility.Escape(x.Name), x.ToEncodedString())));
                         var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
                         content = new ByteArrayContent(bytes);
                         content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");

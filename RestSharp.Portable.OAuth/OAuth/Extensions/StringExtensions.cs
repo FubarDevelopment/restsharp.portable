@@ -51,7 +51,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
         public static string UrlEncode(this string value)
         {
             // [DC] This is more correct than HttpUtility; it escapes spaces as %20, not +
-            return Uri.EscapeDataString(value);
+            return UrlUtility.Escape(value);
         }
         public static string UrlDecode(this string value)
         {

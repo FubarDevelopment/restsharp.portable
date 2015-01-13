@@ -11,67 +11,24 @@ namespace RestSharp.Portable
     /// </summary>
     public static class ParameterExtensions
     {
-        private const string _alphanum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private const string _mark = "-_.!~*'()";
-
         internal static readonly Encoding DefaultEncoding = Encoding.UTF8;
-
-        private static readonly IDictionary<byte, bool> _allowedBytes = DefaultEncoding.GetBytes(_alphanum + _mark)
-            .ToDictionary(x => x, x => true);
-        // ReSharper disable once RedundantEnumerableCastCall
-        // We have to disable it, because there is no IEnumerable<char> in a .NET 4.0 compatible PCL
-        private static readonly IDictionary<char, bool> _allowedChars = (_alphanum + _mark).Cast<char>()
-            .ToDictionary(x => x, x => true);
-
-        internal static string UrlEncode(string s, Encoding encoding, bool spaceAsPlus)
-        {
-            var buffer = new char[1];
-            var result = new StringBuilder();
-            foreach (char ch in s)
-            {
-                if (spaceAsPlus && ch == ' ')
-                    result.Append('+');
-                else if (_allowedChars.ContainsKey(ch))
-                    result.Append(ch);
-                else
-                {
-                    buffer[0] = ch;
-                    var data = encoding.GetBytes(buffer);
-                    foreach (var v in data)
-                        result.AppendFormat("%{0:x2}", v);
-                }
-            }
-            return result.ToString();
-        }
-
-        internal static string UrlEncode(byte[] v, bool spaceAsPlus)
-        {
-            var result = new StringBuilder();
-            foreach (var b in v)
-            {
-                if (spaceAsPlus && b == 32)
-                    result.Append('+');
-                else if (_allowedBytes.ContainsKey(b))
-                {
-                    result.Append((char)b);
-                }
-                else
-                    result.AppendFormat("%{0:x2}", b);
-            }
-            return result.ToString();
-        }
 
         internal static string UrlEncode(object v, Encoding encoding, bool spaceAsPlus)
         {
+            var flags = (spaceAsPlus ? UrlEscapeFlags.EscapeSpaceAsPlus : UrlEscapeFlags.Default);
+
             if (v == null)
                 return string.Empty;
+            
             var s = v as string;
             if (s != null)
-                return UrlEncode(s, encoding, spaceAsPlus);
+                return UrlUtility.Escape(s, encoding, flags);
+
             var bytes = v as byte[];
             if (bytes != null)
-                return UrlEncode(bytes, spaceAsPlus);
-            return UrlEncode(string.Format("{0}", v), encoding, spaceAsPlus);
+                return UrlUtility.Escape(bytes, flags);
+
+            return UrlUtility.Escape(string.Format("{0}", v), encoding, flags);
         }
 
         internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)

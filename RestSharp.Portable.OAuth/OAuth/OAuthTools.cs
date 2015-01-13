@@ -108,7 +108,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             // This MAY sometimes exhibit RFC 3986 behavior (according to the documentation).
             // If it does, the escaping we do that follows it will be a no-op since the
             // characters we search for to replace can't possibly exist in the string.
-            StringBuilder escaped = new StringBuilder(Uri.EscapeDataString(value));
+            var escaped = new StringBuilder(UrlUtility.Escape(value));
             // Upgrade the escaping to RFC 3986, if necessary.
             for (int i = 0; i < _uriRfc3986CharsToEscape.Length; i++)
             {
