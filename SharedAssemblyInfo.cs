@@ -23,9 +23,9 @@ using System.Resources;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0")]
-[assembly: AssemblyFileVersion("2.0.3")]
-[assembly: AssemblyInformationalVersion("2.0.3")]
+[assembly: AssemblyVersion("2.0.99.3")]
+[assembly: AssemblyFileVersion("2.0.99.3")]
+[assembly: AssemblyInformationalVersion("2.0.99.3")]
 
 #if !PCL && !SILVERLIGHT
 [assembly: CLSCompliant(true)]
