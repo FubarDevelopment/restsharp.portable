@@ -9,8 +9,7 @@ namespace RestSharp.Portable.Authenticators
     /// </summary>
     public class HttpBasicAuthenticator : IAuthenticator
     {
-        private readonly string _username;
-        private readonly string _password;
+        private readonly string _authHeader;
 
         /// <summary>
         /// Constructor taking the user name and password for the HTTP Basic authenticator
@@ -19,8 +18,8 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="password">Password</param>
         public HttpBasicAuthenticator(string username, string password)
         {
-            _password = password;
-            _username = username;
+            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password)));
+            _authHeader = string.Format("Basic {0}", token);
         }
 
         /// <summary>
@@ -33,9 +32,7 @@ namespace RestSharp.Portable.Authenticators
             // only add the Authorization parameter if it hasn't been added by a previous Execute
             if (request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
                 return;
-            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _username, _password)));
-            var authHeader = string.Format("Basic {0}", token);
-            request.AddParameter("Authorization", authHeader, ParameterType.HttpHeader);
+            request.AddParameter("Authorization", _authHeader, ParameterType.HttpHeader);
         }
     }
 }
