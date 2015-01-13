@@ -252,24 +252,17 @@ namespace RestSharp.Portable.Authenticators
             var useMultiPart = request.ContentCollectionMode == ContentCollectionMode.MultiPart
                 || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
+            var requestParameters = client.MergeParameters(request).Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
             if (!useMultiPart)
             {
-                var getOrPostParameters = client.MergeParameters(request).GetGetOrPostParameters();
-                foreach (var p in getOrPostParameters)
+                foreach (var p in requestParameters)
                     parameters.Add(new WebPair(p.Name, p.Value.ToString()));
             }
             else
             {
                 // if we are sending a multipart request, only the "oauth_" parameters should be included in the signature
-                foreach (var p in client.DefaultParameters.Where(
-                p => p.Type == ParameterType.GetOrPost && p.Name.StartsWith("oauth_")))
-                {
+                foreach (var p in requestParameters.Where(p => p.Name.StartsWith("oauth_", StringComparison.Ordinal)))
                     parameters.Add(new WebPair(p.Name, p.Value.ToString()));
-                }
-                foreach (var p in request.Parameters.Where(p => p.Type == ParameterType.GetOrPost && p.Name.StartsWith("oauth_")))
-                {
-                    parameters.Add(new WebPair(p.Name, p.Value.ToString()));
-                }
             }
             switch (Type)
             {
