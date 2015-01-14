@@ -1,4 +1,4 @@
-﻿#define ENABLE_MULTI_TEST
+﻿//#define ENABLE_MULTI_TEST
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
