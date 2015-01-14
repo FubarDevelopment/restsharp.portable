@@ -44,6 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)System.Security.Cryptography\MD5Managed.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlUtility.cs" />
   </ItemGroup>
 </Project>

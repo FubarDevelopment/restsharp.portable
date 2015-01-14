@@ -79,6 +79,8 @@
     <Compile Include="CustomDeserializer.cs" />
     <Compile Include="SerializerTests.cs" />
     <Compile Include="RequestParameterTests.cs" />
+    <Compile Include="UrlEncodeVariant2Tests.cs" />
+    <Compile Include="UrlEncodeVariant1Tests.cs" />
     <Compile Include="UrlEncodeTests.cs" />
     <Compile Include="PostHeaderRequestTests.cs" />
   </ItemGroup>

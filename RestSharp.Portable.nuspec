@@ -66,7 +66,9 @@ Supported Platforms:
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50" />
             <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net40" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="net40" />
             <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="net45" />
             <frameworkAssembly assemblyName="System.Security" targetFramework="net45" />
             <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
             <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoAndroid10" />
