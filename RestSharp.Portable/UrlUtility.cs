@@ -154,5 +154,70 @@ namespace RestSharp.Portable
         {
             return s_defaultEscapeUtility.EscapeToBytes(data, flags);
         }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static long ComputeLength(string data)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static long ComputeLength(string data, Encoding encoding)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data, encoding);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public static long ComputeLength(string data, UrlEscapeFlags flags)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data, flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="encoding"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public static long ComputeLength(string data, Encoding encoding, UrlEscapeFlags flags)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data, encoding, flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static long ComputeLength(byte[] data)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public static long ComputeLength(byte[] data, UrlEscapeFlags flags)
+        {
+            return s_defaultEscapeUtility.ComputeLength(data, flags);
+        }
     }
 }

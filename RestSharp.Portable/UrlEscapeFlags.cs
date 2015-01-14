@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RestSharp.Portable
 {
@@ -22,7 +20,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Compatibility with HttpUtility.UrlEncode(string)
         /// </summary>
-        LikeUrlEncode = UrlEscapeFlags.EscapeSpaceAsPlus | UrlEscapeFlags.LowerCaseHexCharacters | UrlEscapeFlags.AllowLikeUrlEncode,
+        LikeUrlEncode = EscapeSpaceAsPlus | LowerCaseHexCharacters | AllowLikeUrlEncode,
 
         /// <summary>
         /// Allow all characters that are allowed by EscapeDataString

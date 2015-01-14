@@ -211,6 +211,110 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public long ComputeLength(string data)
+        {
+            return ComputeLength(data, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public long ComputeLength(string data, Encoding encoding)
+        {
+            return ComputeLength(data, encoding, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public long ComputeLength(string data, UrlEscapeFlags flags)
+        {
+            return ComputeLength(data, s_defaultEncoding, flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="encoding"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public long ComputeLength(string data, Encoding encoding, UrlEscapeFlags flags)
+        {
+            return ComputeLength(encoding.GetBytes(data), flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public long ComputeLength(byte[] data)
+        {
+            return ComputeLength(data, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public long ComputeLength(byte[] data, UrlEscapeFlags flags)
+        {
+            var allowedBytesIndex = (flags & UrlEscapeFlags.AllowMask);
+            ISet<byte> allowedBytes;
+            if (!s_allowedBytes.TryGetValue(allowedBytesIndex, out allowedBytes))
+                allowedBytes = s_allowedBytes[UrlEscapeFlags.Default];
+            return ComputeLength(data, flags, allowedBytes);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="flags"></param>
+        /// <param name="allowedBytes"></param>
+        /// <returns></returns>
+        private static long ComputeLength(byte[] data, UrlEscapeFlags flags, ISet<byte> allowedBytes)
+        {
+            var escapeSpaceAsPlus = (flags & UrlEscapeFlags.EscapeSpaceAsPlus) == UrlEscapeFlags.EscapeSpaceAsPlus;
+            long computedLength = 0;
+
+#if PCL || SILVERLIGHT
+            long len = data.Length;
+#else
+            var len = data.LongLength;
+#endif
+            for (long i = 0; i != len; ++i)
+            {
+                var v = data[i];
+                if (allowedBytes.Contains(v))
+                    computedLength += 1;
+                else if (v == 0x20)
+                {
+                    if (escapeSpaceAsPlus)
+                        computedLength += 1;
+                    else
+                        computedLength += 3;
+                }
+                else
+                    computedLength += 3;
+            }
+            return computedLength;
+        }
+
+        /// <summary>
         /// Variant 1 of EscapeToBytes
         /// </summary>
         /// <remarks>
@@ -221,11 +325,12 @@ namespace RestSharp.Portable
         /// <param name="hexChars"></param>
         /// <param name="allowedBytes"></param>
         /// <returns></returns>
-        internal static byte[] EscapeToBytes1(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes)
+        private static byte[] EscapeToBytes1(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes)
         {
             var encodedByte = new byte[3];
             encodedByte[0] = (byte)'%';
 
+            var escapeSpaceAsPlus = (flags & UrlEscapeFlags.EscapeSpaceAsPlus) == UrlEscapeFlags.EscapeSpaceAsPlus;
             var output = new List<byte>(data.Length);
             var len = data.Length;
             var escapeByte = false;
@@ -238,7 +343,7 @@ namespace RestSharp.Portable
                 }
                 else if (v == 0x20)
                 {
-                    if ((flags & UrlEscapeFlags.EscapeSpaceAsPlus) != UrlEscapeFlags.Default)
+                    if (escapeSpaceAsPlus)
                     {
                         output.Add((byte)'+');
                     }
@@ -275,8 +380,9 @@ namespace RestSharp.Portable
         /// <param name="hexChars"></param>
         /// <param name="allowedBytes"></param>
         /// <returns></returns>
-        internal static byte[] EscapeToBytes2(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes)
+        private static byte[] EscapeToBytes2(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes)
         {
+            var escapeSpaceAsPlus = (flags & UrlEscapeFlags.EscapeSpaceAsPlus) == UrlEscapeFlags.EscapeSpaceAsPlus;
             var output = new List<byte[]>();
             var outputEscaped = new List<byte>();
             var outputSize = 0;
@@ -307,7 +413,7 @@ namespace RestSharp.Portable
                 }
                 if (v == 0x20)
                 {
-                    if ((flags & UrlEscapeFlags.EscapeSpaceAsPlus) != UrlEscapeFlags.Default)
+                    if (escapeSpaceAsPlus)
                     {
                         outputEscaped.Add((byte)'+');
                     }

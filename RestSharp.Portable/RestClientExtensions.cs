@@ -226,10 +226,14 @@ namespace RestSharp.Portable
                     var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
                     if (getOrPostParameters.Count != 0)
                     {
+#if USE_POST_PARAMETER_CONTENT
+                        content = new PostParametersContent(getOrPostParameters);
+#else
                         var postData = string.Join("&", getOrPostParameters
                             .Select(x => string.Format("{0}={1}", UrlUtility.Escape(x.Name), x.ToEncodedString())));
                         var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
                         content = new ByteArrayContent(bytes);
+#endif
                         content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
                     }
                     else

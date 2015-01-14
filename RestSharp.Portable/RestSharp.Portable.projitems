@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
