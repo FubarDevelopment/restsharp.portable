@@ -121,7 +121,7 @@ namespace RestSharp.Portable
             if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
                 return HttpUtility.UrlEncode(data);
 #endif
-            return ConvertEscapedBytesToString(EscapeToBytes(data, flags));
+            return Escape(data, s_defaultEncoding, flags);
         }
 
         /// <summary>
