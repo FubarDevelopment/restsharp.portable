@@ -42,12 +42,25 @@ namespace RestSharp.Portable
         AllowMask = 0x000F,
 
         /// <summary>
+        /// Lower case hexadecimal characters
+        /// </summary>
+        LowerCaseHexCharacters = 0x0010,
+        /// <summary>
         /// Escapes a space character (0x20) as plus
         /// </summary>
         EscapeSpaceAsPlus       = 0x0020,
+
         /// <summary>
-        /// Lower case hexadecimal characters
+        /// The mask for all builder variants
         /// </summary>
-        LowerCaseHexCharacters  = 0x0010,
+        BuilderVariantMask          = 0x0F00,
+        /// <summary>
+        /// Use a list of byte arrays to build the result
+        /// </summary>
+        BuilderVariantListByteArray = 0x0000,
+        /// <summary>
+        /// Use a list of bytes to build the result
+        /// </summary>
+        BuilderVariantListByte      = 0x0100,
     }
 }
