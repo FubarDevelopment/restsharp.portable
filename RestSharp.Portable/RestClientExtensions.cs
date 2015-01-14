@@ -221,11 +221,10 @@ namespace RestSharp.Portable
             }
             else
             {
-                var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
-                if (client.GetEffectiveHttpMethod(request) == HttpMethod.Post && getOrPostParameters.Count != 0)
+                if (client.GetEffectiveHttpMethod(request) == HttpMethod.Post)
                 {
-                    var hasEncoding = getOrPostParameters.Any(x => x.Encoding != null && !Equals(x.Encoding, ParameterExtensions.DefaultEncoding));
-                    if (hasEncoding)
+                    var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
+                    if (getOrPostParameters.Count != 0)
                     {
                         var postData = string.Join("&", getOrPostParameters
                             .Select(x => string.Format("{0}={1}", UrlUtility.Escape(x.Name), x.ToEncodedString())));
@@ -235,10 +234,7 @@ namespace RestSharp.Portable
                     }
                     else
                     {
-                        var postData = getOrPostParameters
-                            .Select(x => new KeyValuePair<string, string>(x.Name, string.Format("{0}", x.Value)))
-                            .ToList();
-                        content = new FormUrlEncodedContent(postData);
+                        content = null;
                     }
                 }
                 else

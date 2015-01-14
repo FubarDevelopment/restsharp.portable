@@ -75,6 +75,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DictionaryDeserializer.cs" />
+    <Compile Include="IssueTests.cs" />
     <Compile Include="OptionalHttpBasicAuthenticator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomDeserializer.cs" />
