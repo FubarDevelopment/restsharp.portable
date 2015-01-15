@@ -123,9 +123,11 @@ public class TickerResult
 We use the class with:
 
 ```csharp
-var client = new RestClient(new Uri("https://www.bitstamp.net/api/"));
-var request = new RestRequest("ticker", HttpMethod.Get);
-var result = await client.Execute<TickerResult>(request);
+using (var client = new RestClient(new Uri("https://www.bitstamp.net/api/")))
+{
+    var request = new RestRequest("ticker", HttpMethod.Get);
+    var result = await client.Execute<TickerResult>(request);
+}
 ```
 
 # Profressional Support #
