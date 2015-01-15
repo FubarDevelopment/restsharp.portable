@@ -130,6 +130,10 @@ using (var client = new RestClient(new Uri("https://www.bitstamp.net/api/")))
 }
 ```
 
-# Profressional Support #
+# Community Support #
+
+The support for community projects can be found in my [subreddit /r/FubarDev](http://www.reddit.com/r/FubarDev/).
+
+# Professional Support #
 
 You can get professional support here: [Fubar Development Junker](https://www.fubar-dev.de)
