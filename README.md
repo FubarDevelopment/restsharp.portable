@@ -6,9 +6,37 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.0.0 is available now!
+* Version 2.1.0 is available now!
 
 # Changes #
+
+## 2.1.0 ##
+
+* Fixes issue [#11](https://github.com/FubarDevelopment/restsharp.portable/issues/11)
+  * IRestClient now derives from IDisposable
+  * HttpClient is kept alive until the RestClient gets disposed
+  * Default HTTP header parameters are set for the
+    HttpClient
+* Fixes issue [#12](https://github.com/FubarDevelopment/restsharp.portable/issues/12)
+  * Workaround for the 32k limit of EscapeDataString
+  * Custom class for URL encoding that's
+    used as fall-back, when the user wants to use 
+    EscapeDataString with a byte array (which isn't supported).
+* Avoid rebuilding the Basic Authentication header for each request 
+
+## 2.0.3 ##
+
+* Fixed NuGet dependency for the OAuth 1.0 package
+* Fixed some problems found by FxCop
+
+## 2.0.2 ##
+
+* Fixed NuGet package for Xamarin.iOS (upload using nuget instead of NPE)
+
+## 2.0.1 ##
+
+* Fixed Microsoft.Bcl and Microsoft.Bcl.Build dependencies
+* Assemblies are now CLSCompliant (except PCL and SL5, which don't support this attribute)
 
 ## 2.0.0 ##
 
