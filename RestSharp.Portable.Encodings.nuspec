@@ -21,7 +21,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
-        <releaseNotes>- IRestClient now implements IDisposable (Fixes issue #11)</releaseNotes>
+        <releaseNotes>- Parallel release (Issues #11 and #12 fixed)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>

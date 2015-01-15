@@ -22,7 +22,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries (.NET 4.0.3+)</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-      <releaseNotes>- IRestClient now implements IDisposable (Fixes issue #11)</releaseNotes>
+      <releaseNotes>- Parallel release (Issues #11 and #12 fixed)</releaseNotes>
       <copyright>Copyright © Constantin Titarenko, RestSharp.Portable project and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>

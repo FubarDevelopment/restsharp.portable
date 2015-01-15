@@ -21,7 +21,8 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>- IRestClient now implements IDisposable (Fixes issue #11)</releaseNotes>
+        <releaseNotes>- The HttpClient is now kept alive as long as the RestClient is alive (Fixes issue #11)
+- Support for POST parameter values with lengths > 32k (Fixes issue #12)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
