@@ -36,7 +36,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource"></param>
         public RestRequest(string resource)
-            : this(new Uri(resource, UriKind.RelativeOrAbsolute) , HttpMethod.Get)
+            : this(resource, HttpMethod.Get)
         {
         }
 
