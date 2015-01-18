@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace RestSharp.Portable
 {
@@ -71,7 +72,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">The REST request</param>
         /// <returns>A list of merged parameters</returns>
-        public static IList<Parameter> MergeParameters(this IRestClient client, IRestRequest request)
+        public static IList<Parameter> MergeParameters([CanBeNull] this IRestClient client, IRestRequest request)
         {
             var parameters = new List<Parameter>();
 
@@ -103,7 +104,7 @@ namespace RestSharp.Portable
             return result;
         }
 
-        private static string ReplaceUrlSegments(string url, IEnumerable<Parameter> parameters)
+        private static string ReplaceUrlSegments([NotNull] string url, [NotNull] IEnumerable<Parameter> parameters)
         {
             foreach (var param in parameters.Where(x => x.Type == ParameterType.UrlSegment))
             {
@@ -125,7 +126,7 @@ namespace RestSharp.Portable
         /// Resource, where all URL segments are replaced and - optionally - the query parameters
         /// added.
         /// </remarks>
-        public static Uri BuildUri(this IRestClient client, IRestRequest request)
+        public static Uri BuildUri([CanBeNull] this IRestClient client, IRestRequest request)
         {
             return BuildUri(client, request, true);
         }
@@ -142,17 +143,24 @@ namespace RestSharp.Portable
         /// Resource, where all URL segments are replaced and - optionally - the query parameters
         /// added.
         /// </remarks>
-        public static Uri BuildUri(this IRestClient client, IRestRequest request, bool withQuery)
+        [NotNull]
+        public static Uri BuildUri([CanBeNull] this IRestClient client, IRestRequest request, bool withQuery)
         {
             var parameters = client.MergeParameters(request);
             UriBuilder urlBuilder;
-            if (client.BaseUrl == null)
+            if (client == null || client.BaseUrl == null)
             {
+                if (request == null)
+                    throw new ArgumentNullException("request");
+                if (string.IsNullOrEmpty(request.Resource))
+                    throw new ArgumentOutOfRangeException("request", "The resource must be specified and not be empty");
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
                 urlBuilder = new UriBuilder(new Uri(resource, UriKind.RelativeOrAbsolute));
             }
             else if (request == null || string.IsNullOrEmpty(request.Resource))
             {
+                if (client.BaseUrl == null)
+                    throw new ArgumentOutOfRangeException("client", "The BaseUrl must be specified");
                 var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
                 urlBuilder = new UriBuilder(new Uri(baseUrl, UriKind.RelativeOrAbsolute));
             }
@@ -210,7 +218,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static HttpContent GetBasicContent(this IRestClient client, IRestRequest request)
+        internal static HttpContent GetBasicContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             HttpContent content;
             var parameters = client.MergeParameters(request);
@@ -255,11 +263,11 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static HttpContent GetContent(this IRestClient client, IRestRequest request)
+        public static HttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             HttpContent content;
             var parameters = client.MergeParameters(request);
-            var collectionMode = request.ContentCollectionMode;
+            var collectionMode = (request == null ? ContentCollectionMode.MultiPartForFileParameters : request.ContentCollectionMode);
             if (collectionMode != ContentCollectionMode.BasicContent)
             {
                 var fileParameters = parameters.GetFileParameters().ToList();
@@ -285,7 +293,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static HttpContent GetMultiPartContent(this IRestClient client, IRestRequest request)
+        internal static HttpContent GetMultiPartContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             var isPostMethod = client.GetEffectiveHttpMethod(request) == HttpMethod.Post;
             var multipartContent = new MultipartFormDataContent();
@@ -337,7 +345,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">The request to determine the HTTP method for</param>
         /// <returns>GET or POST</returns>
-        internal static HttpMethod GetDefaultMethod(this IRestClient client, IRestRequest request)
+        internal static HttpMethod GetDefaultMethod([CanBeNull] this IRestClient client, IRestRequest request)
         {
             var parameters = (client == null ? new List<Parameter>() : client.DefaultParameters)
                 .Union(request == null ? new List<Parameter>() : request.Parameters);
@@ -352,9 +360,9 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">The request to determine the HTTP method for</param>
         /// <returns>The real HTTP method that must be used</returns>
-        public static HttpMethod GetEffectiveHttpMethod(this IRestClient client, IRestRequest request)
+        public static HttpMethod GetEffectiveHttpMethod([CanBeNull] this IRestClient client, IRestRequest request)
         {
-            if (request.Method == null || request.Method == HttpMethod.Get)
+            if (request == null || request.Method == null || request.Method == HttpMethod.Get)
                 return client.GetDefaultMethod(request);
             return request.Method;
         }
