@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
