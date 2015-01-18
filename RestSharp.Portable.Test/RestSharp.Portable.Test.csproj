@@ -73,6 +73,7 @@
     <Compile Include="DictionaryDeserializer.cs" />
     <Compile Include="IssueTests.cs" />
     <Compile Include="OptionalHttpBasicAuthenticator.cs" />
+    <Compile Include="OtherTests.cs" />
     <Compile Include="PostHeaderRequestTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestParameterTests.cs" />
