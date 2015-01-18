@@ -1,59 +1,58 @@
 ﻿//#define ENABLE_MULTI_TEST
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web;
+using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [TestClass]
     public class UrlEncodeTests
     {
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceASCII()
         {
             var chars = new string(Enumerable.Range(32, 95).Select(x => (char)x).ToArray());
             var expected = Uri.EscapeDataString(chars);
             var test = UrlUtility.Escape(chars);
-            Assert.AreEqual(expected, test);
+            Assert.Equal(expected, test);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceUmlaut()
         {
-            var chars = "äöüßÄÖÜ\u007F";
+            const string chars = "äöüßÄÖÜ\u007F";
             var expected = Uri.EscapeDataString(chars);
             var test = UrlUtility.Escape(chars);
-            Assert.AreEqual(expected, test);
+            Assert.Equal(expected, test);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceASCII()
         {
             var chars = new string(Enumerable.Range(32, 95).Select(x => (char)x).ToArray());
             var expected = HttpUtility.UrlEncode(chars);
             var test = UrlUtility.Escape(chars, UrlEscapeFlags.LikeUrlEncode);
-            Assert.AreEqual(expected, test);
+            Assert.Equal(expected, test);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceUmlaut()
         {
-            var chars = "äöüßÄÖÜ\u007F";
+            const string chars = "äöüßÄÖÜ\u007F";
             var expected = HttpUtility.UrlEncode(chars);
             var test = UrlUtility.Escape(chars, UrlEscapeFlags.LikeUrlEncode);
-            Assert.AreEqual(expected, test);
+            Assert.Equal(expected, test);
         }
 
 #if ENABLE_MULTI_TEST
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceASCII100000()
         {
             for (int i = 0; i != 100000; ++i)
                 TestEscapeDataStringComplianceASCII();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceASCII100000()
         {
             for (int i = 0; i != 100000; ++i)

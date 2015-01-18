@@ -1,72 +1,71 @@
 ﻿//#define ENABLE_MULTI_TEST
 
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.Web;
+using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [TestClass]
     public class UrlEncodeVariant2Tests
     {
         private readonly UrlEscapeUtility _utility = new UrlEscapeUtility(false);
 
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceASCII()
         {
             const UrlEscapeFlags flags = UrlEscapeFlags.BuilderVariantListByteArray;
             var chars = new string(Enumerable.Range(32, 95).Select(x => (char)x).ToArray());
             var expected = Uri.EscapeDataString(chars);
             var test = _utility.Escape(chars, flags);
-            Assert.AreEqual(expected, test);
-            Assert.AreEqual(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected, test);
+            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceUmlaut()
         {
             const UrlEscapeFlags flags = UrlEscapeFlags.BuilderVariantListByteArray;
             const string chars = "äöüßÄÖÜ\u007F";
             var expected = Uri.EscapeDataString(chars);
             var test = _utility.Escape(chars, flags);
-            Assert.AreEqual(expected, test);
-            Assert.AreEqual(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected, test);
+            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceASCII()
         {
             const UrlEscapeFlags flags = UrlEscapeFlags.LikeUrlEncode | UrlEscapeFlags.BuilderVariantListByteArray;
             var chars = new string(Enumerable.Range(32, 95).Select(x => (char)x).ToArray());
             var expected = HttpUtility.UrlEncode(chars);
-            Assert.IsNotNull(expected);
+            Assert.NotNull(expected);
             var test = _utility.Escape(chars, flags);
-            Assert.AreEqual(expected, test);
-            Assert.AreEqual(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected, test);
+            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceUmlaut()
         {
             const UrlEscapeFlags flags = UrlEscapeFlags.LikeUrlEncode | UrlEscapeFlags.BuilderVariantListByteArray;
             const string chars = "äöüßÄÖÜ\u007F";
             var expected = HttpUtility.UrlEncode(chars);
-            Assert.IsNotNull(expected);
+            Assert.NotNull(expected);
             var test = _utility.Escape(chars, flags);
-            Assert.AreEqual(expected, test);
-            Assert.AreEqual(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected, test);
+            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
         }
 
 #if ENABLE_MULTI_TEST
-        [TestMethod]
+        [Fact]
         public void TestEscapeDataStringComplianceASCII100000()
         {
             for (int i = 0; i != 100000; ++i)
                 TestEscapeDataStringComplianceASCII();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestUrlEncodeComplianceASCII100000()
         {
             for (int i = 0; i != 100000; ++i)

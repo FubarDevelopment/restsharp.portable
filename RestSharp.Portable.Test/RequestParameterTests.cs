@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [TestClass]
     public class RequestParameterTests
     {
-        [TestMethod]
+        [Fact]
         public void TestParameterCaseSensitive()
         {
             using (var client = new RestClient("http://localhost"))
@@ -21,11 +20,11 @@ namespace RestSharp.Portable.Test
                     .AddParameter("Param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1&param2=value2&Param1=value1.1", uri);
+                Assert.Equal("http://localhost/?param1=value1&param2=value2&Param1=value1.1", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestOnlyDefaultParameter()
         {
             using (var client = new RestClient("http://localhost"))
@@ -35,11 +34,11 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest();
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1", uri);
+                Assert.Equal("http://localhost/?param1=value1", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestParameterCaseInsensitive()
         {
             using (var client = new RestClient("http://localhost")
@@ -55,11 +54,11 @@ namespace RestSharp.Portable.Test
                     .AddParameter("Param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?Param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?Param1=value1.1&param2=value2", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestParameterOverride()
         {
             using (var client = new RestClient("http://localhost"))
@@ -72,11 +71,11 @@ namespace RestSharp.Portable.Test
                     .AddParameter("param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestParameterDuplication()
         {
             using (var client = new RestClient("http://localhost"))
@@ -88,11 +87,11 @@ namespace RestSharp.Portable.Test
                     .AddParameter("param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestParameterDuplicationGetAndQueryString()
         {
             using (var client = new RestClient("http://localhost"))
@@ -104,11 +103,11 @@ namespace RestSharp.Portable.Test
                     .AddParameter("param1", "value1.1", ParameterType.QueryString);
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public async Task TestParameterDuplicationPostAndQueryString()
         {
             using (var client = new RestClient("http://localhost"))
@@ -120,10 +119,10 @@ namespace RestSharp.Portable.Test
                     .AddParameter("param1", "value1.1", ParameterType.QueryString);
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.AreEqual("http://localhost/?param1=value1.1", uri);
+                Assert.Equal("http://localhost/?param1=value1.1", uri);
 
                 var body = await client.GetContent(request).ReadAsStringAsync();
-                Assert.AreEqual("param1=value1&param2=value2", body);
+                Assert.Equal("param1=value1&param2=value2", body);
             }
         }
     }

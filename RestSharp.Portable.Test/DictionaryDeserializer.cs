@@ -1,9 +1,8 @@
-﻿using RestSharp.Portable.Deserializers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using RestSharp.Portable.Deserializers;
 
 namespace RestSharp.Portable.Test
 {
@@ -13,7 +12,7 @@ namespace RestSharp.Portable.Test
 
         public DictionaryDeserializer()
         {
-            Encoding = System.Text.Encoding.UTF8;
+            Encoding = Encoding.UTF8;
         }
 
         private string Decode(string s)
@@ -25,7 +24,7 @@ namespace RestSharp.Portable.Test
 
         public T Deserialize<T>(IRestResponse response)
         {
-            var text = System.Text.Encoding.ASCII.GetString(response.RawBytes);
+            var text = Encoding.ASCII.GetString(response.RawBytes);
 
             var kvp = from line in text.Split('&')
                       let parts = line.Split(new[] { '=' }, 2)

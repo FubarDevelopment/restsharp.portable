@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [TestClass]
     public class PostHeaderRequestTests
     {
+        // ReSharper disable once ClassNeverInstantiated.Local
+        [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         class Response
         {
             public Dictionary<string, string> Form { get; set; }
             public Dictionary<string, string> Headers { get; set; }
         }
 
-        [TestMethod]
+        [Fact]
         public async Task TestRequestParameter()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -25,12 +28,12 @@ namespace RestSharp.Portable.Test
                 request.AddParameter("param1", "ParamValue1");
 
                 var response = await client.Execute<Response>(request);
-                Assert.AreEqual("ParamValue1", response.Data.Form["param1"]);
-                Assert.AreEqual("TestValue1", response.Data.Headers["Restsharp-Test1"]);
+                Assert.Equal("ParamValue1", response.Data.Form["param1"]);
+                Assert.Equal("TestValue1", response.Data.Headers["Restsharp-Test1"]);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public async Task TestDefaultParameter()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -41,8 +44,8 @@ namespace RestSharp.Portable.Test
                 request.AddParameter("param1", "ParamValue1");
 
                 var response = await client.Execute<Response>(request);
-                Assert.AreEqual("ParamValue1", response.Data.Form["param1"]);
-                Assert.AreEqual("TestValue2", response.Data.Headers["Restsharp-Test2"]);
+                Assert.Equal("ParamValue1", response.Data.Form["param1"]);
+                Assert.Equal("TestValue2", response.Data.Headers["Restsharp-Test2"]);
             }
         }
     }

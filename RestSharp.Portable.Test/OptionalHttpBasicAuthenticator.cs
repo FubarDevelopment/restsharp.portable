@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 
+// ReSharper disable once CheckNamespace
 namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
@@ -13,7 +12,7 @@ namespace RestSharp.Portable.Authenticators
     public class OptionalHttpBasicAuthenticator : IRoundTripAuthenticator
     {
         private readonly HttpBasicAuthenticator _basicAuth;
-        private bool _authRequired = false;
+        private bool _authRequired;
 
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {
@@ -57,7 +56,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Returns all the status codes where a round trip is allowed
         /// </summary>
-        public IEnumerable<System.Net.HttpStatusCode> StatusCodes
+        public IEnumerable<HttpStatusCode> StatusCodes
         {
             get { return _statusCodes; }
         }

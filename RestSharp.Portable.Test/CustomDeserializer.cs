@@ -1,8 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [TestClass]
     public class CustomDeserializer
     {
         class TestDeserializer : Deserializers.JsonDeserializer
@@ -14,14 +13,14 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void TestReplaceContentTypeDeserializer()
         {
             var restClient = new RestClient();
             var deserializer = new TestDeserializer();
             restClient.ReplaceHandler(typeof(Deserializers.JsonDeserializer), deserializer);
-            Assert.AreSame(deserializer, restClient.GetHandler("application/json"));
-            Assert.AreSame(deserializer, restClient.GetHandler("text/json"));
+            Assert.Same(deserializer, restClient.GetHandler("application/json"));
+            Assert.Same(deserializer, restClient.GetHandler("text/json"));
         }
     }
 }
