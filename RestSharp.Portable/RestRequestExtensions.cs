@@ -299,10 +299,9 @@ namespace RestSharp.Portable
                 return null;
 
             MediaTypeHeaderValue contentType;
-            byte[] buffer;
-            if (body.Value is byte[])
+            var buffer = body.Value as byte[];
+            if (buffer != null)
             {
-                buffer = (byte[])body.Value;
                 contentType = body.ContentType;
             }
             else
