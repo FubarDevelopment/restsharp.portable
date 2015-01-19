@@ -175,7 +175,7 @@ namespace RestSharp.Portable
                         message.Content = bodyData;
 
                     if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
-                        message.Headers.Accept.Clear();
+                        _httpClient.DefaultRequestHeaders.Accept.Clear();
 
                     bool failed = true;
                     var response = await _httpClient.SendAsync(message, ct);
