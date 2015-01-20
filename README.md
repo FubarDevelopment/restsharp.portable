@@ -10,6 +10,10 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
+## 2.1.1 ##
+
+* Fixed broken SL5 support (thanks to P2SH)
+
 ## 2.1.0 ##
 
 * Fixes issue [#11](https://github.com/FubarDevelopment/restsharp.portable/issues/11)
