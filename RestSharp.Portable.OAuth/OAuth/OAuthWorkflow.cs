@@ -26,32 +26,32 @@ namespace RestSharp.Portable.Authenticators.OAuth
     /// </summary>
     internal class OAuthWorkflow
     {
-        public virtual string Version { get; set; }
-        public virtual string ConsumerKey { get; set; }
-        public virtual string ConsumerSecret { get; set; }
-        public virtual string Token { get; set; }
-        public virtual string TokenSecret { get; set; }
-        public virtual string CallbackUrl { get; set; }
-        public virtual string Verifier { get; set; }
-        public virtual string SessionHandle { get; set; }
-        public virtual OAuthSignatureMethod SignatureMethod { get; set; }
-        public virtual OAuthSignatureTreatment SignatureTreatment { get; set; }
-        public virtual OAuthParameterHandling ParameterHandling { get; set; }
-        public virtual string ClientUsername { get; set; }
-        public virtual string ClientPassword { get; set; }
+        public string Version { get; set; }
+        public string ConsumerKey { get; set; }
+        public string ConsumerSecret { get; set; }
+        public string Token { get; set; }
+        public string TokenSecret { get; set; }
+        public string CallbackUrl { get; set; }
+        public string Verifier { get; set; }
+        public string SessionHandle { get; set; }
+        public OAuthSignatureMethod SignatureMethod { get; set; }
+        public OAuthSignatureTreatment SignatureTreatment { get; set; }
+        public OAuthParameterHandling ParameterHandling { get; set; }
+        public string ClientUsername { get; set; }
+        public string ClientPassword { get; set; }
         /// <summary>
         /// The URL to query the request token (<a href="http://oauth.net/core/1.0#request_urls"/>
         /// </summary>
-        public virtual string RequestTokenUrl { get; set; }
+        public string RequestTokenUrl { get; set; }
         /// <a href="http://oauth.net/core/1.0#request_urls"/>
         /// <summary>
         /// The URL to query the access token (<a href="http://oauth.net/core/1.0#request_urls"/>
         /// </summary>
-        public virtual string AccessTokenUrl { get; set; }
+        public string AccessTokenUrl { get; set; }
         /// <summary>
         /// The URL where the user has to authorize the app
         /// </summary>
-        public virtual string AuthorizationUrl { get; set; }
+        public string AuthorizationUrl { get; set; }
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
         /// <see cref="IAuthenticator" /> for the purpose of requesting an
@@ -72,7 +72,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <param name="parameters">Any existing, non-OAuth query parameters desired in the request</param>
         /// <a href="http://oauth.net/core/1.0#anchor9"/>
         /// <returns></returns>
-        public virtual OAuthWebQueryInfo BuildRequestTokenInfo(string method, WebParameterCollection parameters)
+        public OAuthWebQueryInfo BuildRequestTokenInfo(string method, WebParameterCollection parameters)
         {
             ValidateTokenRequestState();
             if (parameters == null)
@@ -108,7 +108,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// </summary>
         /// <param name="method">The HTTP method for the intended request</param>
         /// <a href="http://oauth.net/core/1.0#anchor9"/>
-        public virtual OAuthWebQueryInfo BuildAccessTokenInfo(string method)
+        public OAuthWebQueryInfo BuildAccessTokenInfo(string method)
         {
             return BuildAccessTokenInfo(method, null);
         }
@@ -120,7 +120,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <param name="method">The HTTP method for the intended request</param>
         /// <a href="http://oauth.net/core/1.0#anchor9"/>
         /// <param name="parameters">Any existing, non-OAuth query parameters desired in the request</param>
-        public virtual OAuthWebQueryInfo BuildAccessTokenInfo(string method, WebParameterCollection parameters)
+        public OAuthWebQueryInfo BuildAccessTokenInfo(string method, WebParameterCollection parameters)
         {
             ValidateAccessRequestState();
             if (parameters == null)
@@ -160,7 +160,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <param name="method">The HTTP method for the intended request</param>
         /// <a href="http://tools.ietf.org/html/draft-dehora-farrell-oauth-accesstoken-creds-00#section-4"/>
         /// <param name="parameters">Any existing, non-OAuth query parameters desired in the request</param>
-        public virtual OAuthWebQueryInfo BuildClientAuthAccessTokenInfo(string method, WebParameterCollection parameters)
+        public OAuthWebQueryInfo BuildClientAuthAccessTokenInfo(string method, WebParameterCollection parameters)
         {
             ValidateClientAuthAccessRequestState();
             if (parameters == null)
@@ -192,7 +192,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             };
             return info;
         }
-        public virtual OAuthWebQueryInfo BuildProtectedResourceInfo(string method, WebParameterCollection parameters, string url)
+        public OAuthWebQueryInfo BuildProtectedResourceInfo(string method, WebParameterCollection parameters, string url)
         {
             ValidateProtectedResourceState();
             if (parameters == null)
