@@ -21,7 +21,6 @@ using System.Text;
 namespace RestSharp.Portable.Authenticators
 {
     using OAuth;
-    using OAuth.Extensions;
 
     /// <summary>
     /// OAuth 1.0a authenticator
@@ -44,6 +43,11 @@ namespace RestSharp.Portable.Authenticators
         /// OAuth signature treatment
         /// </summary>
         public virtual OAuthSignatureTreatment SignatureTreatment { get; set; }
+        /// <summary>
+        /// The function specified is used to create a timestamp
+        /// </summary>
+        public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
+
         internal virtual OAuthType Type { get; set; }
         internal virtual string ConsumerKey { get; set; }
         internal virtual string ConsumerSecret { get; set; }
@@ -210,6 +214,18 @@ namespace RestSharp.Portable.Authenticators
                 TokenSecret = accessTokenSecret
             };
             return authenticator;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <remarks>
+        /// Sets the default CreateTimestamp function. Creation is only allowed by
+        /// using the static functions like <see cref="ForRequestToken(string, string)"/>.
+        /// </remarks>
+        private OAuth1Authenticator()
+        {
+            CreateTimestampFunc = OAuthTools.GetTimestamp;
         }
 
         /// <summary>
