@@ -6,7 +6,7 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.1.0 is available now!
+* Version 2.1.1 is available now!
 
 # Changes #
 
