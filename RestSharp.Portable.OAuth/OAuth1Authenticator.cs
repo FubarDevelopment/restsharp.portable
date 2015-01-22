@@ -30,35 +30,35 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Realm
         /// </summary>
-        public virtual string Realm { get; set; }
+        public string Realm { get; set; }
         /// <summary>
         /// OAuth parameter handling
         /// </summary>
-        public virtual OAuthParameterHandling ParameterHandling { get; set; }
+        public OAuthParameterHandling ParameterHandling { get; set; }
         /// <summary>
         /// OAuth signature method
         /// </summary>
-        public virtual OAuthSignatureMethod SignatureMethod { get; set; }
+        public OAuthSignatureMethod SignatureMethod { get; set; }
         /// <summary>
         /// OAuth signature treatment
         /// </summary>
-        public virtual OAuthSignatureTreatment SignatureTreatment { get; set; }
+        public OAuthSignatureTreatment SignatureTreatment { get; set; }
         /// <summary>
         /// The function specified is used to create a timestamp
         /// </summary>
         public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
 
-        internal virtual OAuthType Type { get; set; }
-        internal virtual string ConsumerKey { get; set; }
-        internal virtual string ConsumerSecret { get; set; }
-        internal virtual string Token { get; set; }
-        internal virtual string TokenSecret { get; set; }
-        internal virtual string Verifier { get; set; }
-        internal virtual string Version { get; set; }
-        internal virtual string CallbackUrl { get; set; }
-        internal virtual string SessionHandle { get; set; }
-        internal virtual string ClientUsername { get; set; }
-        internal virtual string ClientPassword { get; set; }
+        internal OAuthType Type { get; set; }
+        internal string ConsumerKey { get; set; }
+        internal string ConsumerSecret { get; set; }
+        internal string Token { get; set; }
+        internal string TokenSecret { get; set; }
+        internal string Verifier { get; set; }
+        internal string Version { get; set; }
+        internal string CallbackUrl { get; set; }
+        internal string SessionHandle { get; set; }
+        internal string ClientUsername { get; set; }
+        internal string ClientPassword { get; set; }
 
         /// <summary>
         /// Create an authenticator to gather a request token
