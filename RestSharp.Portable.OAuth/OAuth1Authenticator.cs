@@ -249,7 +249,8 @@ namespace RestSharp.Portable.Authenticators
                 Token = Token,
                 TokenSecret = TokenSecret,
                 ClientUsername = ClientUsername,
-                ClientPassword = ClientPassword
+                ClientPassword = ClientPassword,
+                CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp,
             };
             AddOAuthData(client, request, workflow);
         }
