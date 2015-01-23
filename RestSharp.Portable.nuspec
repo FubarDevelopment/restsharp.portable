@@ -24,7 +24,8 @@ Supported Platforms:
         <releaseNotes>- The HttpClient is now kept alive as long as the RestClient is alive (fixes issue #11)
 - Support for POST parameter values with lengths > 32k (fixes issue #12)
 - Fixed broken support for SL5 (thanks to P2SH)
-- Custom timestamp provider for OAuth 1.0 authenticator (fixes issue #15)</releaseNotes>
+- Custom timestamp provider for OAuth 1.0 authenticator (fixes issue #15)
+- Remove superfluous "?" (fixes issue #16)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
