@@ -203,7 +203,7 @@ namespace RestSharp.Portable
                         queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                     }
                 }
-                urlBuilder.Query = queryString.ToString();
+                urlBuilder.Query = queryString.ToString().Substring(startsWithQuestionmark ? 1 : 0);
             }
             else
             {
