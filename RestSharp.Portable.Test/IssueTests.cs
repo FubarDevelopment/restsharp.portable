@@ -18,7 +18,7 @@ namespace RestSharp.Portable.Test
             public Dictionary<string, string> Headers { get; set; }
         }
 
-        [Fact]
+        [Fact(DisplayName = "Issue 12, Post 1 parameter")]
         public async Task TestIssue12_Post1()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -37,7 +37,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact]
+        [Fact(DisplayName = "Issue 12, Post 2 parameters")]
         public async Task TestIssue12_Post2()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -57,6 +57,18 @@ namespace RestSharp.Portable.Test
 
                 Assert.True(response.Data.Form.ContainsKey("param2"));
                 Assert.Equal("param2", response.Data.Form["param2"]);
+            }
+        }
+
+        [Fact(DisplayName = "Issue 16")]
+        public void TestIssue16()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var request = new RestRequest("get?a={a}");
+                request.AddParameter("a", "value-of-a", ParameterType.UrlSegment);
+
+                Assert.Equal("http://httpbin.org/get?a=value-of-a", client.BuildUri(request).ToString());
             }
         }
     }
