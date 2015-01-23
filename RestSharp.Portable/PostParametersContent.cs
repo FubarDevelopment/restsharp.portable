@@ -34,13 +34,7 @@ namespace RestSharp.Portable
                 
                 var bytes = v as byte[];
                 if (bytes != null)
-                {
-#if PCL || SILVERLIGHT
-                    return bytes.Length;
-#else
-                    return bytes.LongLength;
-#endif
-                }
+                    return UrlUtility.ComputeLength(bytes);
 
                 s = string.Format("{0}", v);
                 return UrlUtility.ComputeLength(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
@@ -58,7 +52,7 @@ namespace RestSharp.Portable
 
                 var bytes = v as byte[];
                 if (bytes != null)
-                    return bytes;
+                    return UrlUtility.EscapeToBytes(bytes);
 
                 s = string.Format("{0}", v);
                 return UrlUtility.EscapeToBytes(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
@@ -105,9 +99,9 @@ namespace RestSharp.Portable
                 {
                     get
                     {
-                        if (_parameter == null)
+                        if (_parameter != null)
                             return _parameter.GetFullDataLength();
-                        return 1;
+                        return _data.Length;
                     }
                 }
 
