@@ -6,9 +6,16 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.1.1 is available now!
+* Version 2.2.0 is available now!
 
 # Changes #
+
+## 2.2.0 ##
+
+* Fixes issue [#15](https://github.com/FubarDevelopment/restsharp.portable/issues/15)
+  * Add the ability to provide a custom timestamp provider
+* Fixes issue [#16](https://github.com/FubarDevelopment/restsharp.portable/issues/16)
+  * Remove superfluous "?" when using URL segment parameters in the query string
 
 ## 2.1.1 ##
 
