@@ -48,6 +48,11 @@ namespace RestSharp.Portable
         public HttpHeaders Headers { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether the request was successful.
+        /// </summary>
+        public bool IsSuccess { get; private set; }
+
+        /// <summary>
         /// Gets the HTTP status code
         /// </summary>
         public HttpStatusCode StatusCode { get; private set; }
@@ -72,6 +77,7 @@ namespace RestSharp.Portable
         {
             Headers = response.Headers;
 
+            IsSuccess = response.IsSuccessStatusCode;
             StatusCode = response.StatusCode;
             StatusDescription = response.ReasonPhrase;
 
