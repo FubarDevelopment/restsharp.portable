@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRestResponseT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
@@ -41,6 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponseT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />

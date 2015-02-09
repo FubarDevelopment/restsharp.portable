@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RestSharp.Portable
 {
@@ -44,17 +45,5 @@ namespace RestSharp.Portable
         /// Gets the description for the HTTP status code
         /// </summary>
         string StatusDescription { get; }
-    }
-
-    /// <summary>
-    /// Typed response
-    /// </summary>
-    /// <typeparam name="T">Type of the object to deserialize from the raw data</typeparam>
-    public interface IRestResponse<T> : IRestResponse
-    {
-        /// <summary>
-        /// Gets the deserialized object of type T
-        /// </summary>
-        T Data { get; }
     }
 }
