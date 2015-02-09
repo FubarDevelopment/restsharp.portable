@@ -10,32 +10,38 @@ namespace RestSharp.Portable
     public interface IRestResponse
     {
         /// <summary>
-        /// Request that resulted in this response
+        /// Gets the Request that resulted in this response
         /// </summary>
         IRestRequest Request { get; }
+
         /// <summary>
-        /// The full response URL
+        /// Gets the full response URL
         /// </summary>
         Uri ResponseUri { get; }
+
         /// <summary>
-        /// The raw data
+        /// Gets the raw data
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required for RestSharp compatibility")]
         byte[] RawBytes { get; }
+
         /// <summary>
-        /// Content type of the raw data
+        /// Gets the content type of the raw data
         /// </summary>
         string ContentType { get; }
+
         /// <summary>
-        /// Response headers (without content headers)
+        /// Gets the response headers (without content headers)
         /// </summary>
         HttpHeaders Headers { get; }
+
         /// <summary>
-        /// HTTP status code
+        /// Gets the HTTP status code
         /// </summary>
         HttpStatusCode StatusCode { get; }
+
         /// <summary>
-        /// Description for the HTTP status code
+        /// Gest the description for the HTTP status code
         /// </summary>
         string StatusDescription { get; }
     }
@@ -47,7 +53,7 @@ namespace RestSharp.Portable
     public interface IRestResponse<T> : IRestResponse
     {
         /// <summary>
-        /// Deserialized object of type T
+        /// Gets the deserialized object of type T
         /// </summary>
         T Data { get; }
     }
