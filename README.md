@@ -6,9 +6,20 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.2.0 is available now!
+* Version 2.3.1 is available now!
 
 # Changes #
+
+## 2.3.1 ##
+
+* Fixes issue [#18](https://github.com/FubarDevelopment/restsharp.portable/issues/17)
+  * All DateTime(Offset) HTTP header values are encoded as described in RFC 1123 after conversion to UTC/GMT
+* All data is converted to a string using the en-US culture (might be a breaking change)
+
+## 2.3.0 ##
+
+* Fixes issue [#17](https://github.com/FubarDevelopment/restsharp.portable/issues/17)
+  * New IsSuccess property for IRestResponse
 
 ## 2.2.0 ##
 
