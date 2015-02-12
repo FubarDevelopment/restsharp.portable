@@ -19,9 +19,9 @@ namespace RestSharp.Portable
 
         private static readonly Dictionary<UrlEscapeFlags, ISet<byte>> s_allowedBytes = new Dictionary<UrlEscapeFlags, ISet<byte>>
         {
-            { UrlEscapeFlags.AllowLikeEscapeDataString, new HashSet<byte>(UrlUtility.s_alphanum.Union(Encoding.UTF8.GetBytes("-_.~"))) },
-            { UrlEscapeFlags.AllowAllUnreserved, new HashSet<byte>(UrlUtility.s_unreserved) },
-            { UrlEscapeFlags.AllowLikeUrlEncode, new HashSet<byte>(UrlUtility.s_alphanum.Union(Encoding.UTF8.GetBytes("-_.!*()"))) },
+            { UrlEscapeFlags.AllowLikeEscapeDataString, new HashSet<byte>(UrlUtility.AlphaNum.Union(Encoding.UTF8.GetBytes("-_.~"))) },
+            { UrlEscapeFlags.AllowAllUnreserved, new HashSet<byte>(UrlUtility.Unreserved) },
+            { UrlEscapeFlags.AllowLikeUrlEncode, new HashSet<byte>(UrlUtility.AlphaNum.Union(Encoding.UTF8.GetBytes("-_.!*()"))) },
         };
 
         private static readonly Dictionary<UrlEscapeFlags, EscapeBuilderDelegate> s_escapeBuilders = new Dictionary<UrlEscapeFlags, EscapeBuilderDelegate>

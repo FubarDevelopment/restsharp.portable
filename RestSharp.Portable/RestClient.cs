@@ -1,13 +1,14 @@
-﻿using RestSharp.Portable.Authenticators;
-using RestSharp.Portable.Deserializers;
-using RestSharp.Portable.Encodings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.Deserializers;
+using RestSharp.Portable.Encodings;
 
 namespace RestSharp.Portable
 {
@@ -21,51 +22,19 @@ namespace RestSharp.Portable
 
         private readonly IDictionary<string, IEncoding> _encodingHandlers = new Dictionary<string, IEncoding>(StringComparer.OrdinalIgnoreCase);
         private readonly IList<string> _acceptEncodings = new List<string>();
-        
+
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
         private HttpClient _httpClient;
 
         /// <summary>
-        /// HTTP client factory used to create IHttpClient implementations
-        /// </summary>
-        public IHttpClientFactory HttpClientFactory { get; set; }
-
-        /// <summary>
-        /// Base URL for all requests
-        /// </summary>
-        public Uri BaseUrl { get; set; }
-
-        /// <summary>
-        /// Authenticator to use for all requests
-        /// </summary>
-        public IAuthenticator Authenticator { get; set; }
-
-        /// <summary>
-        /// Cookies for all requests
-        /// </summary>
-        /// <remarks>
-        /// Cookies set by the server will be collected here.
-        /// </remarks>
-        public CookieContainer CookieContainer { get; set; }
-
-        /// <summary>
-        /// Default parameters for all requests
-        /// </summary>
-        public IList<Parameter> DefaultParameters { get { return _defaultParameters; } }
-
-        /// <summary>
-        /// Ignore the response status code?
-        /// </summary>
-        public bool IgnoreResponseStatusCode { get; set; }
-
-        /// <summary>
-        /// Constructor that initializes some default content handlers
+        /// Initializes a new instance of the <see cref="RestClient" /> class.
         /// </summary>
         public RestClient()
         {
             HttpClientFactory = new HttpClientImpl.DefaultHttpClientFactory();
 
             var jsonDeserializer = new JsonDeserializer();
+
             // register default handlers
             AddHandler("application/json", jsonDeserializer);
             AddHandler("text/json", jsonDeserializer);
@@ -78,7 +47,7 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Constructor that initializes the base URL and some default content handlers
+        /// Initializes a new instance of the <see cref="RestClient" /> class.
         /// </summary>
         /// <param name="baseUrl">Base URL</param>
         public RestClient(Uri baseUrl)
@@ -88,122 +57,62 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Constructor that initializes the base URL and some default content handlers
+        /// Initializes a new instance of the <see cref="RestClient" /> class.
         /// </summary>
         /// <param name="baseUrl">Base URL</param>
         public RestClient(string baseUrl)
             : this(new Uri(baseUrl))
         {
-
         }
 
         /// <summary>
-        /// Add non-overriden default parameters to the request
+        /// Gets or sets the HTTP client factory used to create IHttpClient implementations
         /// </summary>
-        /// <param name="request"></param>
-        private void AddDefaultParameters(IRestRequest request)
+        public IHttpClientFactory HttpClientFactory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the base URL for all requests
+        /// </summary>
+        public Uri BaseUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Authenticator to use for all requests
+        /// </summary>
+        public IAuthenticator Authenticator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Cookies for all requests
+        /// </summary>
+        /// <remarks>
+        /// Cookies set by the server will be collected here.
+        /// </remarks>
+        public CookieContainer CookieContainer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default <see cref="StringComparer"/> to be used for the requests.
+        /// </summary>
+        /// <remarks>
+        /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
+        /// </remarks>
+        public StringComparer DefaultParameterNameComparer { get; set; }
+
+        /// <summary>
+        /// Gets the collection of the default parameters for all requests
+        /// </summary>
+        public IList<Parameter> DefaultParameters
         {
-            var comparer = new ParameterComparer(this, request);
-
-            var startIndex = 0;
-            foreach (var parameter in DefaultParameters.Where(x => x.Type != ParameterType.HttpHeader))
-            {
-                if (request.Parameters.Contains(parameter, comparer))
-                    continue;
-                request.Parameters.Insert(startIndex++, parameter);
-            }
-        }
-
-        private async Task AuthenticateRequest(IRestRequest request)
-        {
-            if (Authenticator == null)
-                return;
-
-            var asyncAuth = Authenticator as IAsyncAuthenticator;
-            if (asyncAuth != null)
-            {
-                await asyncAuth.Authenticate(this, request);
-            }
-            else
-            {
-                Authenticator.Authenticate(this, request);
-            }
+            get { return _defaultParameters; }
         }
 
         /// <summary>
-        /// Notify the authenticator about a failed request to be able to retry the request
-        /// with updated authentication information.
+        /// Gets or sets a value indicating whether the response status code should be ignored by default.
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        /// <returns>true == Authenticator notified</returns>
-        private async Task<bool> NotifyAuthenticatorAboutFailedRequest(IRestRequest request, HttpResponseMessage response)
-        {
-            var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
-            if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
-            {
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                return true;
-            }
-            var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-            if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
-            {
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
-                return true;
-            }
-            return false;
-        }
+        public bool IgnoreResponseStatusCode { get; set; }
 
-        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
-        {
-            var retryWithAuthentication = true;
-            AddDefaultParameters(request);
-            for (; ; )
-            {
-                await AuthenticateRequest(request);
-                if (_httpClient == null)
-                    _httpClient = HttpClientFactory.CreateClient(this, request);
-                using (var message = HttpClientFactory.CreateRequestMessage(this, request))
-                {
-
-                    var bodyData = this.GetContent(request);
-                    if (bodyData != null)
-                        message.Content = bodyData;
-
-                    if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
-                        _httpClient.DefaultRequestHeaders.Accept.Clear();
-
-                    bool failed = true;
-                    var response = await _httpClient.SendAsync(message, ct);
-                    try
-                    {
-                        if (retryWithAuthentication)
-                        {
-                            retryWithAuthentication = false;
-                            var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
-                            if (retry)
-                            {
-                                failed = false;
-                                continue;
-                            }
-                        }
-                        if (!IgnoreResponseStatusCode)
-                            response.EnsureSuccessStatusCode();
-                        failed = false;
-                    }
-                    finally
-                    {
-                        if (failed && response != null)
-                            response.Dispose();
-                    }
-                    return response;
-                }
-            }
-        }
+        /// <summary>
+        /// Gets or sets the proxy to use for the requests
+        /// </summary>
+        public IWebProxy Proxy { get; set; }
 
         /// <summary>
         /// Execute the given request
@@ -226,8 +135,15 @@ namespace RestSharp.Portable
         /// <summary>
         /// Execute the given request
         /// </summary>
-        /// <param name="request">Request to execute</param>
-        /// <returns>Response returned, with a deserialized object</returns>
+        /// <typeparam name="T">
+        /// The type to deserialize the response to.
+        /// </typeparam>
+        /// <param name="request">
+        /// Request to execute
+        /// </param>
+        /// <returns>
+        /// Response returned, with a deserialized object
+        /// </returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
             using (var cts = new CancellationTokenSource())
@@ -273,32 +189,6 @@ namespace RestSharp.Portable
                 return restResponse;
             }
         }
-    
-        private void UpdateAcceptsHeader()
-        {
-            this.RemoveDefaultParameter("Accept");
-            if (_acceptTypes.Count != 0)
-            {
-                var accepts = string.Join(", ", _acceptTypes);
-                this.AddDefaultParameter(new Parameter
-                {
-                    Name = "Accept",
-                    Value = accepts,
-                    Type = ParameterType.HttpHeader,
-                    ValidateOnAdd = !EnvironmentUtilities.IsMono,
-                });
-            }
-        }
-
-        private void UpdateAcceptsEncodingHeader()
-        {
-            this.RemoveDefaultParameter("Accept-Encoding");
-            if (_acceptEncodings.Count != 0)
-            {
-                var accepts = string.Join(", ", _acceptEncodings);
-                this.AddDefaultParameter("Accept-Encoding", accepts, ParameterType.HttpHeader);
-            }
-        }
 
         /// <summary>
         /// Add a new content type handler
@@ -314,6 +204,7 @@ namespace RestSharp.Portable
                 _acceptTypes.Add(contentType);
                 UpdateAcceptsHeader();
             }
+
             return this;
         }
 
@@ -330,6 +221,7 @@ namespace RestSharp.Portable
                 _acceptTypes.Remove(contentType);
                 UpdateAcceptsHeader();
             }
+
             return this;
         }
 
@@ -383,14 +275,10 @@ namespace RestSharp.Portable
                 _contentHandlers.Remove(contentHandlerToReplace.Key);
                 _contentHandlers.Add(contentHandlerToReplace.Key, deserializer);
             }
+
             UpdateAcceptsHeader();
             return this;
         }
-
-        /// <summary>
-        /// Proxy to use for the requests
-        /// </summary>
-        public IWebProxy Proxy { get; set; }
 
         /// <summary>
         /// Add a new content encoding handler
@@ -449,18 +337,11 @@ namespace RestSharp.Portable
                         return _encodingHandlers[encodingId];
                 }
             }
+
             if (_encodingHandlers.ContainsKey("*"))
                 return _encodingHandlers["*"];
             return null;
         }
-
-        /// <summary>
-        /// The default <see cref="StringComparer"/> to be used for the requests.
-        /// </summary>
-        /// <remarks>
-        /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
-        /// </remarks>
-        public StringComparer DefaultParameterNameComparer { get; set; }
 
         /// <summary>
         /// Close the used HTTP client
@@ -471,6 +352,143 @@ namespace RestSharp.Portable
                 return;
             _httpClient.Dispose();
             _httpClient = null;
+        }
+
+        private void UpdateAcceptsHeader()
+        {
+            this.RemoveDefaultParameter("Accept");
+            if (_acceptTypes.Count != 0)
+            {
+                var accepts = string.Join(", ", _acceptTypes);
+                this.AddDefaultParameter(new Parameter
+                {
+                    Name = "Accept",
+                    Value = accepts,
+                    Type = ParameterType.HttpHeader,
+                    ValidateOnAdd = !EnvironmentUtilities.IsMono,
+                });
+            }
+        }
+
+        private void UpdateAcceptsEncodingHeader()
+        {
+            this.RemoveDefaultParameter("Accept-Encoding");
+            if (_acceptEncodings.Count != 0)
+            {
+                var accepts = string.Join(", ", _acceptEncodings);
+                this.AddDefaultParameter("Accept-Encoding", accepts, ParameterType.HttpHeader);
+            }
+        }
+
+        /// <summary>
+        /// Add overridable default parameters to the request
+        /// </summary>
+        /// <param name="request">The requests to add the default parameters to.</param>
+        private void AddDefaultParameters(IRestRequest request)
+        {
+            var comparer = new ParameterComparer(this, request);
+
+            var startIndex = 0;
+            foreach (var parameter in DefaultParameters.Where(x => x.Type != ParameterType.HttpHeader))
+            {
+                if (request.Parameters.Contains(parameter, comparer))
+                    continue;
+                request.Parameters.Insert(startIndex++, parameter);
+            }
+        }
+
+        private async Task AuthenticateRequest(IRestRequest request)
+        {
+            if (Authenticator == null)
+                return;
+
+            var asyncAuth = Authenticator as IAsyncAuthenticator;
+            if (asyncAuth != null)
+            {
+                await asyncAuth.Authenticate(this, request);
+            }
+            else
+            {
+                Authenticator.Authenticate(this, request);
+            }
+        }
+
+        /// <summary>
+        /// Notify the authenticator about a failed request to be able to retry the request
+        /// with updated authentication information.
+        /// </summary>
+        /// <param name="request">The failed request</param>
+        /// <param name="response">The response of the failed request</param>
+        /// <returns>true == Authenticator notified</returns>
+        private async Task<bool> NotifyAuthenticatorAboutFailedRequest(IRestRequest request, HttpResponseMessage response)
+        {
+            var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
+            if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+
+            var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+            if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+
+            return false;
+        }
+
+        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
+        {
+            var retryWithAuthentication = true;
+            AddDefaultParameters(request);
+            while (true)
+            {
+                await AuthenticateRequest(request);
+                if (_httpClient == null)
+                    _httpClient = HttpClientFactory.CreateClient(this, request);
+                using (var message = HttpClientFactory.CreateRequestMessage(this, request))
+                {
+                    var bodyData = this.GetContent(request);
+                    if (bodyData != null)
+                        message.Content = bodyData;
+
+                    if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
+                        _httpClient.DefaultRequestHeaders.Accept.Clear();
+
+                    bool failed = true;
+                    var response = await _httpClient.SendAsync(message, ct);
+                    try
+                    {
+                        if (retryWithAuthentication)
+                        {
+                            retryWithAuthentication = false;
+                            var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
+                            if (retry)
+                            {
+                                failed = false;
+                                continue;
+                            }
+                        }
+
+                        if (!IgnoreResponseStatusCode)
+                            response.EnsureSuccessStatusCode();
+                        failed = false;
+                    }
+                    finally
+                    {
+                        if (failed && response != null)
+                            response.Dispose();
+                    }
+
+                    return response;
+                }
+            }
         }
     }
 }

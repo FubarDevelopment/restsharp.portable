@@ -1,6 +1,10 @@
 <StyleCopSettings Version="105">
   <GlobalSettings>
     <StringProperty Name="Culture">en-US</StringProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>deserialized</Value>
+      <Value>deserializer</Value>
+    </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
