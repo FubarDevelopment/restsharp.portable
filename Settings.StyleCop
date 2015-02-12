@@ -4,6 +4,8 @@
     <CollectionProperty Name="RecognizedWords">
       <Value>deserialized</Value>
       <Value>deserializer</Value>
+      <Value>json</Value>
+      <Value>Json</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>

@@ -12,12 +12,7 @@ namespace RestSharp.Portable.Serializers
         private static readonly JsonSerializer _defaultJsonSerializer = new JsonSerializer();
 
         /// <summary>
-        /// Default JSON serializer for AddJsonBody
-        /// </summary>
-        internal static JsonSerializer Default { get { return _defaultJsonSerializer; } }
-
-        /// <summary>
-        /// Constructor which initializes this serializer
+        /// Initializes a new instance of the <see cref="JsonSerializer" /> class.
         /// </summary>
         public JsonSerializer()
         {
@@ -28,11 +23,19 @@ namespace RestSharp.Portable.Serializers
         }
 
         /// <summary>
-        /// Configure the JsonSerializer
+        /// Gets or sets the content type produced by the serializer
         /// </summary>
-        /// <param name="serializer">The serializer to configure</param>
-        protected virtual void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
+        /// <remarks>
+        /// This serializer will return application/json
+        /// </remarks>
+        public MediaTypeHeaderValue ContentType { get; set; }
+
+        /// <summary>
+        /// Gets the default JSON serializer for <see cref="RestRequestExtensions.AddJsonBody"/>
+        /// </summary>
+        internal static JsonSerializer Default
         {
+            get { return _defaultJsonSerializer; }
         }
 
         /// <summary>
@@ -51,11 +54,11 @@ namespace RestSharp.Portable.Serializers
         }
 
         /// <summary>
-        /// Content type produced by the serializer
+        /// Configure the <see cref="JsonSerializer"/>
         /// </summary>
-        /// <remarks>
-        /// This serializer will return application/json
-        /// </remarks>
-        public MediaTypeHeaderValue ContentType { get; set; }
+        /// <param name="serializer">The serializer to configure</param>
+        protected virtual void ConfigureSerializer(Newtonsoft.Json.JsonSerializer serializer)
+        {
+        }
     }
 }
