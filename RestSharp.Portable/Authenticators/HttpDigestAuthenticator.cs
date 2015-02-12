@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -15,17 +16,50 @@ namespace RestSharp.Portable.Authenticators
     /// <remarks>
     /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
     /// </remarks>
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
     public class HttpDigestAuthenticator : IRoundTripAuthenticator
     {
+        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
+        {
+            HttpStatusCode.Unauthorized,
+        };
+
+        private readonly ICredentials _credentials;
+
+        private string _realm;
+
+        private string _nonce;
+
+        private QualityOfProtection _qop = QualityOfProtection.Undefined;
+
+        private string _cnonce;
+
+        private string _opaque;
+
+        private Algorithm _algorithm = Algorithm.Undefined;
+
+        private DateTime _cnonceDate;
+
+        private int _nc;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpDigestAuthenticator" /> class.
+        /// </summary>
+        /// <param name="credentials">The authentication credentials</param>
+        public HttpDigestAuthenticator(ICredentials credentials)
+        {
+            _credentials = credentials;
+        }
+
         [Flags]
-        enum QualityOfProtection
+        private enum QualityOfProtection
         {
             Undefined = 0,
             Auth = 1,
             AuthInt = 2,
         }
 
-        enum Algorithm
+        private enum Algorithm
         {
             Undefined = 0,
             MD5,
@@ -33,28 +67,20 @@ namespace RestSharp.Portable.Authenticators
             MD5sess,
         }
 
-        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
-        {
-            HttpStatusCode.Unauthorized,
-        };
-
-        private readonly ICredentials _credentials;
-        private string _realm;
-        private string _nonce;
-        private QualityOfProtection _qop = QualityOfProtection.Undefined;
-        private string _cnonce;
-        private string _opaque;
-        private Algorithm _algorithm = Algorithm.Undefined;
-        private DateTime _cnonceDate;
-        private int _nc;
-
         /// <summary>
-        /// Initializes the HTTP Digest authenticator with the given credentials
+        /// Gets all the status codes where a round trip is allowed
         /// </summary>
-        /// <param name="credentials"></param>
-        public HttpDigestAuthenticator(ICredentials credentials)
+        public IEnumerable<HttpStatusCode> StatusCodes
         {
-            _credentials = credentials;
+            get { return _statusCodes; }
+        }
+
+        private bool HasDigestHeader
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(_cnonce) && DateTime.Now.Subtract(_cnonceDate).TotalHours < 1.0;
+            }
         }
 
         /// <summary>
@@ -109,17 +135,10 @@ namespace RestSharp.Portable.Authenticators
                 var val = matchHeader.Groups["val"];
                 return val.Value.Trim();
             }
+
             if (defaultValue == null)
                 throw new WebException(string.Format("Header {0} not found", varName), WebExceptionStatus.UnknownError);
             return defaultValue;
-        }
-
-        private bool HasDigestHeader
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(_cnonce) && DateTime.Now.Subtract(_cnonceDate).TotalHours < 1.0;
-            }
         }
 
         private string GetDigestHeader(IRestClient client, IRestRequest restRequest)
@@ -180,8 +199,10 @@ namespace RestSharp.Portable.Authenticators
                             readTask.Wait();
                             entityBody = readTask.Result;
                         }
+
                         ha2 = CalculateMd5Hash(entityBody);
                     }
+
                     ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery, ha2));
                     break;
                 default:
@@ -242,8 +263,8 @@ namespace RestSharp.Portable.Authenticators
                 default:
                     throw new NotSupportedException(string.Format("Unsupported algorithm {0}", algorithm));
             }
-            
-            var qopParts = GrabHeaderVar("qop", wwwAuthenticateHeader, "")
+
+            var qopParts = GrabHeaderVar("qop", wwwAuthenticateHeader, string.Empty)
                 .Split(',');
             _qop = QualityOfProtection.Undefined;
             foreach (var qopPart in qopParts.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x.Trim().ToLower()))
@@ -265,14 +286,6 @@ namespace RestSharp.Portable.Authenticators
             _opaque = GrabHeaderVar("opaque", wwwAuthenticateHeader, string.Empty);
             _cnonce = new Random().Next(123400, 9999999).ToString(CultureInfo.InvariantCulture);
             _cnonceDate = DateTime.Now;
-        }
-
-        /// <summary>
-        /// Returns all the status codes where a round trip is allowed
-        /// </summary>
-        public IEnumerable<HttpStatusCode> StatusCodes
-        {
-            get { return _statusCodes; }
         }
     }
 }

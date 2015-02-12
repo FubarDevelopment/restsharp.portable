@@ -12,10 +12,10 @@ namespace RestSharp.Portable.Authenticators
         private readonly string _authHeader;
 
         /// <summary>
-        /// Constructor taking the user name and password for the HTTP Basic authenticator
+        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
         /// </summary>
         /// <param name="username">User name</param>
-        /// <param name="password">Password</param>
+        /// <param name="password">The users password</param>
         public HttpBasicAuthenticator(string username, string password)
         {
             var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password)));

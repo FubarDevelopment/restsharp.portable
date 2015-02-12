@@ -92,27 +92,19 @@ namespace RestSharp.Portable
 
             var result = parameters
                 .Select((p, i) => new { Parameter = p, Index = i })
+
                 // Group by parameter type/name
                 .GroupBy(x => x.Parameter, comparer)
+
                 // Select only the last of all duplicate parameters
-                .Select(x => new {x.Last().Parameter, x.First().Index })
+                .Select(x => new { x.Last().Parameter, x.First().Index })
+
                 // Sort by appearance
                 .OrderBy(x => x.Index)
                 .Select(x => x.Parameter)
                 .ToList();
 
             return result;
-        }
-
-        private static string ReplaceUrlSegments([NotNull] string url, [NotNull] IEnumerable<Parameter> parameters)
-        {
-            foreach (var param in parameters.Where(x => x.Type == ParameterType.UrlSegment))
-            {
-                var searchText = string.Format("{{{0}}}", param.Name);
-                var replaceText = param.ToEncodedString();
-                url = url.Replace(searchText, replaceText);
-            }
-            return url;
         }
 
         /// <summary>
@@ -183,6 +175,7 @@ namespace RestSharp.Portable
                     urlBuilder = new UriBuilder(new Uri(new Uri(baseUrl), new Uri(resource, UriKind.RelativeOrAbsolute)));
                 }
             }
+
             if (withQuery)
             {
                 var queryString = new StringBuilder(urlBuilder.Query);
@@ -193,6 +186,7 @@ namespace RestSharp.Portable
                         queryString.Append("&");
                     queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                 }
+
                 if (client.GetEffectiveHttpMethod(request) == HttpMethod.Get)
                 {
                     var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
@@ -203,13 +197,59 @@ namespace RestSharp.Portable
                         queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                     }
                 }
+
                 urlBuilder.Query = queryString.ToString().Substring(startsWithQuestionmark ? 1 : 0);
             }
             else
             {
                 urlBuilder.Query = string.Empty;
             }
+
             return urlBuilder.Uri;
+        }
+
+        /// <summary>
+        /// Gets the content for a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">REST request to get the content for</param>
+        /// <returns>The HTTP content to be sent</returns>
+        public static HttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        {
+            HttpContent content;
+            var parameters = client.MergeParameters(request);
+            var collectionMode = request == null ? ContentCollectionMode.MultiPartForFileParameters : request.ContentCollectionMode;
+            if (collectionMode != ContentCollectionMode.BasicContent)
+            {
+                var fileParameters = parameters.GetFileParameters().ToList();
+                if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
+                {
+                    content = client.GetMultiPartContent(request);
+                }
+                else
+                {
+                    content = client.GetBasicContent(request);
+                }
+            }
+            else
+            {
+                content = client.GetBasicContent(request);
+            }
+
+            return content;
+        }
+
+        /// <summary>
+        /// Returns the real HTTP method that must be used to execute a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <returns>The real HTTP method that must be used</returns>
+        public static HttpMethod GetEffectiveHttpMethod([CanBeNull] this IRestClient client, IRestRequest request)
+        {
+            if (request == null || request.Method == null || request.Method == HttpMethod.Get)
+                return client.GetDefaultMethod(request);
+            return request.Method;
         }
 
         /// <summary>
@@ -237,8 +277,10 @@ namespace RestSharp.Portable
 #if USE_POST_PARAMETER_CONTENT
                         content = new PostParametersContent(getOrPostParameters);
 #else
-                        var postData = string.Join("&", getOrPostParameters
-                            .Select(x => string.Format("{0}={1}", UrlUtility.Escape(x.Name), x.ToEncodedString())));
+                        var postData = string.Join(
+                            "&",
+                            getOrPostParameters
+                                .Select(x => string.Format("{0}={1}", UrlUtility.Escape(x.Name), x.ToEncodedString())));
                         var bytes = ParameterExtensions.DefaultEncoding.GetBytes(postData);
                         content = new ByteArrayContent(bytes);
 #endif
@@ -254,36 +296,7 @@ namespace RestSharp.Portable
                     content = null;
                 }
             }
-            return content;
-        }
 
-        /// <summary>
-        /// Gets the content for a request
-        /// </summary>
-        /// <param name="client">The REST client that will execute the request</param>
-        /// <param name="request">REST request to get the content for</param>
-        /// <returns>The HTTP content to be sent</returns>
-        public static HttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
-        {
-            HttpContent content;
-            var parameters = client.MergeParameters(request);
-            var collectionMode = (request == null ? ContentCollectionMode.MultiPartForFileParameters : request.ContentCollectionMode);
-            if (collectionMode != ContentCollectionMode.BasicContent)
-            {
-                var fileParameters = parameters.GetFileParameters().ToList();
-                if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
-                {
-                    content = client.GetMultiPartContent(request);
-                }
-                else
-                {
-                    content = client.GetBasicContent(request);
-                }
-            }
-            else
-            {
-                content = client.GetBasicContent(request);
-            }
             return content;
         }
 
@@ -336,6 +349,7 @@ namespace RestSharp.Portable
                     multipartContent.Add(data, parameter.Name);
                 }
             }
+
             return multipartContent;
         }
 
@@ -354,17 +368,16 @@ namespace RestSharp.Portable
             return HttpMethod.Get;
         }
 
-        /// <summary>
-        /// Returns the real HTTP method that must be used to execute a request
-        /// </summary>
-        /// <param name="client">The REST client that will execute the request</param>
-        /// <param name="request">The request to determine the HTTP method for</param>
-        /// <returns>The real HTTP method that must be used</returns>
-        public static HttpMethod GetEffectiveHttpMethod([CanBeNull] this IRestClient client, IRestRequest request)
+        private static string ReplaceUrlSegments([NotNull] string url, [NotNull] IEnumerable<Parameter> parameters)
         {
-            if (request == null || request.Method == null || request.Method == HttpMethod.Get)
-                return client.GetDefaultMethod(request);
-            return request.Method;
+            foreach (var param in parameters.Where(x => x.Type == ParameterType.UrlSegment))
+            {
+                var searchText = string.Format("{{{0}}}", param.Name);
+                var replaceText = param.ToEncodedString();
+                url = url.Replace(searchText, replaceText);
+            }
+
+            return url;
         }
     }
 }

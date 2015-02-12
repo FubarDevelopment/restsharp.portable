@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -28,6 +27,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
         {
             return Encoding.UTF8.GetBytes(input);
         }
+
         public static string PercentEncode(this string s)
         {
             var bytes = s.GetBytes();
@@ -35,17 +35,12 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             foreach (var b in bytes)
             {
                 // [DC]: Support proper encoding of special characters (\n\r\t\b)
-                if ((b > 7 && b < 11) || b == 13)
-                {
-                    sb.Append(string.Format("%0{0:X}", b));
-                }
-                else
-                {
-                    sb.Append(string.Format("%{0:X}", b));
-                }
+                sb.Append(string.Format("%{0:X2}", b));
             }
+
             return sb.ToString();
         }
+
         public static IDictionary<string, string> ParseQueryString(this string query)
         {
             // [DC]: This method does not URL decode, and cannot handle decoded input
@@ -54,6 +49,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
             {
                 return new Dictionary<string, string>();
             }
+
             var parts = query.Split('&');
             return (from part in parts
                 let equalIndex = part.IndexOf('=')

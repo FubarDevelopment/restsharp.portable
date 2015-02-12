@@ -9,7 +9,7 @@ namespace RestSharp.Portable.HttpClientImpl
     /// The default HTTP client factory
     /// </summary>
     /// <remarks>
-    /// Any other implementation should derive from this class, because it contains serveral
+    /// Any other implementation should derive from this class, because it contains several
     /// useful utility functions for the creation of a HTTP client and request message.
     /// </remarks>
     public class DefaultHttpClientFactory : IHttpClientFactory
@@ -17,11 +17,52 @@ namespace RestSharp.Portable.HttpClientImpl
         private readonly System.Reflection.PropertyInfo _proxyProperty;
 
         /// <summary>
-        /// Default constructor
+        /// Initializes a new instance of the <see cref="DefaultHttpClientFactory" /> class.
         /// </summary>
         public DefaultHttpClientFactory()
         {
             _proxyProperty = typeof(HttpClientHandler).GetProperty("Proxy");
+        }
+
+        /// <summary>
+        /// Create the client
+        /// </summary>
+        /// <param name="client">The REST client that wants to create the HTTP client</param>
+        /// <param name="request">The REST request for which the HTTP client is created</param>
+        /// <returns>A new HttpClient object</returns>
+        /// <remarks>
+        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
+        /// the data required for a proper configuration of the HttpClient.
+        /// </remarks>
+        public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
+        {
+            var handler = CreateMessageHandler(client, request);
+
+            var httpClient = new HttpClient(handler, true)
+            {
+                BaseAddress = GetBaseAddress(client)
+            };
+            httpClient = AddHttpHeaderParameters(httpClient, client);
+            return httpClient;
+        }
+
+        /// <summary>
+        /// Create the request message
+        /// </summary>
+        /// <param name="client">The REST client that wants to create the HTTP request message</param>
+        /// <param name="request">The REST request for which the HTTP request message is created</param>
+        /// <returns>A new HttpRequestMessage object</returns>
+        /// <remarks>
+        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
+        /// the data required for a proper configuration of the HttpClient.
+        /// </remarks>
+        public virtual HttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
+        {
+            var address = GetMessageAddress(client, request);
+            var method = GetHttpMethod(client, request);
+            var message = new HttpRequestMessage(method, address);
+            message = AddHttpHeaderParameters(message, request);
+            return message;
         }
 
         /// <summary>
@@ -89,7 +130,7 @@ namespace RestSharp.Portable.HttpClientImpl
             if (!HasCookies(client, request))
                 return null;
             var baseUrl = GetBaseAddress(client);
-            var newCookies = client.CookieContainer = (client.CookieContainer ?? new CookieContainer());
+            var newCookies = client.CookieContainer = client.CookieContainer ?? new CookieContainer();
             var oldCookies = client.CookieContainer.GetCookies(baseUrl)
                 .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
             foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
@@ -130,6 +171,7 @@ namespace RestSharp.Portable.HttpClientImpl
                     message.Headers.TryAddWithoutValidation(param.Name, paramValue);
                 }
             }
+
             return message;
         }
 
@@ -155,6 +197,7 @@ namespace RestSharp.Portable.HttpClientImpl
                     httpClient.DefaultRequestHeaders.TryAddWithoutValidation(param.Name, paramValue);
                 }
             }
+
             return httpClient;
         }
 
@@ -183,51 +226,10 @@ namespace RestSharp.Portable.HttpClientImpl
             if (credentials != null)
                 handler.Credentials = credentials;
 
-            //if (handler.SupportsAutomaticDecompression)
-            //    handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            //// if (handler.SupportsAutomaticDecompression)
+            ////     handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 
             return handler;
-        }
-
-        /// <summary>
-        /// Create the client
-        /// </summary>
-        /// <param name="client">The REST client that wants to create the HTTP client</param>
-        /// <param name="request">The REST request for which the HTTP client is created</param>
-        /// <returns>A new HttpClient object</returns>
-        /// <remarks>
-        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
-        /// the data required for a proper configuration of the HttpClient.
-        /// </remarks>
-        public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
-        {
-            var handler = CreateMessageHandler(client, request);
-
-            var httpClient = new HttpClient(handler, true)
-            {
-                BaseAddress = GetBaseAddress(client)
-            };
-            httpClient = AddHttpHeaderParameters(httpClient, client);
-            return httpClient;
-        }
-
-        /// <summary>
-        /// Create the request message
-        /// </summary>
-        /// <param name="client">The REST client that wants to create the HTTP request message</param>
-        /// <param name="request">The REST request for which the HTTP request message is created</param>
-        /// <returns>A new HttpRequestMessage object</returns>
-        /// <remarks>
-        /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
-        /// the data required for a proper configuration of the HttpClient.
-        /// </remarks>
-        public virtual HttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
-        {
-            var address = GetMessageAddress(client, request);
-            var method = GetHttpMethod(client, request);
-            var message = new HttpRequestMessage(method, address);
-            message = AddHttpHeaderParameters(message, request);
-            return message;
         }
     }
 }
