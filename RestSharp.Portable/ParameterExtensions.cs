@@ -57,24 +57,6 @@ namespace RestSharp.Portable
             return parameters.OfType<FileParameter>();
         }
 
-        internal static string UrlEncode(object v, Encoding encoding, bool spaceAsPlus)
-        {
-            var flags = spaceAsPlus ? UrlEscapeFlags.EscapeSpaceAsPlus : UrlEscapeFlags.Default;
-
-            if (v == null)
-                return string.Empty;
-
-            var s = v as string;
-            if (s != null)
-                return UrlUtility.Escape(s, encoding, flags);
-
-            var bytes = v as byte[];
-            if (bytes != null)
-                return UrlUtility.Escape(bytes, flags);
-
-            return UrlUtility.Escape(string.Format("{0}", v), encoding, flags);
-        }
-
         internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)
         {
             switch (parameter.Type)
@@ -82,9 +64,28 @@ namespace RestSharp.Portable
                 case ParameterType.GetOrPost:
                 case ParameterType.QueryString:
                 case ParameterType.UrlSegment:
-                    return UrlEncode(parameter.Value, parameter.Encoding ?? DefaultEncoding, spaceAsPlus);
+                    return UrlEncode(parameter, parameter.Encoding ?? DefaultEncoding, spaceAsPlus);
             }
+
             throw new NotSupportedException(string.Format("Parameter of type {0} doesn't support an encoding.", parameter.Type));
+        }
+
+        private static string UrlEncode(Parameter parameter, Encoding encoding, bool spaceAsPlus)
+        {
+            var flags = spaceAsPlus ? UrlEscapeFlags.EscapeSpaceAsPlus : UrlEscapeFlags.Default;
+
+            if (parameter.Value == null)
+                return string.Empty;
+
+            var s = parameter.Value as string;
+            if (s != null)
+                return UrlUtility.Escape(s, encoding, flags);
+
+            var bytes = parameter.Value as byte[];
+            if (bytes != null)
+                return UrlUtility.Escape(bytes, flags);
+
+            return UrlUtility.Escape(parameter.AsString(), encoding, flags);
         }
     }
 }

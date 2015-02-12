@@ -134,7 +134,7 @@ namespace RestSharp.Portable.HttpClientImpl
             var oldCookies = client.CookieContainer.GetCookies(baseUrl)
                 .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
             foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
-                newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, string.Format("{0}", cookieParameter.Value)));
+                newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.AsString()));
             return newCookies;
         }
 
@@ -161,7 +161,7 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 if (message.Headers.Contains(param.Name))
                     message.Headers.Remove(param.Name);
-                var paramValue = string.Format("{0}", param.Value);
+                var paramValue = param.AsString();
                 if (param.ValidateOnAdd)
                 {
                     message.Headers.Add(param.Name, paramValue);
@@ -187,7 +187,7 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 if (httpClient.DefaultRequestHeaders.Contains(param.Name))
                     httpClient.DefaultRequestHeaders.Remove(param.Name);
-                var paramValue = string.Format("{0}", param.Value);
+                var paramValue = param.AsString();
                 if (param.ValidateOnAdd)
                 {
                     httpClient.DefaultRequestHeaders.Add(param.Name, paramValue);

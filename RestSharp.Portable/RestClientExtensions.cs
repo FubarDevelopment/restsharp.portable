@@ -336,7 +336,7 @@ namespace RestSharp.Portable
                     }
                     else
                     {
-                        var value = string.Format("{0}", parameter.Value);
+                        var value = parameter.AsString();
                         data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
                         if (parameter.ContentType != null)
                             data.Headers.ContentType = parameter.ContentType;

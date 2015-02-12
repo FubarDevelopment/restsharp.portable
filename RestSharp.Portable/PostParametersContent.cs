@@ -73,7 +73,7 @@ namespace RestSharp.Portable
                 if (bytes != null)
                     return UrlUtility.EscapeToBytes(bytes);
 
-                s = string.Format("{0}", v);
+                s = _parameter.AsString();
                 return UrlUtility.EscapeToBytes(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
             }
 
@@ -106,7 +106,7 @@ namespace RestSharp.Portable
                 if (bytes != null)
                     return UrlUtility.ComputeLength(bytes);
 
-                s = string.Format("{0}", v);
+                s = _parameter.AsString();
                 return UrlUtility.ComputeLength(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
             }
         }
