@@ -73,6 +73,18 @@ namespace RestSharp.Portable
             var byteArray = Value as byte[];
             if (byteArray != null)
                 return Convert.ToBase64String(byteArray);
+
+            if (Type == ParameterType.HttpHeader)
+            {
+                var dateTime = Value as DateTime?;
+                if (dateTime != null)
+                    return dateTime.Value.ToUniversalTime().ToString("R");
+
+                var dateTimeOffset = Value as DateTimeOffset?;
+                if (dateTimeOffset != null)
+                    return dateTimeOffset.Value.ToUniversalTime().ToString("R");
+            }
+
             return string.Format(s_cultureUS, "{0}", Value);
         }
     }
