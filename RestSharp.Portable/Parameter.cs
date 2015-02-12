@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace RestSharp.Portable
@@ -9,7 +10,7 @@ namespace RestSharp.Portable
     public class Parameter
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="Parameter" /> class.
         /// </summary>
         public Parameter()
         {
@@ -17,22 +18,22 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Name of the parameter
+        /// Gets or sets the name of the parameter
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Value of the parameter
+        /// Gets or sets the value of the parameter
         /// </summary>
         public object Value { get; set; }
 
         /// <summary>
-        /// Type of the parameter
+        /// Gets or sets the type of the parameter
         /// </summary>
         public ParameterType Type { get; set; }
 
         /// <summary>
-        /// Content type of the parameter
+        /// Gets or sets the content type of the parameter
         /// </summary>
         /// <remarks>
         /// Applies to the following parameter types:
@@ -41,7 +42,7 @@ namespace RestSharp.Portable
         public MediaTypeHeaderValue ContentType { get; set; }
 
         /// <summary>
-        /// Should this parameter be validated?
+        /// Gets or sets a value indicating whether this parameter should be validated?
         /// </summary>
         /// <remarks>
         /// Applies to the following parameter types:
@@ -50,7 +51,7 @@ namespace RestSharp.Portable
         public bool ValidateOnAdd { get; set; }
 
         /// <summary>
-        /// Encoding of this parameters value
+        /// Gets or sets the encoding of this parameters value
         /// </summary>
         /// <remarks>
         /// Applies to the following parameter types:
