@@ -23,7 +23,8 @@ Supported Platforms:
         <summary>Some kind of a RestSharp port to PCL</summary>
         <releaseNotes>- New IsSuccess proeprty for IRestResponse (fixes issue #17)
 - All data is converted to a string using the en-US culture
-- All DateTime(Offset) HTTP header values are encoded as described in RFC 1123 after conversion to UTC/GMT</releaseNotes>
+- All DateTime(Offset) HTTP header values are encoded as described in RFC 1123 after conversion to UTC/GMT
+- Synchronization of requests for the same client (fixes issue #19)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
