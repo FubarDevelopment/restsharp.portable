@@ -28,7 +28,9 @@ namespace RestSharp.Portable.Deserializers
         /// <summary>
         /// Create a new data contract serializer
         /// </summary>
+        /// <remarks>Override this method when you want a custom data contract serializer configuration.</remarks>
         /// <param name="t">The type to create the serializer for</param>
+        /// <returns>A new data contract serializer.</returns>
         protected virtual DataContractSerializer CreateSerializer(Type t)
         {
             return new DataContractSerializer(t);

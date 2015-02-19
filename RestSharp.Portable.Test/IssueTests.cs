@@ -3,21 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
     public class IssueTests
     {
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        class PostResponse
-        {
-            public Dictionary<string, string> Form { get; set; }
-            public Dictionary<string, string> Headers { get; set; }
-        }
-
         [Fact(DisplayName = "Issue 12, Post 1 parameter")]
         public async Task TestIssue12_Post1()
         {
@@ -70,6 +62,13 @@ namespace RestSharp.Portable.Test
 
                 Assert.Equal("http://httpbin.org/get?a=value-of-a", client.BuildUri(request).ToString());
             }
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
+        private class PostResponse
+        {
+            public Dictionary<string, string> Form { get; set; }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        /// <returns></returns>
+        /// <returns>The task the authentication is performed on</returns>
         Task Authenticate(IRestClient client, IRestRequest request);
     }
 }

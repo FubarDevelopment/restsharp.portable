@@ -3,21 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
     public class PostHeaderRequestTests
     {
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        class Response
-        {
-            public Dictionary<string, string> Form { get; set; }
-            public Dictionary<string, string> Headers { get; set; }
-        }
-
         [Fact]
         public async Task TestRequestParameter()
         {
@@ -47,6 +39,16 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("ParamValue1", response.Data.Form["param1"]);
                 Assert.Equal("TestValue2", response.Data.Headers["Restsharp-Test2"]);
             }
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local", Justification = "Is updated by RestSharp")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper Bug")]
+        private class Response
+        {
+            public Dictionary<string, string> Form { get; set; }
+
+            public Dictionary<string, string> Headers { get; set; }
         }
     }
 }

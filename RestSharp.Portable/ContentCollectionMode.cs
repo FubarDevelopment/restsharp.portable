@@ -9,10 +9,12 @@
         /// Basic content only (ignores file parameters)
         /// </summary>
         BasicContent,
+
         /// <summary>
         /// MultiPart only if file parameters are used
         /// </summary>
         MultiPartForFileParameters,
+
         /// <summary>
         /// Always use multi part content
         /// </summary>

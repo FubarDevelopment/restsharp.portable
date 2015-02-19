@@ -2,25 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using RestSharp.Portable.Deserializers;
 
 namespace RestSharp.Portable.Test
 {
-    class DictionaryDeserializer : IDeserializer
+    internal class DictionaryDeserializer : IDeserializer
     {
-        public Encoding Encoding { get; private set; }
-
         public DictionaryDeserializer()
         {
             Encoding = Encoding.UTF8;
         }
 
-        private string Decode(string s)
-        {
-            s = Uri.UnescapeDataString(s).Replace('+', ' ');
-            s = Encoding.GetString(s.Select(x => (byte)x).ToArray());
-            return s;
-        }
+        public Encoding Encoding { get; private set; }
 
         public T Deserialize<T>(IRestResponse response)
         {
@@ -29,7 +23,7 @@ namespace RestSharp.Portable.Test
             var kvp = from line in text.Split('&')
                       let parts = line.Split(new[] { '=' }, 2)
                       let key = Decode(parts[0].Trim())
-                      let value = (parts.Length > 1 ? Decode(parts[1]) : null)
+                      let value = parts.Length > 1 ? Decode(parts[1]) : null
                       select new { key, value };
 
             object result;
@@ -42,6 +36,13 @@ namespace RestSharp.Portable.Test
                 throw new NotSupportedException();
 
             return (T)result;
+        }
+
+        private string Decode(string s)
+        {
+            s = Uri.UnescapeDataString(s).Replace('+', ' ');
+            s = Encoding.GetString(s.Select(x => (byte)x).ToArray());
+            return s;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
@@ -13,39 +14,37 @@ namespace RestSharp.Portable
         private readonly List<Parameter> _parameters = new List<Parameter>();
 
         /// <summary>
-        /// Constructor that initializes with the HTTP GET request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         public RestRequest()
             : this((string)null, HttpMethod.Get)
         {
-
         }
 
         /// <summary>
-        /// Constructor that initializes with the HTTP request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="method">The HTTP request method to use</param>
         public RestRequest(HttpMethod method)
             : this((string)null, method)
         {
-
         }
 
         /// <summary>
-        /// Constructor that initializes the resource path, HTTP GET request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
-        /// <param name="resource"></param>
+        /// <param name="resource">The resource this request is targeting</param>
         public RestRequest(string resource)
             : this(resource, HttpMethod.Get)
         {
         }
 
         /// <summary>
-        /// Constructor that initializes the resource path, HTTP request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="method"></param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null")]
+        /// <param name="resource">The resource this request is targeting</param>
+        /// <param name="method">The HTTP request method</param>
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null")]
         public RestRequest(string resource, HttpMethod method)
         {
             ContentCollectionMode = ContentCollectionMode.MultiPartForFileParameters;
@@ -55,56 +54,59 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Constructor that initializes the resource path, HTTP GET request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
-        /// <param name="resource"></param>
+        /// <param name="resource">The resource this request is targeting</param>
         public RestRequest(Uri resource)
             : this(resource, HttpMethod.Get)
         {
         }
 
         /// <summary>
-        /// Constructor that initializes the resource path, HTTP request method and the JSON serializer as default serializer
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="method"></param>
+        /// <param name="resource">The resource this request is targeting</param>
+        /// <param name="method">The HTTP request method</param>
         public RestRequest(Uri resource, HttpMethod method)
-            : this((resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString), method)
+            : this(resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString, method)
         {
         }
 
         /// <summary>
-        /// HTTP request method (GET, POST, etc...)
+        /// Gets or sets the HTTP request method (GET, POST, etc...)
         /// </summary>
         public HttpMethod Method { get; set; }
 
         /// <summary>
-        /// The resource relative to the REST clients base URL
+        /// Gets or sets the resource relative to the REST clients base URL
         /// </summary>
         public string Resource { get; set; }
 
         /// <summary>
-        /// REST request parameters
+        /// Gets the REST request parameters
         /// </summary>
-        public IList<Parameter> Parameters { get { return _parameters; } }
+        public IList<Parameter> Parameters
+        {
+            get { return _parameters; }
+        }
 
         /// <summary>
-        /// The serializer that should serialize the body
+        /// Gets or sets the serializer that should serialize the body
         /// </summary>
         public Serializers.ISerializer Serializer { get; set; }
 
         /// <summary>
-        /// The credentials used for the request (e.g. NTLM authentication)
+        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
         /// </summary>
         public ICredentials Credentials { get; set; }
 
         /// <summary>
-        /// Controls if we use basic content or multi part content by default.
+        /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         public ContentCollectionMode ContentCollectionMode { get; set; }
 
         /// <summary>
-        /// The <see cref="StringComparer"/> to be used for this request.
+        /// Gets or sets the <see cref="StringComparer"/> to be used for this request.
         /// </summary>
         /// <remarks>
         /// If this property is null, the <see cref="IRestClient.DefaultParameterNameComparer"/> is used.

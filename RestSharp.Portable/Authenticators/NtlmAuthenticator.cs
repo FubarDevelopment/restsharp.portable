@@ -11,17 +11,17 @@ namespace RestSharp.Portable.Authenticators
         private readonly ICredentials _credentials;
 
         /// <summary>
-        /// Authenticate by impersonation
+        /// Initializes a new instance of the <see cref="NtlmAuthenticator" /> class.
         /// </summary>
         /// <param name="username">User name</param>
-        /// <param name="password">Password</param>
+        /// <param name="password">The users password</param>
         public NtlmAuthenticator(string username, string password)
             : this(new NetworkCredential(username, password))
         {
         }
 
         /// <summary>
-        /// Authenticate by impersonation, using an existing <c>ICredentials</c> instance
+        /// Initializes a new instance of the <see cref="NtlmAuthenticator" /> class.
         /// </summary>
         /// <param name="credentials">The credentials to use</param>
         public NtlmAuthenticator(ICredentials credentials)

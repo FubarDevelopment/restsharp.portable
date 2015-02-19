@@ -1,7 +1,7 @@
-﻿//#define ENABLE_MULTI_TEST
-using System;
+﻿using System;
 using System.Linq;
 using System.Web;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test

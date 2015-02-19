@@ -11,12 +11,12 @@
         private readonly string _password;
 
         /// <summary>
-        /// Constructor for the simple authenticator
+        /// Initializes a new instance of the <see cref="SimpleAuthenticator" /> class.
         /// </summary>
         /// <param name="usernameKey">GetOrPost parameter name for the user name</param>
         /// <param name="username">User name</param>
         /// <param name="passwordKey">GetOrPost parameter name for the password</param>
-        /// <param name="password">Password</param>
+        /// <param name="password">The users password</param>
         public SimpleAuthenticator(string usernameKey, string username, string passwordKey, string password)
         {
             _usernameKey = usernameKey;

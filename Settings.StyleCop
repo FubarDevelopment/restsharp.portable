@@ -11,7 +11,7 @@
   <Analyzers>
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
       <AnalyzerSettings>
-        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN EOF FxCop ID IDs MD5 MD5sess OAuth OK StyleCop US X</StringProperty>
+        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN EOF FxCop ID IDs MD5 MD5sess OAuth OK StyleCop US X Y</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

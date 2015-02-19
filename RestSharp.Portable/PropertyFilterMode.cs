@@ -11,6 +11,7 @@ namespace RestSharp.Portable
         /// Include the given properties
         /// </summary>
         Include,
+
         /// <summary>
         /// Exclude the given properties
         /// </summary>
