@@ -1,7 +1,7 @@
 [OutputType([void])]
 param(
 	[Parameter()]
-	$version = "2.3.1",
+	$version = "2.3.2",
 	[Parameter()]
 	$config = "Release"
 )
