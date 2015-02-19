@@ -116,7 +116,10 @@ namespace RestSharp.Portable.Authenticators
 
         private static string CalculateMd5Hash(byte[] inputBytes)
         {
-            var hash = new MD5Managed().ComputeHash(inputBytes);
+            byte[] hash;
+            using (var digest = MD5.Create())
+                hash = digest.ComputeHash(inputBytes);
+
             var sb = new StringBuilder();
             foreach (var b in hash)
                 sb.Append(b.ToString("x2"));

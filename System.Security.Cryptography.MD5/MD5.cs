@@ -42,6 +42,11 @@ namespace System.Security.Cryptography
         {
             HashSizeValue = 128;
         }
+
+        public static MD5 Create()
+        {
+            return new MD5Managed();
+        }
     }
 }
 

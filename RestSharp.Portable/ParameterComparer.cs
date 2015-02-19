@@ -13,7 +13,7 @@ namespace RestSharp.Portable
         private readonly bool _isGetRequest;
 
         /// <summary>
-        /// Constructor to create a parameter comparer variant
+        /// Initializes a new instance of the <see cref="ParameterComparer" /> class.
         /// </summary>
         /// <param name="client">The client this parameter comparer is for</param>
         /// <param name="request">The request this parameter comparer is for</param>
@@ -23,14 +23,14 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Constructor to create a parameter comparer variant
+        /// Initializes a new instance of the <see cref="ParameterComparer" /> class.
         /// </summary>
         /// <param name="client">The client this parameter comparer is for</param>
         /// <param name="request">The request this parameter comparer is for</param>
         /// <param name="stringComparer">The string comparer to use (default: Ordinal)</param>
         public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer)
         {
-            _isGetRequest = (request == null || client.GetEffectiveHttpMethod(request) == HttpMethod.Get);
+            _isGetRequest = request == null || client.GetEffectiveHttpMethod(request) == HttpMethod.Get;
             var nameComparer = stringComparer;
             if (nameComparer == null && request != null)
                 nameComparer = request.ParameterNameComparer;
@@ -44,9 +44,9 @@ namespace RestSharp.Portable
         /// <summary>
         /// Parameters have the same name?
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="x">The parameter to compare with</param>
+        /// <param name="y">The parameter to compare to</param>
+        /// <returns>true if both parameters are equal</returns>
         public bool Equals(Parameter x, Parameter y)
         {
             return Compare(x, y) == 0;
@@ -55,8 +55,8 @@ namespace RestSharp.Portable
         /// <summary>
         /// Calculate the hash code for a given parameter
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        /// <param name="obj">The object to get the hash code for</param>
+        /// <returns>The hash code</returns>
         public int GetHashCode(Parameter obj)
         {
             var paramType = obj.Type;
@@ -75,15 +75,15 @@ namespace RestSharp.Portable
         /// <summary>
         /// Compare two parameters
         /// </summary>
-        /// <param name="x">The first parameter</param>
-        /// <param name="y">The second parameter</param>
-        /// <returns></returns>
+        /// <param name="x">The parameter to compare with</param>
+        /// <param name="y">The parameter to compare to</param>
+        /// <returns>0 if both parameters are equal, &lt;0 when the <paramref name="x"/> is &lt; <paramref name="y"/>, otherwise &gt;0.</returns>
         public int Compare(Parameter x, Parameter y)
         {
             // Both must be parameters of the same type
             var xTypeName = x.GetType().FullName;
             var yTypeName = y.GetType().FullName;
-            var result = String.Compare(xTypeName, yTypeName, StringComparison.Ordinal);
+            var result = string.Compare(xTypeName, yTypeName, StringComparison.Ordinal);
             if (result != 0)
                 return result;
 

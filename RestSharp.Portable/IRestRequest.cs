@@ -1,8 +1,9 @@
-﻿using RestSharp.Portable.Serializers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+
+using RestSharp.Portable.Serializers;
 
 namespace RestSharp.Portable
 {
@@ -12,31 +13,37 @@ namespace RestSharp.Portable
     public interface IRestRequest
     {
         /// <summary>
-        /// The serializer that should serialize the body
+        /// Gets or sets the serializer that should serialize the body
         /// </summary>
         ISerializer Serializer { get; set; }
+
         /// <summary>
-        /// HTTP request method (GET, POST, etc...)
+        /// Gets or sets the HTTP request method (GET, POST, etc...)
         /// </summary>
         HttpMethod Method { get; set; }
+
         /// <summary>
-        /// The resource relative to the REST clients base URL
+        /// Gets the resource relative to the REST clients base URL
         /// </summary>
         string Resource { get; }
+
         /// <summary>
-        /// REST request parameters
+        /// Gets the REST request parameters
         /// </summary>
         IList<Parameter> Parameters { get; }
+
         /// <summary>
-        /// The credentials used for the request (e.g. NTLM authentication)
+        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
         /// </summary>
         ICredentials Credentials { get; set; }
+
         /// <summary>
-        /// Controls if we use basic content or multi part content by default.
+        /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         ContentCollectionMode ContentCollectionMode { get; set; }
+
         /// <summary>
-        /// The <see cref="StringComparer"/> to be used for this request.
+        /// Gets or sets the <see cref="StringComparer"/> to be used for this request.
         /// </summary>
         /// <remarks>
         /// If this property is null, the <see cref="IRestClient.DefaultParameterNameComparer"/> is used.

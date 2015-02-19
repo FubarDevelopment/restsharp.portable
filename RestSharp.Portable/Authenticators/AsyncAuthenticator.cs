@@ -12,14 +12,14 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        /// <returns></returns>
+        /// <returns>The task the authentication is performed on</returns>
         public abstract Task Authenticate(IRestClient client, IRestRequest request);
 
         /// <summary>
-        /// This is for API compatibility with the current IRestClient
+        /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="request"></param>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
         void IAuthenticator.Authenticate(IRestClient client, IRestRequest request)
         {
             Authenticate(client, request).Wait();

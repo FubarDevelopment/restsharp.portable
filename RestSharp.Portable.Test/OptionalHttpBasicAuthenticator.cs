@@ -11,23 +11,32 @@ namespace RestSharp.Portable.Authenticators
     /// </summary>
     public class OptionalHttpBasicAuthenticator : IRoundTripAuthenticator
     {
-        private readonly HttpBasicAuthenticator _basicAuth;
-        private bool _authRequired;
-
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {
             HttpStatusCode.Unauthorized,
             HttpStatusCode.NotFound,
         };
 
+        private readonly HttpBasicAuthenticator _basicAuth;
+
+        private bool _authRequired;
+
         /// <summary>
-        /// Constructor taking the user name and password for the HTTP Basic authenticator
+        /// Initializes a new instance of the <see cref="OptionalHttpBasicAuthenticator" /> class.
         /// </summary>
         /// <param name="username">User name</param>
-        /// <param name="password">Password</param>
+        /// <param name="password">The users password</param>
         public OptionalHttpBasicAuthenticator(string username, string password)
         {
             _basicAuth = new HttpBasicAuthenticator(username, password);
+        }
+
+        /// <summary>
+        /// Gets all the status codes where a round trip is allowed
+        /// </summary>
+        public IEnumerable<HttpStatusCode> StatusCodes
+        {
+            get { return _statusCodes; }
         }
 
         /// <summary>
@@ -51,14 +60,6 @@ namespace RestSharp.Portable.Authenticators
             if (!_authRequired)
                 return;
             _basicAuth.Authenticate(client, request);
-        }
-
-        /// <summary>
-        /// Returns all the status codes where a round trip is allowed
-        /// </summary>
-        public IEnumerable<HttpStatusCode> StatusCodes
-        {
-            get { return _statusCodes; }
         }
     }
 }

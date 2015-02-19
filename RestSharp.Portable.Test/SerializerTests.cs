@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using RestSharp.Portable.Serializers;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
     public class SerializerTests
     {
-        [DataContract(Namespace = "")]
-        class TestData
-        {
-            [DataMember]
-            public string TestProp { get; set; }
-        }
-
         [Fact]
         public void TestXmlSerializerBom()
         {
@@ -27,6 +21,13 @@ namespace RestSharp.Portable.Test
             var firstThreeBytes = new byte[3];
             Array.Copy(output, 0, firstThreeBytes, 0, 3);
             Assert.NotEqual(new byte[] { 0xEF, 0xBB, 0xBF }, firstThreeBytes);
+        }
+
+        [DataContract(Namespace = "")]
+        private class TestData
+        {
+            [DataMember]
+            public string TestProp { get; set; }
         }
     }
 }

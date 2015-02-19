@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>9c53c4ac-1a03-4d74-a2b6-8a5968eb2cf5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>System.Security.Cryptography</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CryptographicException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CryptographicUnexpectedOperationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HashAlgorithm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICryptoTransform.cs" />
+  </ItemGroup>
+</Project>

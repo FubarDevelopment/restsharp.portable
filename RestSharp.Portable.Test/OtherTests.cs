@@ -1,22 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
     public class OtherTests
     {
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
-        class PostResponse
-        {
-            public Dictionary<string, string> Form { get; set; }
-            public Dictionary<string, string> Headers { get; set; }
-        }
-
         [Fact]
         public async Task TestMultipleRequests()
         {
@@ -32,6 +25,7 @@ namespace RestSharp.Portable.Test
                     Assert.True(response.Data.Form.ContainsKey("param1"));
                     Assert.Equal("param1", response.Data.Form["param1"]);
                 }
+
                 {
                     var request = new RestRequest("post", HttpMethod.Post);
                     request.AddParameter("param1", "param1+");
@@ -43,6 +37,13 @@ namespace RestSharp.Portable.Test
                     Assert.Equal("param1+", response.Data.Form["param1"]);
                 }
             }
-        } 
+        }
+
+        // ReSharper disable once ClassNeverInstantiated.Local
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
+        private class PostResponse
+        {
+            public Dictionary<string, string> Form { get; set; }
+        }
     }
 }

@@ -1,7 +1,7 @@
-﻿//#define ENABLE_MULTI_TEST
-using System;
+﻿using System;
 using System.Linq;
 using System.Web;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
@@ -38,9 +38,9 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestUrlEncodeComplianceUmlaut()
         {
-            const string chars = "äöüßÄÖÜ\u007F";
-            var expected = HttpUtility.UrlEncode(chars);
-            var test = UrlUtility.Escape(chars, UrlEscapeFlags.LikeUrlEncode);
+            const string Chars = "äöüßÄÖÜ\u007F";
+            var expected = HttpUtility.UrlEncode(Chars);
+            var test = UrlUtility.Escape(Chars, UrlEscapeFlags.LikeUrlEncode);
             Assert.Equal(expected, test);
         }
 

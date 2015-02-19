@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -38,7 +39,6 @@ namespace RestSharp.Portable
             return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
         }
 
-
         /// <summary>
         /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.XmlDataContractSerializer"/>.
         /// </summary>
@@ -61,7 +61,7 @@ namespace RestSharp.Portable
         /// <returns>The request object to allow call chains</returns>
         public static IRestRequest AddObject(this IRestRequest request, object obj, params string[] includedProperties)
         {
-            return AddObject(request, obj, ((includedProperties == null || includedProperties.Length == 0) ? null : includedProperties), PropertyFilterMode.Include);
+            return AddObject(request, obj, (includedProperties == null || includedProperties.Length == 0) ? null : includedProperties, PropertyFilterMode.Include);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace RestSharp.Portable
             var type = obj.GetType();
             var props = type.GetProperties();
 
-            var objProps = (objProperties == null ? null : objProperties.Where(x => x != null).ToList());
+            var objProps = objProperties == null ? null : objProperties.Where(x => x != null).ToList();
 
             foreach (var prop in props)
             {
@@ -281,7 +281,7 @@ namespace RestSharp.Portable
         /// <param name="request">The REST request to add this parameter to</param>
         /// <param name="parameter">The new file parameter</param>
         /// <returns>The REST request to allow call chains</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Communicate to the caller that a file parameter is required.")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Communicate to the caller that a file parameter is required.")]
         public static IRestRequest AddFile(this IRestRequest request, FileParameter parameter)
         {
             return request.AddParameter(parameter);
@@ -309,6 +309,7 @@ namespace RestSharp.Portable
                 buffer = request.Serializer.Serialize(body.Value);
                 contentType = request.Serializer.ContentType;
             }
+
             var content = new ByteArrayContent(buffer);
             content.Headers.ContentType = contentType;
             content.Headers.ContentLength = buffer.Length;

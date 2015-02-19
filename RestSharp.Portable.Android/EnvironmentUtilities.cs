@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RestSharp.Portable
 {
-    static class EnvironmentUtilities
+    internal static class EnvironmentUtilities
     {
         public static bool IsMono
         {

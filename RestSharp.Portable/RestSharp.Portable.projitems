@@ -30,13 +30,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponseT.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequestGuard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
@@ -46,7 +49,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)System.Security.Cryptography\MD5Managed.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlUtility.cs" />

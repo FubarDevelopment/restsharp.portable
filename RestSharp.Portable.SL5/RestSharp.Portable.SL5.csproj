@@ -105,13 +105,13 @@
     </Compile>
     <Compile Include="EnvironmentUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System.Security.Cryptography\MD5.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
   <Import Project="..\System.Security.Cryptography.Portable\System.Security.Cryptography.Portable.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.Portable\System.Security.Cryptography.Portable.projitems')" />
+  <Import Project="..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
