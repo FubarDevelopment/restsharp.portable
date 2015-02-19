@@ -129,6 +129,8 @@ This is some kind of a RestSharp port to PCL.
 * Windows Phone 8 and 8.1
 * Silverlight 5
 * Portable Class Libraries
+* Xamarin Android
+* Xamarin MonoTouch / iOS
 
 # Small example
 
