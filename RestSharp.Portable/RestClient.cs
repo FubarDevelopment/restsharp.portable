@@ -18,12 +18,17 @@ namespace RestSharp.Portable
     public class RestClient : IRestClient
     {
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
+
         private readonly IList<string> _acceptTypes = new List<string>();
 
         private readonly IDictionary<string, IEncoding> _encodingHandlers = new Dictionary<string, IEncoding>(StringComparer.OrdinalIgnoreCase);
+
         private readonly IList<string> _acceptEncodings = new List<string>();
 
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
+
+        private readonly RequestGuard _requestGuard = new RequestGuard();
+
         private HttpClient _httpClient;
 
         /// <summary>
@@ -121,9 +126,9 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request)
         {
-            using (var cts = new CancellationTokenSource())
+            using (_requestGuard.Guard(CancellationToken.None))
             {
-                using (var response = await ExecuteRequest(request, cts.Token))
+                using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
                     var restResponse = new RestResponse(this, request);
                     await restResponse.LoadResponse(response);
@@ -146,9 +151,9 @@ namespace RestSharp.Portable
         /// </returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
-            using (var cts = new CancellationTokenSource())
+            using (_requestGuard.Guard(CancellationToken.None))
             {
-                using (var response = await ExecuteRequest(request, cts.Token))
+                using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
                     var restResponse = new RestResponse<T>(this, request);
                     await restResponse.LoadResponse(response);
@@ -165,11 +170,14 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
         {
-            using (var response = await ExecuteRequest(request, ct))
+            using (_requestGuard.Guard(ct))
             {
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                return restResponse;
+                using (var response = await ExecuteRequest(request, ct))
+                {
+                    var restResponse = new RestResponse(this, request);
+                    await restResponse.LoadResponse(response);
+                    return restResponse;
+                }
             }
         }
 
@@ -182,11 +190,14 @@ namespace RestSharp.Portable
         /// <returns>Response returned, with a deserialized object</returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
         {
-            using (var response = await ExecuteRequest(request, ct))
+            using (_requestGuard.Guard(ct))
             {
-                var restResponse = new RestResponse<T>(this, request);
-                await restResponse.LoadResponse(response);
-                return restResponse;
+                using (var response = await ExecuteRequest(request, ct))
+                {
+                    var restResponse = new RestResponse<T>(this, request);
+                    await restResponse.LoadResponse(response);
+                    return restResponse;
+                }
             }
         }
 
@@ -348,6 +359,7 @@ namespace RestSharp.Portable
         /// </summary>
         public void Dispose()
         {
+            _requestGuard.Dispose();
             if (_httpClient == null)
                 return;
             _httpClient.Dispose();

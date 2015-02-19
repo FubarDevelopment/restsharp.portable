@@ -31,14 +31,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponseT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
-		<ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-	</Compile>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequestGuard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
