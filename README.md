@@ -6,9 +6,13 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.3.2 is available now!
+* Version 2.4.0 is available now!
 
 # Changes #
+
+## 2.4.0 ##
+
+* New "Timeout" property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
 
 ## 2.3.2 ##
 
