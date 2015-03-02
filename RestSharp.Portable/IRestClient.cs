@@ -58,6 +58,15 @@ namespace RestSharp.Portable
         StringComparer DefaultParameterNameComparer { get; set; }
 
         /// <summary>
+        /// Gets or sets the timeout to be used for requests.
+        /// </summary>
+        /// <remarks>
+        /// When the value isn't set, it uses the default timeout of <see cref="System.Net.Http.HttpClient"/> (100 seconds) or whatever
+        /// is used to implement the <see cref="IHttpClientFactory"/>.
+        /// </remarks>
+        TimeSpan? Timeout { get; set; }
+
+        /// <summary>
         /// Execute the given request
         /// </summary>
         /// <param name="request">Request to execute</param>

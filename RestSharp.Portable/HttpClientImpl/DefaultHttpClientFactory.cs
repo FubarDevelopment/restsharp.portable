@@ -42,7 +42,13 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 BaseAddress = GetBaseAddress(client)
             };
+
             httpClient = AddHttpHeaderParameters(httpClient, client);
+
+            var timeout = client.Timeout;
+            if (timeout.HasValue)
+                httpClient.Timeout = timeout.Value;
+
             return httpClient;
         }
 
