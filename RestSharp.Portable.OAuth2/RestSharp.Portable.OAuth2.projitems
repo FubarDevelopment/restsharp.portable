@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2Authenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\AuthorizationRoot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\BeforeAfterRequestArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\GitterClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\AsanaClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\DigitalOceanClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\FacebookClient.cs" />
