@@ -134,6 +134,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Security.Cryptograph
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Security.Cryptography.MD5", "System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.shproj", "{DE12BF6B-63BA-4106-BE18-C59C01392AFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth1.Tests", "RestSharp.Portable.OAuth1.Tests\RestSharp.Portable.OAuth1.Tests.csproj", "{392A32D2-5974-48B5-9604-09880285744C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -285,6 +287,10 @@ Global
 		{6559CD2F-FF50-486F-B94E-7B43EC7069E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6559CD2F-FF50-486F-B94E-7B43EC7069E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6559CD2F-FF50-486F-B94E-7B43EC7069E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{392A32D2-5974-48B5-9604-09880285744C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{392A32D2-5974-48B5-9604-09880285744C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{392A32D2-5974-48B5-9604-09880285744C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{392A32D2-5974-48B5-9604-09880285744C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -331,5 +337,6 @@ Global
 		{6559CD2F-FF50-486F-B94E-7B43EC7069E9} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
 		{9C53C4AC-1A03-4D74-A2B6-8A5968EB2CF5} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{DE12BF6B-63BA-4106-BE18-C59C01392AFC} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
+		{392A32D2-5974-48B5-9604-09880285744C} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
 	EndGlobalSection
 EndGlobal
