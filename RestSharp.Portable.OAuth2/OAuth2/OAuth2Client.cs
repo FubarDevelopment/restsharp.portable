@@ -50,12 +50,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Refresh token returned by provider. Can be used for further calls of provider API.
         /// </summary>
         public string RefreshToken { get; protected set; }
-        
+
         /// <summary>
         /// Token type returned by provider. Can be used for further calls of provider API.
         /// </summary>
         public string TokenType { get; private set; }
-        
+
         /// <summary>
         /// The time when the access token expires
         /// </summary>
@@ -65,9 +65,17 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// A safety margin that's used to see if an access token is expired
         /// </summary>
         public TimeSpan ExpirationSafetyMargin { get; set; }
-        
+
+        /// <summary>
+        /// Gets the instance of the request factory.
+        /// </summary>
+        protected IRequestFactory Factory
+        {
+            get { return _factory; }
+        }
+
         private string GrantType { get; set; }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Client"/> class.
         /// </summary>
@@ -166,7 +174,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
 
             return AccessToken;
         }
-        
+
         /// <summary>
         /// Defines URI of service which issues access code.
         /// </summary>
