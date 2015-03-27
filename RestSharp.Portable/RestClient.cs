@@ -491,10 +491,7 @@ namespace RestSharp.Portable
                             retryWithAuthentication = false;
                             var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
                             if (retry)
-                            {
-                                failed = false;
                                 continue;
-                            }
                         }
 
                         if (!IgnoreResponseStatusCode)
