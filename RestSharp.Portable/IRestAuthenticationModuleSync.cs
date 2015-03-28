@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 
 namespace RestSharp.Portable
 {
@@ -26,6 +27,6 @@ namespace RestSharp.Portable
         /// <param name="header">Authentication/Authorization header</param>
         /// <param name="credential">Credential to be used for the authentication</param>
         /// <returns>true when the authentication succeeded</returns>
-        bool Authenticate(IRestClient client, IRestRequest request, IRestResponse response, AuthHeader header, NetworkCredential credential);
+        bool Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response, AuthHeader header, NetworkCredential credential);
     }
 }

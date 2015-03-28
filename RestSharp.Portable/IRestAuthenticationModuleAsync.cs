@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -28,6 +29,6 @@ namespace RestSharp.Portable
         /// <param name="header">Authentication/Authorization header</param>
         /// <param name="credential">Credential to be used for the authentication</param>
         /// <returns>The task the authentication is performed on, which returns true when the authentication succeeded</returns>
-        Task<bool> Authenticate(IRestClient client, IRestRequest request, IRestResponse response, AuthHeader header, NetworkCredential credential);
+        Task<bool> Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response, AuthHeader header, NetworkCredential credential);
     }
 }

@@ -450,12 +450,10 @@ namespace RestSharp.Portable
                         {
                             if (AuthenticationManager != null)
                             {
-                                var restResponse = new RestResponse(this, request);
-                                await restResponse.LoadResponse(response);
                                 if (await AuthenticationManager.AuthenticateAsync(
                                     this,
                                     request,
-                                    restResponse,
+                                    response,
                                     Credentials))
                                 {
                                     continue;

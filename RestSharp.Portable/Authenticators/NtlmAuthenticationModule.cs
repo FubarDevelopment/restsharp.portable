@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -52,7 +53,7 @@ namespace RestSharp.Portable.Authenticators
         public bool Authenticate(
             IRestClient client,
             IRestRequest request,
-            IRestResponse response,
+            HttpResponseMessage response,
             AuthHeader header,
             NetworkCredential credential)
         {
