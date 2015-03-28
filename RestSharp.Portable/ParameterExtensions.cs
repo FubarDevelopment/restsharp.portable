@@ -57,6 +57,36 @@ namespace RestSharp.Portable
             return parameters.OfType<FileParameter>();
         }
 
+        /// <summary>
+        /// Remove a parameter by name
+        /// </summary>
+        /// <param name="parameters">The parameters where the parameter is removed from</param>
+        /// <param name="parameterName">The name of the parameter to remove</param>
+        /// <param name="parameterNameComparer">The parameter name comparer</param>
+        public static void RemoveParameter(this IList<Parameter> parameters, string parameterName, StringComparer parameterNameComparer)
+        {
+            var parametersToDelete = parameters.Where(x => parameterNameComparer.Equals(x.Name, parameterName)).ToList();
+            foreach (var parameter in parametersToDelete)
+                parameters.Remove(parameter);
+        }
+
+        /// <summary>
+        /// Test if a parameter with a given value exists
+        /// </summary>
+        /// <param name="parameters">The list of parameters to search</param>
+        /// <param name="parameterName">The parameter name to search for</param>
+        /// <param name="parameterValue">The parameter value to search for</param>
+        /// <param name="parameterNameComparer">The parameter name comparer</param>
+        /// <returns>true when the parameter with the given name exists</returns>
+        public static bool HasParameterWithValue(this IList<Parameter> parameters, string parameterName, string parameterValue, StringComparer parameterNameComparer)
+        {
+            var parameterValues = parameters
+                .Where(x => parameterNameComparer.Equals(x.Name, parameterName) && (x.Value == null || x.Value is string))
+                .Select(x => (string)x.Value)
+                .ToList();
+            return parameterValues.Any(x => (x == null && parameterValue == null) || (x != null && parameterValue != null && x == parameterValue));
+        }
+
         internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)
         {
             switch (parameter.Type)

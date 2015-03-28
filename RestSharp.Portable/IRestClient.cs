@@ -5,7 +5,6 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Encodings;
 
@@ -17,9 +16,14 @@ namespace RestSharp.Portable
     public interface IRestClient : IDisposable
     {
         /// <summary>
+        /// Gets or sets the credentials to be used by the authentication manager.
+        /// </summary>
+        ICredentials Credentials { get; set; }
+
+        /// <summary>
         /// Gets or sets the authenticator to use for all requests
         /// </summary>
-        IAuthenticator Authenticator { get; set; }
+        AuthenticationManager AuthenticationManager { get; set; }
 
         /// <summary>
         /// Gets or sets the base URL for all requests

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -17,15 +16,8 @@ namespace RestSharp.Portable.Authenticators
     /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
-    public class HttpDigestAuthenticator : IRoundTripAuthenticator
+    public class HttpDigestAuthenticationModule : IRestAuthenticationModule
     {
-        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
-        {
-            HttpStatusCode.Unauthorized,
-        };
-
-        private readonly ICredentials _credentials;
-
         private string _realm;
 
         private string _nonce;
@@ -41,15 +33,6 @@ namespace RestSharp.Portable.Authenticators
         private DateTime _cnonceDate;
 
         private int _nc;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpDigestAuthenticator" /> class.
-        /// </summary>
-        /// <param name="credentials">The authentication credentials</param>
-        public HttpDigestAuthenticator(ICredentials credentials)
-        {
-            _credentials = credentials;
-        }
 
         [Flags]
         private enum QualityOfProtection
@@ -68,14 +51,22 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets all the status codes where a round trip is allowed
+        /// Gets the authentication type provided by this authentication module.
         /// </summary>
-        public IEnumerable<HttpStatusCode> StatusCodes
+        public string AuthenticationType
         {
-            get { return _statusCodes; }
+            get { return "Digest"; }
         }
 
-        private bool HasDigestHeader
+        /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public bool CanPreAuthenticate
+        {
+            get { return CanCreateDigestHeader; }
+        }
+
+        private bool CanCreateDigestHeader
         {
             get
             {
@@ -88,24 +79,44 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        /// <param name="header">Authentication/Authorization header</param>
+        /// <param name="credential">Credential to be used for the authentication</param>
+        public void PreAuthenticate(
+            IRestClient client,
+            IRestRequest request,
+            AuthHeader header,
+            NetworkCredential credential)
         {
-            if (HasDigestHeader)
-            {
-                var digestHeader = GetDigestHeader(client, request);
-                request.AddParameter("Authorization", digestHeader, ParameterType.HttpHeader);
-            }
+            if (!CanCreateDigestHeader || credential == null)
+                return;
+            var digestHeader = GetDigestHeader(client, request, credential);
+            AuthHeaderUtilities.TrySetAuthorizationHeader(client, request, header, digestHeader);
         }
 
         /// <summary>
-        /// Will be called when the authentication failed
+        /// Will be called in response to an authentication request.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        public void AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        /// <param name="header">Authentication/Authorization header</param>
+        /// <param name="credential">Credential to be used for the authentication</param>
+        /// <returns>true when the authentication succeeded</returns>
+        public bool Authenticate(
+            IRestClient client,
+            IRestRequest request,
+            IRestResponse response,
+            AuthHeader header,
+            NetworkCredential credential)
         {
-            ParseResponseHeader(response);
+            var wwwAuthenticateHeader = response.GetAuthenticationMethodValue(header, AuthenticationType);
+            if (string.IsNullOrEmpty(wwwAuthenticateHeader))
+                return false;
+            ParseResponseHeader(wwwAuthenticateHeader);
+            if (!CanCreateDigestHeader || credential == null)
+                return false;
+            var digestHeader = GetDigestHeader(client, request, credential);
+            return AuthHeaderUtilities.TrySetAuthorizationHeader(client, request, header, digestHeader);
         }
 
         private static string CalculateMd5Hash(string input)
@@ -144,12 +155,11 @@ namespace RestSharp.Portable.Authenticators
             return defaultValue;
         }
 
-        private string GetDigestHeader(IRestClient client, IRestRequest restRequest)
+        private string GetDigestHeader(IRestClient client, IRestRequest restRequest, NetworkCredential credential)
         {
             _nc = _nc + 1;
 
             var uri = client.BuildUri(restRequest);
-            var credential = _credentials.GetCredential(uri, "Digest");
 
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
@@ -248,9 +258,8 @@ namespace RestSharp.Portable.Authenticators
             return result.ToString();
         }
 
-        private void ParseResponseHeader(IRestResponse response)
+        private void ParseResponseHeader(string wwwAuthenticateHeader)
         {
-            var wwwAuthenticateHeader = response.Headers.GetValues("WWW-Authenticate").First();
             _realm = GrabHeaderVar("realm", wwwAuthenticateHeader);
             _nonce = GrabHeaderVar("nonce", wwwAuthenticateHeader);
 
