@@ -420,7 +420,7 @@ namespace RestSharp.Portable
 
         private async Task AuthenticateRequest(IRestRequest request)
         {
-            if (Authenticator == null)
+            if (Authenticator == null || !Authenticator.CanPreAuthenticate)
                 return;
 
             var asyncAuth = Authenticator as IAsyncAuthenticator;
@@ -435,40 +435,40 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Notify the authenticator about a failed request to be able to retry the request
-        /// with updated authentication information.
+        /// Tries to handle the challenge sent with the authenticator.
         /// </summary>
         /// <param name="request">The failed request</param>
         /// <param name="response">The response of the failed request</param>
-        /// <returns>true == Authenticator notified</returns>
-        private async Task<bool> NotifyAuthenticatorAboutFailedRequest(IRestRequest request, HttpResponseMessage response)
+        /// <returns>true == authentication challenge handled</returns>
+        private async Task<bool> HandleChallenge(IRestRequest request, HttpResponseMessage response)
         {
-            var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
-            if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            if (Authenticator == null || !Authenticator.CanHandleChallenge(response))
+                return false;
+
+            var asyncAuthenticator = Authenticator as IAsyncAuthenticator;
+            if (asyncAuthenticator != null && asyncAuthenticator.CanHandleChallenge(response))
             {
-                await asyncRoundTripAuthenticator.Authenticate(this, request, response);
-                return true;
+                await asyncAuthenticator.HandleChallenge(this, request, response);
+            }
+            else
+            {
+                Authenticator.HandleChallenge(this, request, response);
             }
 
-            var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
-            if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
-            {
-                roundTripAuthenticator.Authenticate(this, request, response);
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
-            var retryWithAuthentication = true;
             AddDefaultParameters(request);
             while (true)
             {
                 await AuthenticateRequest(request);
+
+                // Lazy initialization of the HTTP client
                 if (_httpClient == null)
                     _httpClient = HttpClientFactory.CreateClient(this, request);
+
                 using (var message = HttpClientFactory.CreateRequestMessage(this, request))
                 {
                     var bodyData = this.GetContent(request);
@@ -482,16 +482,12 @@ namespace RestSharp.Portable
                     var response = await _httpClient.SendAsync(message, ct);
                     try
                     {
-                        if (retryWithAuthentication)
-                        {
-                            retryWithAuthentication = false;
-                            var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
-                            if (retry)
-                                continue;
-                        }
+                        if (await HandleChallenge(request, response))
+                            continue;
 
                         if (!IgnoreResponseStatusCode)
                             response.EnsureSuccessStatusCode();
+
                         failed = false;
                     }
                     finally

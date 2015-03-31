@@ -16,6 +16,7 @@
 
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 
 namespace RestSharp.Portable.Authenticators
@@ -47,6 +48,14 @@ namespace RestSharp.Portable.Authenticators
         /// The function specified is used to create a timestamp
         /// </summary>
         public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public bool CanPreAuthenticate
+        {
+            get { return true; }
+        }
 
         internal OAuthType Type { get; set; }
         internal string ConsumerKey { get; set; }
@@ -254,6 +263,26 @@ namespace RestSharp.Portable.Authenticators
             };
             AddOAuthData(client, request, workflow);
         }
+
+        /// <summary>
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// </summary>
+        public bool CanHandleChallenge(HttpResponseMessage response)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        {
+            throw new NotSupportedException();
+        }
+
         private void AddOAuthData(IRestClient client, IRestRequest request, OAuthWorkflow workflow)
         {
             var url = client.BuildUri(request, false).ToString();

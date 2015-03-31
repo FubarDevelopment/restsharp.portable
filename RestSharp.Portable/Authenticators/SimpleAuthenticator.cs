@@ -1,4 +1,7 @@
-﻿namespace RestSharp.Portable.Authenticators
+﻿using System;
+using System.Net.Http;
+
+namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
     /// Simple authenticator that adds the authentication information as GetOrPost parameter
@@ -26,6 +29,14 @@
         }
 
         /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public bool CanPreAuthenticate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
@@ -34,6 +45,25 @@
         {
             request.AddParameter(_usernameKey, _username);
             request.AddParameter(_passwordKey, _password);
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// </summary>
+        public virtual bool CanHandleChallenge(HttpResponseMessage response)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        {
+            throw new NotSupportedException();
         }
     }
 }

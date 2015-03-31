@@ -34,19 +34,8 @@ namespace RestSharp.Portable.Authenticators
     /// Any other OAuth2 authenticators must derive from this
     /// abstract class.
     /// </remarks>
-    public abstract class OAuth2Authenticator : AsyncAuthenticator, IAsyncRoundTripAuthenticator, IRoundTripAuthenticator
+    public abstract class OAuth2Authenticator : AsyncAuthenticator
     {
-        /// <summary>
-        /// The OAuth client that is used by this authenticator
-        /// </summary>
-        protected OAuth2.OAuth2Client Client { get; private set; }
-
-        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
-        {
-            HttpStatusCode.Unauthorized,
-        };
-        private static readonly IEnumerable<HttpStatusCode> _noStatusCodes = new List<HttpStatusCode>();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Authenticator"/> class.
         /// </summary>
@@ -57,13 +46,26 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public override bool CanPreAuthenticate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// The OAuth client that is used by this authenticator
+        /// </summary>
+        protected OAuth2.OAuth2Client Client { get; private set; }
+
+        /// <summary>
         /// Will be called when the authentication failed
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual async Task Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
@@ -71,27 +73,11 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Returns all the status codes where a round trip is allowed
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
         /// </summary>
-        public virtual IEnumerable<HttpStatusCode> StatusCodes
+        public override bool CanHandleChallenge(HttpResponseMessage response)
         {
-            get
-            {
-                if (string.IsNullOrEmpty(Client.RefreshToken))
-                    return _noStatusCodes;
-                return _statusCodes;
-            }
-        }
-
-        /// <summary>
-        /// Will be called when the authentication failed
-        /// </summary>
-        /// <param name="client">Client executing this request</param>
-        /// <param name="request">Request to authenticate</param>
-        /// <param name="response">Response of the failed request</param>
-        void IRoundTripAuthenticator.Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
-        {
-            Authenticate(client, request, response).Wait();
+            return !string.IsNullOrEmpty(Client.RefreshToken);
         }
     }
 
@@ -160,7 +146,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;

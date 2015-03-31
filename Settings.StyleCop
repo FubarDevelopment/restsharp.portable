@@ -6,6 +6,7 @@
       <Value>deserializer</Value>
       <Value>json</Value>
       <Value>Json</Value>
+      <Value>preauthentication</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
