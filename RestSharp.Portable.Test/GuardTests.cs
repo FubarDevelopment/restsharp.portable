@@ -12,31 +12,34 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestGuardLock1()
         {
-            var evt = new AutoResetEvent(false);
+            var evt1 = new AutoResetEvent(false);
+            var evt2 = new AutoResetEvent(false);
             var guard = new RequestGuard();
             var results = new ConcurrentBag<int>();
             var t1 = Task.Run(
                 () =>
+                {
+                    using (guard.Guard(CancellationToken.None))
                     {
-                        using (guard.Guard(CancellationToken.None))
-                        {
-                            evt.Set();
-                            evt.WaitOne();
-                            Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                        }
+                        evt1.Set();
+                        evt2.WaitOne();
+                        evt1.WaitOne();
+                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                    }
 
-                        results.Add(1);
-                    });
-            evt.WaitOne();
+                    results.Add(1);
+                });
+            evt1.WaitOne();
 
             var t2 = Task.Run(
                 () =>
-                    {
-                        evt.Set();
-                        using (guard.Guard(CancellationToken.None))
-                            DoNothing();
-                        results.Add(2);
-                    });
+                {
+                    evt2.Set();
+                    evt1.Set();
+                    using (guard.Guard(CancellationToken.None))
+                        DoNothing();
+                    results.Add(2);
+                });
 
             Task.WaitAll(t1, t2);
             var resultsData = results.ToArray();
