@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -21,6 +25,6 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response);
+        Task AuthenticationFailed([NotNull] IRestClient client, [NotNull] IRestRequest request, [NotNull] HttpResponseMessage response);
     }
 }

@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+
+using JetBrains.Annotations;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -19,6 +23,6 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        void AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response);
+        void AuthenticationFailed([NotNull] IRestClient client, [NotNull] IRestRequest request, [NotNull] HttpResponseMessage response);
     }
 }

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -103,7 +104,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        public void AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        public void AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             ParseResponseHeader(response);
         }
@@ -248,7 +249,7 @@ namespace RestSharp.Portable.Authenticators
             return result.ToString();
         }
 
-        private void ParseResponseHeader(IRestResponse response)
+        private void ParseResponseHeader(HttpResponseMessage response)
         {
             var wwwAuthenticateHeader = response.Headers.GetValues("WWW-Authenticate").First();
             _realm = GrabHeaderVar("realm", wwwAuthenticateHeader);

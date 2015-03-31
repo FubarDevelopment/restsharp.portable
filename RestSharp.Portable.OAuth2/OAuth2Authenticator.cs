@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -62,7 +63,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        public virtual async Task AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
@@ -88,7 +89,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        void IRoundTripAuthenticator.AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        void IRoundTripAuthenticator.AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             AuthenticationFailed(client, request, response).Wait();
         }
@@ -159,10 +160,11 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        public override async Task AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
+
             // Set this variable only if we have a refresh token
             _authFailed = true;
             await Client.GetCurrentToken(forceUpdate: true);

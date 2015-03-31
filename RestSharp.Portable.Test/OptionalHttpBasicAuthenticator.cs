@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 
 // ReSharper disable once CheckNamespace
 namespace RestSharp.Portable.Authenticators
@@ -45,7 +46,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        public void AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        public void AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             _authRequired = true;
         }

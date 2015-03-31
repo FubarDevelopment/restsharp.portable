@@ -446,18 +446,14 @@ namespace RestSharp.Portable
             var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
             if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
             {
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, response);
                 return true;
             }
 
             var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
             if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
             {
-                var restResponse = new RestResponse(this, request);
-                await restResponse.LoadResponse(response);
-                roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                roundTripAuthenticator.AuthenticationFailed(this, request, response);
                 return true;
             }
 
