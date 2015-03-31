@@ -233,7 +233,7 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
             var workflow = new OAuthWorkflow
             {

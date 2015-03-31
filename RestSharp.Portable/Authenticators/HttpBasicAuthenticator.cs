@@ -27,7 +27,7 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
             // only add the Authorization parameter if it hasn't been added by a previous Execute
             if (request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))

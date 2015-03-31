@@ -46,7 +46,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        public void AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public void Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             _authRequired = true;
         }
@@ -56,11 +56,11 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
             if (!_authRequired)
                 return;
-            _basicAuth.Authenticate(client, request);
+            _basicAuth.PreAuthenticate(client, request);
         }
     }
 }

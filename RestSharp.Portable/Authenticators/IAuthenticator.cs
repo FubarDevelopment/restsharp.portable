@@ -1,4 +1,6 @@
-﻿namespace RestSharp.Portable.Authenticators
+﻿using JetBrains.Annotations;
+
+namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
     /// The authenticator interface
@@ -10,6 +12,6 @@
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        void Authenticate(IRestClient client, IRestRequest request);
+        void PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request);
     }
 }

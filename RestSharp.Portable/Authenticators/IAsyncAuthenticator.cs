@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -13,6 +16,6 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <returns>The task the authentication is performed on</returns>
-        Task Authenticate(IRestClient client, IRestRequest request);
+        Task PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request);
     }
 }

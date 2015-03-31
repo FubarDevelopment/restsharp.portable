@@ -63,7 +63,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual async Task AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public virtual async Task Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
@@ -89,9 +89,9 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        void IRoundTripAuthenticator.AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        void IRoundTripAuthenticator.Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
-            AuthenticationFailed(client, request, response).Wait();
+            Authenticate(client, request, response).Wait();
         }
     }
 
@@ -116,7 +116,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <returns></returns>
-        public override async Task Authenticate(IRestClient client, IRestRequest request)
+        public override async Task PreAuthenticate(IRestClient client, IRestRequest request)
         {
             request.AddParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
         }
@@ -160,7 +160,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task AuthenticationFailed(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             if (string.IsNullOrEmpty(Client.RefreshToken))
                 return;
@@ -176,7 +176,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <returns></returns>
-        public override async Task Authenticate(IRestClient client, IRestRequest request)
+        public override async Task PreAuthenticate(IRestClient client, IRestRequest request)
         {
             // Only add the Authorization parameter if it hasn't been added and the authorization didn't fail previously
             var authParam = request.Parameters.LastOrDefault(p => p.Type == ParameterType.HttpHeader && p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase));

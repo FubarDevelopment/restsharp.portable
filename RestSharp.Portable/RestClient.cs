@@ -426,11 +426,11 @@ namespace RestSharp.Portable
             var asyncAuth = Authenticator as IAsyncAuthenticator;
             if (asyncAuth != null)
             {
-                await asyncAuth.Authenticate(this, request);
+                await asyncAuth.PreAuthenticate(this, request);
             }
             else
             {
-                Authenticator.Authenticate(this, request);
+                Authenticator.PreAuthenticate(this, request);
             }
         }
 
@@ -446,14 +446,14 @@ namespace RestSharp.Portable
             var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
             if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
             {
-                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, response);
+                await asyncRoundTripAuthenticator.Authenticate(this, request, response);
                 return true;
             }
 
             var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
             if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
             {
-                roundTripAuthenticator.AuthenticationFailed(this, request, response);
+                roundTripAuthenticator.Authenticate(this, request, response);
                 return true;
             }
 
