@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Deserializers;
 using RestSharp.Portable.Encodings;
 
@@ -36,8 +37,6 @@ namespace RestSharp.Portable
         public RestClient()
         {
             HttpClientFactory = new HttpClientImpl.DefaultHttpClientFactory();
-
-            AuthenticationManager = new AuthenticationManager();
 
             var jsonDeserializer = new JsonDeserializer();
 
@@ -82,14 +81,9 @@ namespace RestSharp.Portable
         public Uri BaseUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the credentials to be used by the authentication manager.
+        /// Gets or sets the Authenticator to use for all requests
         /// </summary>
-        public ICredentials Credentials { get; set; }
-
-        /// <summary>
-        /// Gets or sets the authentication manager to use for all requests
-        /// </summary>
-        public AuthenticationManager AuthenticationManager { get; set; }
+        public IAuthenticator Authenticator { get; set; }
 
         /// <summary>
         /// Gets or sets the Cookies for all requests
@@ -424,13 +418,59 @@ namespace RestSharp.Portable
             }
         }
 
+        private async Task AuthenticateRequest(IRestRequest request)
+        {
+            if (Authenticator == null)
+                return;
+
+            var asyncAuth = Authenticator as IAsyncAuthenticator;
+            if (asyncAuth != null)
+            {
+                await asyncAuth.Authenticate(this, request);
+            }
+            else
+            {
+                Authenticator.Authenticate(this, request);
+            }
+        }
+
+        /// <summary>
+        /// Notify the authenticator about a failed request to be able to retry the request
+        /// with updated authentication information.
+        /// </summary>
+        /// <param name="request">The failed request</param>
+        /// <param name="response">The response of the failed request</param>
+        /// <returns>true == Authenticator notified</returns>
+        private async Task<bool> NotifyAuthenticatorAboutFailedRequest(IRestRequest request, HttpResponseMessage response)
+        {
+            var asyncRoundTripAuthenticator = Authenticator as IAsyncRoundTripAuthenticator;
+            if (asyncRoundTripAuthenticator != null && asyncRoundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                await asyncRoundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+
+            var roundTripAuthenticator = Authenticator as IRoundTripAuthenticator;
+            if (roundTripAuthenticator != null && roundTripAuthenticator.StatusCodes.Contains(response.StatusCode))
+            {
+                var restResponse = new RestResponse(this, request);
+                await restResponse.LoadResponse(response);
+                roundTripAuthenticator.AuthenticationFailed(this, request, restResponse);
+                return true;
+            }
+
+            return false;
+        }
+
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
+            var retryWithAuthentication = true;
             AddDefaultParameters(request);
             while (true)
             {
-                if (AuthenticationManager != null)
-                    await AuthenticationManager.PreAuthenticateAsync(this, request, Credentials);
+                await AuthenticateRequest(request);
                 if (_httpClient == null)
                     _httpClient = HttpClientFactory.CreateClient(this, request);
                 using (var message = HttpClientFactory.CreateRequestMessage(this, request))
@@ -442,35 +482,25 @@ namespace RestSharp.Portable
                     if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
                         _httpClient.DefaultRequestHeaders.Accept.Clear();
 
-                    var failed = true;
+                    bool failed = true;
                     var response = await _httpClient.SendAsync(message, ct);
                     try
                     {
-                        if (!response.IsSuccessStatusCode)
+                        if (retryWithAuthentication)
                         {
-                            if (AuthenticationManager != null)
-                            {
-                                var restResponse = new RestResponse(this, request);
-                                await restResponse.LoadResponse(response);
-                                if (await AuthenticationManager.AuthenticateAsync(
-                                    this,
-                                    request,
-                                    restResponse,
-                                    Credentials))
-                                {
-                                    continue;
-                                }
-                            }
-
-                            if (!IgnoreResponseStatusCode)
-                                response.EnsureSuccessStatusCode();
+                            retryWithAuthentication = false;
+                            var retry = await NotifyAuthenticatorAboutFailedRequest(request, response);
+                            if (retry)
+                                continue;
                         }
 
+                        if (!IgnoreResponseStatusCode)
+                            response.EnsureSuccessStatusCode();
                         failed = false;
                     }
                     finally
                     {
-                        if (failed)
+                        if (failed && response != null)
                             response.Dispose();
                     }
 

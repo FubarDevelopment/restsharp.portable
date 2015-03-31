@@ -53,33 +53,17 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Remove a default parameter by name
+        /// Remove a default parameter from the REST client
         /// </summary>
-        /// <param name="client">The REST client</param>
-        /// <param name="parameterName">The name of the parameter to remove</param>
-        /// <returns>The REST client where the parameter was removed from</returns>
-        public static IRestClient RemoveDefaultParameter(this IRestClient client, string parameterName)
+        /// <param name="client">REST client to remove the parameter from</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <returns>The REST client to allow call chains</returns>
+        public static IRestClient RemoveDefaultParameter(this IRestClient client, string name)
         {
-            var parameterNameComparer =
-                client.DefaultParameterNameComparer
-                ?? StringComparer.Ordinal;
-            client.DefaultParameters.RemoveParameter(parameterName, parameterNameComparer);
+            var parameter = client.DefaultParameters.SingleOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (parameter != null)
+                client.DefaultParameters.Remove(parameter);
             return client;
-        }
-
-        /// <summary>
-        /// Test if a parameter with a given value exists
-        /// </summary>
-        /// <param name="client">The REST client</param>
-        /// <param name="parameterName">The parameter name to search for</param>
-        /// <param name="parameterValue">The parameter value to search for</param>
-        /// <returns>true when the parameter with the given name exists</returns>
-        public static bool HasDefaultParameterWithValue(this IRestClient client, string parameterName, string parameterValue)
-        {
-            var parameterNameComparer =
-                client.DefaultParameterNameComparer
-                ?? StringComparer.Ordinal;
-            return client.DefaultParameters.HasParameterWithValue(parameterName, parameterValue, parameterNameComparer);
         }
 
         /// <summary>
@@ -266,38 +250,6 @@ namespace RestSharp.Portable
             if (request == null || request.Method == null || request.Method == HttpMethod.Get)
                 return client.GetDefaultMethod(request);
             return request.Method;
-        }
-
-        /// <summary>
-        /// Remove a request parameter by name
-        /// </summary>
-        /// <param name="client">The REST client</param>
-        /// <param name="request">The REST request</param>
-        /// <param name="parameterName">The name of the parameter to remove</param>
-        public static void RemoveRequestParameter(this IRestClient client, IRestRequest request, string parameterName)
-        {
-            var parameterNameComparer =
-                request.ParameterNameComparer
-                ?? client.DefaultParameterNameComparer
-                ?? StringComparer.Ordinal;
-            request.Parameters.RemoveParameter(parameterName, parameterNameComparer);
-        }
-
-        /// <summary>
-        /// Test if a parameter with a given value exists
-        /// </summary>
-        /// <param name="client">The REST client</param>
-        /// <param name="request">The REST request</param>
-        /// <param name="parameterName">The parameter name to search for</param>
-        /// <param name="parameterValue">The parameter value to search for</param>
-        /// <returns>true when the parameter with the given name exists</returns>
-        public static bool HasRequestParameterWithValue(this IRestClient client, IRestRequest request, string parameterName, string parameterValue)
-        {
-            var parameterNameComparer =
-                request.ParameterNameComparer
-                ?? client.DefaultParameterNameComparer
-                ?? StringComparer.Ordinal;
-            return request.Parameters.HasParameterWithValue(parameterName, parameterValue, parameterNameComparer);
         }
 
         /// <summary>

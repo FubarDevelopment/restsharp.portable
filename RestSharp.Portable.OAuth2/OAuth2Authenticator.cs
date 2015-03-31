@@ -33,7 +33,7 @@ namespace RestSharp.Portable.Authenticators
     /// Any other OAuth2 authenticators must derive from this
     /// abstract class.
     /// </remarks>
-    public abstract class OAuth2Authenticator : AsyncAuthenticationModule, IAsyncRoundTripAuthenticator, IRoundTripAuthenticator
+    public abstract class OAuth2Authenticator : AsyncAuthenticator, IAsyncRoundTripAuthenticator, IRoundTripAuthenticator
     {
         /// <summary>
         /// The OAuth client that is used by this authenticator

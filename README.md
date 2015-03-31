@@ -6,14 +6,9 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 3.0.0 is available now!
+* Version 2.4.0 is available now!
 
 # Changes #
-
-## 3.0.0 ##
-
-* Fixed memory leak
-* Refactoring of the authentication modules
 
 ## 2.4.0 ##
 
