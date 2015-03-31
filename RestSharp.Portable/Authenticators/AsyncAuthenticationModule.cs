@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -45,7 +44,7 @@ namespace RestSharp.Portable.Authenticators
         public abstract Task<bool> Authenticate(
             IRestClient client,
             IRestRequest request,
-            HttpResponseMessage response,
+            IRestResponse response,
             AuthHeader header,
             NetworkCredential credential);
 
@@ -77,7 +76,7 @@ namespace RestSharp.Portable.Authenticators
         bool IRestAuthenticationModuleSync.Authenticate(
             IRestClient client,
             IRestRequest request,
-            HttpResponseMessage response,
+            IRestResponse response,
             AuthHeader header,
             NetworkCredential credential)
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -172,7 +171,7 @@ namespace RestSharp.Portable
         /// <param name="response">The REST response to read the challenge from</param>
         /// <param name="credentials">The credentials to use for the authentication</param>
         /// <returns>true if the challenge could be processed by an authentication module</returns>
-        public bool Authenticate(IRestClient client, IRestRequest request, HttpResponseMessage response, ICredentials credentials)
+        public bool Authenticate(IRestClient client, IRestRequest request, IRestResponse response, ICredentials credentials)
         {
             if (credentials == null)
                 return false;
@@ -211,7 +210,7 @@ namespace RestSharp.Portable
         /// <param name="response">The REST response to read the challenge from</param>
         /// <param name="credentials">The credentials to use for the authentication</param>
         /// <returns>true if the challenge could be processed by an authentication module</returns>
-        public async Task<bool> AuthenticateAsync(IRestClient client, IRestRequest request, HttpResponseMessage response, ICredentials credentials)
+        public async Task<bool> AuthenticateAsync(IRestClient client, IRestRequest request, IRestResponse response, ICredentials credentials)
         {
             if (credentials == null)
                 return false;

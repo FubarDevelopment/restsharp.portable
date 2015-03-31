@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -106,7 +105,7 @@ namespace RestSharp.Portable.Authenticators
         public bool Authenticate(
             IRestClient client,
             IRestRequest request,
-            HttpResponseMessage response,
+            IRestResponse response,
             AuthHeader header,
             NetworkCredential credential)
         {

@@ -16,8 +16,6 @@
 
 using System;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 
 namespace RestSharp.Portable.Authenticators
@@ -27,81 +25,39 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// OAuth 1.0a authenticator
     /// </summary>
-    public class OAuth1Authenticator : IRestAuthenticationModuleSync
+    public class OAuth1Authenticator : IRestAuthenticationModule
     {
         /// <summary>
-        /// Prevents a default instance of the <see cref="OAuth1Authenticator" /> class from being created.
-        /// </summary>
-        /// <remarks>
-        /// Sets the default CreateTimestamp function. Creation is only allowed by
-        /// using the static functions like <see cref="ForRequestToken(string, string)"/>.
-        /// </remarks>
-        private OAuth1Authenticator()
-        {
-            CreateTimestampFunc = OAuthTools.GetTimestamp;
-        }
-
-        /// <summary>
-        /// Gets or sets the realm
+        /// Realm
         /// </summary>
         public string Realm { get; set; }
-
         /// <summary>
-        /// Gets or sets the OAuth parameter handling
+        /// OAuth parameter handling
         /// </summary>
         public OAuthParameterHandling ParameterHandling { get; set; }
-
         /// <summary>
-        /// Gets or sets the OAuth signature method
+        /// OAuth signature method
         /// </summary>
         public OAuthSignatureMethod SignatureMethod { get; set; }
-
         /// <summary>
-        /// Gets or sets the OAuth signature treatment
+        /// OAuth signature treatment
         /// </summary>
         public OAuthSignatureTreatment SignatureTreatment { get; set; }
-
         /// <summary>
-        /// Gets or sets the function to create a timestamp
+        /// The function specified is used to create a timestamp
         /// </summary>
         public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
 
-        /// <summary>
-        /// Gets the authentication type provided by this authentication module.
-        /// </summary>
-        public string AuthenticationType
-        {
-            get { return "OAuth 1.0a"; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
-        /// </summary>
-        public bool CanPreAuthenticate
-        {
-            get { return true; }
-        }
-
         internal OAuthType Type { get; set; }
-
         internal string ConsumerKey { get; set; }
-
         internal string ConsumerSecret { get; set; }
-
         internal string Token { get; set; }
-
         internal string TokenSecret { get; set; }
-
         internal string Verifier { get; set; }
-
         internal string Version { get; set; }
-
         internal string CallbackUrl { get; set; }
-
         internal string SessionHandle { get; set; }
-
         internal string ClientUsername { get; set; }
-
         internal string ClientPassword { get; set; }
 
         /// <summary>
@@ -261,17 +217,23 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <remarks>
+        /// Sets the default CreateTimestamp function. Creation is only allowed by
+        /// using the static functions like <see cref="ForRequestToken(string, string)"/>.
+        /// </remarks>
+        private OAuth1Authenticator()
+        {
+            CreateTimestampFunc = OAuthTools.GetTimestamp;
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        /// <param name="header">Authentication/Authorization header</param>
-        /// <param name="credential">Credential to be used for the authentication</param>
-        public void PreAuthenticate(
-            IRestClient client,
-            IRestRequest request,
-            AuthHeader header,
-            NetworkCredential credential)
+        public void Authenticate(IRestClient client, IRestRequest request)
         {
             var workflow = new OAuthWorkflow
             {
@@ -292,42 +254,20 @@ namespace RestSharp.Portable.Authenticators
             };
             AddOAuthData(client, request, workflow);
         }
-
-        /// <summary>
-        /// Will be called in response to an authentication request.
-        /// </summary>
-        /// <param name="client">Client executing this request</param>
-        /// <param name="request">Request to authenticate</param>
-        /// <param name="response">Response of the failed request</param>
-        /// <param name="header">Authentication/Authorization header</param>
-        /// <param name="credential">Credential to be used for the authentication</param>
-        /// <returns>true when the authentication succeeded</returns>
-        public bool Authenticate(
-            IRestClient client,
-            IRestRequest request,
-            HttpResponseMessage response,
-            AuthHeader header,
-            NetworkCredential credential)
-        {
-            return false;
-        }
-
         private void AddOAuthData(IRestClient client, IRestRequest request, OAuthWorkflow workflow)
         {
             var url = client.BuildUri(request, false).ToString();
             OAuthWebQueryInfo oauth;
             var method = request.Method.Method;
             var parameters = new WebParameterCollection();
-
             // include all GET and POST parameters before generating the signature
             // according to the RFC 5849 - The OAuth 1.0 Protocol
             // http://tools.ietf.org/html/rfc5849#section-3.4.1
             // if this change causes trouble we need to introduce a flag indicating the specific OAuth implementation level,
             // or implement a seperate class for each OAuth version
-            var useMultiPart =
-                request.ContentCollectionMode == ContentCollectionMode.MultiPart
-                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters
-                    && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
+
+            var useMultiPart = request.ContentCollectionMode == ContentCollectionMode.MultiPart
+                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
             var requestParameters = client.MergeParameters(request).Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
             if (!useMultiPart)
@@ -341,7 +281,6 @@ namespace RestSharp.Portable.Authenticators
                 foreach (var p in requestParameters.Where(p => p.Name.StartsWith("oauth_", StringComparison.Ordinal)))
                     parameters.Add(new WebPair(p.Name, p.Value.ToString()));
             }
-
             switch (Type)
             {
                 case OAuthType.RequestToken:
@@ -362,7 +301,6 @@ namespace RestSharp.Portable.Authenticators
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
             switch (ParameterHandling)
             {
                 case OAuthParameterHandling.HttpAuthorizationHeader:
@@ -372,20 +310,18 @@ namespace RestSharp.Portable.Authenticators
                 case OAuthParameterHandling.UrlOrPostParameters:
                     parameters.Add("oauth_signature", oauth.Signature);
                     foreach (var parameter in parameters.Where(
-                        parameter => !string.IsNullOrEmpty(parameter.Name)
+                        parameter => !string.IsNullOrEmpty(parameter.Name) 
                             && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))))
                     {
                         var v = parameter.Value;
                         v = Uri.UnescapeDataString(v.Replace('+', ' '));
                         request.AddParameter(parameter.Name, v);
                     }
-
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
         private string GetAuthorizationHeader(WebPairCollection parameters)
         {
             var sb = new StringBuilder("OAuth ");
@@ -393,22 +329,19 @@ namespace RestSharp.Portable.Authenticators
             {
                 sb.Append(string.Format("realm=\"{0}\",", OAuthTools.UrlEncodeRelaxed(Realm)));
             }
-
-            parameters.Sort((l, r) => string.Compare(l.Name, r.Name, StringComparison.Ordinal));
+            parameters.Sort((l, r) => String.Compare(l.Name, r.Name, StringComparison.Ordinal));
             var parameterCount = 0;
-            var oathParameters = parameters
-                .Where(
-                    parameter => !string.IsNullOrEmpty(parameter.Name)
-                                 && !string.IsNullOrEmpty(parameter.Value)
-                                 && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_")))
-                .ToList();
+            var oathParameters = parameters.Where(
+                parameter => !string.IsNullOrEmpty(parameter.Name) 
+                    && !string.IsNullOrEmpty(parameter.Value) 
+                    && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))
+            ).ToList();
             foreach (var parameter in oathParameters)
             {
                 parameterCount++;
                 var format = parameterCount < oathParameters.Count ? "{0}=\"{1}\"," : "{0}=\"{1}\"";
                 sb.Append(string.Format(format, parameter.Name, parameter.Value));
             }
-
             var authorization = sb.ToString();
             return authorization;
         }

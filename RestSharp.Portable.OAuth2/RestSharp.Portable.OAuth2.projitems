@@ -10,8 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2Authenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OAuth2AuthorizationRequestHeaderAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OAuth2UriQueryParameterAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\AuthorizationRoot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\BeforeAfterRequestArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\GitterClient.cs" />
