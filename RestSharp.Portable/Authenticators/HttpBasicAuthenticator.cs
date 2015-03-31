@@ -8,7 +8,7 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// The default HTTP Basic authenticator
     /// </summary>
-    public class HttpBasicAuthenticator : IAuthenticator
+    public class HttpBasicAuthenticator : ISyncAuthenticator
     {
         private readonly string _authHeader;
 

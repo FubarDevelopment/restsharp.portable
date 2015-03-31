@@ -7,7 +7,7 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// Tries to Authenticate with the credentials of the currently logged in user, or impersonate a user
     /// </summary>
-    public class NtlmAuthenticator : IAuthenticator
+    public class NtlmAuthenticator : ISyncAuthenticator
     {
         private readonly ICredentials _credentials;
 

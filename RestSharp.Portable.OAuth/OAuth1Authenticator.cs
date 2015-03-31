@@ -26,7 +26,7 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// OAuth 1.0a authenticator
     /// </summary>
-    public class OAuth1Authenticator : IAuthenticator
+    public class OAuth1Authenticator : ISyncAuthenticator
     {
         /// <summary>
         /// Realm

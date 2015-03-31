@@ -10,7 +10,7 @@ namespace RestSharp.Portable.Authenticators
     /// Same as HttpBasicAuthenticator, but it only applies the authentication information only when
     /// a request failed before with 401 or 404.
     /// </summary>
-    public class OptionalHttpBasicAuthenticator : IAuthenticator
+    public class OptionalHttpBasicAuthenticator : ISyncAuthenticator
     {
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {

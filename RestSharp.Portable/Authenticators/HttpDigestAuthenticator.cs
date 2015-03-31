@@ -18,7 +18,7 @@ namespace RestSharp.Portable.Authenticators
     /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
-    public class HttpDigestAuthenticator : IAuthenticator
+    public class HttpDigestAuthenticator : ISyncAuthenticator
     {
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {

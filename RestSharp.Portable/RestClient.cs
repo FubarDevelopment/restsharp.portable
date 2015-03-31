@@ -83,7 +83,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the Authenticator to use for all requests
         /// </summary>
-        public IAuthenticator Authenticator { get; set; }
+        public ISyncAuthenticator Authenticator { get; set; }
 
         /// <summary>
         /// Gets or sets the Cookies for all requests

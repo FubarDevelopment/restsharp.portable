@@ -6,7 +6,7 @@ namespace RestSharp.Portable.Authenticators
     /// <summary>
     /// Simple authenticator that adds the authentication information as GetOrPost parameter
     /// </summary>
-    public class SimpleAuthenticator : IAuthenticator
+    public class SimpleAuthenticator : ISyncAuthenticator
     {
         private readonly string _usernameKey;
         private readonly string _username;
