@@ -16,12 +16,24 @@ namespace RestSharp.Portable.HttpClientImpl
     {
         private readonly System.Reflection.PropertyInfo _proxyProperty;
 
+        private readonly bool _setCredentials;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpClientFactory" /> class.
         /// </summary>
         public DefaultHttpClientFactory()
+            : this(true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultHttpClientFactory"/> class.
+        /// </summary>
+        /// <param name="setCredentials">Set the credentials for the native <see cref="HttpMessageHandler"/> (<see cref="HttpClientHandler"/>)?</param>
+        public DefaultHttpClientFactory(bool setCredentials)
         {
             _proxyProperty = typeof(HttpClientHandler).GetProperty("Proxy");
+            _setCredentials = setCredentials;
         }
 
         /// <summary>
@@ -218,9 +230,12 @@ namespace RestSharp.Portable.HttpClientImpl
                 handler.CookieContainer = cookieContainer;
             }
 
-            var credentials = client.Credentials;
-            if (credentials != null)
-                handler.Credentials = credentials;
+            if (_setCredentials)
+            {
+                var credentials = client.Credentials;
+                if (credentials != null)
+                    handler.Credentials = credentials;
+            }
 
             //// if (handler.SupportsAutomaticDecompression)
             ////     handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
