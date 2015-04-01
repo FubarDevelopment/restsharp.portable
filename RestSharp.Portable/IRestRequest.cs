@@ -33,11 +33,6 @@ namespace RestSharp.Portable
         IList<Parameter> Parameters { get; }
 
         /// <summary>
-        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
-        /// </summary>
-        ICredentials Credentials { get; set; }
-
-        /// <summary>
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         ContentCollectionMode ContentCollectionMode { get; set; }

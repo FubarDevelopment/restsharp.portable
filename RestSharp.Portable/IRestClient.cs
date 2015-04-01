@@ -45,6 +45,11 @@ namespace RestSharp.Portable
         IWebProxy Proxy { get; set; }
 
         /// <summary>
+        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
+        /// </summary>
+        ICredentials Credentials { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the response status code should be ignored?
         /// </summary>
         bool IgnoreResponseStatusCode { get; set; }

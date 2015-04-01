@@ -99,11 +99,6 @@ namespace RestSharp.Portable
         public Serializers.ISerializer Serializer { get; set; }
 
         /// <summary>
-        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
-        /// </summary>
-        public ICredentials Credentials { get; set; }
-
-        /// <summary>
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         public ContentCollectionMode ContentCollectionMode { get; set; }

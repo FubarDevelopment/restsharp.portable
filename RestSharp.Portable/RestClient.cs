@@ -119,6 +119,11 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
+        /// </summary>
+        public ICredentials Credentials { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the response status code should be ignored by default.
         /// </summary>
         public bool IgnoreResponseStatusCode { get; set; }

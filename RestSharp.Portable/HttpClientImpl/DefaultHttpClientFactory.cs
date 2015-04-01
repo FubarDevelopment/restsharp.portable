@@ -116,16 +116,6 @@ namespace RestSharp.Portable.HttpClientImpl
         }
 
         /// <summary>
-        /// Get the credentials required for the REST request
-        /// </summary>
-        /// <param name="request">REST request</param>
-        /// <returns>Credentials for the HTTP client or null</returns>
-        protected virtual ICredentials GetCredentials(IRestRequest request)
-        {
-            return request.Credentials;
-        }
-
-        /// <summary>
         /// Get the cookies for the HTTP client
         /// </summary>
         /// <param name="client">REST client</param>
@@ -228,7 +218,7 @@ namespace RestSharp.Portable.HttpClientImpl
                 handler.CookieContainer = cookieContainer;
             }
 
-            var credentials = GetCredentials(request);
+            var credentials = client.Credentials;
             if (credentials != null)
                 handler.Credentials = credentials;
 

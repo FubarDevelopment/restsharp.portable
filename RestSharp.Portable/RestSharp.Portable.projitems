@@ -16,7 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAsyncAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\ISyncAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\NtlmAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\NativeHttpClientAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderInfo.cs" />
