@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 
 namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
     /// Tries to Authenticate with the credentials of the currently logged in user, or impersonate a user
     /// </summary>
-    public class NtlmAuthenticator : IAuthenticator
+    public class NtlmAuthenticator : ISyncAuthenticator
     {
         private readonly ICredentials _credentials;
 
@@ -32,13 +33,40 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public bool CanPreAuthenticate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
             request.Credentials = _credentials;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// </summary>
+        public bool CanHandleChallenge(HttpResponseMessage response)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Will be called when the authentication failed
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="response">Response of the failed request</param>
+        public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        {
+            throw new NotSupportedException();
         }
     }
 }

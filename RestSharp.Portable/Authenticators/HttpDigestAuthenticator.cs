@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,7 +18,7 @@ namespace RestSharp.Portable.Authenticators
     /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
-    public class HttpDigestAuthenticator : IRoundTripAuthenticator
+    public class HttpDigestAuthenticator : ISyncAuthenticator
     {
         private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
         {
@@ -25,6 +26,8 @@ namespace RestSharp.Portable.Authenticators
         };
 
         private readonly ICredentials _credentials;
+
+        private readonly AuthHeader _authHeader;
 
         private string _realm;
 
@@ -47,8 +50,19 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="credentials">The authentication credentials</param>
         public HttpDigestAuthenticator(ICredentials credentials)
+            : this(credentials, AuthHeader.Www)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpDigestAuthenticator" /> class.
+        /// </summary>
+        /// <param name="credentials">The authentication credentials</param>
+        /// <param name="authHeader">Authentication/Authorization header type</param>
+        public HttpDigestAuthenticator(ICredentials credentials, AuthHeader authHeader)
         {
             _credentials = credentials;
+            _authHeader = authHeader;
         }
 
         [Flags]
@@ -75,6 +89,14 @@ namespace RestSharp.Portable.Authenticators
             get { return _statusCodes; }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// </summary>
+        public bool CanPreAuthenticate
+        {
+            get { return HasDigestHeader; }
+        }
+
         private bool HasDigestHeader
         {
             get
@@ -88,7 +110,7 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void Authenticate(IRestClient client, IRestRequest request)
+        public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
             if (HasDigestHeader)
             {
@@ -98,14 +120,26 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// </summary>
+        public virtual bool CanHandleChallenge(HttpResponseMessage response)
+        {
+            if (HasDigestHeader)
+                return false;
+            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, "Digest");
+            return authModeInfo != null;
+        }
+
+        /// <summary>
         /// Will be called when the authentication failed
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="response">Response of the failed request</param>
-        public void AuthenticationFailed(IRestClient client, IRestRequest request, IRestResponse response)
+        public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
-            ParseResponseHeader(response);
+            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, "Digest");
+            ParseResponseHeader(authModeInfo);
         }
 
         private static string CalculateMd5Hash(string input)
@@ -248,13 +282,12 @@ namespace RestSharp.Portable.Authenticators
             return result.ToString();
         }
 
-        private void ParseResponseHeader(IRestResponse response)
+        private void ParseResponseHeader(string authenticateHeader)
         {
-            var wwwAuthenticateHeader = response.Headers.GetValues("WWW-Authenticate").First();
-            _realm = GrabHeaderVar("realm", wwwAuthenticateHeader);
-            _nonce = GrabHeaderVar("nonce", wwwAuthenticateHeader);
+            _realm = GrabHeaderVar("realm", authenticateHeader);
+            _nonce = GrabHeaderVar("nonce", authenticateHeader);
 
-            var algorithm = GrabHeaderVar("algorithm", wwwAuthenticateHeader, "MD5");
+            var algorithm = GrabHeaderVar("algorithm", authenticateHeader, "MD5");
             switch (algorithm.ToLower())
             {
                 case "md5":
@@ -267,7 +300,7 @@ namespace RestSharp.Portable.Authenticators
                     throw new NotSupportedException(string.Format("Unsupported algorithm {0}", algorithm));
             }
 
-            var qopParts = GrabHeaderVar("qop", wwwAuthenticateHeader, string.Empty)
+            var qopParts = GrabHeaderVar("qop", authenticateHeader, string.Empty)
                 .Split(',');
             _qop = QualityOfProtection.Undefined;
             foreach (var qopPart in qopParts.Where(x => !string.IsNullOrWhiteSpace(x)).Select(x => x.Trim().ToLower()))
@@ -286,7 +319,7 @@ namespace RestSharp.Portable.Authenticators
             }
 
             _nc = 0;
-            _opaque = GrabHeaderVar("opaque", wwwAuthenticateHeader, string.Empty);
+            _opaque = GrabHeaderVar("opaque", authenticateHeader, string.Empty);
             _cnonce = new Random().Next(123400, 9999999).ToString(CultureInfo.InvariantCulture);
             _cnonceDate = DateTime.Now;
         }

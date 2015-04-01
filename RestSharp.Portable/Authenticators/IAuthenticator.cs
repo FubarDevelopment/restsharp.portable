@@ -1,15 +1,25 @@
-﻿namespace RestSharp.Portable.Authenticators
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+
+using JetBrains.Annotations;
+
+namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
-    /// The authenticator interface
+    /// The base authenticator interface.
     /// </summary>
     public interface IAuthenticator
     {
         /// <summary>
-        /// Modifies the request to ensure that the authentication requirements are met.
+        /// Gets a value indicating whether the authentication module supports pre-authentication.
         /// </summary>
-        /// <param name="client">Client executing this request</param>
-        /// <param name="request">Request to authenticate</param>
-        void Authenticate(IRestClient client, IRestRequest request);
+        bool CanPreAuthenticate { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// </summary>
+        bool CanHandleChallenge([NotNull] HttpResponseMessage response);
     }
 }
