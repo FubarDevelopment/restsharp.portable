@@ -16,6 +16,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 
@@ -39,14 +40,6 @@ namespace RestSharp.Portable.Authenticators
         private OAuth1Authenticator()
         {
             CreateTimestampFunc = OAuthTools.GetTimestamp;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
-        /// </summary>
-        public bool CanPreAuthenticate
-        {
-            get { return true; }
         }
 
         /// <summary>
@@ -253,11 +246,24 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Dies the authentication module supports pre-authentication?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void PreAuthenticate(IRestClient client, IRestRequest request)
+        /// <param name="credentials">The credentials used for the authentication</param>
+        public void PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
             var workflow = new OAuthWorkflow
                 {

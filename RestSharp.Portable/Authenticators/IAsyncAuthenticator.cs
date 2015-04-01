@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -16,8 +17,9 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        Task PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request);
+        Task PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request, ICredentials credentials);
 
         /// <summary>
         /// Will be called when the authentication failed

@@ -78,14 +78,6 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
-        /// </summary>
-        public bool CanPreAuthenticate
-        {
-            get { return HasAuthorizationToken; }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
         /// </summary>
         protected bool HasAuthorizationToken
@@ -97,13 +89,26 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Dies the authentication module supports pre-authentication?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            return HasAuthorizationToken;
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void PreAuthenticate(IRestClient client, IRestRequest request)
+        /// <param name="credentials">The credentials used for the authentication</param>
+        public void PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            if (!HasAuthorizationToken)
+            if (!CanPreAuthenticate(client, request, credentials))
                 throw new InvalidOperationException();
 
             var digestHeader = GetDigestHeader(client, request, _authCredential);

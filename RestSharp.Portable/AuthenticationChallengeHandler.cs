@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -40,11 +41,15 @@ namespace RestSharp.Portable
         public AuthHeader Header { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// Dies the authentication module supports pre-authentication?
         /// </summary>
-        public override bool CanPreAuthenticate
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public override bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            get { return _authenticators.Values.Any(x => x.Authenticator.CanPreAuthenticate); }
+            return _authenticators.Values.Any(x => x.Authenticator.CanPreAuthenticate(client, request, credentials));
         }
 
         /// <summary>
@@ -139,20 +144,21 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public override async Task PreAuthenticate(IRestClient client, IRestRequest request)
+        public override async Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            foreach (var authenticator in _authenticators.Values.Select(x => x.Authenticator).Where(x => x.CanPreAuthenticate))
+            foreach (var authenticator in _authenticators.Values.Select(x => x.Authenticator).Where(x => x.CanPreAuthenticate(client, request, credentials)))
             {
                 var asyncAuth = authenticator as IAsyncAuthenticator;
                 if (asyncAuth != null)
                 {
-                    await asyncAuth.PreAuthenticate(client, request);
+                    await asyncAuth.PreAuthenticate(client, request, credentials);
                 }
                 else
                 {
                     var syncAuth = (ISyncAuthenticator)authenticator;
-                    syncAuth.PreAuthenticate(client, request);
+                    syncAuth.PreAuthenticate(client, request, credentials);
                 }
             }
         }

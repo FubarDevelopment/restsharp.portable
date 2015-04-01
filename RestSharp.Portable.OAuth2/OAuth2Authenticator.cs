@@ -15,6 +15,7 @@
 #endregion
 
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -46,17 +47,21 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
-        /// </summary>
-        public override bool CanPreAuthenticate
-        {
-            get { return true; }
-        }
-
-        /// <summary>
         /// The OAuth client that is used by this authenticator
         /// </summary>
         protected OAuth2.OAuth2Client Client { get; private set; }
+
+        /// <summary>
+        /// Dies the authentication module supports pre-authentication?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public override bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            return true;
+        }
 
         /// <summary>
         /// Will be called when the authentication failed

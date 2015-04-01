@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 
 namespace RestSharp.Portable.Authenticators
@@ -43,11 +44,20 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// Dies the authentication module supports pre-authentication?
         /// </summary>
-        public bool CanPreAuthenticate
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            get { return true; }
+            if (credentials == null)
+                return false;
+            var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            if (cred == null)
+                return false;
+            return true;
         }
 
         /// <summary>
@@ -55,11 +65,12 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        public void PreAuthenticate(IRestClient client, IRestRequest request)
+        /// <param name="credentials">The credentials used for the authentication</param>
+        public void PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            if (client.Credentials == null)
+            if (credentials == null)
                 throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
-            var cred = client.Credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
             if (cred == null)
                 throw new InvalidOperationException(string.Format("No credentials provided for the {0} authentication type.", AuthenticationMethod));
             request.AddParameter(_usernameKey, cred.UserName, _parameterType);

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -9,9 +10,13 @@ namespace RestSharp.Portable.Authenticators
     public abstract class AsyncAuthenticator : ISyncAuthenticator, IAsyncAuthenticator
     {
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// Dies the authentication module supports pre-authentication?
         /// </summary>
-        public abstract bool CanPreAuthenticate { get; }
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public abstract bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials);
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
@@ -36,17 +41,19 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public abstract Task PreAuthenticate(IRestClient client, IRestRequest request);
+        public abstract Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials);
 
         /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        void ISyncAuthenticator.PreAuthenticate(IRestClient client, IRestRequest request)
+        /// <param name="credentials">The credentials used for the authentication</param>
+        void ISyncAuthenticator.PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            PreAuthenticate(client, request).Wait();
+            PreAuthenticate(client, request, credentials).Wait();
         }
 
         /// <summary>

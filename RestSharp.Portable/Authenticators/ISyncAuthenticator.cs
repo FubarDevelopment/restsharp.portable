@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 
 using JetBrains.Annotations;
@@ -15,7 +16,8 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
-        void PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request);
+        /// <param name="credentials">The credentials used for the authentication</param>
+        void PreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request, ICredentials credentials);
 
         /// <summary>
         /// Will be called when the authentication failed

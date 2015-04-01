@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -58,8 +59,9 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public override async Task PreAuthenticate(IRestClient client, IRestRequest request)
+        public override async Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
             // Only add the Authorization parameter if it hasn't been added and the authorization didn't fail previously
             var authParam = request.Parameters.LastOrDefault(p => p.Type == ParameterType.HttpHeader && p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase));

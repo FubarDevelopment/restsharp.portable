@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 
 using JetBrains.Annotations;
 
@@ -13,9 +12,13 @@ namespace RestSharp.Portable.Authenticators
     public interface IAuthenticator
     {
         /// <summary>
-        /// Gets a value indicating whether the authentication module supports pre-authentication.
+        /// Dies the authentication module supports pre-authentication?
         /// </summary>
-        bool CanPreAuthenticate { get; }
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        bool CanPreAuthenticate([NotNull] IRestClient client, [NotNull] IRestRequest request, ICredentials credentials);
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.

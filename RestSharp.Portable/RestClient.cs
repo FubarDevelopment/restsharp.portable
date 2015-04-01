@@ -425,17 +425,17 @@ namespace RestSharp.Portable
 
         private async Task AuthenticateRequest(IRestRequest request)
         {
-            if (Authenticator == null || !Authenticator.CanPreAuthenticate)
+            if (Authenticator == null || !Authenticator.CanPreAuthenticate(this, request, Credentials))
                 return;
 
             var asyncAuth = Authenticator as IAsyncAuthenticator;
             if (asyncAuth != null)
             {
-                await asyncAuth.PreAuthenticate(this, request);
+                await asyncAuth.PreAuthenticate(this, request, Credentials);
             }
             else
             {
-                Authenticator.PreAuthenticate(this, request);
+                Authenticator.PreAuthenticate(this, request, Credentials);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -16,15 +17,18 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">The OAuth2 client</param>
         public OAuth2UriQueryParameterAuthenticator(OAuth2.OAuth2Client client)
-            : base(client) { }
+            : base(client)
+        {
+        }
 
         /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public override async Task PreAuthenticate(IRestClient client, IRestRequest request)
+        public override async Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
             request.AddParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
         }
