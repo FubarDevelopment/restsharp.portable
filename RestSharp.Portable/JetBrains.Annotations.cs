@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global
@@ -440,6 +441,7 @@ namespace JetBrains.Annotations
     /// Indicates that a parameter is a path to a file or a folder within a web project.
     /// Path can be relative or absolute, starting from web root (~)
     /// </summary>
+    [SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes", Justification = "Required by ReSharper")]
     [AttributeUsage(AttributeTargets.Parameter)]
     [Conditional("JETBRAINS_ANNOTATIONS")]
     internal class PathReferenceAttribute : Attribute

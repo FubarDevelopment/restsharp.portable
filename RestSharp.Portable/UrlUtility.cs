@@ -167,7 +167,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(string data)
         {
-            return s_defaultEscapeUtility.ComputeLength(data);
+            return UrlEscapeUtility.ComputeLength(data);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(string data, Encoding encoding)
         {
-            return s_defaultEscapeUtility.ComputeLength(data, encoding);
+            return UrlEscapeUtility.ComputeLength(data, encoding);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(string data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.ComputeLength(data, flags);
+            return UrlEscapeUtility.ComputeLength(data, flags);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(string data, Encoding encoding, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.ComputeLength(data, encoding, flags);
+            return UrlEscapeUtility.ComputeLength(data, encoding, flags);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(byte[] data)
         {
-            return s_defaultEscapeUtility.ComputeLength(data);
+            return UrlEscapeUtility.ComputeLength(data);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the length of the escaped data</returns>
         public static long ComputeLength(byte[] data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.ComputeLength(data, flags);
+            return UrlEscapeUtility.ComputeLength(data, flags);
         }
     }
 }

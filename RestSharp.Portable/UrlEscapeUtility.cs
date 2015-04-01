@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,75 @@ namespace RestSharp.Portable
         }
 
         private delegate byte[] EscapeBuilderDelegate(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes);
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(string data)
+        {
+            return ComputeLength(data, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(string data, Encoding encoding)
+        {
+            return ComputeLength(data, encoding, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <param name="flags">The flags to modify the behavior</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(string data, UrlEscapeFlags flags)
+        {
+            return ComputeLength(data, s_defaultEncoding, flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
+        /// <param name="flags">The flags to modify the behavior</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(string data, Encoding encoding, UrlEscapeFlags flags)
+        {
+            return ComputeLength(encoding.GetBytes(data), flags);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(byte[] data)
+        {
+            return ComputeLength(data, UrlEscapeFlags.Default);
+        }
+
+        /// <summary>
+        /// Compute length of the data after escaping its values
+        /// </summary>
+        /// <param name="data">The data to escape</param>
+        /// <param name="flags">The flags to modify the behavior</param>
+        /// <returns>The escaped data</returns>
+        public static long ComputeLength(byte[] data, UrlEscapeFlags flags)
+        {
+            var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;
+            ISet<byte> allowedBytes;
+            if (!s_allowedBytes.TryGetValue(allowedBytesIndex, out allowedBytes))
+                allowedBytes = s_allowedBytes[UrlEscapeFlags.Default];
+            return ComputeLength(data, flags, allowedBytes);
+        }
 
         /// <summary>
         /// URL escape
@@ -185,6 +255,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Cannot be static when HAS_SYSTEM_WEB is defined.")]
         public byte[] EscapeToBytes(byte[] data, UrlEscapeFlags flags)
         {
 #if HAS_SYSTEM_WEB
@@ -203,75 +274,6 @@ namespace RestSharp.Portable
             if (!s_escapeBuilders.TryGetValue(builderVariant, out builder))
                 builder = EscapeToBytes2;
             return builder(data, flags, hexChars, allowedBytes);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(string data)
-        {
-            return ComputeLength(data, UrlEscapeFlags.Default);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(string data, Encoding encoding)
-        {
-            return ComputeLength(data, encoding, UrlEscapeFlags.Default);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <param name="flags">The flags to modify the behavior</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(string data, UrlEscapeFlags flags)
-        {
-            return ComputeLength(data, s_defaultEncoding, flags);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
-        /// <param name="flags">The flags to modify the behavior</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(string data, Encoding encoding, UrlEscapeFlags flags)
-        {
-            return ComputeLength(encoding.GetBytes(data), flags);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(byte[] data)
-        {
-            return ComputeLength(data, UrlEscapeFlags.Default);
-        }
-
-        /// <summary>
-        /// Compute length of the data after escaping its values
-        /// </summary>
-        /// <param name="data">The data to escape</param>
-        /// <param name="flags">The flags to modify the behavior</param>
-        /// <returns>The escaped data</returns>
-        public long ComputeLength(byte[] data, UrlEscapeFlags flags)
-        {
-            var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;
-            ISet<byte> allowedBytes;
-            if (!s_allowedBytes.TryGetValue(allowedBytesIndex, out allowedBytes))
-                allowedBytes = s_allowedBytes[UrlEscapeFlags.Default];
-            return ComputeLength(data, flags, allowedBytes);
         }
 
         /// <summary>

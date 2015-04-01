@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable
 {
     /// <summary>
@@ -34,6 +36,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource")]
         public RestRequest(string resource)
             : this(resource, HttpMethod.Get)
         {
@@ -44,7 +47,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
-        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null")]
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null and the resource URI must never be null")]
         public RestRequest(string resource, HttpMethod method)
         {
             ContentCollectionMode = ContentCollectionMode.MultiPartForFileParameters;
@@ -57,7 +60,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
-        public RestRequest(Uri resource)
+        public RestRequest([NotNull] Uri resource)
             : this(resource, HttpMethod.Get)
         {
         }
@@ -67,7 +70,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
-        public RestRequest(Uri resource, HttpMethod method)
+        public RestRequest([NotNull] Uri resource, HttpMethod method)
             : this(resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString, method)
         {
         }

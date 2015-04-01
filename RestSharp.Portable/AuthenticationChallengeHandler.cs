@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable.Authenticators
+using RestSharp.Portable.Authenticators;
+
+namespace RestSharp.Portable
 {
     /// <summary>
     /// The authentication manager that bundles authentication mechanisms that may be requested by the Www-Authenticate or Proxy-Authenticate headers.
     /// </summary>
-    public class AuthenticationManager : AsyncAuthenticator
+    public class AuthenticationChallengeHandler : AsyncAuthenticator
     {
         private readonly Dictionary<string, AuthenticatorInfo> _authenticators = new Dictionary<string, AuthenticatorInfo>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthenticationManager" /> class.
+        /// Initializes a new instance of the <see cref="AuthenticationChallengeHandler" /> class.
         /// </summary>
         /// <param name="authHeader">The HTTP header to look for the challenge.</param>
-        public AuthenticationManager(AuthHeader authHeader)
+        public AuthenticationChallengeHandler(AuthHeader authHeader)
         {
             Header = authHeader;
         }
@@ -25,6 +28,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Gets the current list auf registered authenticators.
         /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "There's no better (easier) solution")]
         public IEnumerable<Tuple<string, IAuthenticator>> Authenticators
         {
             get { return _authenticators.Select(x => Tuple.Create(x.Key, x.Value.Authenticator)); }
@@ -49,6 +53,10 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="method">The method ID used in the Www-Authenticate header.</param>
         /// <param name="authenticator">The authenticator to assign with the method ID.</param>
         /// <param name="securityLevel">Authenticators with higher security levels are preferred.</param>
+        [SuppressMessage(
+            "Microsoft.Design",
+            "CA1011:ConsiderPassingBaseTypesAsParameters",
+            Justification = "We must not use the base type, because we only support ISyncAuthenticator and IAsyncAuthenticator")]
         public void Register(string method, ISyncAuthenticator authenticator, int securityLevel)
         {
             _authenticators[method] = new AuthenticatorInfo(securityLevel, authenticator);
@@ -60,6 +68,10 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="method">The method ID used in the Www-Authenticate header.</param>
         /// <param name="authenticator">The authenticator to assign with the method ID.</param>
         /// <param name="securityLevel">Authenticators with higher security levels are preferred.</param>
+        [SuppressMessage(
+            "Microsoft.Design",
+            "CA1011:ConsiderPassingBaseTypesAsParameters",
+            Justification = "We must not use the base type, because we only support ISyncAuthenticator and IAsyncAuthenticator")]
         public void Register(string method, IAsyncAuthenticator authenticator, int securityLevel)
         {
             _authenticators[method] = new AuthenticatorInfo(securityLevel, authenticator);
@@ -75,8 +87,10 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="response">The response that returned the authentication challenge</param>
+        /// <returns>true when the authenticator can handle the sent challenge</returns>
         public override bool CanHandleChallenge(HttpResponseMessage response)
         {
             return response

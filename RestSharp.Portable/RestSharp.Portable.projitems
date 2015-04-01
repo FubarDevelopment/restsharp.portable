@@ -9,8 +9,8 @@
     <Import_RootNamespace>RestSharp.Portable</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\AsyncAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\AuthenticationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAsyncAuthenticator.cs" />

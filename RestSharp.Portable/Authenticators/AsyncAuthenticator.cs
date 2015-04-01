@@ -14,8 +14,10 @@ namespace RestSharp.Portable.Authenticators
         public abstract bool CanPreAuthenticate { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="response">The response that returned the authentication challenge</param>
+        /// <returns>true when the authenticator can handle the sent challenge</returns>
         public abstract bool CanHandleChallenge(HttpResponseMessage response);
 
         /// <summary>

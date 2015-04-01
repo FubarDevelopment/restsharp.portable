@@ -18,7 +18,7 @@ namespace RestSharp.Portable.Test
             var expected = Uri.EscapeDataString(chars);
             var test = _utility.Escape(chars, flags);
             Assert.Equal(expected, test);
-            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected.Length, UrlEscapeUtility.ComputeLength(chars, flags));
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace RestSharp.Portable.Test
             var expected = Uri.EscapeDataString(chars);
             var test = _utility.Escape(chars, flags);
             Assert.Equal(expected, test);
-            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected.Length, UrlEscapeUtility.ComputeLength(chars, flags));
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace RestSharp.Portable.Test
             Assert.NotNull(expected);
             var test = _utility.Escape(chars, flags);
             Assert.Equal(expected, test);
-            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected.Length, UrlEscapeUtility.ComputeLength(chars, flags));
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace RestSharp.Portable.Test
             Assert.NotNull(expected);
             var test = _utility.Escape(chars, flags);
             Assert.Equal(expected, test);
-            Assert.Equal(expected.Length, _utility.ComputeLength(chars, flags));
+            Assert.Equal(expected.Length, UrlEscapeUtility.ComputeLength(chars, flags));
         }
 
 #if ENABLE_MULTI_TEST

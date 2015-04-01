@@ -20,11 +20,6 @@ namespace RestSharp.Portable.Authenticators
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
     public class HttpDigestAuthenticator : ISyncAuthenticator
     {
-        private static readonly IEnumerable<HttpStatusCode> _statusCodes = new List<HttpStatusCode>
-        {
-            HttpStatusCode.Unauthorized,
-        };
-
         private readonly ICredentials _credentials;
 
         private readonly AuthHeader _authHeader;
@@ -82,14 +77,6 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets all the status codes where a round trip is allowed
-        /// </summary>
-        public IEnumerable<HttpStatusCode> StatusCodes
-        {
-            get { return _statusCodes; }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether the authentication module supports pre-authentication.
         /// </summary>
         public bool CanPreAuthenticate
@@ -120,8 +107,10 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Gets a value indicating whether the authentication module can handle the challenge sent with the response.
+        /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="response">The response that returned the authentication challenge</param>
+        /// <returns>true when the authenticator can handle the sent challenge</returns>
         public virtual bool CanHandleChallenge(HttpResponseMessage response)
         {
             if (HasDigestHeader)
