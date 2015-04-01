@@ -89,15 +89,17 @@ namespace RestSharp.Portable
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="client">The REST client the response is assigned to</param>
+        /// <param name="request">The REST request the response is assigned to</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public override bool CanHandleChallenge(HttpResponseMessage response)
+        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             return response
                 .GetAuthenticationHeaderInfo(Header)
                 .Where(x => _authenticators.ContainsKey(x.Name))
                 .Select(x => _authenticators[x.Name])
-                .Where(x => x.Authenticator.CanHandleChallenge(response))
+                .Where(x => x.Authenticator.CanHandleChallenge(client, request, response))
                 .OrderByDescending(x => x.Security)
                 .Select(x => x.Authenticator)
                 .Any();
@@ -116,7 +118,7 @@ namespace RestSharp.Portable
                 .GetAuthenticationHeaderInfo(Header)
                 .Where(x => _authenticators.ContainsKey(x.Name))
                 .Select(x => _authenticators[x.Name])
-                .Where(x => x.Authenticator.CanHandleChallenge(response))
+                .Where(x => x.Authenticator.CanHandleChallenge(client, request, response))
                 .OrderByDescending(x => x.Security)
                 .Select(x => x.Authenticator)
                 .First();

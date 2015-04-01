@@ -8,24 +8,38 @@ namespace RestSharp.Portable.Authenticators
     /// </summary>
     public class SimpleAuthenticator : ISyncAuthenticator
     {
+        /// <summary>
+        /// The authentication method ID used to search for the credentials.
+        /// </summary>
+        public const string AuthenticationMethod = "Simple";
+
         private readonly string _usernameKey;
-        private readonly string _username;
+
         private readonly string _passwordKey;
-        private readonly string _password;
+
+        private readonly ParameterType _parameterType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SimpleAuthenticator" /> class.
         /// </summary>
         /// <param name="usernameKey">GetOrPost parameter name for the user name</param>
-        /// <param name="username">User name</param>
         /// <param name="passwordKey">GetOrPost parameter name for the password</param>
-        /// <param name="password">The users password</param>
-        public SimpleAuthenticator(string usernameKey, string username, string passwordKey, string password)
+        public SimpleAuthenticator(string usernameKey, string passwordKey)
+            : this(usernameKey, passwordKey, ParameterType.GetOrPost)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SimpleAuthenticator" /> class.
+        /// </summary>
+        /// <param name="usernameKey">GetOrPost parameter name for the user name</param>
+        /// <param name="passwordKey">GetOrPost parameter name for the password</param>
+        /// <param name="parameterType">The type of the request parameter</param>
+        public SimpleAuthenticator(string usernameKey, string passwordKey, ParameterType parameterType)
         {
             _usernameKey = usernameKey;
-            _username = username;
             _passwordKey = passwordKey;
-            _password = password;
+            _parameterType = parameterType;
         }
 
         /// <summary>
@@ -43,16 +57,23 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
-            request.AddParameter(_usernameKey, _username);
-            request.AddParameter(_passwordKey, _password);
+            if (client.Credentials == null)
+                throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
+            var cred = client.Credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            if (cred == null)
+                throw new InvalidOperationException(string.Format("No credentials provided for the {0} authentication type.", AuthenticationMethod));
+            request.AddParameter(_usernameKey, cred.UserName, _parameterType);
+            request.AddParameter(_passwordKey, cred.Password, _parameterType);
         }
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="client">The REST client the response is assigned to</param>
+        /// <param name="request">The REST request the response is assigned to</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
             return false;
         }

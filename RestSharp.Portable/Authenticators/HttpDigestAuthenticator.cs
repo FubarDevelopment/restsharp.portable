@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -20,9 +19,14 @@ namespace RestSharp.Portable.Authenticators
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
     public class HttpDigestAuthenticator : ISyncAuthenticator
     {
-        private readonly ICredentials _credentials;
+        /// <summary>
+        /// The authentication method ID used in HTTP authentication challenge
+        /// </summary>
+        public const string AuthenticationMethod = "Digest";
 
         private readonly AuthHeader _authHeader;
+
+        private NetworkCredential _authCredential;
 
         private string _realm;
 
@@ -43,20 +47,17 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpDigestAuthenticator" /> class.
         /// </summary>
-        /// <param name="credentials">The authentication credentials</param>
-        public HttpDigestAuthenticator(ICredentials credentials)
-            : this(credentials, AuthHeader.Www)
+        public HttpDigestAuthenticator()
+            : this(AuthHeader.Www)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpDigestAuthenticator" /> class.
         /// </summary>
-        /// <param name="credentials">The authentication credentials</param>
         /// <param name="authHeader">Authentication/Authorization header type</param>
-        public HttpDigestAuthenticator(ICredentials credentials, AuthHeader authHeader)
+        public HttpDigestAuthenticator(AuthHeader authHeader)
         {
-            _credentials = credentials;
             _authHeader = authHeader;
         }
 
@@ -81,10 +82,13 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         public bool CanPreAuthenticate
         {
-            get { return HasDigestHeader; }
+            get { return HasAuthorizationToken; }
         }
 
-        private bool HasDigestHeader
+        /// <summary>
+        /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
+        /// </summary>
+        protected bool HasAuthorizationToken
         {
             get
             {
@@ -99,24 +103,45 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         public void PreAuthenticate(IRestClient client, IRestRequest request)
         {
-            if (HasDigestHeader)
-            {
-                var digestHeader = GetDigestHeader(client, request);
-                request.AddParameter("Authorization", digestHeader, ParameterType.HttpHeader);
-            }
+            if (!HasAuthorizationToken)
+                throw new InvalidOperationException();
+
+            var digestHeader = GetDigestHeader(client, request, _authCredential);
+            AuthHeaderUtilities.TrySetAuthorizationHeader(client, request, _authHeader, digestHeader);
         }
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
+        /// <param name="client">The REST client the response is assigned to</param>
+        /// <param name="request">The REST request the response is assigned to</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
-            if (HasDigestHeader)
+            // No credentials defined?
+            if (client.Credentials == null)
                 return false;
-            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, "Digest");
-            return authModeInfo != null;
+
+            // No challenge header found?
+            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
+            if (authModeInfo == null)
+                return false;
+
+            // Search for credential for request URI
+            var responseUri = response.Headers.Location ?? client.BuildUri(request, false);
+            var credential = client.Credentials.GetCredential(responseUri, AuthenticationMethod);
+            if (credential == null)
+                return false;
+
+            // Did we already try to use the found credentials?
+            if (ReferenceEquals(credential, _authCredential))
+            {
+                // Yes, so we don't retry the authentication.
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -127,7 +152,12 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="response">Response of the failed request</param>
         public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
         {
-            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, "Digest");
+            if (!CanHandleChallenge(client, request, response))
+                throw new InvalidOperationException();
+
+            var responseUri = response.Headers.Location ?? client.BuildUri(request, false);
+            _authCredential = client.Credentials.GetCredential(responseUri, AuthenticationMethod);
+            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
             ParseResponseHeader(authModeInfo);
         }
 
@@ -167,12 +197,11 @@ namespace RestSharp.Portable.Authenticators
             return defaultValue;
         }
 
-        private string GetDigestHeader(IRestClient client, IRestRequest restRequest)
+        private string GetDigestHeader(IRestClient client, IRestRequest restRequest, NetworkCredential credential)
         {
             _nc = _nc + 1;
 
-            var uri = client.BuildUri(restRequest);
-            var credential = _credentials.GetCredential(uri, "Digest");
+            var uri = client.BuildUri(restRequest, false);
 
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
@@ -249,7 +278,7 @@ namespace RestSharp.Portable.Authenticators
 
             var result = new StringBuilder();
             result
-                .AppendFormat("Digest username=\"{0}\"", credential.UserName)
+                .AppendFormat("{0} username=\"{1}\"", AuthenticationMethod, credential.UserName)
                 .AppendFormat(", realm=\"{0}\"", _realm)
                 .AppendFormat(", nonce=\"{0}\"", _nonce)
                 .AppendFormat(", uri=\"{0}\"", pathAndQuery)

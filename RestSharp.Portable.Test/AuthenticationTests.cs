@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Authenticators.OAuth;
+using RestSharp.Portable.HttpClientImpl;
 
 using Xunit;
 
@@ -23,7 +24,9 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                Authenticator = new OptionalHttpBasicAuthenticator(Username, Password),
+                HttpClientFactory = new DefaultHttpClientFactory(false),
+                Credentials = new NetworkCredential(Username, Password),
+                Authenticator = new HttpBasicAuthenticator(),
             })
             {
                 var request = new RestRequest("basic-auth/{username}/{password}", HttpMethod.Get);
@@ -45,7 +48,9 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                Authenticator = new OptionalHttpBasicAuthenticator(Username, Password),
+                HttpClientFactory = new DefaultHttpClientFactory(false),
+                Credentials = new NetworkCredential(Username, Password),
+                Authenticator = new HttpBasicHiddenAuth(),
             })
             {
                 var request = new RestRequest("hidden-basic-auth/{username}/{password}", HttpMethod.Get);
@@ -67,8 +72,9 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                Authenticator =
-                    new HttpDigestAuthenticator(new NetworkCredential(Username, Password))
+                HttpClientFactory = new DefaultHttpClientFactory(false),
+                Credentials = new NetworkCredential(Username, Password),
+                Authenticator = new HttpDigestAuthenticator()
             })
             {
                 var request = new RestRequest("digest-auth/auth/{username}/{password}", HttpMethod.Get);
@@ -90,8 +96,9 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/digest-auth")
             {
                 CookieContainer = new CookieContainer(),
-                Authenticator =
-                    new HttpDigestAuthenticator(new NetworkCredential(Username, Password))
+                HttpClientFactory = new DefaultHttpClientFactory(false),
+                Credentials = new NetworkCredential(Username, Password),
+                Authenticator = new HttpDigestAuthenticator()
             })
             {
                 var request = new RestRequest("auth-int/{username}/{password}", HttpMethod.Get);
@@ -145,6 +152,25 @@ namespace RestSharp.Portable.Test
             public bool Authenticated { get; set; }
 
             public string User { get; set; }
+        }
+
+        private class HttpBasicHiddenAuth : HttpBasicAuthenticator
+        {
+            /// <summary>
+            /// Determines if the authentication module can handle the challenge sent with the response.
+            /// </summary>
+            /// <param name="client">The REST client the response is assigned to</param>
+            /// <param name="request">The REST request the response is assigned to</param>
+            /// <param name="response">The response that returned the authentication challenge</param>
+            /// <returns>true when the authenticator can handle the sent challenge</returns>
+            public override bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+            {
+                if (HasAuthorizationToken)
+                    return false;
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                    return true;
+                return base.CanHandleChallenge(client, request, response);
+            }
         }
     }
 }

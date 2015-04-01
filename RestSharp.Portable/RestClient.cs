@@ -447,11 +447,11 @@ namespace RestSharp.Portable
         /// <returns>true == authentication challenge handled</returns>
         private async Task<bool> HandleChallenge(IRestRequest request, HttpResponseMessage response)
         {
-            if (Authenticator == null || !Authenticator.CanHandleChallenge(response))
+            if (Authenticator == null || !Authenticator.CanHandleChallenge(this, request, response))
                 return false;
 
             var asyncAuthenticator = Authenticator as IAsyncAuthenticator;
-            if (asyncAuthenticator != null && asyncAuthenticator.CanHandleChallenge(response))
+            if (asyncAuthenticator != null && asyncAuthenticator.CanHandleChallenge(this, request, response))
             {
                 await asyncAuthenticator.HandleChallenge(this, request, response);
             }
@@ -487,11 +487,14 @@ namespace RestSharp.Portable
                     var response = await _httpClient.SendAsync(message, ct);
                     try
                     {
-                        if (await HandleChallenge(request, response))
-                            continue;
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            if (await HandleChallenge(request, response))
+                                continue;
 
-                        if (!IgnoreResponseStatusCode)
-                            response.EnsureSuccessStatusCode();
+                            if (!IgnoreResponseStatusCode)
+                                response.EnsureSuccessStatusCode();
+                        }
 
                         failed = false;
                     }
