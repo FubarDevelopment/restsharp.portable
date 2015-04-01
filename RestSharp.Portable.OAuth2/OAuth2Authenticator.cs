@@ -68,12 +68,13 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
-            if (string.IsNullOrEmpty(Client.RefreshToken))
-                return;
+            if (!CanHandleChallenge(client, request, credentials, response))
+                throw new InvalidOperationException();
             await Client.GetCurrentToken(forceUpdate: true);
         }
 
@@ -82,9 +83,10 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">The REST client the response is assigned to</param>
         /// <param name="request">The REST request the response is assigned to</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
             return !string.IsNullOrEmpty(Client.RefreshToken);
         }

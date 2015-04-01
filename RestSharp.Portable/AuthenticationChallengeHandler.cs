@@ -96,15 +96,16 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">The REST client the response is assigned to</param>
         /// <param name="request">The REST request the response is assigned to</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
             return response
                 .GetAuthenticationHeaderInfo(Header)
                 .Where(x => _authenticators.ContainsKey(x.Name))
                 .Select(x => _authenticators[x.Name])
-                .Where(x => x.Authenticator.CanHandleChallenge(client, request, response))
+                .Where(x => x.Authenticator.CanHandleChallenge(client, request, credentials, response))
                 .OrderByDescending(x => x.Security)
                 .Select(x => x.Authenticator)
                 .Any();
@@ -115,27 +116,28 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
             var authenticator = response
                 .GetAuthenticationHeaderInfo(Header)
                 .Where(x => _authenticators.ContainsKey(x.Name))
                 .Select(x => _authenticators[x.Name])
-                .Where(x => x.Authenticator.CanHandleChallenge(client, request, response))
+                .Where(x => x.Authenticator.CanHandleChallenge(client, request, credentials, response))
                 .OrderByDescending(x => x.Security)
                 .Select(x => x.Authenticator)
                 .First();
             var asyncAuth = authenticator as IAsyncAuthenticator;
             if (asyncAuth != null)
             {
-                await asyncAuth.HandleChallenge(client, request, response);
+                await asyncAuth.HandleChallenge(client, request, credentials, response);
             }
             else
             {
                 var syncAuth = (ISyncAuthenticator)authenticator;
-                syncAuth.HandleChallenge(client, request, response);
+                syncAuth.HandleChallenge(client, request, credentials, response);
             }
         }
 

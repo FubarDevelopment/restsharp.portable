@@ -26,8 +26,9 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        Task HandleChallenge([NotNull] IRestClient client, [NotNull] IRestRequest request, [NotNull] HttpResponseMessage response);
+        Task HandleChallenge([NotNull] IRestClient client, [NotNull] IRestRequest request, ICredentials credentials, [NotNull] HttpResponseMessage response);
     }
 }

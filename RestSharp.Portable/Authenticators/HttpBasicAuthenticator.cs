@@ -76,12 +76,13 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">The REST client the response is assigned to</param>
         /// <param name="request">The REST request the response is assigned to</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
             // No credentials defined?
-            if (client.Credentials == null)
+            if (credentials == null)
                 return false;
 
             // No challenge header found?
@@ -91,7 +92,7 @@ namespace RestSharp.Portable.Authenticators
 
             // Search for credential for request URI
             var responseUri = response.Headers.Location ?? client.BuildUri(request, false);
-            var credential = client.Credentials.GetCredential(responseUri, AuthenticationMethod);
+            var credential = credentials.GetCredential(responseUri, AuthenticationMethod);
             if (credential == null)
                 return false;
 
@@ -110,10 +111,11 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
-        public void HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public void HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
-            if (!CanHandleChallenge(client, request, response))
+            if (!CanHandleChallenge(client, request, credentials, response))
                 throw new InvalidOperationException();
 
             var responseUri = response.Headers.Location ?? client.BuildUri(request, false);

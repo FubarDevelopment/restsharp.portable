@@ -42,12 +42,13 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public override async Task HandleChallenge(IRestClient client, IRestRequest request, HttpResponseMessage response)
+        public override async Task HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
         {
-            if (string.IsNullOrEmpty(Client.RefreshToken))
-                return;
+            if (!CanHandleChallenge(client, request, credentials, response))
+                throw new InvalidOperationException();
 
             // Set this variable only if we have a refresh token
             _authFailed = true;
