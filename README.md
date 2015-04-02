@@ -6,13 +6,31 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.4.0 is available now!
+Version 3.0.0 will come soon and it will contain **breaking changes** for the authenticators:
+
+* The ```IRestRequest.Credentials``` property moved to ```IRestClient.Credentials```
+* Credentials for authenticators are specified using the ```IRestClient.Credentials``` property
+* The API will change again soon!
 
 # Changes #
 
+## 3.0.0 alpha 1 ##
+
+* Revamped authenticator interfaces
+  * Provide a way to process the ```Www-Authenticate``` header
+  * Make HTTP Basic/Digest authenticators work with ```Proxy-Authenticate``` header
+  * Credentials property moved from ```IRestRequest``` to ```IRestClient```
+  * The NTLM authenticator is not needed anymore, because the the credentials from 
+    the ```IRestRequest``` are automatically used in the ```HttpClientHandler``` which handles
+    the Basic/Digest/NTLM authentication automatically
+  * All authenticators should query the credentials passed to the authenticator
+  * New ```AuthenticationChallengeHandler``` which selects one of the registered
+    authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
+* New Gitter OAuth 2.0 client
+
 ## 2.4.0 ##
 
-* New "Timeout" property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
+* New ```Timeout``` property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
 
 ## 2.3.2 ##
 
