@@ -12,7 +12,6 @@
     <RootNamespace>RestSharp.Portable.Authenticators</RootNamespace>
     <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>
     </AndroidUseLatestPlatformSdk>
