@@ -14,7 +14,7 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 
 # Changes #
 
-## 3.0.0 alpha 1 ##
+## 3.0.0 alpha 2 ##
 
 * Revamped authenticator interfaces
   * Provide a way to process the ```Www-Authenticate``` header

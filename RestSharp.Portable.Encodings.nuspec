@@ -21,7 +21,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Library that will contain some standard Content-Encoding handlers</summary>
-        <releaseNotes>- Parallel release (issue #13, 24)</releaseNotes>
+        <releaseNotes>- Parallel release</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable encoding gzip</tags>

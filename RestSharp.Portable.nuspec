@@ -21,8 +21,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>- New timeout property to avoid problems with CancellationTokenSource (issue #13)
-- OAuth 1.0 and 2.0 can now be used at the same time in Android Apps (issue #24)</releaseNotes>
+        <releaseNotes>- Revamped authenticator API (all async now)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
