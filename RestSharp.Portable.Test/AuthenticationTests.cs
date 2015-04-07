@@ -101,13 +101,20 @@ namespace RestSharp.Portable.Test
                 Authenticator = new HttpDigestAuthenticator()
             })
             {
+                // httpbin.org only supports GET for digest-auth...
                 var request = new RestRequest("auth-int/{username}/{password}", HttpMethod.Get);
                 request.AddUrlSegment("username", Username);
                 request.AddUrlSegment("password", Password);
+                ////request.AddParameter("param1", "val1");
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(Username, response.Data.User);
+
+                ////Assert.NotNull(response.Data.Form);
+                ////Assert.Equal(1, response.Data.Form.Count);
+                ////Assert.Contains("param1", response.Data.Form.Keys);
+                ////Assert.Equal("val1", response.Data.Form["param1"]);
             }
         }
 
@@ -152,6 +159,8 @@ namespace RestSharp.Portable.Test
             public bool Authenticated { get; set; }
 
             public string User { get; set; }
+
+            public Dictionary<string, string> Form { get; set; }
         }
     }
 }

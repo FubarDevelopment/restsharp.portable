@@ -19,7 +19,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the authenticator to use for all requests
         /// </summary>
-        ISyncAuthenticator Authenticator { get; set; }
+        IAuthenticator Authenticator { get; set; }
 
         /// <summary>
         /// Gets or sets the base URL for all requests

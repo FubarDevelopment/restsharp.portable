@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+
+using JetBrains.Annotations;
 
 namespace RestSharp.Portable
 {
@@ -11,6 +14,40 @@ namespace RestSharp.Portable
     public static class AuthHeaderUtilities
     {
         private static readonly IEnumerable<string> _emptyHeaderValues = new List<string>();
+
+        /// <summary>
+        /// Get the absolute request URL
+        /// </summary>
+        /// <param name="client">HTTP client</param>
+        /// <param name="request">HTTP request message</param>
+        /// <returns>The absolute URI</returns>
+        [NotNull]
+        public static Uri GetRequestUri([NotNull] this HttpClient client, [NotNull] HttpRequestMessage request)
+        {
+            if (client.BaseAddress == null)
+                return request.RequestUri;
+
+            if (request.RequestUri != null)
+                return new Uri(client.BaseAddress, request.RequestUri);
+
+            return client.BaseAddress;
+        }
+
+        /// <summary>
+        /// Get the absolute response or request URL
+        /// </summary>
+        /// <param name="client">HTTP client</param>
+        /// <param name="request">HTTP request message</param>
+        /// <param name="response">HTTP response message</param>
+        /// <returns>The absolute URI</returns>
+        [NotNull]
+        public static Uri GetRequestUri([NotNull] this HttpClient client, [NotNull] HttpRequestMessage request, [NotNull] HttpResponseMessage response)
+        {
+            var requestUri = client.GetRequestUri(request);
+            if (response.Headers.Location == null)
+                return requestUri;
+            return new Uri(requestUri, response.Headers.Location);
+        }
 
         /// <summary>
         /// Returns the HTTP header name for a given authorization header
@@ -81,6 +118,25 @@ namespace RestSharp.Portable
         public static void SetAuthorizationHeader(IRestRequest request, AuthHeader header, string authValue)
         {
             request.AddParameter(header.ToAuthorizationHeaderName(), authValue, ParameterType.HttpHeader);
+        }
+
+        /// <summary>
+        /// Unconditionally adds the authorization header to the request
+        /// </summary>
+        /// <param name="request">The request to add the authorization header to</param>
+        /// <param name="header">The type of the HTTP header that stores the authorization information</param>
+        /// <param name="authValue">The authentication header value</param>
+        public static void SetAuthorizationHeader(this HttpRequestMessage request, AuthHeader header, AuthenticationHeaderValue authValue)
+        {
+            switch (header)
+            {
+                case AuthHeader.Www:
+                    request.Headers.Authorization = authValue;
+                    break;
+                case AuthHeader.Proxy:
+                    request.Headers.ProxyAuthorization = authValue;
+                    break;
+            }
         }
 
         /// <summary>

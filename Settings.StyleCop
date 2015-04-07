@@ -2,6 +2,7 @@
   <GlobalSettings>
     <StringProperty Name="Culture">en-US</StringProperty>
     <CollectionProperty Name="RecognizedWords">
+      <Value>Auth</Value>
       <Value>deserialized</Value>
       <Value>deserializer</Value>
       <Value>json</Value>
@@ -12,7 +13,7 @@
   <Analyzers>
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
       <AnalyzerSettings>
-        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN EOF FxCop ID IDs MD5 MD5sess OAuth OK StyleCop US X Y</StringProperty>
+        <StringProperty Name="AdvancedNaming_Words">3D A Auth B C DE EN EOF FxCop ID IDs MD5 MD5sess OAuth OK StyleCop US X Y</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

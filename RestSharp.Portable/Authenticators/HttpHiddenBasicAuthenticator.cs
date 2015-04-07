@@ -17,7 +17,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public override bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
+        public override bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
         {
             if (HasAuthorizationToken)
                 return false;

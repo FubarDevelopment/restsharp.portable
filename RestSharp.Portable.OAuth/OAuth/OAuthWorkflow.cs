@@ -61,7 +61,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
 
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
-        /// <see cref="ISyncAuthenticator" /> for the purpose of requesting an
+        /// <see cref="IAuthenticator" /> for the purpose of requesting an
         /// unauthorized request token.
         /// </summary>
         /// <param name="method">The HTTP method for the intended request (<a href="http://oauth.net/core/1.0#anchor9" />)</param>
@@ -70,9 +70,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
         {
             return BuildRequestTokenInfo(method, null);
         }
+
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
-        /// <see cref="ISyncAuthenticator" /> for the purpose of requesting an
+        /// <see cref="IAuthenticator" /> for the purpose of requesting an
         /// unauthorized request token.
         /// </summary>
         /// <param name="method">The HTTP method for the intended request</param>
@@ -108,9 +109,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
             };
             return info;
         }
+
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
-        /// <see cref="ISyncAuthenticator" /> for the purpose of exchanging a request token
+        /// <see cref="IAuthenticator" /> for the purpose of exchanging a request token
         /// for an access token authorized by the user at the Service Provider site.
         /// </summary>
         /// <param name="method">The HTTP method for the intended request</param>
@@ -119,9 +121,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
         {
             return BuildAccessTokenInfo(method, null);
         }
+
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
-        /// <see cref="ISyncAuthenticator" /> for the purpose of exchanging a request token
+        /// <see cref="IAuthenticator" /> for the purpose of exchanging a request token
         /// for an access token authorized by the user at the Service Provider site.
         /// </summary>
         /// <param name="method">The HTTP method for the intended request</param>
@@ -159,9 +162,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
             };
             return info;
         }
+
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
-        /// <see cref="ISyncAuthenticator" /> for the purpose of exchanging user credentials
+        /// <see cref="IAuthenticator" /> for the purpose of exchanging user credentials
         /// for an access token authorized by the user at the Service Provider site.
         /// </summary>
         /// <param name="method">The HTTP method for the intended request</param>

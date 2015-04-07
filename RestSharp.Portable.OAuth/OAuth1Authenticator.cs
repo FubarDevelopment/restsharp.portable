@@ -1,6 +1,7 @@
 ﻿#region License
 
-//// Copyright 2010 John Sheehan
+//// <copyright file="OAuth1Authenticator.cs" company="John Sheehan">2010</copyright>
+////
 //// Licensed under the Apache License, Version 2.0 (the "License");
 //// you may not use this file except in compliance with the License.
 //// You may obtain a copy of the License at
@@ -18,7 +19,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators.OAuth;
 
@@ -28,8 +31,13 @@ namespace RestSharp.Portable.Authenticators
     /// OAuth 1.0a authenticator
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-    public class OAuth1Authenticator : ISyncAuthenticator
+    public class OAuth1Authenticator : IAuthenticator
     {
+        /// <summary>
+        /// The authentication method ID used in HTTP authentication challenge
+        /// </summary>
+        public const string AuthenticationMethod = "OAuth";
+
         /// <summary>
         /// Prevents a default instance of the <see cref="OAuth1Authenticator" /> class from being created.
         /// </summary>
@@ -246,7 +254,7 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Dies the authentication module supports pre-authentication?
+        /// Does the authentication module supports pre-authentication?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
@@ -258,31 +266,59 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
-        public void PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        /// <returns>The task the authentication is performed on</returns>
+        public Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            var workflow = new OAuthWorkflow
-                {
-                    ConsumerKey = ConsumerKey,
-                    ConsumerSecret = ConsumerSecret,
-                    ParameterHandling = ParameterHandling,
-                    SignatureMethod = SignatureMethod,
-                    SignatureTreatment = SignatureTreatment,
-                    Verifier = Verifier,
-                    Version = Version,
-                    CallbackUrl = CallbackUrl,
-                    SessionHandle = SessionHandle,
-                    Token = Token,
-                    TokenSecret = TokenSecret,
-                    ClientUsername = ClientUsername,
-                    ClientPassword = ClientPassword,
-                    CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp
-                };
-            AddOAuthData(client, request, workflow);
+            return Task.Factory.StartNew(() =>
+            {
+                var workflow = new OAuthWorkflow
+                    {
+                        ConsumerKey = ConsumerKey,
+                        ConsumerSecret = ConsumerSecret,
+                        ParameterHandling = ParameterHandling,
+                        SignatureMethod = SignatureMethod,
+                        SignatureTreatment = SignatureTreatment,
+                        Verifier = Verifier,
+                        Version = Version,
+                        CallbackUrl = CallbackUrl,
+                        SessionHandle = SessionHandle,
+                        Token = Token,
+                        TokenSecret = TokenSecret,
+                        ClientUsername = ClientUsername,
+                        ClientPassword = ClientPassword,
+                        CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp
+                    };
+                AddOAuthData(client, request, workflow);
+            });
+        }
+
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
+        /// <returns>The task the authentication is performed on</returns>
+        public Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -293,7 +329,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
         {
             return false;
         }
@@ -305,7 +341,8 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
-        public void HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
+        /// <returns>Task where the handler for a failed authentication gets executed</returns>
+        public virtual Task HandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
         {
             throw new NotSupportedException();
         }
@@ -368,7 +405,7 @@ namespace RestSharp.Portable.Authenticators
             {
                 case OAuthParameterHandling.HttpAuthorizationHeader:
                     parameters.Add("oauth_signature", oauth.Signature);
-                    request.AddHeader("Authorization", GetAuthorizationHeader(parameters));
+                    request.AddHeader("Authorization", GetAuthorizationHeader(parameters).ToString());
                     break;
                 case OAuthParameterHandling.UrlOrPostParameters:
                     parameters.Add("oauth_signature", oauth.Signature);
@@ -387,9 +424,9 @@ namespace RestSharp.Portable.Authenticators
             }
         }
 
-        private string GetAuthorizationHeader(WebPairCollection parameters)
+        private AuthenticationHeaderValue GetAuthorizationHeader(WebPairCollection parameters)
         {
-            var sb = new StringBuilder("OAuth ");
+            var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(Realm))
             {
                 sb.Append(string.Format("realm=\"{0}\",", OAuthTools.UrlEncodeRelaxed(Realm)));
@@ -409,7 +446,7 @@ namespace RestSharp.Portable.Authenticators
             }
 
             var authorization = sb.ToString();
-            return authorization;
+            return new AuthenticationHeaderValue(AuthenticationMethod, authorization);
         }
     }
 }

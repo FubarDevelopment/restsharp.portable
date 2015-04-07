@@ -10,13 +10,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\AsyncAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpHiddenBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAsyncAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\ISyncAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderInfo.cs" />

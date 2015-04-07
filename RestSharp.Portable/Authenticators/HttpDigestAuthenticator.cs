@@ -4,9 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -17,7 +19,7 @@ namespace RestSharp.Portable.Authenticators
     /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
     /// </remarks>
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
-    public class HttpDigestAuthenticator : ISyncAuthenticator
+    public class HttpDigestAuthenticator : IAuthenticator
     {
         /// <summary>
         /// The authentication method ID used in HTTP authentication challenge
@@ -89,13 +91,25 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Dies the authentication module supports pre-authentication?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IRestRequest" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
         public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Does the authentication module supports pre-authentication?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
         {
             return HasAuthorizationToken;
         }
@@ -106,13 +120,26 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
-        public void PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        /// <returns>The task the authentication is performed on</returns>
+        public Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
+        /// <returns>The task the authentication is performed on</returns>
+        public async Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
         {
             if (!CanPreAuthenticate(client, request, credentials))
                 throw new InvalidOperationException();
 
-            var digestHeader = GetDigestHeader(client, request, _authCredential);
-            AuthHeaderUtilities.TrySetAuthorizationHeader(client, request, _authHeader, digestHeader);
+            var digestHeader = await GetDigestHeader(client, request, _authCredential);
+            request.SetAuthorizationHeader(_authHeader, new AuthenticationHeaderValue(AuthenticationMethod, digestHeader));
         }
 
         /// <summary>
@@ -123,7 +150,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
         {
             // No credentials defined?
             if (credentials == null)
@@ -135,7 +162,7 @@ namespace RestSharp.Portable.Authenticators
                 return false;
 
             // Search for credential for request URI
-            var responseUri = response.Headers.Location ?? client.BuildUri(request, false);
+            var responseUri = client.GetRequestUri(request, response);
             var credential = credentials.GetCredential(responseUri, AuthenticationMethod);
             if (credential == null)
                 return false;
@@ -157,15 +184,19 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
-        public void HandleChallenge(IRestClient client, IRestRequest request, ICredentials credentials, HttpResponseMessage response)
+        /// <returns>Task where the handler for a failed authentication gets executed</returns>
+        public Task HandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
         {
-            if (!CanHandleChallenge(client, request, credentials, response))
-                throw new InvalidOperationException();
+            return Task.Factory.StartNew(() =>
+            {
+                if (!CanHandleChallenge(client, request, credentials, response))
+                    throw new InvalidOperationException();
 
-            var responseUri = response.Headers.Location ?? client.BuildUri(request, false);
-            _authCredential = client.Credentials.GetCredential(responseUri, AuthenticationMethod);
-            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
-            ParseResponseHeader(authModeInfo);
+                var responseUri = client.GetRequestUri(request, response);
+                _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
+                var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
+                ParseResponseHeader(authModeInfo);
+            });
         }
 
         private static string CalculateMd5Hash(string input)
@@ -204,11 +235,11 @@ namespace RestSharp.Portable.Authenticators
             return defaultValue;
         }
 
-        private string GetDigestHeader(IRestClient client, IRestRequest restRequest, NetworkCredential credential)
+        private async Task<string> GetDigestHeader(HttpClient client, HttpRequestMessage request, NetworkCredential credential)
         {
             _nc = _nc + 1;
 
-            var uri = client.BuildUri(restRequest, false);
+            var uri = client.GetRequestUri(request);
 
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
@@ -249,26 +280,24 @@ namespace RestSharp.Portable.Authenticators
             {
                 case QualityOfProtection.AuthInt:
                     {
-                        var content = client.GetContent(restRequest);
                         byte[] entityBody;
-                        if (content == null)
+                        if (request.Content == null)
                         {
                             entityBody = new byte[0];
                         }
                         else
                         {
-                            var readTask = content.ReadAsByteArrayAsync();
-                            readTask.Wait();
-                            entityBody = readTask.Result;
+                            await request.Content.LoadIntoBufferAsync();
+                            entityBody = await request.Content.ReadAsByteArrayAsync();
                         }
 
                         ha2 = CalculateMd5Hash(entityBody);
                     }
 
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery, ha2));
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", request.Method.Method, pathAndQuery, ha2));
                     break;
                 default:
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", client.GetEffectiveHttpMethod(restRequest).Method, pathAndQuery));
+                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", request.Method.Method, pathAndQuery));
                     break;
             }
 
@@ -285,7 +314,7 @@ namespace RestSharp.Portable.Authenticators
 
             var result = new StringBuilder();
             result
-                .AppendFormat("{0} username=\"{1}\"", AuthenticationMethod, credential.UserName)
+                .AppendFormat("username=\"{0}\"", credential.UserName)
                 .AppendFormat(", realm=\"{0}\"", _realm)
                 .AppendFormat(", nonce=\"{0}\"", _nonce)
                 .AppendFormat(", uri=\"{0}\"", pathAndQuery)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -22,6 +23,30 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Does the authentication module supports pre-authentication?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public override bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials to be used for the authentication</param>
+        /// <returns>true when the authentication module supports pre-authentication</returns>
+        public override bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
         /// </summary>
         /// <param name="client">Client executing this request</param>
@@ -31,6 +56,18 @@ namespace RestSharp.Portable.Authenticators
         public override async Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
             request.AddParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
+        }
+
+        /// <summary>
+        /// Modifies the request to ensure that the authentication requirements are met.
+        /// </summary>
+        /// <param name="client">Client executing this request</param>
+        /// <param name="request">Request to authenticate</param>
+        /// <param name="credentials">The credentials used for the authentication</param>
+        /// <returns>The task the authentication is performed on</returns>
+        public override Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        {
+            throw new NotSupportedException();
         }
     }
 }

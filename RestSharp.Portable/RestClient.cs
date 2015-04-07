@@ -83,7 +83,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the Authenticator to use for all requests
         /// </summary>
-        public ISyncAuthenticator Authenticator { get; set; }
+        public IAuthenticator Authenticator { get; set; }
 
         /// <summary>
         /// Gets or sets the Cookies for all requests
@@ -423,52 +423,13 @@ namespace RestSharp.Portable
             }
         }
 
-        private async Task AuthenticateRequest(IRestRequest request)
-        {
-            if (Authenticator == null || !Authenticator.CanPreAuthenticate(this, request, Credentials))
-                return;
-
-            var asyncAuth = Authenticator as IAsyncAuthenticator;
-            if (asyncAuth != null)
-            {
-                await asyncAuth.PreAuthenticate(this, request, Credentials);
-            }
-            else
-            {
-                Authenticator.PreAuthenticate(this, request, Credentials);
-            }
-        }
-
-        /// <summary>
-        /// Tries to handle the challenge sent with the authenticator.
-        /// </summary>
-        /// <param name="request">The failed request</param>
-        /// <param name="response">The response of the failed request</param>
-        /// <returns>true == authentication challenge handled</returns>
-        private async Task<bool> HandleChallenge(IRestRequest request, HttpResponseMessage response)
-        {
-            if (Authenticator == null || !Authenticator.CanHandleChallenge(this, request, Credentials, response))
-                return false;
-
-            var asyncAuthenticator = Authenticator as IAsyncAuthenticator;
-            if (asyncAuthenticator != null)
-            {
-                await asyncAuthenticator.HandleChallenge(this, request, Credentials, response);
-            }
-            else
-            {
-                Authenticator.HandleChallenge(this, request, Credentials, response);
-            }
-
-            return true;
-        }
-
         private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
             AddDefaultParameters(request);
             while (true)
             {
-                await AuthenticateRequest(request);
+                if (Authenticator != null && Authenticator.CanPreAuthenticate(this, request, Credentials))
+                    await Authenticator.PreAuthenticate(this, request, Credentials);
 
                 // Lazy initialization of the HTTP client
                 if (_httpClient == null)
@@ -483,14 +444,20 @@ namespace RestSharp.Portable
                     if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
                         _httpClient.DefaultRequestHeaders.Accept.Clear();
 
+                    if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
+                        await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
+
                     bool failed = true;
                     var response = await _httpClient.SendAsync(message, ct);
                     try
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            if (await HandleChallenge(request, response))
+                            if (Authenticator != null && Authenticator.CanHandleChallenge(_httpClient, message, Credentials, response))
+                            {
+                                await Authenticator.HandleChallenge(_httpClient, message, Credentials, response);
                                 continue;
+                            }
 
                             if (!IgnoreResponseStatusCode)
                                 response.EnsureSuccessStatusCode();
