@@ -22,7 +22,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
     <summary>OAuth authenticator</summary>
-    <releaseNotes>- Parallel release (issue #13)</releaseNotes>
+    <releaseNotes>- OAuth 1.0 and 2.0 can now be used at the same time in Android Apps (issue #24)</releaseNotes>
     <copyright>Copyright © John Sheehan and RestSharp.Portable project</copyright>
     <language>en-US</language>
     <tags>PCL RestSharp portable OAuth</tags>
