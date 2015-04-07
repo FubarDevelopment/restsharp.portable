@@ -12,7 +12,6 @@
     <RootNamespace>RestSharp.Portable</RootNamespace>
     <AssemblyName>RestSharp.Portable</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>
     </AndroidUseLatestPlatformSdk>

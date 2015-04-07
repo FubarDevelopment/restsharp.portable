@@ -28,6 +28,11 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
     authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
 * New Gitter OAuth 2.0 client
 
+## 2.4.1 ##
+
+* Bugfix for issue [#24](https://github.com/FubarDevelopment/restsharp.portable/issues/24)
+  which should allow using both OAuth 1.0 and 2.0 in Android apps.
+
 ## 2.4.0 ##
 
 * New ```Timeout``` property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
