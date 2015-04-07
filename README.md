@@ -6,9 +6,14 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-* Version 2.4.0 is available now!
+* Version 2.4.1 is available now!
 
 # Changes #
+
+## 2.4.1 ##
+
+* Bugfix for issue [#24](https://github.com/FubarDevelopment/restsharp.portable/issues/24)
+  which should allow using both OAuth 1.0 and 2.0 in Android apps.
 
 ## 2.4.0 ##
 
