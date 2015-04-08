@@ -16,8 +16,6 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
     /// </summary>
     public class GitHubClient : OAuth2Client
     {
-        private readonly IRequestFactory _factory;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubClient"/> class.
         /// </summary>
@@ -26,7 +24,6 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         public GitHubClient(IRequestFactory factory, IClientConfiguration configuration)
             : base(factory, configuration)
         {
-            _factory = factory;
         }
 
         /// <summary>
@@ -100,9 +97,9 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             if (!string.IsNullOrEmpty(userInfo.Email))
                 return userInfo;
 
-            var client = _factory.CreateClient(UserEmailServiceEndpoint);
+            var client = Factory.CreateClient(UserEmailServiceEndpoint);
             client.Authenticator = new OAuth2UriQueryParameterAuthenticator(this);
-            var request = _factory.CreateRequest(UserEmailServiceEndpoint);
+            var request = Factory.CreateRequest(UserEmailServiceEndpoint);
 
             BeforeGetUserInfo(new BeforeAfterRequestArgs
             {
