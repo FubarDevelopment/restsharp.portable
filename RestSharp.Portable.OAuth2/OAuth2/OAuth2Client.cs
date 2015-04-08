@@ -17,11 +17,15 @@ namespace RestSharp.Portable.Authenticators.OAuth2
     public abstract class OAuth2Client : IClient
     {
         private const string AccessTokenKey = "access_token";
+
         private const string RefreshTokenKey = "refresh_token";
+
         private const string ExpiresKey = "expires_in";
+
         private const string TokenTypeKey = "token_type";
 
         private const string GrantTypeAuthorizationKey = "authorization_code";
+
         private const string GrantTypeRefreshTokenKey = "refresh_token";
 
         private readonly IRequestFactory _factory;
@@ -50,12 +54,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Refresh token returned by provider. Can be used for further calls of provider API.
         /// </summary>
         public string RefreshToken { get; protected set; }
-        
+
         /// <summary>
         /// Token type returned by provider. Can be used for further calls of provider API.
         /// </summary>
         public string TokenType { get; private set; }
-        
+
         /// <summary>
         /// The time when the access token expires
         /// </summary>
@@ -65,9 +69,9 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// A safety margin that's used to see if an access token is expired
         /// </summary>
         public TimeSpan ExpirationSafetyMargin { get; set; }
-        
+
         private string GrantType { get; set; }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Client"/> class.
         /// </summary>
@@ -91,20 +95,24 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         {
             var client = _factory.CreateClient(AccessCodeServiceEndpoint);
             var request = _factory.CreateRequest(AccessCodeServiceEndpoint);
-            request.AddObject(new
-            {
-                response_type = "code",
-                client_id = Configuration.ClientId,
-                redirect_uri = Configuration.RedirectUri,
-                scope = Configuration.Scope,
-                state
-            }, new[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) }, PropertyFilterMode.Exclude);
-            await BeforeGetLoginLinkUri(new BeforeAfterRequestArgs()
-            {
-                Client = client,
-                Request = request,
-                Configuration = Configuration,
-            });
+            request.AddObject(
+                new
+                    {
+                        response_type = "code",
+                        client_id = Configuration.ClientId,
+                        redirect_uri = Configuration.RedirectUri,
+                        scope = Configuration.Scope,
+                        state
+                    },
+                new[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) },
+                PropertyFilterMode.Exclude);
+            await BeforeGetLoginLinkUri(
+                new BeforeAfterRequestArgs()
+                    {
+                        Client = client,
+                        Request = request,
+                        Configuration = Configuration,
+                    });
             return await Task<string>.Factory.StartNew(() => client.BuildUri(request).ToString());
         }
 
@@ -143,7 +151,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         {
             bool refreshRequired =
                 forceUpdate
-                || (ExpiresAt != null && DateTime.Now >= (ExpiresAt - (safetyMargin ?? ExpirationSafetyMargin))) 
+                || (ExpiresAt != null && DateTime.Now >= (ExpiresAt - (safetyMargin ?? ExpirationSafetyMargin)))
                 || String.IsNullOrEmpty(AccessToken);
 
             if (refreshRequired)
@@ -156,9 +164,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 else
                     throw new Exception("Token never fetched and refresh token not provided.");
 
-                var parameters = new Dictionary<string, string>() {
-                    { RefreshTokenKey, refreshTokenValue },
-                };
+                var parameters = new Dictionary<string, string>()
+                    {
+                        { RefreshTokenKey, refreshTokenValue },
+                    };
 
                 GrantType = GrantTypeRefreshTokenKey;
                 await QueryAccessToken(parameters.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase));
@@ -166,7 +175,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
 
             return AccessToken;
         }
-        
+
         /// <summary>
         /// Defines URI of service which issues access code.
         /// </summary>
@@ -203,13 +212,14 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             var client = _factory.CreateClient(AccessTokenServiceEndpoint);
             var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
 
-            BeforeGetAccessToken(new BeforeAfterRequestArgs
-            {
-                Client = client,
-                Request = request,
-                Parameters = parameters,
-                Configuration = Configuration
-            });
+            BeforeGetAccessToken(
+                new BeforeAfterRequestArgs
+                    {
+                        Client = client,
+                        Request = request,
+                        Parameters = parameters,
+                        Configuration = Configuration
+                    });
 
             var response = await client.ExecuteAndVerify(request);
 
@@ -223,11 +233,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             var expiresIn = ParseStringResponse(content, new[] { ExpiresKey })[ExpiresKey].Select(x => Convert.ToInt32(x, 10)).FirstOrDefault();
             ExpiresAt = (expiresIn != 0 ? (DateTime?)DateTime.Now.AddSeconds(expiresIn) : null);
 
-            AfterGetAccessToken(new BeforeAfterRequestArgs
-            {
-                Response = response,
-                Parameters = parameters
-            });
+            AfterGetAccessToken(
+                new BeforeAfterRequestArgs
+                    {
+                        Response = response,
+                        Parameters = parameters
+                    });
         }
 
         /// <summary>
@@ -314,26 +325,29 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <param name="args"></param>
         protected virtual void BeforeGetAccessToken(BeforeAfterRequestArgs args)
         {
-            args.Request.AddObject(new
-            {
-                client_id = Configuration.ClientId,
-                client_secret = Configuration.ClientSecret,
-                grant_type = GrantType
-            });
+            args.Request.AddObject(
+                new
+                    {
+                        client_id = Configuration.ClientId,
+                        client_secret = Configuration.ClientSecret,
+                        grant_type = GrantType
+                    });
             if (GrantType == GrantTypeRefreshTokenKey)
             {
-                args.Request.AddObject(new
-                {
-                    refresh_token = args.Parameters.GetOrThrowUnexpectedResponse(RefreshTokenKey),
-                });
+                args.Request.AddObject(
+                    new
+                        {
+                            refresh_token = args.Parameters.GetOrThrowUnexpectedResponse(RefreshTokenKey),
+                        });
             }
             else
             {
-                args.Request.AddObject(new
-                {
-                    code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
-                    redirect_uri = Configuration.RedirectUri,
-                });
+                args.Request.AddObject(
+                    new
+                        {
+                            code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
+                            redirect_uri = Configuration.RedirectUri,
+                        });
             }
         }
 
@@ -362,12 +376,13 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             client.Authenticator = new OAuth2UriQueryParameterAuthenticator(this);
             var request = _factory.CreateRequest(UserInfoServiceEndpoint);
 
-            BeforeGetUserInfo(new BeforeAfterRequestArgs
-            {
-                Client = client,
-                Request = request,
-                Configuration = Configuration
-            });
+            BeforeGetUserInfo(
+                new BeforeAfterRequestArgs
+                    {
+                        Client = client,
+                        Request = request,
+                        Configuration = Configuration
+                    });
 
             var response = await client.ExecuteAndVerify(request);
 

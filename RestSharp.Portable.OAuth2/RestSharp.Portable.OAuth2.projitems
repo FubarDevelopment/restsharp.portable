@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\TwitterClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\VkClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\WindowsLiveClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\XingClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Client\YandexClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\IClientConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Configuration\IConfigurationManager.cs" />

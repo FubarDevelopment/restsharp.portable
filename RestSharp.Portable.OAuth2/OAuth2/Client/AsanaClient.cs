@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+
 using Newtonsoft.Json.Linq;
+
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;
-using RestSharp.Portable;
-using RestSharp.Portable.Authenticators;
 
 namespace RestSharp.Portable.Authenticators.OAuth2.Client
 {
@@ -17,8 +18,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="AsanaClient"/> class.
         /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="configuration">The configuration.</param>
+        /// <param name="factory">
+        /// The factory.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
         public AsanaClient(IRequestFactory factory, IClientConfiguration configuration)
             : base(factory, configuration)
         {
@@ -33,7 +38,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             {
                 return new Endpoint
                 {
-                    BaseUri = "https://app.asana.com",
+                    BaseUri = "https://app.asana.com", 
                     Resource = "/-/oauth_authorize"
                 };
             }
@@ -48,7 +53,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             {
                 return new Endpoint
                 {
-                    BaseUri = "https://app.asana.com",
+                    BaseUri = "https://app.asana.com", 
                     Resource = "/-/oauth_token"
                 };
             }
@@ -63,7 +68,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             {
                 return new Endpoint
                 {
-                    BaseUri = "https://app.asana.com",
+                    BaseUri = "https://app.asana.com", 
                     Resource = "/api/1.0/users/me"
                 };
             }
@@ -73,6 +78,8 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// Called just before issuing request to third-party service when everything is ready.
         /// Allows to add extra parameters to request or do any other needed preparations.
         /// </summary>
+        /// <param name="args">
+        /// </param>
         protected override void BeforeGetUserInfo(BeforeAfterRequestArgs args)
         {
             args.Request.AddParameter("opt_fields", "id,name,photo.image_128x128,photo.image_60x60,photo.image_36x36,email");
@@ -82,7 +89,11 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
+        /// <param name="content">
+        /// The content which is received from third-party service.
+        /// </param>
+        /// <returns>
+        /// </returns>
         protected override UserInfo ParseUserInfo(string content)
         {
             var response = JObject.Parse(content);
@@ -90,7 +101,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             if (!response.TryGetValue("data", out dataExists))
                 return new UserInfo();
 
-            //const string avatarUriTemplate = "{0}?type={1}";
+            // const string avatarUriTemplate = "{0}?type={1}";
             var avatarSmallUri = response["data"]["photo"]["image_36x36"].Value<string>();
             var avatarNormalUri = response["data"]["photo"]["image_60x60"].Value<string>();
             var avatarLargeUri = response["data"]["photo"]["image_128x128"].Value<string>();
@@ -101,14 +112,14 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
 
             return new UserInfo
             {
-                Id = response["data"]["id"].Value<string>(),
-                FirstName = firstName,
-                LastName = lastName,
-                Email = response["data"]["email"].SafeGet(x => x.Value<string>()),
+                Id = response["data"]["id"].Value<string>(), 
+                FirstName = firstName, 
+                LastName = lastName, 
+                Email = response["data"]["email"].SafeGet(x => x.Value<string>()), 
                 AvatarUri =
                 {
-                    Small = !string.IsNullOrWhiteSpace(avatarSmallUri) ? avatarSmallUri : string.Empty,
-                    Normal = !string.IsNullOrWhiteSpace(avatarNormalUri) ? avatarNormalUri : string.Empty,
+                    Small = !string.IsNullOrWhiteSpace(avatarSmallUri) ? avatarSmallUri : string.Empty, 
+                    Normal = !string.IsNullOrWhiteSpace(avatarNormalUri) ? avatarNormalUri : string.Empty, 
                     Large = !string.IsNullOrWhiteSpace(avatarLargeUri) ? avatarLargeUri : string.Empty
                 }
             };
