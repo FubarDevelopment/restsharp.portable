@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
@@ -11,6 +16,8 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
     /// </summary>
     public class GitHubClient : OAuth2Client
     {
+        private readonly IRequestFactory _factory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubClient"/> class.
         /// </summary>
@@ -19,6 +26,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         public GitHubClient(IRequestFactory factory, IClientConfiguration configuration)
             : base(factory, configuration)
         {
+            _factory = factory;
         }
 
         /// <summary>
@@ -55,19 +63,68 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         }
 
         /// <summary>
+        /// Gets the URI of service which allows to obtain information about user email.
+        /// </summary>
+        protected virtual Endpoint UserEmailServiceEndpoint
+        {
+            get { return new Endpoint { BaseUri = "https://api.github.com/", Resource = "/user/emails" }; }
+        }
+
+        /// <summary>
         /// Called before the request to get the access token
         /// </summary>
         /// <param name="args">The request/response arguments</param>
         protected override void BeforeGetAccessToken(BeforeAfterRequestArgs args)
         {
-            args.Request.AddObject(new
+            args.Request.AddObject(
+                new
+                    {
+                        code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
+                        client_id = args.Configuration.ClientId,
+                        client_secret = args.Configuration.ClientSecret,
+                        redirect_uri = args.Configuration.RedirectUri,
+                        state = State,
+                    });
+        }
+
+        /// <summary>
+        /// Obtains user information using provider API.
+        /// </summary>
+        /// <returns>The queried user information</returns>
+        protected override async Task<UserInfo> GetUserInfo()
+        {
+            var userInfo = await base.GetUserInfo();
+            if (userInfo == null)
+                return null;
+
+            if (!string.IsNullOrEmpty(userInfo.Email))
+                return userInfo;
+
+            var client = _factory.CreateClient(UserEmailServiceEndpoint);
+            client.Authenticator = new OAuth2UriQueryParameterAuthenticator(this);
+            var request = _factory.CreateRequest(UserEmailServiceEndpoint);
+
+            BeforeGetUserInfo(new BeforeAfterRequestArgs
             {
-                code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
-                client_id = args.Configuration.ClientId,
-                client_secret = args.Configuration.ClientSecret,
-                redirect_uri = args.Configuration.RedirectUri,
-                state = State,
+                Client = client,
+                Request = request,
+                Configuration = Configuration
             });
+
+            var response = await client.ExecuteAndVerify(request);
+            var userEmails = ParseEmailAddresses(response.GetContent());
+            userInfo.Email = userEmails.First(u => u.IsPrimary).Email;
+            return userInfo;
+        }
+
+        /// <summary>
+        /// Parse the email addresses
+        /// </summary>
+        /// <param name="content">The JSON response to parse</param>
+        /// <returns>The list of user email addresses</returns>
+        protected virtual IEnumerable<UserEmails> ParseEmailAddresses(string content)
+        {
+            return JsonConvert.DeserializeObject<List<UserEmails>>(content);
         }
 
         /// <summary>
@@ -96,6 +153,27 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
                         }
                 };
             return result;
+        }
+
+        /// <summary>
+        /// Information about a user email.
+        /// </summary>
+        protected class UserEmails
+        {
+            /// <summary>
+            /// Gets or sets the email address
+            /// </summary>
+            public string Email { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this is the primary email address?
+            /// </summary>
+            public bool IsPrimary { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this email address is verified?
+            /// </summary>
+            public bool IsVerified { get; set; }
         }
     }
 }

@@ -5,6 +5,7 @@
       <Value>Auth</Value>
       <Value>deserialized</Value>
       <Value>deserializer</Value>
+      <Value>Git</Value>
       <Value>json</Value>
       <Value>Json</Value>
     </CollectionProperty>
