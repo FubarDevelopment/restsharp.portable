@@ -1,6 +1,5 @@
-﻿using System.Net;
-using RestSharp.Portable.Authenticators.OAuth2.Client;
-using RestSharp.Portable;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
@@ -11,19 +10,26 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
     public static class RestClientExtensions
     {
         /// <summary>
-        /// Execute a request and test if the status code is OK 
+        /// Execute a request and test if the status code is OK
         /// </summary>
-        /// <param name="client"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="client">
+        /// The client that executes the request
+        /// </param>
+        /// <param name="request">
+        /// The request to be executed
+        /// </param>
+        /// <returns>
+        /// The response of the request
+        /// </returns>
         public static async Task<IRestResponse> ExecuteAndVerify(this IRestClient client, IRestRequest request)
         {
             var response = await client.Execute(request);
-            if (response.StatusCode != HttpStatusCode.OK ||
-                response.IsEmpty())
+            if ((response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
+                || response.IsEmpty())
             {
                 throw new UnexpectedResponseException(response);
             }
+
             return response;
         }
     }

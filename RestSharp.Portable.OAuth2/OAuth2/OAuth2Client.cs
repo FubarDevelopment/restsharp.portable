@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Linq;
-using System;
 
 namespace RestSharp.Portable.Authenticators.OAuth2
 {
@@ -16,65 +18,19 @@ namespace RestSharp.Portable.Authenticators.OAuth2
     /// </summary>
     public abstract class OAuth2Client : IClient
     {
-        private const string AccessTokenKey = "access_token";
-        private const string RefreshTokenKey = "refresh_token";
-        private const string ExpiresKey = "expires_in";
-        private const string TokenTypeKey = "token_type";
+        private const string _accessTokenKey = "access_token";
 
-        private const string GrantTypeAuthorizationKey = "authorization_code";
-        private const string GrantTypeRefreshTokenKey = "refresh_token";
+        private const string _refreshTokenKey = "refresh_token";
+
+        private const string _expiresKey = "expires_in";
+
+        private const string _tokenTypeKey = "token_type";
+
+        private const string _grantTypeAuthorizationKey = "authorization_code";
+
+        private const string _grantTypeRefreshTokenKey = "refresh_token";
 
         private readonly IRequestFactory _factory;
-
-        /// <summary>
-        /// Client configuration object.
-        /// </summary>
-        public IClientConfiguration Configuration { get; private set; }
-
-        /// <summary>
-        /// Friendly name of provider (OAuth2 service).
-        /// </summary>
-        public abstract string Name { get; }
-
-        /// <summary>
-        /// State (any additional information that was provided by application and is posted back by service).
-        /// </summary>
-        public string State { get; private set; }
-
-        /// <summary>
-        /// Access token returned by provider. Can be used for further calls of provider API.
-        /// </summary>
-        public string AccessToken { get; protected set; }
-
-        /// <summary>
-        /// Refresh token returned by provider. Can be used for further calls of provider API.
-        /// </summary>
-        public string RefreshToken { get; protected set; }
-
-        /// <summary>
-        /// Token type returned by provider. Can be used for further calls of provider API.
-        /// </summary>
-        public string TokenType { get; private set; }
-
-        /// <summary>
-        /// The time when the access token expires
-        /// </summary>
-        public DateTime? ExpiresAt { get; protected set; }
-
-        /// <summary>
-        /// A safety margin that's used to see if an access token is expired
-        /// </summary>
-        public TimeSpan ExpirationSafetyMargin { get; set; }
-
-        /// <summary>
-        /// Gets the instance of the request factory.
-        /// </summary>
-        protected IRequestFactory Factory
-        {
-            get { return _factory; }
-        }
-
-        private string GrantType { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Client"/> class.
@@ -89,30 +45,99 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         }
 
         /// <summary>
+        /// Gets the client configuration object.
+        /// </summary>
+        public IClientConfiguration Configuration { get; private set; }
+
+        /// <summary>
+        /// Gets the friendly name of provider (OAuth2 service).
+        /// </summary>
+        public abstract string Name { get; }
+
+        /// <summary>
+        /// Gets the state (any additional information that was provided by application and is posted back by service).
+        /// </summary>
+        public string State { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the access token returned by provider. Can be used for further calls of provider API.
+        /// </summary>
+        public string AccessToken { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the refresh token returned by provider. Can be used for further calls of provider API.
+        /// </summary>
+        public string RefreshToken { get; protected set; }
+
+        /// <summary>
+        /// Gets the token type returned by provider. Can be used for further calls of provider API.
+        /// </summary>
+        public string TokenType { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the time when the access token expires
+        /// </summary>
+        public DateTime? ExpiresAt { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a safety margin that's used to see if an access token is expired
+        /// </summary>
+        public TimeSpan ExpirationSafetyMargin { get; set; }
+
+        /// <summary>
+        /// Gets the instance of the request factory.
+        /// </summary>
+        protected IRequestFactory Factory
+        {
+            get { return _factory; }
+        }
+
+        /// <summary>
+        /// Gets the URI of service which issues access code.
+        /// </summary>
+        protected abstract Endpoint AccessCodeServiceEndpoint { get; }
+
+        /// <summary>
+        /// Gets the URI of service which issues access token.
+        /// </summary>
+        protected abstract Endpoint AccessTokenServiceEndpoint { get; }
+
+        /// <summary>
+        /// Gets the URI of service which allows to obtain information about user
+        /// who is currently logged in.
+        /// </summary>
+        protected abstract Endpoint UserInfoServiceEndpoint { get; }
+
+        private string GrantType { get; set; }
+
+        /// <summary>
         /// Returns URI of service which should be called in order to start authentication process.
         /// This URI should be used for rendering login link.
         /// </summary>
-        /// <param name="state">
-        /// Any additional information that will be posted back by service.
-        /// </param>
+        /// <param name="state">Any additional information that will be posted back by service.</param>
+        /// <returns>A string containing the login link URI</returns>
         public virtual async Task<string> GetLoginLinkUri(string state = null)
         {
             var client = _factory.CreateClient(AccessCodeServiceEndpoint);
             var request = _factory.CreateRequest(AccessCodeServiceEndpoint);
-            request.AddObject(new
-            {
-                response_type = "code",
-                client_id = Configuration.ClientId,
-                redirect_uri = Configuration.RedirectUri,
-                scope = Configuration.Scope,
-                state
-            }, new[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) }, PropertyFilterMode.Exclude);
-            await BeforeGetLoginLinkUri(new BeforeAfterRequestArgs()
-            {
-                Client = client,
-                Request = request,
-                Configuration = Configuration,
-            });
+            request.AddObject(
+                new
+                    {
+                        response_type = "code",
+                        client_id = Configuration.ClientId,
+                        redirect_uri = Configuration.RedirectUri,
+                        scope = Configuration.Scope,
+                        state
+                    },
+                new[] { (string.IsNullOrEmpty(Configuration.Scope) ? "scope" : null) },
+                PropertyFilterMode.Exclude);
+            await BeforeGetLoginLinkUri(
+                new BeforeAfterRequestArgs()
+                    {
+                        Client = client,
+                        Request = request,
+                        Configuration = Configuration,
+                    });
             return await Task<string>.Factory.StartNew(() => client.BuildUri(request).ToString());
         }
 
@@ -120,9 +145,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Obtains user information using RestSharp.Portable.Authenticators.OAuth2 service and data provided via callback request.
         /// </summary>
         /// <param name="parameters">Callback request payload (parameters).</param>
+        /// <returns>The user information</returns>
         public async Task<UserInfo> GetUserInfo(ILookup<string, string> parameters)
         {
-            GrantType = GrantTypeAuthorizationKey;
+            GrantType = _grantTypeAuthorizationKey;
             CheckErrorAndSetState(parameters);
             await QueryAccessToken(parameters);
             return await GetUserInfo();
@@ -132,27 +158,28 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Issues query for access token and returns access token.
         /// </summary>
         /// <param name="parameters">Callback request payload (parameters).</param>
+        /// <returns>The access token</returns>
         public async Task<string> GetToken(ILookup<string, string> parameters)
         {
-            GrantType = GrantTypeAuthorizationKey;
+            GrantType = _grantTypeAuthorizationKey;
             CheckErrorAndSetState(parameters);
             await QueryAccessToken(parameters);
             return AccessToken;
         }
 
         /// <summary>
-        /// Get the current access token - and optinally refreshes it if it is expired
+        /// Get the current access token - and optionally refreshes it if it is expired
         /// </summary>
         /// <param name="refreshToken">The refresh token to use (null == default)</param>
-        /// <param name="forceUpdate">Enfore an update of the access token?</param>
+        /// <param name="forceUpdate">Enforce an update of the access token?</param>
         /// <param name="safetyMargin">A custom safety margin to check if the access token is expired</param>
-        /// <returns></returns>
+        /// <returns>The current access token</returns>
         public async Task<string> GetCurrentToken(string refreshToken = null, bool forceUpdate = false, TimeSpan? safetyMargin = null)
         {
             bool refreshRequired =
                 forceUpdate
-                || (ExpiresAt != null && DateTime.Now >= (ExpiresAt - (safetyMargin ?? ExpirationSafetyMargin))) 
-                || String.IsNullOrEmpty(AccessToken);
+                || (ExpiresAt != null && DateTime.Now >= (ExpiresAt - (safetyMargin ?? ExpirationSafetyMargin)))
+                || string.IsNullOrEmpty(AccessToken);
 
             if (refreshRequired)
             {
@@ -164,11 +191,12 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 else
                     throw new Exception("Token never fetched and refresh token not provided.");
 
-                var parameters = new Dictionary<string, string>() {
-                    { RefreshTokenKey, refreshTokenValue },
-                };
+                var parameters = new Dictionary<string, string>()
+                    {
+                        { _refreshTokenKey, refreshTokenValue },
+                    };
 
-                GrantType = GrantTypeRefreshTokenKey;
+                GrantType = _grantTypeRefreshTokenKey;
                 await QueryAccessToken(parameters.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase));
             }
 
@@ -176,84 +204,11 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         }
 
         /// <summary>
-        /// Defines URI of service which issues access code.
-        /// </summary>
-        protected abstract Endpoint AccessCodeServiceEndpoint { get; }
-
-        /// <summary>
-        /// Defines URI of service which issues access token.
-        /// </summary>
-        protected abstract Endpoint AccessTokenServiceEndpoint { get; }
-
-        /// <summary>
-        /// Defines URI of service which allows to obtain information about user 
-        /// who is currently logged in.
-        /// </summary>
-        protected abstract Endpoint UserInfoServiceEndpoint { get; }
-
-        private void CheckErrorAndSetState(ILookup<string, string> parameters)
-        {
-            const string errorFieldName = "error";
-
-            var error = parameters[errorFieldName].ToList();
-            if (error.Any(x => !string.IsNullOrEmpty(x)))
-                throw new UnexpectedResponseException(errorFieldName, string.Join("\n", error));
-
-            State = string.Join(",", parameters["state"]);
-        }
-
-        /// <summary>
-        /// Issues query for access token and parses response.
-        /// </summary>
-        /// <param name="parameters">Callback request payload (parameters).</param>
-        private async Task QueryAccessToken(ILookup<string, string> parameters)
-        {
-            var client = _factory.CreateClient(AccessTokenServiceEndpoint);
-            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
-
-            BeforeGetAccessToken(new BeforeAfterRequestArgs
-            {
-                Client = client,
-                Request = request,
-                Parameters = parameters,
-                Configuration = Configuration
-            });
-
-            var response = await client.ExecuteAndVerify(request);
-
-            var content = response.GetContent();
-            AccessToken = ParseAccessTokenResponse(content);
-
-            if (GrantType != GrantTypeRefreshTokenKey)
-                RefreshToken = ParseStringResponse(content, new[] { RefreshTokenKey })[RefreshTokenKey].FirstOrDefault();
-            TokenType = ParseStringResponse(content, new[] { TokenTypeKey })[TokenTypeKey].FirstOrDefault();
-
-            var expiresIn = ParseStringResponse(content, new[] { ExpiresKey })[ExpiresKey].Select(x => Convert.ToInt32(x, 10)).FirstOrDefault();
-            ExpiresAt = (expiresIn != 0 ? (DateTime?)DateTime.Now.AddSeconds(expiresIn) : null);
-
-            AfterGetAccessToken(new BeforeAfterRequestArgs
-            {
-                Response = response,
-                Parameters = parameters
-            });
-        }
-
-        /// <summary>
-        /// Parse the access token response using either JSON or form url encoded parameters
-        /// </summary>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        protected virtual string ParseAccessTokenResponse(string content)
-        {
-            return ParseStringResponse(content, AccessTokenKey);
-        }
-
-        /// <summary>
         /// Parse the response, search for a key and return its value.
         /// </summary>
         /// <param name="content">The content to parse</param>
         /// <param name="key">The key to query</param>
-        /// <returns></returns>
+        /// <returns>The value for the queried key</returns>
         /// <exception cref="UnexpectedResponseException">Thrown when the key wasn't found</exception>
         protected static string ParseStringResponse(string content, string key)
         {
@@ -266,9 +221,9 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// Parse the response for a given key/value using either JSON or form url encoded parameters
         /// </summary>
-        /// <param name="content"></param>
-        /// <param name="keys"></param>
-        /// <returns></returns>
+        /// <param name="content">The content to parse</param>
+        /// <param name="keys">The keys to query</param>
+        /// <returns>The values for the queried keys</returns>
         protected static ILookup<string, string> ParseStringResponse(string content, params string[] keys)
         {
             var result = new List<KeyValuePair<string, string>>();
@@ -298,19 +253,33 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                         result.Add(new KeyValuePair<string, string>(key, item));
                 }
             }
+
             return result.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Parse the access token response using either JSON or form url encoded parameters
+        /// </summary>
+        /// <param name="content">The content to parse the access token from</param>
+        /// <returns>The access token</returns>
+        protected virtual string ParseAccessTokenResponse(string content)
+        {
+            return ParseStringResponse(content, _accessTokenKey);
         }
 
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content received from provider.
         /// </summary>
         /// <param name="content">The content which is received from provider.</param>
+        /// <returns>The found user information</returns>
         protected abstract UserInfo ParseUserInfo(string content);
 
         /// <summary>
         /// Called just before building the request URI when everything is ready.
         /// Allows to add extra parameters to request or do any other needed preparations.
         /// </summary>
+        /// <param name="args">The request/response arguments</param>
+        /// <returns>The task this handler is processed on</returns>
         protected virtual async Task BeforeGetLoginLinkUri(BeforeAfterRequestArgs args)
         {
             await Task.Factory.StartNew(() => { });
@@ -319,29 +288,32 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// Called before the request to get the access token
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The request/response arguments</param>
         protected virtual void BeforeGetAccessToken(BeforeAfterRequestArgs args)
         {
-            args.Request.AddObject(new
-            {
-                client_id = Configuration.ClientId,
-                client_secret = Configuration.ClientSecret,
-                grant_type = GrantType
-            });
-            if (GrantType == GrantTypeRefreshTokenKey)
-            {
-                args.Request.AddObject(new
+            args.Request.AddObject(
+                new
                 {
-                    refresh_token = args.Parameters.GetOrThrowUnexpectedResponse(RefreshTokenKey),
+                    client_id = Configuration.ClientId,
+                    client_secret = Configuration.ClientSecret,
+                    grant_type = GrantType
                 });
+            if (GrantType == _grantTypeRefreshTokenKey)
+            {
+                args.Request.AddObject(
+                    new
+                    {
+                        refresh_token = args.Parameters.GetOrThrowUnexpectedResponse(_refreshTokenKey),
+                    });
             }
             else
             {
-                args.Request.AddObject(new
-                {
-                    code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
-                    redirect_uri = Configuration.RedirectUri,
-                });
+                args.Request.AddObject(
+                    new
+                    {
+                        code = args.Parameters.GetOrThrowUnexpectedResponse("code"),
+                        redirect_uri = Configuration.RedirectUri,
+                    });
             }
         }
 
@@ -349,6 +321,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Called just after obtaining response with access token from service.
         /// Allows to read extra data returned along with access token.
         /// </summary>
+        /// <param name="args">The request/response arguments</param>
         protected virtual void AfterGetAccessToken(BeforeAfterRequestArgs args)
         {
         }
@@ -357,6 +330,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// Called just before issuing request to service when everything is ready.
         /// Allows to add extra parameters to request or do any other needed preparations.
         /// </summary>
+        /// <param name="args">The request/response arguments</param>
         protected virtual void BeforeGetUserInfo(BeforeAfterRequestArgs args)
         {
         }
@@ -364,18 +338,20 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// Obtains user information using provider API.
         /// </summary>
+        /// <returns>The queried user information</returns>
         protected virtual async Task<UserInfo> GetUserInfo()
         {
             var client = _factory.CreateClient(UserInfoServiceEndpoint);
             client.Authenticator = new OAuth2UriQueryParameterAuthenticator(this);
             var request = _factory.CreateRequest(UserInfoServiceEndpoint);
 
-            BeforeGetUserInfo(new BeforeAfterRequestArgs
-            {
-                Client = client,
-                Request = request,
-                Configuration = Configuration
-            });
+            BeforeGetUserInfo(
+                new BeforeAfterRequestArgs
+                {
+                    Client = client,
+                    Request = request,
+                    Configuration = Configuration
+                });
 
             var response = await client.ExecuteAndVerify(request);
 
@@ -383,6 +359,56 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             result.ProviderName = Name;
 
             return result;
+        }
+
+        private void CheckErrorAndSetState(ILookup<string, string> parameters)
+        {
+            const string errorFieldName = "error";
+
+            var error = parameters[errorFieldName].ToList();
+            if (error.Any(x => !string.IsNullOrEmpty(x)))
+                throw new UnexpectedResponseException(errorFieldName, string.Join("\n", error));
+
+            State = string.Join(",", parameters["state"]);
+        }
+
+        /// <summary>
+        /// Issues query for access token and parses response.
+        /// </summary>
+        /// <param name="parameters">Callback request payload (parameters).</param>
+        /// <returns>The task the query is performed on</returns>
+        private async Task QueryAccessToken(ILookup<string, string> parameters)
+        {
+            var client = _factory.CreateClient(AccessTokenServiceEndpoint);
+            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
+
+            BeforeGetAccessToken(
+                new BeforeAfterRequestArgs
+                    {
+                        Client = client,
+                        Request = request,
+                        Parameters = parameters,
+                        Configuration = Configuration
+                    });
+
+            var response = await client.ExecuteAndVerify(request);
+
+            var content = response.GetContent();
+            AccessToken = ParseAccessTokenResponse(content);
+
+            if (GrantType != _grantTypeRefreshTokenKey)
+                RefreshToken = ParseStringResponse(content, new[] { _refreshTokenKey })[_refreshTokenKey].FirstOrDefault();
+            TokenType = ParseStringResponse(content, new[] { _tokenTypeKey })[_tokenTypeKey].FirstOrDefault();
+
+            var expiresIn = ParseStringResponse(content, new[] { _expiresKey })[_expiresKey].Select(x => Convert.ToInt32(x, 10)).FirstOrDefault();
+            ExpiresAt = expiresIn != 0 ? (DateTime?)DateTime.Now.AddSeconds(expiresIn) : null;
+
+            AfterGetAccessToken(
+                new BeforeAfterRequestArgs
+                    {
+                        Response = response,
+                        Parameters = parameters
+                    });
         }
     }
 }

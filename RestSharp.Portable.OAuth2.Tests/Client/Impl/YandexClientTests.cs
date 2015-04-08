@@ -1,8 +1,13 @@
-﻿using FluentAssertions;
+﻿using System;
+
+using FluentAssertions;
+
 using NSubstitute;
+
 using NUnit.Framework;
-using RestSharp.Portable.Authenticators.OAuth2.Client;
+
 using RestSharp.Portable.Authenticators.OAuth2;
+using RestSharp.Portable.Authenticators.OAuth2.Client;
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;

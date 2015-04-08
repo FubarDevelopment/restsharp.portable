@@ -5,6 +5,7 @@
       <Value>Auth</Value>
       <Value>deserialized</Value>
       <Value>deserializer</Value>
+      <Value>Git</Value>
       <Value>json</Value>
       <Value>Json</Value>
       <Value>preauthentication</Value>
@@ -14,6 +15,7 @@
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
       <AnalyzerSettings>
         <StringProperty Name="AdvancedNaming_Words">3D A Auth B C DE EN EOF FxCop ID IDs MD5 MD5sess OAuth OK StyleCop US X Y</StringProperty>
+        <StringProperty Name="AdvancedNaming_PrivateConst">_$(aaBb):$(AaBb):c_$(aaBb):$(AA_BB)</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

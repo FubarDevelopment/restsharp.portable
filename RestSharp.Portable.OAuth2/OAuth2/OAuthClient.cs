@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
 using RestSharp.Portable.Authenticators.OAuth2.Infrastructure;
 using RestSharp.Portable.Authenticators.OAuth2.Models;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace RestSharp.Portable.Authenticators.OAuth2
 {
@@ -13,36 +14,11 @@ namespace RestSharp.Portable.Authenticators.OAuth2
     /// </summary>
     public abstract class OAuthClient : IClient
     {
-        private const string OAuthTokenKey = "oauth_token";
-        private const string OAuthTokenSecretKey = "oauth_token_secret";
+        private const string _oAuthTokenKey = "oauth_token";
+
+        private const string _oAuthTokenSecretKey = "oauth_token_secret";
 
         private readonly IRequestFactory _factory;
-
-        /// <summary>
-        /// Client configuration object.
-        /// </summary>
-        public IClientConfiguration Configuration { get; private set; }
-
-        /// <summary>
-        /// Friendly name of provider (OAuth service).
-        /// </summary>
-        public abstract string Name { get; }
-
-        /// <summary>
-        /// State which was posted as additional parameter
-        /// to service and then received along with main answer.
-        /// </summary>
-        public string State { get { return null; } }
-
-        /// <summary>
-        /// Access token received from service. Can be used for further service API calls.
-        /// </summary>
-        public string AccessToken { get; private set; }
-
-        /// <summary>
-        /// Access token secret received from service. Can be used for further service API calls.
-        /// </summary>
-        public string AccessTokenSecret { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuthClient" /> class.
@@ -56,6 +32,55 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         }
 
         /// <summary>
+        /// Gets the client configuration object.
+        /// </summary>
+        public IClientConfiguration Configuration { get; private set; }
+
+        /// <summary>
+        /// Gets the friendly name of provider (OAuth service).
+        /// </summary>
+        public abstract string Name { get; }
+
+        /// <summary>
+        /// Gets the state which was posted as additional parameter
+        /// to service and then received along with main answer.
+        /// </summary>
+        public string State
+        {
+            get { return null; }
+        }
+
+        /// <summary>
+        /// Gets the access token received from service. Can be used for further service API calls.
+        /// </summary>
+        public string AccessToken { get; private set; }
+
+        /// <summary>
+        /// Gets the access token secret received from service. Can be used for further service API calls.
+        /// </summary>
+        public string AccessTokenSecret { get; private set; }
+
+        /// <summary>
+        /// Gets the URI of service which is called for obtaining request token.
+        /// </summary>
+        protected abstract Endpoint RequestTokenServiceEndpoint { get; }
+
+        /// <summary>
+        /// Gets the URI of service which should be called to initiate authentication process.
+        /// </summary>
+        protected abstract Endpoint LoginServiceEndpoint { get; }
+
+        /// <summary>
+        /// Gets the URI of service which issues access token.
+        /// </summary>
+        protected abstract Endpoint AccessTokenServiceEndpoint { get; }
+
+        /// <summary>
+        /// Gets the URI of service which is called to obtain user information.
+        /// </summary>
+        protected abstract Endpoint UserInfoServiceEndpoint { get; }
+
+        /// <summary>
         /// Returns URI of service which should be called in order to start authentication process.
         /// You should use this URI when rendering login link.
         /// </summary>
@@ -67,6 +92,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             {
                 throw new NotSupportedException("State transmission is not supported by current implementation.");
             }
+
             await QueryRequestToken();
             return GetLoginRequestUri(state);
         }
@@ -77,71 +103,100 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// </summary>
         /// <param name="parameters">Callback request payload (parameters).
         /// <example>Request.QueryString</example></param>
-        /// <returns></returns>
+        /// <returns>The user information</returns>
         public async Task<UserInfo> GetUserInfo(ILookup<string, string> parameters)
         {
-            AccessToken = parameters.GetOrThrowUnexpectedResponse(OAuthTokenKey);
+            AccessToken = parameters.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
             await QueryAccessToken(parameters.GetOrThrowUnexpectedResponse("oauth_verifier"));
 
             var result = ParseUserInfo(await QueryUserInfo());
-            result.ProviderName = Name;
+            if (result != null)
+                result.ProviderName = Name;
 
             return result;
         }
 
         /// <summary>
-        /// Defines URI of service which is called for obtaining request token.
+        /// Called just before obtaining response with access token from service.
+        /// Allows to modify the request.
         /// </summary>
-        protected abstract Endpoint RequestTokenServiceEndpoint { get; }
+        /// <param name="args">The request arguments (client, request, configuration)</param>
+        protected virtual void BeforeGetAccessToken(BeforeAfterRequestArgs args)
+        {
+        }
 
         /// <summary>
-        /// Defines URI of service which should be called to initiate authentication process.
+        /// Called just after obtaining response with access token from service.
+        /// Allows to read extra data returned along with access token.
         /// </summary>
-        protected abstract Endpoint LoginServiceEndpoint { get; }
+        /// <param name="args">The request arguments (response only)</param>
+        protected virtual void AfterGetAccessToken(BeforeAfterRequestArgs args)
+        {
+        }
 
         /// <summary>
-        /// Defines URI of service which issues access token.
+        /// Called just before issuing request to service when everything is ready.
+        /// Allows to add extra parameters to request or do any other needed preparations.
         /// </summary>
-        protected abstract Endpoint AccessTokenServiceEndpoint { get; }
-
-        /// <summary>
-        /// Defines URI of service which is called to obtain user information.
-        /// </summary>
-        protected abstract Endpoint UserInfoServiceEndpoint { get; }
+        /// <param name="args">The request arguments (client, request, configuration)</param>
+        protected virtual void BeforeGetUserInfo(BeforeAfterRequestArgs args)
+        {
+        }
 
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content of callback issued by service.
         /// </summary>
+        /// <param name="content">The content to parse the user information from</param>
+        /// <returns>The new user information</returns>
         protected abstract UserInfo ParseUserInfo(string content);
 
         /// <summary>
         /// Issues request for request token and returns result.
         /// </summary>
+        /// <returns>The task the request token gets queried on</returns>
         private async Task QueryRequestToken()
         {
             var client = _factory.CreateClient(RequestTokenServiceEndpoint);
             client.Authenticator = OAuth1Authenticator.ForRequestToken(
-                Configuration.ClientId, Configuration.ClientSecret, Configuration.RedirectUri);
-            
+                Configuration.ClientId,
+                Configuration.ClientSecret,
+                Configuration.RedirectUri);
+
             var request = _factory.CreateRequest(RequestTokenServiceEndpoint, HttpMethod.Post);
-            
+
+            BeforeGetAccessToken(
+                new BeforeAfterRequestArgs
+                    {
+                        Client = client,
+                        Request = request,
+                        Configuration = Configuration
+                    });
+
             var response = await client.ExecuteAndVerify(request);
+
+            AfterGetAccessToken(
+                new BeforeAfterRequestArgs
+                {
+                    Response = response,
+                });
+
             var collection = response.GetContent().ParseQueryString();
 
-            AccessToken = collection.GetOrThrowUnexpectedResponse(OAuthTokenKey);
-            AccessTokenSecret = collection.GetOrThrowUnexpectedResponse(OAuthTokenSecretKey);
+            AccessToken = collection.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
+            AccessTokenSecret = collection.GetOrThrowUnexpectedResponse(_oAuthTokenSecretKey);
         }
 
         /// <summary>
         /// Composes login link URI.
         /// </summary>
         /// <param name="state">Any additional information needed by application.</param>
+        /// <returns>The login request URI</returns>
         private string GetLoginRequestUri(string state = null)
         {
             var client = _factory.CreateClient(LoginServiceEndpoint);
             var request = _factory.CreateRequest(LoginServiceEndpoint);
 
-            request.AddParameter(OAuthTokenKey, AccessToken);
+            request.AddParameter(_oAuthTokenKey, AccessToken);
             if (!state.IsEmpty())
             {
                 request.AddParameter("state", state);
@@ -159,28 +214,44 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         {
             var client = _factory.CreateClient(AccessTokenServiceEndpoint);
             client.Authenticator = OAuth1Authenticator.ForAccessToken(
-                Configuration.ClientId, Configuration.ClientSecret, AccessToken, AccessTokenSecret, verifier);
+                Configuration.ClientId,
+                Configuration.ClientSecret,
+                AccessToken,
+                AccessTokenSecret,
+                verifier);
 
             var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
 
             var content = (await client.ExecuteAndVerify(request)).GetContent();
             var collection = content.ParseQueryString();
-            
-            AccessToken = collection.GetOrThrowUnexpectedResponse(OAuthTokenKey);
-            AccessTokenSecret = collection.GetOrThrowUnexpectedResponse(OAuthTokenSecretKey);
+
+            AccessToken = collection.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
+            AccessTokenSecret = collection.GetOrThrowUnexpectedResponse(_oAuthTokenSecretKey);
         }
 
         /// <summary>
         /// Queries user info using corresponding service and data received by access token request.
         /// </summary>
+        /// <returns>The task that queries the user information and the string that was returned by the query</returns>
         private async Task<string> QueryUserInfo()
         {
             var client = _factory.CreateClient(UserInfoServiceEndpoint);
             client.Authenticator = OAuth1Authenticator.ForProtectedResource(
-                Configuration.ClientId, Configuration.ClientSecret, AccessToken, AccessTokenSecret);
+                Configuration.ClientId,
+                Configuration.ClientSecret,
+                AccessToken,
+                AccessTokenSecret);
 
             var request = _factory.CreateRequest(UserInfoServiceEndpoint);
-            
+
+            BeforeGetUserInfo(
+                new BeforeAfterRequestArgs
+                {
+                    Client = client,
+                    Request = request,
+                    Configuration = Configuration
+                });
+
             return (await client.ExecuteAndVerify(request)).GetContent();
         }
     }
