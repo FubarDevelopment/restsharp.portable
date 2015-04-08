@@ -12,19 +12,52 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
     public class GitHubClient : OAuth2Client
     {
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="GitHubClient"/> class.
         /// </summary>
-        /// <param name="factory"></param>
-        /// <param name="configuration"></param>
+        /// <param name="factory">The factory.</param>
+        /// <param name="configuration">The configuration.</param>
         public GitHubClient(IRequestFactory factory, IClientConfiguration configuration)
             : base(factory, configuration)
         {
         }
 
         /// <summary>
+        /// Gets the friendly name of provider (OAuth2 service).
+        /// </summary>
+        public override string Name
+        {
+            get { return "GitHub"; }
+        }
+
+        /// <summary>
+        /// Gets the URI of service which issues access code.
+        /// </summary>
+        protected override Endpoint AccessCodeServiceEndpoint
+        {
+            get { return new Endpoint { BaseUri = "https://github.com", Resource = "/login/oauth/authorize" }; }
+        }
+
+        /// <summary>
+        /// Gets the URI of service which issues access token.
+        /// </summary>
+        protected override Endpoint AccessTokenServiceEndpoint
+        {
+            get { return new Endpoint { BaseUri = "https://github.com", Resource = "/login/oauth/access_token" }; }
+        }
+
+        /// <summary>
+        /// Gets the URI of service which allows to obtain information about user
+        /// who is currently logged in.
+        /// </summary>
+        protected override Endpoint UserInfoServiceEndpoint
+        {
+            get { return new Endpoint { BaseUri = "https://api.github.com/", Resource = "/user" }; }
+        }
+
+        /// <summary>
         /// Called before the request to get the access token
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">The request/response arguments</param>
         protected override void BeforeGetAccessToken(BeforeAfterRequestArgs args)
         {
             args.Request.AddObject(new
@@ -38,9 +71,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         }
 
         /// <summary>
-        /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
+        /// Should return parsed <see cref="UserInfo"/> using content received from provider.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
+        /// <param name="content">The content which is received from provider.</param>
+        /// <returns>The found user information</returns>
         protected override UserInfo ParseUserInfo(string content)
         {
             var cnt = JObject.Parse(content);
@@ -50,7 +84,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             var result = new UserInfo
                 {
                     Email = cnt["email"].SafeGet(x => x.Value<string>()),
-                    ProviderName = this.Name,
+                    ProviderName = Name,
                     Id = cnt["id"].Value<string>(),
                     FirstName = names.Count > 0 ? names.First() : cnt["login"].Value<string>(),
                     LastName = names.Count > 1 ? names.Last() : string.Empty,
@@ -62,38 +96,6 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
                         }
                 };
             return result;
-        }
-
-        /// <summary>
-        /// Friendly name of provider (OAuth2 service).
-        /// </summary>
-        public override string Name
-        {
-            get { return "GitHub"; }
-        }
-
-        /// <summary>
-        /// Defines URI of service which issues access code.
-        /// </summary>
-        protected override Endpoint AccessCodeServiceEndpoint
-        {
-            get { return new Endpoint { BaseUri = "https://github.com", Resource = "/login/oauth/authorize" }; }
-        }
-
-        /// <summary>
-        /// Defines URI of service which issues access token.
-        /// </summary>
-        protected override Endpoint AccessTokenServiceEndpoint
-        {
-            get { return new Endpoint { BaseUri = "https://github.com", Resource = "/login/oauth/access_token" }; }
-        }
-
-        /// <summary>
-        /// Defines URI of service which allows to obtain information about user which is currently logged in.
-        /// </summary>
-        protected override Endpoint UserInfoServiceEndpoint
-        {
-            get { return new Endpoint { BaseUri = "https://api.github.com/", Resource = "/user" }; }
         }
     }
 }

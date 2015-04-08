@@ -18,12 +18,8 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="AsanaClient"/> class.
         /// </summary>
-        /// <param name="factory">
-        /// The factory.
-        /// </param>
-        /// <param name="configuration">
-        /// The configuration.
-        /// </param>
+        /// <param name="factory">The factory.</param>
+        /// <param name="configuration">The configuration.</param>
         public AsanaClient(IRequestFactory factory, IClientConfiguration configuration)
             : base(factory, configuration)
         {
