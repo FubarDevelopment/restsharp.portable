@@ -28,7 +28,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        bool CanPreAuthenticate([NotNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials);
+        bool CanPreAuthenticate([CanBeNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials);
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
@@ -38,7 +38,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        bool CanHandleChallenge([NotNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials, [NotNull] HttpResponseMessage response);
+        bool CanHandleChallenge([CanBeNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials, [NotNull] HttpResponseMessage response);
 
         /// <summary>
         /// Modifies the request to ensure that the authentication requirements are met.
@@ -56,7 +56,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        Task PreAuthenticate([NotNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials);
+        Task PreAuthenticate([CanBeNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials);
 
         /// <summary>
         /// Will be called when the authentication failed
@@ -66,6 +66,6 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        Task HandleChallenge([NotNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials, [NotNull] HttpResponseMessage response);
+        Task HandleChallenge([CanBeNull] HttpClient client, [NotNull] HttpRequestMessage request, ICredentials credentials, [NotNull] HttpResponseMessage response);
     }
 }

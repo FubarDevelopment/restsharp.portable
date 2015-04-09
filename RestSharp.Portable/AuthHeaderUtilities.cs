@@ -22,9 +22,9 @@ namespace RestSharp.Portable
         /// <param name="request">HTTP request message</param>
         /// <returns>The absolute URI</returns>
         [NotNull]
-        public static Uri GetRequestUri([NotNull] this HttpClient client, [NotNull] HttpRequestMessage request)
+        public static Uri GetRequestUri([CanBeNull] this HttpClient client, [NotNull] HttpRequestMessage request)
         {
-            if (client.BaseAddress == null)
+            if (client == null || client.BaseAddress == null)
                 return request.RequestUri;
 
             if (request.RequestUri != null)
@@ -41,7 +41,7 @@ namespace RestSharp.Portable
         /// <param name="response">HTTP response message</param>
         /// <returns>The absolute URI</returns>
         [NotNull]
-        public static Uri GetRequestUri([NotNull] this HttpClient client, [NotNull] HttpRequestMessage request, [NotNull] HttpResponseMessage response)
+        public static Uri GetRequestUri([CanBeNull] this HttpClient client, [NotNull] HttpRequestMessage request, [NotNull] HttpResponseMessage response)
         {
             var requestUri = client.GetRequestUri(request);
             if (response.Headers.Location == null)
