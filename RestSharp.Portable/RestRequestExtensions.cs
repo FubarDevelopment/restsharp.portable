@@ -204,6 +204,8 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddParameter(this IRestRequest request, string name, object value, ParameterType type)
         {
+            if (type == ParameterType.RequestBody && !string.IsNullOrEmpty(name))
+                return request.AddParameter(null, value, ParameterType.RequestBody, new MediaTypeHeaderValue(name));
             return request.AddParameter(new Parameter { Name = name, Value = value, Type = type });
         }
 
