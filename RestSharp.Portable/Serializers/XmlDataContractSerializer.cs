@@ -14,7 +14,7 @@ namespace RestSharp.Portable.Serializers
         private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
         private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
         private MediaTypeHeaderValue _defaultContentType;
-        private MediaTypeHeaderValue _contentType;
+        private string _contentType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlDataContractSerializer" /> class.
@@ -34,7 +34,7 @@ namespace RestSharp.Portable.Serializers
         /// As long as there is no manually set content type, the content type character set will always reflect the encoding
         /// of the XmlWriterSettings.
         /// </remarks>
-        public MediaTypeHeaderValue ContentType
+        public string ContentType
         {
             get
             {
@@ -47,7 +47,7 @@ namespace RestSharp.Portable.Serializers
                             CharSet = XmlWriterSettings.Encoding.WebName,
                         };
                     }
-                    return _defaultContentType;
+                    return _defaultContentType.ToString();
                 }
                 return _contentType;
             }

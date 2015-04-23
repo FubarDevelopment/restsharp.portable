@@ -59,20 +59,6 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
     </Reference>
     <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net40\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net40\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net40\System.Net.Http.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\net40\System.Runtime.dll</HintPath>
       <Private>True</Private>
@@ -93,9 +79,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.NET4\RestSharp.Portable.NET4.csproj">
-      <Project>{8df2addf-ebaf-4559-9429-85b5b8c2dcab}</Project>
-      <Name>RestSharp.Portable.NET4</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth.NET4\RestSharp.Portable.OAuth.NET4.csproj">
       <Project>{f0c273e4-854d-4140-86eb-7dc4834999b3}</Project>

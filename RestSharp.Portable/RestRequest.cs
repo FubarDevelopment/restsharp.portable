@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Net.Http;
 
 using JetBrains.Annotations;
@@ -19,7 +18,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         public RestRequest()
-            : this((string)null, HttpMethod.Get)
+            : this((string)null, Method.GET)
         {
         }
 
@@ -27,6 +26,16 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="method">The HTTP request method to use</param>
+        public RestRequest(Method method)
+            : this((string)null, method)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
+        /// </summary>
+        /// <param name="method">The HTTP request method to use</param>
+        [Obsolete]
         public RestRequest(HttpMethod method)
             : this((string)null, method)
         {
@@ -38,7 +47,7 @@ namespace RestSharp.Portable
         /// <param name="resource">The resource this request is targeting</param>
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource")]
         public RestRequest(string resource)
-            : this(resource, HttpMethod.Get)
+            : this(resource, Method.GET)
         {
         }
 
@@ -48,7 +57,7 @@ namespace RestSharp.Portable
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource might be null and the resource URI must never be null")]
-        public RestRequest(string resource, HttpMethod method)
+        public RestRequest(string resource, Method method)
         {
             ContentCollectionMode = ContentCollectionMode.MultiPartForFileParameters;
             Method = method;
@@ -60,8 +69,19 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
+        /// <param name="method">The HTTP request method</param>
+        [Obsolete]
+        public RestRequest(string resource, HttpMethod method)
+            : this(resource, method.ToMethod())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
+        /// </summary>
+        /// <param name="resource">The resource this request is targeting</param>
         public RestRequest([NotNull] Uri resource)
-            : this(resource, HttpMethod.Get)
+            : this(resource, Method.GET)
         {
         }
 
@@ -70,7 +90,18 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
+        [Obsolete]
         public RestRequest([NotNull] Uri resource, HttpMethod method)
+            : this(resource, method.ToMethod())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestRequest" /> class.
+        /// </summary>
+        /// <param name="resource">The resource this request is targeting</param>
+        /// <param name="method">The HTTP request method</param>
+        public RestRequest([NotNull] Uri resource, Method method)
             : this(resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString, method)
         {
         }
@@ -78,7 +109,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the HTTP request method (GET, POST, etc...)
         /// </summary>
-        public HttpMethod Method { get; set; }
+        public Method Method { get; set; }
 
         /// <summary>
         /// Gets or sets the resource relative to the REST clients base URL
@@ -96,7 +127,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the serializer that should serialize the body
         /// </summary>
-        public Serializers.ISerializer Serializer { get; set; }
+        public ISerializer Serializer { get; set; }
 
         /// <summary>
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.

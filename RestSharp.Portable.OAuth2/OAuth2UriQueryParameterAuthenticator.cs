@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -35,13 +34,13 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        public override bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public override bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             return false;
         }
@@ -65,7 +64,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public override Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public override Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             throw new NotSupportedException();
         }

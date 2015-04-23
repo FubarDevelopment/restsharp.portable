@@ -19,7 +19,7 @@ namespace RestSharp.Portable.Serializers
             ContentType = new MediaTypeHeaderValue("application/json")
             {
                 CharSet = _encoding.WebName,
-            };
+            }.ToString();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace RestSharp.Portable.Serializers
         /// <remarks>
         /// This serializer will return application/json
         /// </remarks>
-        public MediaTypeHeaderValue ContentType { get; set; }
+        public string ContentType { get; set; }
 
         /// <summary>
         /// Gets the default JSON serializer for <see cref="RestRequestExtensions.AddJsonBody"/>

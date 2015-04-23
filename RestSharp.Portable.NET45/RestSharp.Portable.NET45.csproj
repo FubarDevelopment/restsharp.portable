@@ -73,6 +73,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

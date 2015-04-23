@@ -41,7 +41,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\IRequestFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\LookupExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\ObjectExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RequestFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RequestFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth2\Infrastructure\RestResponseExtensions.cs" />

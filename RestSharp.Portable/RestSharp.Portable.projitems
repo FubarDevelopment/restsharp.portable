@@ -9,48 +9,34 @@
     <Import_RootNamespace>RestSharp.Portable</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AsyncLock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpHiddenBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\IAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AuthHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderUtilities.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ContentCollectionMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Deserializers\IDeserializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DefaultHttpExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Deserializers\JsonDeserializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Deserializers\XmlDataContractDeserializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Encodings\IEncoding.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)FileParameter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HttpClientImpl\DefaultHttpClientFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IHttpClientFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IRestResponseT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpMethodExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\DefaultHttpClientFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpHeaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpRequestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpContentWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RequestGuard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestResponseT.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Serializers\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeUtility.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UrlUtility.cs" />
   </ItemGroup>
 </Project>

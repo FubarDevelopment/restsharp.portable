@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -17,7 +16,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public override bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public override bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             if (HasAuthorizationToken)
                 return false;

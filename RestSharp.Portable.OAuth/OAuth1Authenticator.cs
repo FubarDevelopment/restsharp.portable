@@ -18,8 +18,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -266,13 +264,13 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        public bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             return false;
         }
@@ -316,7 +314,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             throw new NotSupportedException();
         }
@@ -329,7 +327,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             return false;
         }
@@ -342,7 +340,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual Task HandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public virtual Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             throw new NotSupportedException();
         }
@@ -351,7 +349,7 @@ namespace RestSharp.Portable.Authenticators
         {
             var url = client.BuildUri(request, false).ToString();
             OAuthWebQueryInfo oauth;
-            var method = request.Method.Method;
+            var method = request.Method.ToString();
             var parameters = new WebParameterCollection();
 
             // include all GET and POST parameters before generating the signature
@@ -405,7 +403,7 @@ namespace RestSharp.Portable.Authenticators
             {
                 case OAuthParameterHandling.HttpAuthorizationHeader:
                     parameters.Add("oauth_signature", oauth.Signature);
-                    request.AddHeader("Authorization", GetAuthorizationHeader(parameters).ToString());
+                    request.AddHeader("Authorization", GetAuthorizationHeader(parameters));
                     break;
                 case OAuthParameterHandling.UrlOrPostParameters:
                     parameters.Add("oauth_signature", oauth.Signature);
@@ -424,7 +422,7 @@ namespace RestSharp.Portable.Authenticators
             }
         }
 
-        private AuthenticationHeaderValue GetAuthorizationHeader(WebPairCollection parameters)
+        private string GetAuthorizationHeader(WebPairCollection parameters)
         {
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(Realm))
@@ -446,7 +444,7 @@ namespace RestSharp.Portable.Authenticators
             }
 
             var authorization = sb.ToString();
-            return new AuthenticationHeaderValue(AuthenticationMethod, authorization);
+            return string.Format("{0} {1}", AuthenticationMethod, authorization);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -48,7 +47,7 @@ namespace RestSharp.Portable
         /// <remarks>
         /// This override also deserializes the response
         /// </remarks>
-        protected internal override async Task LoadResponse(HttpResponseMessage response)
+        protected internal override async Task LoadResponse(IHttpResponseMessage response)
         {
             await base.LoadResponse(response);
             var handler = Client.GetHandler(ContentType);

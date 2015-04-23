@@ -109,6 +109,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
   <Import Project="..\System.Security.Cryptography.Portable\System.Security.Cryptography.Portable.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.Portable\System.Security.Cryptography.Portable.projitems')" />
   <Import Project="..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems')" />

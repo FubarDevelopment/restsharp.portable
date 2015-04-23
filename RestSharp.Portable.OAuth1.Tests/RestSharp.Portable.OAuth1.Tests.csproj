@@ -69,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj">
-      <Project>{6e25753f-f37d-4c32-931f-d4025546743d}</Project>
-      <Name>RestSharp.Portable.NET45</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth.NET45\RestSharp.Portable.OAuth.NET45.csproj">
       <Project>{3B4CABA1-B3C6-40DD-99E2-4BCE7C35382F}</Project>

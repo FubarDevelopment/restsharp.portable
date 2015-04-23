@@ -98,7 +98,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             factory.Received().CreateRequest("/RequestTokenServiceEndpoint");
 
             restClient.Received().BaseUrl = new Uri("https://RequestTokenServiceEndpoint");
-            restRequest.Received().Method = HttpMethod.Post;
+            restRequest.Received().Method = Method.POST;
 
             restClient.Authenticator.Should().NotBeNull();
             restClient.Authenticator.Should().BeOfType<OAuth1Authenticator>();
@@ -145,7 +145,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             factory.Received().CreateRequest("/AccessTokenServiceEndpoint");
 
             restClient.Received().BaseUrl = new Uri("https://AccessTokenServiceEndpoint");
-            restRequest.Received().Method = HttpMethod.Post;
+            restRequest.Received().Method = Method.POST;
             
             restClient.Authenticator.Should().NotBeNull();
             restClient.Authenticator.Should().BeOfType<OAuth1Authenticator>();

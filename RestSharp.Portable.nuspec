@@ -21,12 +21,14 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>- Revamped authenticator API (all async now)</releaseNotes>
+        <releaseNotes>- Revamped authenticator API (all async now)
+- Using the new core library</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
             <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
                 <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
@@ -34,6 +36,7 @@ Supported Platforms:
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="net40">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
                 <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
@@ -41,6 +44,7 @@ Supported Platforms:
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="sl50">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
                 <dependency id="Microsoft.Bcl" version="1.1.9" />
                 <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
@@ -48,18 +52,23 @@ Supported Platforms:
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="net45">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="MonoAndroid10">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="MonoTouch10">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group targetFramework="Xamarin.iOS10">
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
             <group>
+                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Newtonsoft.Json" version="6.0.5" />
             </group>
         </dependencies>

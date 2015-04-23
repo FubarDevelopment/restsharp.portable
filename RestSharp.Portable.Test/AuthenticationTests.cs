@@ -2,12 +2,11 @@
 using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Authenticators.OAuth;
-using RestSharp.Portable.HttpClientImpl;
+using RestSharp.Portable.Impl;
 
 using Xunit;
 
@@ -29,7 +28,7 @@ namespace RestSharp.Portable.Test
                 Authenticator = new HttpBasicAuthenticator(),
             })
             {
-                var request = new RestRequest("basic-auth/{username}/{password}", HttpMethod.Get);
+                var request = new RestRequest("basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", Username);
                 request.AddUrlSegment("password", Password);
                 var response = await client.Execute<AuthenticationResult>(request);
@@ -53,7 +52,7 @@ namespace RestSharp.Portable.Test
                 Authenticator = new HttpHiddenBasicAuthenticator(),
             })
             {
-                var request = new RestRequest("hidden-basic-auth/{username}/{password}", HttpMethod.Get);
+                var request = new RestRequest("hidden-basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", Username);
                 request.AddUrlSegment("password", Password);
                 var response = await client.Execute<AuthenticationResult>(request);
@@ -77,7 +76,7 @@ namespace RestSharp.Portable.Test
                 Authenticator = new HttpDigestAuthenticator()
             })
             {
-                var request = new RestRequest("digest-auth/auth/{username}/{password}", HttpMethod.Get);
+                var request = new RestRequest("digest-auth/auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", Username);
                 request.AddUrlSegment("password", Password);
                 var response = await client.Execute<AuthenticationResult>(request);
@@ -102,7 +101,7 @@ namespace RestSharp.Portable.Test
             })
             {
                 // httpbin.org only supports GET for digest-auth...
-                var request = new RestRequest("auth-int/{username}/{password}", HttpMethod.Get);
+                var request = new RestRequest("auth-int/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", Username);
                 request.AddUrlSegment("password", Password);
                 ////request.AddParameter("param1", "val1");
@@ -140,7 +139,7 @@ namespace RestSharp.Portable.Test
 
                 ////string token, token_secret;
                 {
-                    var request = new RestRequest("1.0/oauth/request_token", HttpMethod.Post);
+                    var request = new RestRequest("1.0/oauth/request_token", Method.POST);
                     var response = await client.Execute<IDictionary<string, string>>(request);
 
                     Assert.True(response.Data.ContainsKey("oauth_callback_confirmed"));

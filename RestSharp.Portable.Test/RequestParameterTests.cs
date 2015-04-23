@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using Xunit;
@@ -113,7 +112,7 @@ namespace RestSharp.Portable.Test
         {
             using (var client = new RestClient("http://localhost"))
             {
-                var request = new RestRequest(HttpMethod.Post);
+                var request = new RestRequest(Method.POST);
                 request
                     .AddParameter("param1", "value1", ParameterType.GetOrPost)
                     .AddParameter("param2", "value2")
