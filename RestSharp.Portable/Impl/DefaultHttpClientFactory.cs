@@ -223,7 +223,7 @@ namespace RestSharp.Portable.Impl
 
             var proxy = GetProxy(client);
             if (handler.SupportsProxy && _proxyProperty != null && proxy != null)
-                _proxyProperty.SetValue(handler, proxy, null);
+                _proxyProperty.SetValue(handler, new RequestProxyWrapper(proxy), null);
 
             var cookieContainer = GetCookies(client, request);
             if (cookieContainer != null)

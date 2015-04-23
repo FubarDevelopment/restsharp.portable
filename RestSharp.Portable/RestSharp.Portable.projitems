@@ -25,6 +25,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpRequestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpContentWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
