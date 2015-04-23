@@ -13,8 +13,9 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 * New core library that contains all interfaces and other generic stuff
 * New interface for proxies
 * New interfaces that are an abstraction of the HttpClient and its request/response messages
+* Uses now a RestSharp project compatible Method enumeration for HTTP requests and
+  all constructors taking a HttpMethod are flagged as obsolete
 * The API will change again soon!
-* Uses now a RestSharp project compatible Method enumeration for HTTP requests
 
 # Changes #
 
@@ -25,7 +26,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 * New interfaces that are an abstraction of the HttpClient and its 
   request/response messages
 * New interface for proxies
-* Uses now a RestSharp project compatible Method enumeration for HTTP requests
+* Uses now a RestSharp project compatible Method enumeration for HTTP requests and
+  all constructors taking a HttpMethod are flagged as obsolete
+* The IAuthenticator, ISerializer, IEncoding, and IDeserializer interfaces were
+  moved to the RestSharp.Portable namespace
 
 ## 3.0.0 alpha 3 ##
 
