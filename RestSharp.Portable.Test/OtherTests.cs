@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using Xunit;
@@ -16,7 +15,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/"))
             {
                 {
-                    var request = new RestRequest("post", HttpMethod.Post);
+                    var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1");
 
                     var response = await client.Execute<PostResponse>(request);
@@ -27,7 +26,7 @@ namespace RestSharp.Portable.Test
                 }
 
                 {
-                    var request = new RestRequest("post", HttpMethod.Post);
+                    var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1+");
 
                     var response = await client.Execute<PostResponse>(request);

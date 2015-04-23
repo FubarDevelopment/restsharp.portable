@@ -11,8 +11,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 * The ```IRestRequest.Credentials``` property moved to ```IRestClient.Credentials```
 * Credentials for authenticators are specified using the ```IRestClient.Credentials``` property
 * New core library that contains all interfaces and other generic stuff
+* New interface for proxies
 * New interfaces that are an abstraction of the HttpClient and its request/response messages
 * The API will change again soon!
+* Uses now a RestSharp project compatible Method enumeration for HTTP requests
 
 # Changes #
 
@@ -22,6 +24,8 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
   that doesn't have any dependencies
 * New interfaces that are an abstraction of the HttpClient and its 
   request/response messages
+* New interface for proxies
+* Uses now a RestSharp project compatible Method enumeration for HTTP requests
 
 ## 3.0.0 alpha 3 ##
 

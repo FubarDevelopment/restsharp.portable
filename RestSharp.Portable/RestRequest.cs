@@ -18,7 +18,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         public RestRequest()
-            : this((string)null, HttpMethod.Get)
+            : this((string)null, Method.GET)
         {
         }
 
@@ -35,6 +35,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="method">The HTTP request method to use</param>
+        [Obsolete]
         public RestRequest(HttpMethod method)
             : this((string)null, method)
         {
@@ -46,7 +47,7 @@ namespace RestSharp.Portable
         /// <param name="resource">The resource this request is targeting</param>
         [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Justification = "resource")]
         public RestRequest(string resource)
-            : this(resource, HttpMethod.Get)
+            : this(resource, Method.GET)
         {
         }
 
@@ -69,6 +70,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
+        [Obsolete]
         public RestRequest(string resource, HttpMethod method)
             : this(resource, method.ToMethod())
         {
@@ -79,7 +81,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         public RestRequest([NotNull] Uri resource)
-            : this(resource, HttpMethod.Get)
+            : this(resource, Method.GET)
         {
         }
 
@@ -88,6 +90,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
+        [Obsolete]
         public RestRequest([NotNull] Uri resource, HttpMethod method)
             : this(resource, method.ToMethod())
         {
