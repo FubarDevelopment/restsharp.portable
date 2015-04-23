@@ -12,22 +12,22 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestGuardLock1()
         {
-            var guard = new RequestGuard();
-            var results = new ConcurrentBag<int>();
+            var guard = new AsyncLock();
+            var results = new ConcurrentQueue<int>();
             var t1 = Task.Run(
-                () =>
+                async () =>
                     {
-                        using (guard.Guard(CancellationToken.None))
+                        using (await guard.LockAsync(CancellationToken.None))
                             Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                        results.Add(1);
+                        results.Enqueue(1);
                     });
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
             var t2 = Task.Run(
-                () =>
+                async () =>
                 {
-                    using (guard.Guard(CancellationToken.None))
+                    using (await guard.LockAsync(CancellationToken.None))
                         DoNothing();
-                    results.Add(2);
+                    results.Enqueue(2);
                 });
             Task.WaitAll(t1, t2);
             var resultsData = results.ToArray();
@@ -38,22 +38,22 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestGuardLock2()
         {
-            var guard = new RequestGuard();
-            var results = new ConcurrentBag<int>();
+            var guard = new AsyncLock();
+            var results = new ConcurrentQueue<int>();
             var t2 = Task.Run(
-                () =>
+                async () =>
                 {
                     Thread.Sleep(TimeSpan.FromMilliseconds(100));
-                    using (guard.Guard(CancellationToken.None))
+                    using (await guard.LockAsync(CancellationToken.None))
                         DoNothing();
-                    results.Add(2);
+                    results.Enqueue(2);
                 });
             var t1 = Task.Run(
-                () =>
+                async () =>
                 {
-                    using (guard.Guard(CancellationToken.None))
+                    using (await guard.LockAsync(CancellationToken.None))
                         Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                    results.Add(1);
+                    results.Enqueue(1);
                 });
             Task.WaitAll(t1, t2);
             var resultsData = results.ToArray();
