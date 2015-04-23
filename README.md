@@ -45,6 +45,11 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
     authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
 * New Gitter OAuth 2.0 client
 
+## 2.4.2 ##
+
+* Bugfix for issue [#25](https://github.com/FubarDevelopment/restsharp.portable/issues/25).
+  We're using asynchronous locking now.
+
 ## 2.4.1 ##
 
 * Bugfix for issue [#24](https://github.com/FubarDevelopment/restsharp.portable/issues/24)
