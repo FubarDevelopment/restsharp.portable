@@ -49,15 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.iOS\RestSharp.Portable.iOS.csproj">
-      <Project>{01de8f74-819f-4f49-969f-1aa7c4b65d61}</Project>
-      <Name>RestSharp.Portable.iOS</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />

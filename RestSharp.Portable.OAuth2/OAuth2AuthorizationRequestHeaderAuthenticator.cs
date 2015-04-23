@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -49,13 +47,13 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        public override bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public override bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             return true;
         }
@@ -79,11 +77,12 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public override async Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public override async Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             // When the authorization failed or when the Authorization header is missing, we're just adding it (again) with the
             // new AccessToken.
-            request.SetAuthorizationHeader(AuthHeader.Www, new AuthenticationHeaderValue(_tokenType, await Client.GetCurrentToken()));
+            var authHeader = string.Format("{0} {1}", _tokenType, await Client.GetCurrentToken());
+            request.SetAuthorizationHeader(AuthHeader.Www, authHeader);
         }
     }
 }

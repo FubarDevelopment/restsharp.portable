@@ -69,15 +69,6 @@
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.IO.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Extensions">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Primitives">
-      <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Runtime.dll</HintPath>
     </Reference>
@@ -86,13 +77,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth.PCL\RestSharp.Portable.OAuth.PCL.csproj">
       <Project>{99a06c44-0c23-496a-bbb5-fb86f19dc52d}</Project>
       <Name>RestSharp.Portable.OAuth.PCL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj">
-      <Project>{cf7a2df4-2638-4991-81f5-dcf7a68a5911}</Project>
-      <Name>RestSharp.Portable.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems')" />

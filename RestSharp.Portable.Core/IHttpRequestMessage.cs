@@ -5,7 +5,7 @@ namespace RestSharp.Portable
     /// <summary>
     /// Interface to a request message
     /// </summary>
-    public interface IHttpRequestMessage
+    public interface IHttpRequestMessage : IDisposable
     {
         /// <summary>
         /// Gets the HTTP headers for the request message

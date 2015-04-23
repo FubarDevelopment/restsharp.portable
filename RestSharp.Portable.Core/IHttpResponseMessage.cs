@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace RestSharp.Portable
 {
     /// <summary>
     /// The HTTP response message
     /// </summary>
-    public interface IHttpResponseMessage
+    public interface IHttpResponseMessage : IDisposable
     {
         /// <summary>
         /// Gets the HTTP headers returned by the response
@@ -31,11 +31,16 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the status code
         /// </summary>
-        int StatusCode { get; }
+        HttpStatusCode StatusCode { get; }
 
         /// <summary>
         /// Gets the content of the response
         /// </summary>
         IHttpContent Content { get; }
+
+        /// <summary>
+        /// Throws an exception when the status doesn't indicate success.
+        /// </summary>
+        void EnsureSuccessStatusCode();
     }
 }

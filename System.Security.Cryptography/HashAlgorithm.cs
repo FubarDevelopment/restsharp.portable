@@ -29,9 +29,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
+using System;
 
 namespace System.Security.Cryptography
 {
@@ -41,11 +39,11 @@ namespace System.Security.Cryptography
 
         protected internal byte[] HashValue;
         protected int HashSizeValue;
-        private bool disposed;
+        private bool _disposed;
 
         protected HashAlgorithm()
         {
-            disposed = false;
+            _disposed = false;
         }
 
         public virtual bool CanTransformMultipleBlocks
@@ -68,7 +66,7 @@ namespace System.Security.Cryptography
 
         public byte[] ComputeHash(byte[] buffer, int offset, int count)
         {
-            if (disposed)
+            if (_disposed)
                 throw new ObjectDisposedException("HashAlgorithm");
             if (buffer == null)
                 throw new ArgumentNullException("buffer");
@@ -114,7 +112,7 @@ namespace System.Security.Cryptography
 
         protected virtual void Dispose(bool disposing)
         {
-            disposed = true;
+            _disposed = true;
         }
 
         public virtual int InputBlockSize

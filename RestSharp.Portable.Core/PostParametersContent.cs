@@ -2,27 +2,160 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.Impl;
 
 namespace RestSharp.Portable
 {
-    internal class PostParametersContent : HttpContent
+    /// <summary>
+    /// Provides a <see cref="IHttpContent"/> implementation for POST parameters.
+    /// </summary>
+    public class PostParametersContent : IHttpContent
     {
         private readonly List<EncodedParameter> _postParameters;
 
+        private readonly IHttpHeaders _headers = new GenericHttpHeaders();
+
+        private byte[] _buffer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PostParametersContent"/> class.
+        /// </summary>
+        /// <param name="postParameters">The post parameters to provide as content.</param>
         public PostParametersContent(IEnumerable<Parameter> postParameters)
         {
             _postParameters = postParameters.Select(x => new EncodedParameter(x)).ToList();
+            _headers.Add("Content-Type", "application/x-www-form-urlencoded");
         }
 
-        protected override Task<Stream> CreateContentReadStreamAsync()
+        /// <summary>
+        /// Gets the HTTP headers for the content.
+        /// </summary>
+        public IHttpHeaders Headers
         {
-            return new Task<Stream>(() => new EncodedParameterStream(_postParameters));
+            get { return _headers; }
         }
 
-        protected override async Task SerializeToStreamAsync(Stream stream, TransportContext context)
+        /// <summary>
+        /// Asynchronously copy the data to the given stream.
+        /// </summary>
+        /// <param name="stream">The stream to copy to</param>
+        /// <returns>The task that copies the data to the stream</returns>
+        public Task CopyToAsync(Stream stream)
+        {
+            return Task.Factory.StartNew(
+                () =>
+                    {
+                        if (_buffer != null)
+                        {
+                            stream.Write(_buffer, 0, _buffer.Length);
+                        }
+                        else
+                        {
+                            WriteTo(stream);
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// Gets the raw content as byte array.
+        /// </summary>
+        /// <param name="maxBufferSize">The maximum buffer size</param>
+        /// <returns>The task that loads the data into an internal buffer</returns>
+        public Task LoadIntoBufferAsync(long maxBufferSize)
+        {
+            return Task.Factory.StartNew(
+                () =>
+                    {
+                        if (_buffer != null)
+                            return;
+                        using (var temp = new MemoryStream())
+                        {
+                            WriteTo(temp);
+                            _buffer = temp.ToArray();
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// Returns the data as a stream
+        /// </summary>
+        /// <returns>The task that returns the stream</returns>
+        public Task<Stream> ReadAsStreamAsync()
+        {
+            return Task.Factory.StartNew<Stream>(
+                () =>
+                    {
+                        if (_buffer != null)
+                            return new MemoryStream(_buffer, false);
+
+                        return new EncodedParameterStream(_postParameters);
+                    });
+        }
+
+        /// <summary>
+        /// Returns the data as byte array
+        /// </summary>
+        /// <returns>The task that returns the data as byte array</returns>
+        public Task<byte[]> ReadAsByteArrayAsync()
+        {
+            return Task.Factory.StartNew(
+                () =>
+                    {
+                        if (_buffer == null)
+                        {
+                            using (var tempStream = new MemoryStream())
+                            {
+                                WriteTo(tempStream);
+                                _buffer = tempStream.ToArray();
+                            }
+                        }
+
+                        var temp = new byte[_buffer.Length];
+                        Array.Copy(_buffer, temp, _buffer.Length);
+                        return temp;
+                    });
+        }
+
+        /// <summary>
+        /// Returns the data as string
+        /// </summary>
+        /// <returns>The task that returns the data as string</returns>
+        public Task<string> ReadAsStringAsync()
+        {
+            return Task.Factory.StartNew(
+                () =>
+                {
+                    if (_buffer == null)
+                    {
+                        using (var temp = new MemoryStream())
+                        {
+                            WriteTo(temp);
+                            _buffer = temp.ToArray();
+                        }
+                    }
+
+                    return Encoding.UTF8.GetString(_buffer, 0, _buffer.Length);
+                });
+        }
+
+        /// <summary>
+        /// Try to compute the resulting length of all POST parameters.
+        /// </summary>
+        /// <param name="length">The variable that will be set to the computed length</param>
+        /// <returns>true, when the length could be computed</returns>
+        public bool TryComputeLength(out long length)
+        {
+            if (_postParameters.Count == 0)
+                length = 0;
+            else
+                length = _postParameters.Sum(x => x.GetFullDataLength()) + _postParameters.Count - 1;
+            return true;
+        }
+
+        private void WriteTo(Stream stream)
         {
             var isFirst = true;
             foreach (var parameter in _postParameters)
@@ -31,20 +164,11 @@ namespace RestSharp.Portable
                     stream.WriteByte((byte)'&');
                 isFirst = false;
                 var tmp = ParameterExtensions.DefaultEncoding.GetBytes(parameter.Name);
-                await stream.WriteAsync(tmp, 0, tmp.Length);
+                stream.Write(tmp, 0, tmp.Length);
                 stream.WriteByte((byte)'=');
                 tmp = parameter.GetData();
-                await stream.WriteAsync(tmp, 0, tmp.Length);
+                stream.Write(tmp, 0, tmp.Length);
             }
-        }
-
-        protected override bool TryComputeLength(out long length)
-        {
-            if (_postParameters.Count == 0)
-                length = 0;
-            else
-                length = _postParameters.Sum(x => x.GetFullDataLength()) + _postParameters.Count - 1;
-            return true;
         }
 
         private class EncodedParameter
@@ -73,7 +197,7 @@ namespace RestSharp.Portable
                 if (bytes != null)
                     return UrlUtility.EscapeToBytes(bytes);
 
-                s = _parameter.AsString();
+                s = _parameter.ToRequestString();
                 return UrlUtility.EscapeToBytes(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
             }
 
@@ -106,7 +230,7 @@ namespace RestSharp.Portable
                 if (bytes != null)
                     return UrlUtility.ComputeLength(bytes);
 
-                s = _parameter.AsString();
+                s = _parameter.ToRequestString();
                 return UrlUtility.ComputeLength(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
             }
         }

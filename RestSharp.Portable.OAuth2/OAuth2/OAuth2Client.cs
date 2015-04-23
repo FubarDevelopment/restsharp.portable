@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
@@ -380,7 +379,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         private async Task QueryAccessToken(ILookup<string, string> parameters)
         {
             var client = _factory.CreateClient(AccessTokenServiceEndpoint);
-            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
+            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, Method.POST);
 
             BeforeGetAccessToken(
                 new BeforeAfterRequestArgs

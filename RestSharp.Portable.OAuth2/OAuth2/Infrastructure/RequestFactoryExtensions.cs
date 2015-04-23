@@ -1,7 +1,4 @@
-﻿using RestSharp.Portable.Authenticators.OAuth2.Client;
-using RestSharp.Portable;
-using System;
-using System.Net.Http;
+﻿using System;
 
 namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
 {
@@ -31,7 +28,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
         /// <returns></returns>
         public static IRestRequest CreateRequest(this IRequestFactory factory, Endpoint endpoint)
         {
-            return CreateRequest(factory, endpoint, HttpMethod.Get);
+            return CreateRequest(factory, endpoint, Method.GET);
         }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
         /// <param name="endpoint"></param>
         /// <param name="method"></param>
         /// <returns></returns>
-        public static IRestRequest CreateRequest(this IRequestFactory factory, Endpoint endpoint, HttpMethod method)
+        public static IRestRequest CreateRequest(this IRequestFactory factory, Endpoint endpoint, Method method)
         {
             var request = factory.CreateRequest(endpoint.Resource);
             request.Method = method;

@@ -9,6 +9,11 @@ namespace RestSharp.Portable
     public interface IHttpContent
     {
         /// <summary>
+        /// Gets the HTTP headers for the content.
+        /// </summary>
+        IHttpHeaders Headers { get; }
+
+        /// <summary>
         /// Asynchronously copy the data to the given stream.
         /// </summary>
         /// <param name="stream">The stream to copy to</param>
@@ -33,5 +38,20 @@ namespace RestSharp.Portable
         /// </summary>
         /// <returns>The task that returns the data as byte array</returns>
         Task<byte[]> ReadAsByteArrayAsync();
+
+        /// <summary>
+        /// Returns the data as string
+        /// </summary>
+        /// <returns>The task that returns the data as string</returns>
+        Task<string> ReadAsStringAsync();
+
+        /// <summary>
+        /// Determines whether the HTTP content has a valid length in bytes.
+        /// </summary>
+        /// <returns>
+        /// Returns <see cref="T:System.Boolean"/>.true if <paramref name="length"/> is a valid length; otherwise, false.
+        /// </returns>
+        /// <param name="length">The length in bytes of the HTTP content.</param>
+        bool TryComputeLength(out long length);
     }
 }

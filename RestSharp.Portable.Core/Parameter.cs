@@ -67,7 +67,7 @@ namespace RestSharp.Portable
         /// Returns the parameter value as string
         /// </summary>
         /// <returns>Returns the value as string</returns>
-        internal string AsString()
+        public string ToRequestString()
         {
             var byteArray = Value as byte[];
             if (byteArray != null)

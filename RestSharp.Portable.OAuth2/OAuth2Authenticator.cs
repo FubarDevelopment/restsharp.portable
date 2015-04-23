@@ -18,7 +18,6 @@
 
 using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
@@ -63,13 +62,13 @@ namespace RestSharp.Portable.Authenticators
         public abstract bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials);
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        public abstract bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials);
+        public abstract bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials);
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
@@ -79,7 +78,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public virtual bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public virtual bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             return !string.IsNullOrEmpty(Client.RefreshToken);
         }
@@ -100,7 +99,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public abstract Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials);
+        public abstract Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials);
 
         /// <summary>
         /// Will be called when the authentication failed
@@ -110,7 +109,7 @@ namespace RestSharp.Portable.Authenticators
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual async Task HandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public virtual async Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             if (!CanHandleChallenge(client, request, credentials, response))
                 throw new InvalidOperationException();

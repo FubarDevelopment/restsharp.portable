@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
@@ -45,7 +45,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the response headers (without content headers)
         /// </summary>
-        public HttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether the request was successful.
@@ -73,7 +73,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="response">Response that will be used to initialize this response.</param>
         /// <returns>Task, because this function runs asynchronously</returns>
-        protected internal async virtual Task LoadResponse(HttpResponseMessage response)
+        protected internal async virtual Task LoadResponse(IHttpResponseMessage response)
         {
             Headers = response.Headers;
 
@@ -81,16 +81,21 @@ namespace RestSharp.Portable
             StatusCode = response.StatusCode;
             StatusDescription = response.ReasonPhrase;
 
-            ResponseUri = response.Headers.Location ?? Client.BuildUri(Request, false);
+            var requestUri = Client.BuildUri(Request, false);
+            ResponseUri = new Uri(requestUri, response.Headers.GetValue("Location", requestUri.ToString()));
             var data = await response.Content.ReadAsByteArrayAsync();
 
-            var contentType = response.Content.Headers.ContentType;
-            var mediaType = contentType == null ? string.Empty : contentType.MediaType;
+            var contentType = response.Content.Headers.GetValue("Content-Type");
+            var mediaType = string.IsNullOrEmpty(contentType) ? string.Empty : MediaTypeHeaderValue.Parse(contentType).MediaType;
             ContentType = mediaType;
 
-            var encoding = Client.GetEncoding(response.Content.Headers.ContentEncoding);
-            if (encoding != null)
-                data = encoding.Decode(data);
+            IEnumerable<string> contentEncodings;
+            if (response.Content.Headers.TryGetValues("Content-Encoding", out contentEncodings))
+            {
+                var encoding = Client.GetEncoding(contentEncodings);
+                if (encoding != null)
+                    data = encoding.Decode(data);
+            }
 
             RawBytes = data;
         }

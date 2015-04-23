@@ -9,7 +9,7 @@ namespace RestSharp.Portable.Impl
     /// <summary>
     /// A default implementation of the HTTP header collection
     /// </summary>
-    public class HttpHeaders : IHttpHeaders
+    public class GenericHttpHeaders : IHttpHeaders
     {
         private readonly Dictionary<string, IEnumerable<string>> _headers = new Dictionary<string, IEnumerable<string>>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, List<string>> _headersToChange = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);

@@ -6,8 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using RestSharp.Portable.Authenticators;
-
 namespace RestSharp.Portable
 {
     /// <summary>
@@ -83,7 +81,7 @@ namespace RestSharp.Portable
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <returns>true when the authentication module supports pre-authentication</returns>
-        public bool CanPreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             return _authenticators.Values.Any(x => x.Authenticator.CanPreAuthenticate(client, request, credentials));
         }
@@ -110,7 +108,7 @@ namespace RestSharp.Portable
         /// <param name="request">Request to authenticate</param>
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <returns>The task the authentication is performed on</returns>
-        public async Task PreAuthenticate(HttpClient client, HttpRequestMessage request, ICredentials credentials)
+        public async Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             foreach (var authenticator in _authenticators.Values.Select(x => x.Authenticator).Where(x => x.CanPreAuthenticate(client, request, credentials)))
             {
@@ -126,7 +124,7 @@ namespace RestSharp.Portable
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
-        public bool CanHandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             return response
                 .GetAuthenticationHeaderInfo(Header)
@@ -146,7 +144,7 @@ namespace RestSharp.Portable
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public async Task HandleChallenge(HttpClient client, HttpRequestMessage request, ICredentials credentials, HttpResponseMessage response)
+        public async Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             var authenticator = response
                 .GetAuthenticationHeaderInfo(Header)

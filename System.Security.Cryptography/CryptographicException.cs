@@ -28,14 +28,11 @@
 //
 
 using System;
-using System.Globalization;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
 
 namespace System.Security.Cryptography
 {
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
     class CryptographicException : Exception
     {
         public CryptographicException()

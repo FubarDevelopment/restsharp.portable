@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace RestSharp.Portable
@@ -15,7 +13,7 @@ namespace RestSharp.Portable
         private readonly SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
 #endif
 
-        private bool _isDisposed = false;
+        private bool _isDisposed;
 
         public IDisposable Guard(CancellationToken cancellationToken)
         {

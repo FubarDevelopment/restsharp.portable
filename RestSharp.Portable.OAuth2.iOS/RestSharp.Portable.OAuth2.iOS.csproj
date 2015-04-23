@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.iOS\RestSharp.Portable.iOS.csproj">
-      <Project>{01de8f74-819f-4f49-969f-1aa7c4b65d61}</Project>
-      <Name>RestSharp.Portable.iOS</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
+      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
+      <Name>RestSharp.Portable.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth.iOS\RestSharp.Portable.OAuth.iOS.csproj">
       <Project>{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}</Project>
@@ -62,7 +62,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

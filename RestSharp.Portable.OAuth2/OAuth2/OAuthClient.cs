@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators.OAuth2.Configuration;
@@ -162,7 +161,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 Configuration.ClientSecret,
                 Configuration.RedirectUri);
 
-            var request = _factory.CreateRequest(RequestTokenServiceEndpoint, HttpMethod.Post);
+            var request = _factory.CreateRequest(RequestTokenServiceEndpoint, Method.POST);
 
             BeforeGetAccessToken(
                 new BeforeAfterRequestArgs
@@ -220,7 +219,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
                 AccessTokenSecret,
                 verifier);
 
-            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, HttpMethod.Post);
+            var request = _factory.CreateRequest(AccessTokenServiceEndpoint, Method.POST);
 
             var content = (await client.ExecuteAndVerify(request)).GetContent();
             var collection = content.ParseQueryString();

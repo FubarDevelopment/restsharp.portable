@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Authenticators.OAuth;
-using RestSharp.Portable.HttpClientImpl;
+using RestSharp.Portable.Impl;
 
 using Xunit;
 

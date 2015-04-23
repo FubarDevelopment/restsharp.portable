@@ -10,7 +10,10 @@ namespace RestSharp.Portable
     /// </summary>
     public static class ParameterExtensions
     {
-        internal static readonly Encoding DefaultEncoding = Encoding.UTF8;
+        /// <summary>
+        /// The default encoding for POST parameters
+        /// </summary>
+        public static readonly Encoding DefaultEncoding = Encoding.UTF8;
 
         /// <summary>
         /// Get the GetOrPost parameters (by default without file parameters, which are POST-only)
@@ -85,7 +88,7 @@ namespace RestSharp.Portable
             if (bytes != null)
                 return UrlUtility.Escape(bytes, flags);
 
-            return UrlUtility.Escape(parameter.AsString(), encoding, flags);
+            return UrlUtility.Escape(parameter.ToRequestString(), encoding, flags);
         }
     }
 }

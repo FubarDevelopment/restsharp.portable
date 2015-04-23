@@ -3,7 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 
-namespace RestSharp.Portable.HttpClientImpl
+using RestSharp.Portable.Impl.Http;
+
+namespace RestSharp.Portable.Impl
 {
     /// <summary>
     /// The default HTTP client factory
@@ -46,7 +48,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        public virtual HttpClient CreateClient(IRestClient client, IRestRequest request)
+        public virtual IHttpClient CreateClient(IRestClient client, IRestRequest request)
         {
             var handler = CreateMessageHandler(client, request);
 
@@ -61,7 +63,7 @@ namespace RestSharp.Portable.HttpClientImpl
             if (timeout.HasValue)
                 httpClient.Timeout = timeout.Value;
 
-            return httpClient;
+            return new DefaultHttpClient(httpClient);
         }
 
         /// <summary>
@@ -74,13 +76,13 @@ namespace RestSharp.Portable.HttpClientImpl
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        public virtual HttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
+        public virtual IHttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
         {
             var address = GetMessageAddress(client, request);
-            var method = GetHttpMethod(client, request);
+            var method = GetHttpMethod(client, request).ToHttpMethod();
             var message = new HttpRequestMessage(method, address);
             message = AddHttpHeaderParameters(message, request);
-            return message;
+            return new DefaultHttpRequestMessage(message);
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// </summary>
         /// <param name="client">REST client</param>
         /// <returns>Proxy object or null</returns>
-        protected virtual IWebProxy GetProxy(IRestClient client)
+        protected virtual IRequestProxy GetProxy(IRestClient client)
         {
             return client.Proxy;
         }
@@ -142,7 +144,7 @@ namespace RestSharp.Portable.HttpClientImpl
             var oldCookies = client.CookieContainer.GetCookies(baseUrl)
                 .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
             foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
-                newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.AsString()));
+                newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.ToRequestString()));
             return newCookies;
         }
 
@@ -152,7 +154,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <param name="client">The REST client that wants to create the HTTP client</param>
         /// <param name="request">REST request</param>
         /// <returns>HTTP method</returns>
-        protected virtual HttpMethod GetHttpMethod(IRestClient client, IRestRequest request)
+        protected virtual Method GetHttpMethod(IRestClient client, IRestRequest request)
         {
             return client.GetEffectiveHttpMethod(request);
         }
@@ -169,7 +171,7 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 if (message.Headers.Contains(param.Name))
                     message.Headers.Remove(param.Name);
-                var paramValue = param.AsString();
+                var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
                     message.Headers.Add(param.Name, paramValue);
@@ -195,7 +197,7 @@ namespace RestSharp.Portable.HttpClientImpl
             {
                 if (httpClient.DefaultRequestHeaders.Contains(param.Name))
                     httpClient.DefaultRequestHeaders.Remove(param.Name);
-                var paramValue = param.AsString();
+                var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
                     httpClient.DefaultRequestHeaders.Add(param.Name, paramValue);

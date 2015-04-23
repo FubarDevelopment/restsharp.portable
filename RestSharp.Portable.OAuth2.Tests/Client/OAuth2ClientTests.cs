@@ -145,7 +145,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             // assert
             factory.Received(1).CreateRequest("/AccessTokenServiceEndpoint");
             restClient.Received(1).BaseUrl = new Uri("https://AccessTokenServiceEndpoint");
-            restRequest.Received(1).Method = HttpMethod.Post;
+            restRequest.Received(1).Method = Method.POST;
             restRequest.Parameters.Received(1).Add(Arg.Is<Parameter>(x => x.Name == "code" && (string)x.Value == "code"));
             restRequest.Parameters.Received(1).Add(Arg.Is<Parameter>(x => x.Name == "client_id" && (string)x.Value == "client_id"));
             restRequest.Parameters.Received(1).Add(Arg.Is<Parameter>(x => x.Name == "client_secret" && (string)x.Value == "client_secret"));

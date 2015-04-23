@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Deserializers;
-using RestSharp.Portable.Encodings;
 
 namespace RestSharp.Portable
 {
@@ -29,14 +26,14 @@ namespace RestSharp.Portable
 
         private readonly RequestGuard _requestGuard = new RequestGuard();
 
-        private HttpClient _httpClient;
+        private IHttpClient _httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestClient" /> class.
         /// </summary>
         public RestClient()
         {
-            HttpClientFactory = new HttpClientImpl.DefaultHttpClientFactory();
+            HttpClientFactory = new Impl.DefaultHttpClientFactory();
 
             var jsonDeserializer = new JsonDeserializer();
 
@@ -131,7 +128,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the proxy to use for the requests
         /// </summary>
-        public IWebProxy Proxy { get; set; }
+        public IRequestProxy Proxy { get; set; }
 
         /// <summary>
         /// Execute the given request
@@ -423,7 +420,7 @@ namespace RestSharp.Portable
             }
         }
 
-        private async Task<HttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
+        private async Task<IHttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
             AddDefaultParameters(request);
             while (true)
@@ -441,14 +438,26 @@ namespace RestSharp.Portable
                     if (bodyData != null)
                         message.Content = bodyData;
 
-                    if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
-                        _httpClient.DefaultRequestHeaders.Accept.Clear();
+                    if (EnvironmentUtilities.IsSilverlight && message.Method == Method.GET)
+                        _httpClient.DefaultRequestHeaders.Remove("Accept");
 
                     if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
                         await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
 
+                    IHttpResponseMessage response;
                     bool failed = true;
-                    var response = await _httpClient.SendAsync(message, ct);
+                    try
+                    {
+                        response = await _httpClient.SendAsync(message, ct);
+                        failed = false;
+                    }
+                    finally
+                    {
+                        if (failed)
+                            message.Dispose();
+                    }
+
+                    failed = true;
                     try
                     {
                         if (!response.IsSuccessStatusCode)
@@ -467,8 +476,13 @@ namespace RestSharp.Portable
                     }
                     finally
                     {
-                        if (failed && response != null)
-                            response.Dispose();
+                        if (failed)
+                        {
+                            if (response != null)
+                                response.Dispose();
+                            else
+                                message.Dispose();
+                        }
                     }
 
                     return response;

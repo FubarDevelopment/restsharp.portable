@@ -7,7 +7,7 @@ namespace RestSharp.Portable
     /// <summary>
     /// Interface that's an abstraction from the default HttpClient provided by the .NET framework
     /// </summary>
-    public interface IHttpClient
+    public interface IHttpClient : IDisposable
     {
         /// <summary>
         /// Gets or sets the base address of the HTTP client
