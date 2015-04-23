@@ -9,6 +9,7 @@
     <Import_RootNamespace>RestSharp.Portable</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AsyncLock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpHiddenBasicAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
@@ -29,7 +30,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)RequestGuard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />

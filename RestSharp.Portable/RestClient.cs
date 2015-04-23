@@ -24,7 +24,7 @@ namespace RestSharp.Portable
 
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
 
-        private readonly RequestGuard _requestGuard = new RequestGuard();
+        private readonly AsyncLock _requestGuard = new AsyncLock();
 
         private IHttpClient _httpClient;
 
@@ -137,7 +137,7 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request)
         {
-            using (_requestGuard.Guard(CancellationToken.None))
+            using (await _requestGuard.LockAsync(CancellationToken.None))
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
@@ -162,7 +162,7 @@ namespace RestSharp.Portable
         /// </returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
-            using (_requestGuard.Guard(CancellationToken.None))
+            using (await _requestGuard.LockAsync(CancellationToken.None))
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
@@ -181,7 +181,7 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
         {
-            using (_requestGuard.Guard(ct))
+            using (await _requestGuard.LockAsync(ct))
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
@@ -201,7 +201,7 @@ namespace RestSharp.Portable
         /// <returns>Response returned, with a deserialized object</returns>
         public async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
         {
-            using (_requestGuard.Guard(ct))
+            using (await _requestGuard.LockAsync(ct))
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
