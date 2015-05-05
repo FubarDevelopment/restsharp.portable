@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
+
+using RestSharp.Portable.Authenticators;
 
 using Xunit;
 
@@ -91,38 +94,17 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
             }
         }
-
+		
         [Fact(DisplayName = "Issue 23")]
         public async Task TestIssue23()
         {
             using (var client = new RestClient("http://httpbin.org/"))
             {
-                var req = new RestRequest("/post", Method.POST);
-                var param = new Parameter
-                    {
-                        Value = new
-                            {
-                                Parameter1 = "param1",
-                            },
-                        Type = ParameterType.RequestBody,
-                    };
-
-                {
-                    var content = req.GetBodyContent(param);
-                    var s = await content.ReadAsStringAsync();
-                    Assert.Equal("{\"Parameter1\":\"param1\"}", s);
-                }
-
-                {
-                    req.AddBody(param.Value);
-                    var content = client.GetContent(req);
-                    var s = await content.ReadAsStringAsync();
-                    Assert.Equal("{\"Parameter1\":\"param1\"}", s);
-                }
-
-                var response = await client.Execute<PostResponse>(req);
-                var responseJson = JsonConvert.SerializeObject(response.Data.Json, Formatting.None);
-                Assert.Equal("{\"Parameter1\":\"param1\"}", responseJson);
+                client.Authenticator = new HttpBasicAuthenticator();
+                client.Credentials = new NetworkCredential("foo", "bar");
+                var request = new RestRequest("post", Method.GET);
+                request.AddJsonBody("foo");
+                await client.Execute(request);
             }
         }
 
