@@ -30,7 +30,7 @@ namespace RestSharp.Portable.Authenticators
         public void Authenticate(IRestClient client, IRestRequest request)
         {
             // only add the Authorization parameter if it hasn't been added by a previous Execute
-            if (request.Parameters.Any(p => p.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)))
+            if (request.Parameters.Any(p => p.Type == ParameterType.HttpHeader && string.Equals(p.Name, "Authorization", StringComparison.OrdinalIgnoreCase)))
                 return;
             request.AddParameter("Authorization", _authHeader, ParameterType.HttpHeader);
         }

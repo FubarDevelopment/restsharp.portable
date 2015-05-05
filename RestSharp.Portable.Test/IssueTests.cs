@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.Authenticators;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test
@@ -88,6 +90,18 @@ namespace RestSharp.Portable.Test
                 Assert.NotNull(t2.Result.Data.Form);
                 Assert.True(t2.Result.Data.Form.ContainsKey("ab"));
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
+            }
+        }
+
+        [Fact(DisplayName = "Issue 23")]
+        public async Task TestIssue23()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                client.Authenticator = new HttpBasicAuthenticator("foo", "bar");
+                var request = new RestRequest("post", HttpMethod.Get);
+                request.AddJsonBody("foo");
+                await client.Execute(request);
             }
         }
 

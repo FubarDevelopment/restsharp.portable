@@ -10,6 +10,11 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
+## 2.4.3 ##
+
+* Bugfix for issue [#23](https://github.com/FubarDevelopment/restsharp.portable/issues/23).
+  Thanks to [GeirGrusom](https://github.com/GeirGrusom)
+
 ## 2.4.2 ##
 
 * Bugfix for issue [#25](https://github.com/FubarDevelopment/restsharp.portable/issues/25).
