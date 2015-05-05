@@ -26,7 +26,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         private IList<WebPair> _parameters;
         public virtual WebPair this[string name]
         {
-            get { return this.SingleOrDefault(p => p.Name.Equals(name)); }
+            get { return this.SingleOrDefault(p => string.Equals(p.Name, name)); }
         }
         public virtual IEnumerable<string> Names
         {
