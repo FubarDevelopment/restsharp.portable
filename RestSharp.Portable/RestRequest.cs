@@ -35,7 +35,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="method">The HTTP request method to use</param>
-        [Obsolete]
+        [Obsolete("Use RestRequest(Method) instead.")]
         public RestRequest(HttpMethod method)
             : this((string)null, method)
         {
@@ -70,7 +70,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
-        [Obsolete]
+        [Obsolete("Use RestRequest(string, Method) instead.")]
         public RestRequest(string resource, HttpMethod method)
             : this(resource, method.ToMethod())
         {
@@ -90,7 +90,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
-        [Obsolete]
+        [Obsolete("Use RestRequest(Uri, Method) instead.")]
         public RestRequest([NotNull] Uri resource, HttpMethod method)
             : this(resource, method.ToMethod())
         {

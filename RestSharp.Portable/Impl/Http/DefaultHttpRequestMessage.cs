@@ -14,6 +14,8 @@ namespace RestSharp.Portable.Impl.Http
 
         private IHttpContent _content;
 
+        private bool _isDisposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpRequestMessage"/> class.
         /// </summary>
@@ -82,11 +84,25 @@ namespace RestSharp.Portable.Impl.Http
         }
 
         /// <summary>
+        /// Disposes the underlying HTTP request message when disposing is set to true
+        /// </summary>
+        /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            if (_isDisposed)
+                return;
+            _isDisposed = true;
+            RequestMessage.Dispose();
+        }
+
+        /// <summary>
         /// Disposes the underlying HTTP request message
         /// </summary>
         public void Dispose()
         {
-            RequestMessage.Dispose();
+            Dispose(true);
         }
     }
 }
