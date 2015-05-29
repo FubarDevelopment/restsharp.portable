@@ -69,11 +69,22 @@ namespace RestSharp.Portable.Impl.Http
         }
 
         /// <summary>
+        /// Disposes the underlying HTTP client when disposing is set to true
+        /// </summary>
+        /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            Client.Dispose();
+        }
+
+        /// <summary>
         /// Disposes the underlying HTTP client
         /// </summary>
         public void Dispose()
         {
-            Client.Dispose();
+            Dispose(true);
         }
     }
 }
