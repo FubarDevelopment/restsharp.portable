@@ -34,6 +34,7 @@ namespace RestSharp.Portable
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
         /// <param name="resource">The resource this request is targeting</param>
+        [SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads")]
         public RestRequest(string resource)
             : this(resource, HttpMethod.Get)
         {
