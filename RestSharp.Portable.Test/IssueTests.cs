@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
+
+using JetBrains.Annotations;
 
 using RestSharp.Portable.Authenticators;
 
@@ -22,7 +23,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("post", HttpMethod.Post);
                 request.AddParameter("param1", tmp);
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<RequestResponse>(request);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -42,7 +43,7 @@ namespace RestSharp.Portable.Test
                 request.AddParameter("param1", tmp);
                 request.AddParameter("param2", "param2");
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<RequestResponse>(request);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -73,11 +74,11 @@ namespace RestSharp.Portable.Test
             {
                 var req1 = new RestRequest("post", HttpMethod.Post);
                 req1.AddParameter("a", "value-of-a");
-                var t1 = client.Execute<PostResponse>(req1);
+                var t1 = client.Execute<RequestResponse>(req1);
 
                 var req2 = new RestRequest("post", HttpMethod.Post);
                 req2.AddParameter("ab", "value-of-ab");
-                var t2 = client.Execute<PostResponse>(req2);
+                var t2 = client.Execute<RequestResponse>(req2);
 
                 Task.WaitAll(t1, t2);
 
@@ -116,8 +117,8 @@ namespace RestSharp.Portable.Test
                 var req2 = new RestRequest("post", HttpMethod.Post);
                 req2.AddParameter("ab", "value-of-ab");
 
-                var t1 = client.Execute<PostResponse>(req1);
-                var t2 = client.Execute<PostResponse>(req2);
+                var t1 = client.Execute<RequestResponse>(req1);
+                var t2 = client.Execute<RequestResponse>(req2);
 
                 Task.WaitAll(t1, t2);
 
@@ -133,11 +134,11 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
-        private class PostResponse
+        [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+        private class RequestResponse
         {
             public Dictionary<string, string> Form { get; set; }
+            public Dictionary<string, string> Cookies { get; set; }
         }
     }
 }
