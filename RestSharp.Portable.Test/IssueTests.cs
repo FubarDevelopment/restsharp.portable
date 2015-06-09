@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -131,6 +132,93 @@ namespace RestSharp.Portable.Test
                 Assert.NotNull(t2.Result.Data.Form);
                 Assert.True(t2.Result.Data.Form.ContainsKey("ab"));
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
+            }
+        }
+
+        [Fact(DisplayName = "Issue 32")]
+        public async Task TestIssue32()
+        {
+            using (var client = new RestClient("http://httpbin.org/cookies")
+            {
+                CookieContainer = new CookieContainer(),
+            })
+            {
+                {
+                    var req = new RestRequest(string.Empty);
+                    var response = await client.Execute<RequestResponse>(req);
+                    Assert.Equal(0, response.Data.Cookies.Count);
+                }
+                {
+                    Assert.Equal(0, client.CookieContainer.Count);
+                }
+                {
+                    var req = new RestRequest("set");
+                    req.AddParameter("k1", "v1");
+                    var response = await client.Execute<RequestResponse>(req);
+                    Assert.Collection(
+                        response.Data.Cookies,
+                        kvp =>
+                        {
+                            Assert.Equal("k1", kvp.Key);
+                            Assert.Equal("v1", kvp.Value);
+                        });
+                }
+                {
+                    Assert.Equal(1, client.CookieContainer.Count);
+                }
+                {
+                    var req = new RestRequest();
+                    var response = await client.Execute<RequestResponse>(req);
+                    Assert.Collection(
+                        response.Data.Cookies,
+                        kvp =>
+                        {
+                            Assert.Equal("k1", kvp.Key);
+                            Assert.Equal("v1", kvp.Value);
+                        });
+                }
+                {
+                    Assert.Equal(1, client.CookieContainer.Count);
+                }
+                {
+                    var req = new RestRequest("set");
+                    req.AddParameter("k2", "v2");
+                    var response = await client.Execute<RequestResponse>(req);
+                    Assert.Collection(
+                        response.Data.Cookies,
+                        kvp =>
+                        {
+                            Assert.Equal("k1", kvp.Key);
+                            Assert.Equal("v1", kvp.Value);
+                        },
+                        kvp =>
+                        {
+                            Assert.Equal("k2", kvp.Key);
+                            Assert.Equal("v2", kvp.Value);
+                        });
+                }
+                {
+                    Assert.Equal(2, client.CookieContainer.Count);
+                }
+                {
+                    var req = new RestRequest();
+                    var response = await client.Execute<RequestResponse>(req);
+                    Assert.Collection(
+                        response.Data.Cookies,
+                        kvp =>
+                        {
+                            Assert.Equal("k1", kvp.Key);
+                            Assert.Equal("v1", kvp.Value);
+                        },
+                        kvp =>
+                        {
+                            Assert.Equal("k2", kvp.Key);
+                            Assert.Equal("v2", kvp.Value);
+                        });
+                }
+                {
+                    Assert.Equal(2, client.CookieContainer.Count);
+                }
             }
         }
 
