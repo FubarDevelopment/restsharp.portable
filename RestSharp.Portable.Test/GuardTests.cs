@@ -12,15 +12,20 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestGuardLock1()
         {
+            var taskStartMutex = new AutoResetEvent(false);
             var guard = new AsyncLock();
             var results = new ConcurrentQueue<int>();
             var t1 = Task.Run(
                 async () =>
                     {
                         using (await guard.LockAsync(CancellationToken.None))
+                        {
+                            taskStartMutex.Set();
                             Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                        }
                         results.Enqueue(1);
                     });
+            taskStartMutex.WaitOne();
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
             var t2 = Task.Run(
                 async () =>
