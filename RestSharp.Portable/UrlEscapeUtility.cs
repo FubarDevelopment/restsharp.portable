@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 #if HAS_SYSTEM_WEB
@@ -185,6 +186,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public byte[] EscapeToBytes(byte[] data, UrlEscapeFlags flags)
         {
 #if HAS_SYSTEM_WEB
@@ -265,6 +267,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public long ComputeLength(byte[] data, UrlEscapeFlags flags)
         {
             var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;

@@ -15,7 +15,7 @@ namespace RestSharp.Portable
     /// <summary>
     /// The default REST client
     /// </summary>
-    public class RestClient : IRestClient
+    public sealed class RestClient : IRestClient
     {
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
 
