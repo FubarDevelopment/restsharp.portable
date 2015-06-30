@@ -89,9 +89,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
-      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
-      <Name>RestSharp.Portable.Core</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
+      <Project>{5dc024cb-40c9-4573-8a51-05d80e703fe7}</Project>
+      <Name>RestSharp.Portable.Core.AsyncPCL</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj">
       <Project>{6e25753f-f37d-4c32-931f-d4025546743d}</Project>

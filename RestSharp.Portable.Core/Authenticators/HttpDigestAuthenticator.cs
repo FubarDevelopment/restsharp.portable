@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,9 +13,8 @@ namespace RestSharp.Portable.Authenticators
     /// HTTP Digest authenticator
     /// </summary>
     /// <remarks>
-    /// Code was taken from http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/
+    /// Code was taken from <code>http://www.ifjeffcandoit.com/2013/05/16/digest-authentication-with-restsharp/</code>
     /// </remarks>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Misspelled text is an URL.")]
     public class HttpDigestAuthenticator : IAuthenticator
     {
         /// <summary>
@@ -138,7 +135,8 @@ namespace RestSharp.Portable.Authenticators
                 throw new InvalidOperationException();
 
             var digestHeader = await GetDigestHeader(client, request, _authCredential);
-            request.SetAuthorizationHeader(_authHeader, new AuthenticationHeaderValue(AuthenticationMethod, digestHeader).ToString());
+            var authHeaderValue = string.Format("{0} {1}", AuthenticationMethod, digestHeader);
+            request.SetAuthorizationHeader(_authHeader, authHeaderValue);
         }
 
         /// <summary>

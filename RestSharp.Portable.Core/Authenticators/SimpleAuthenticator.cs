@@ -1,51 +1,46 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Authenticators
 {
     /// <summary>
-    /// The default HTTP Basic authenticator
+    /// Simple authenticator that adds the authentication information as GetOrPost parameter
     /// </summary>
-    public class HttpBasicAuthenticator : IAuthenticator
+    public class SimpleAuthenticator : IAuthenticator
     {
         /// <summary>
-        /// The authentication method ID used in HTTP authentication challenge
+        /// The authentication method ID used to search for the credentials.
         /// </summary>
-        public const string AuthenticationMethod = "Basic";
+        public const string AuthenticationMethod = "Simple";
 
-        private readonly AuthHeader _authHeader;
+        private readonly string _usernameKey;
 
-        private string _authToken;
+        private readonly string _passwordKey;
 
-        private NetworkCredential _authCredential;
+        private readonly ParameterType _parameterType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// Initializes a new instance of the <see cref="SimpleAuthenticator" /> class.
         /// </summary>
-        public HttpBasicAuthenticator()
-            : this(AuthHeader.Www)
+        /// <param name="usernameKey">GetOrPost parameter name for the user name</param>
+        /// <param name="passwordKey">GetOrPost parameter name for the password</param>
+        public SimpleAuthenticator(string usernameKey, string passwordKey)
+            : this(usernameKey, passwordKey, ParameterType.GetOrPost)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// Initializes a new instance of the <see cref="SimpleAuthenticator" /> class.
         /// </summary>
-        /// <param name="authHeader">Authentication/Authorization header type</param>
-        public HttpBasicAuthenticator(AuthHeader authHeader)
+        /// <param name="usernameKey">GetOrPost parameter name for the user name</param>
+        /// <param name="passwordKey">GetOrPost parameter name for the password</param>
+        /// <param name="parameterType">The type of the request parameter</param>
+        public SimpleAuthenticator(string usernameKey, string passwordKey, ParameterType parameterType)
         {
-            _authHeader = authHeader;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
-        /// </summary>
-        protected bool HasAuthorizationToken
-        {
-            get { return _authToken != null; }
+            _usernameKey = usernameKey;
+            _passwordKey = passwordKey;
+            _parameterType = parameterType;
         }
 
         /// <summary>
@@ -57,11 +52,16 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>true when the authentication module supports pre-authentication</returns>
         public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            return false;
+            if (credentials == null)
+                return false;
+            var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            if (cred == null)
+                return false;
+            return true;
         }
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>
@@ -69,7 +69,7 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>true when the authentication module supports pre-authentication</returns>
         public bool CanPreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
-            return HasAuthorizationToken;
+            return false;
         }
 
         /// <summary>
@@ -81,7 +81,16 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>The task the authentication is performed on</returns>
         public Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            throw new NotSupportedException();
+            return Task.Factory.StartNew(() =>
+            {
+                if (credentials == null)
+                    throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
+                var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+                if (cred == null)
+                    throw new InvalidOperationException(string.Format("No credentials provided for the {0} authentication type.", AuthenticationMethod));
+                request.AddParameter(_usernameKey, cred.UserName, _parameterType);
+                request.AddParameter(_passwordKey, cred.Password, _parameterType);
+            });
         }
 
         /// <summary>
@@ -93,48 +102,20 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>The task the authentication is performed on</returns>
         public Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                if (!CanPreAuthenticate(client, request, credentials))
-                    throw new InvalidOperationException();
-                var authHeaderValue = new AuthenticationHeaderValue(AuthenticationMethod, _authToken);
-                request.SetAuthorizationHeader(_authHeader, authHeaderValue.ToString());
-            });
+            throw new NotSupportedException();
         }
 
         /// <summary>
         /// Determines if the authentication module can handle the challenge sent with the response.
         /// </summary>
-        /// <param name="client">The REST client the response is assigned to</param>
-        /// <param name="request">The REST request the response is assigned to</param>
+        /// <param name="client">The HTTP client the response is assigned to</param>
+        /// <param name="request">The HTTP request the response is assigned to</param>
         /// <param name="credentials">The credentials to be used for the authentication</param>
         /// <param name="response">The response that returned the authentication challenge</param>
         /// <returns>true when the authenticator can handle the sent challenge</returns>
         public virtual bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
-            // No credentials defined?
-            if (credentials == null)
-                return false;
-
-            // No challenge header found?
-            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
-            if (authModeInfo == null)
-                return false;
-
-            // Search for credential for request URI
-            var responseUri = client.GetRequestUri(request, response);
-            var credential = credentials.GetCredential(responseUri, AuthenticationMethod);
-            if (credential == null)
-                return false;
-
-            // Did we already try to use the found credentials?
-            if (ReferenceEquals(credential, _authCredential))
-            {
-                // Yes, so we don't retry the authentication.
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -147,15 +128,7 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
         public Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                if (!CanHandleChallenge(client, request, credentials, response))
-                    throw new InvalidOperationException();
-
-                var responseUri = client.GetRequestUri(request, response);
-                _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
-                _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _authCredential.UserName, _authCredential.Password)));
-            });
+            throw new NotSupportedException();
         }
     }
 }

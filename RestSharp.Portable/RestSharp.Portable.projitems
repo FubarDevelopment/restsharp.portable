@@ -11,10 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AsyncLock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpHiddenBasicAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DefaultHttpExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpMethodExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\DefaultHttpClientFactory.cs" />

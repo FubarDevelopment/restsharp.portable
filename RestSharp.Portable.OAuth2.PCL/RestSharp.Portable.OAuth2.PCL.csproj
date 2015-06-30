@@ -44,7 +44,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -77,9 +76,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
-      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
-      <Name>RestSharp.Portable.Core</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core.PCL\RestSharp.Portable.Core.PCL.csproj">
+      <Project>{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}</Project>
+      <Name>RestSharp.Portable.Core.PCL</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.OAuth.PCL\RestSharp.Portable.OAuth.PCL.csproj">
       <Project>{99a06c44-0c23-496a-bbb5-fb86f19dc52d}</Project>

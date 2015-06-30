@@ -107,13 +107,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RestSharp.Portable.Core\RestSharp.Portable.Core.csproj">
-      <Project>{cb56401c-abe4-4e82-a155-7d45e0fa601a}</Project>
-      <Name>RestSharp.Portable.Core</Name>
+    <ProjectReference Include="..\RestSharp.Portable.Core.PCL\RestSharp.Portable.Core.PCL.csproj">
+      <Project>{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}</Project>
+      <Name>RestSharp.Portable.Core.PCL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
