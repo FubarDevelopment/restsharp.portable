@@ -143,30 +143,42 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Core.Asy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Encodings.AsyncPCL", "RestSharp.Portable.Encodings.AsyncPCL\RestSharp.Portable.Encodings.AsyncPCL.csproj", "{D32FD25D-47E9-4737-871C-C3048809A620}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebRequest Implementation", "WebRequest Implementation", "{069C3191-43EA-43A2-9710-A4F999AC5C69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.WebRequest.PCL", "RestSharp.Portable.WebRequest.PCL\RestSharp.Portable.WebRequest.PCL.csproj", "{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.WebRequest", "RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.shproj", "{BD08A0F9-FB0D-4585-A715-E21D8DFB62E1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Net.Http.Primitives", "System.Net.Http.Primitives\System.Net.Http.Primitives.shproj", "{0422E016-938B-4EA1-AF92-9F8BE3B23AE8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
+		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{bd08a0f9-fb0d-4585-a715-e21d8dfb62e1}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{89550987-88eb-4df3-9969-ee6e673dae88}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{23041120-0054-41d1-8fa7-d66acef22a44}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01150eb4-311c-46a1-8c5b-cc5667da38ab}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
+		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{0422e016-938b-4ea1-af92-9f8be3b23ae8}*SharedItemsImports = 13
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{9c53c4ac-1a03-4d74-a2b6-8a5968eb2cf5}*SharedItemsImports = 13
+		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
-		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{846592b7-3dc7-4c76-a04b-a224cda0a2bb}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
+		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
+		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{71d709e1-0669-4bdd-b85b-4291831b2eaf}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
@@ -179,9 +191,9 @@ Global
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01dcc8da-1b20-47aa-bb06-70933046435b}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
+		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
-		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{de12bf6b-63ba-4106-be18-c59c01392afc}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -293,6 +305,10 @@ Global
 		{D32FD25D-47E9-4737-871C-C3048809A620}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D32FD25D-47E9-4737-871C-C3048809A620}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D32FD25D-47E9-4737-871C-C3048809A620}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,8 +343,8 @@ Global
 		{1295F2A8-C748-4FD2-BB7E-3778AA87D06C} = {01EA5D7B-8BBB-476F-871D-965B566B8D70}
 		{F0C273E4-854D-4140-86EB-7DC4834999B3} = {8AE32A84-9132-473F-AA04-802DE7F21920}
 		{6559CD2F-FF50-486F-B94E-7B43EC7069E9} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
-		{9C53C4AC-1A03-4D74-A2B6-8A5968EB2CF5} = {52A3BD2A-D319-44E6-85D2-67343203EFF5}
-		{DE12BF6B-63BA-4106-BE18-C59C01392AFC} = {52A3BD2A-D319-44E6-85D2-67343203EFF5}
+		{9C53C4AC-1A03-4D74-A2B6-8A5968EB2CF5} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
+		{DE12BF6B-63BA-4106-BE18-C59C01392AFC} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{392A32D2-5974-48B5-9604-09880285744C} = {EC37F7F1-1ED3-461E-9937-5B89F0ACCFD5}
 		{83366AF6-7732-403F-8956-66DF977F139B} = {52A3BD2A-D319-44E6-85D2-67343203EFF5}
 		{01DE8F74-819F-4F49-969F-1AA7C4B65D61} = {52A3BD2A-D319-44E6-85D2-67343203EFF5}
@@ -340,5 +356,8 @@ Global
 		{0646515D-D16B-4EC2-ACB2-E06020807388} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{5DC024CB-40C9-4573-8A51-05D80E703FE7} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
 		{D32FD25D-47E9-4737-871C-C3048809A620} = {921CC44E-2966-4A66-9F96-3BBE8A853723}
+		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0} = {069C3191-43EA-43A2-9710-A4F999AC5C69}
+		{BD08A0F9-FB0D-4585-A715-E21D8DFB62E1} = {069C3191-43EA-43A2-9710-A4F999AC5C69}
+		{0422E016-938B-4EA1-AF92-9F8BE3B23AE8} = {069C3191-43EA-43A2-9710-A4F999AC5C69}
 	EndGlobalSection
 EndGlobal
