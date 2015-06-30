@@ -49,6 +49,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponseT.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />

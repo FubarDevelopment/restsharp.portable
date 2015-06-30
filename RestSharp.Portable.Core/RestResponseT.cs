@@ -20,7 +20,7 @@ namespace RestSharp.Portable
         /// <param name="request">
         /// REST request
         /// </param>
-        public RestResponse(IRestClient client, IRestRequest request)
+        protected internal RestResponse(IRestClient client, IRestRequest request)
             : base(client, request)
         {
         }
@@ -47,7 +47,7 @@ namespace RestSharp.Portable
         /// <remarks>
         /// This override also deserializes the response
         /// </remarks>
-        protected internal override async Task LoadResponse(IHttpResponseMessage response)
+        protected override async Task LoadResponse(IHttpResponseMessage response)
         {
             await base.LoadResponse(response);
             var handler = Client.GetHandler(ContentType);

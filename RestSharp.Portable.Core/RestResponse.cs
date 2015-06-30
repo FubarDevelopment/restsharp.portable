@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -16,7 +15,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="client">REST client</param>
         /// <param name="request">REST request</param>
-        public RestResponse(IRestClient client, IRestRequest request)
+        protected RestResponse(IRestClient client, IRestRequest request)
         {
             Client = client;
             Request = request;
@@ -68,12 +67,41 @@ namespace RestSharp.Portable
         protected IRestClient Client { get; private set; }
 
         /// <summary>
+        /// Create a <see cref="IRestResponse"/> from a <see cref="IRestClient"/>, <see cref="IRestRequest"/> and a <see cref="IHttpResponseMessage"/>.
+        /// </summary>
+        /// <param name="client">The <see cref="IRestClient"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="request">The <see cref="IRestRequest"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="responseMessage">The <see cref="IHttpResponseMessage"/> used to create a <see cref="IRestResponse"/></param>
+        /// <returns>The new <see cref="IRestResponse"/></returns>
+        public static async Task<IRestResponse> CreateResponse(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage)
+        {
+            var response = new RestResponse(client, request);
+            await response.LoadResponse(responseMessage);
+            return response;
+        }
+
+        /// <summary>
+        /// Create a <see cref="IRestResponse"/> from a <see cref="IRestClient"/>, <see cref="IRestRequest"/> and a <see cref="IHttpResponseMessage"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to instantiate the response for.</typeparam>
+        /// <param name="client">The <see cref="IRestClient"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="request">The <see cref="IRestRequest"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="responseMessage">The <see cref="IHttpResponseMessage"/> used to create a <see cref="IRestResponse"/></param>
+        /// <returns>The new <see cref="IRestResponse"/></returns>
+        public static async Task<IRestResponse<T>> CreateResponse<T>(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage)
+        {
+            var response = new RestResponse<T>(client, request);
+            await response.LoadResponse(responseMessage);
+            return response;
+        }
+
+        /// <summary>
         /// Utility function that really initializes this response object from
         /// a HttpResponseMessage
         /// </summary>
         /// <param name="response">Response that will be used to initialize this response.</param>
         /// <returns>Task, because this function runs asynchronously</returns>
-        protected internal async virtual Task LoadResponse(IHttpResponseMessage response)
+        protected async virtual Task LoadResponse(IHttpResponseMessage response)
         {
             Headers = response.Headers;
 
@@ -86,8 +114,17 @@ namespace RestSharp.Portable
             var data = await response.Content.ReadAsByteArrayAsync();
 
             var contentType = response.Content.Headers.GetValue("Content-Type");
-            var mediaType = string.IsNullOrEmpty(contentType) ? string.Empty : MediaTypeHeaderValue.Parse(contentType).MediaType;
-            ContentType = mediaType;
+            if (string.IsNullOrEmpty(contentType))
+            {
+                ContentType = string.Empty;
+            }
+            else
+            {
+                var semicolonPos = contentType.IndexOf(';');
+                if (semicolonPos != -1)
+                    contentType = contentType.Substring(0, semicolonPos);
+                ContentType = contentType.Trim();
+            }
 
             IEnumerable<string> contentEncodings;
             if (response.Content.Headers.TryGetValues("Content-Encoding", out contentEncodings))

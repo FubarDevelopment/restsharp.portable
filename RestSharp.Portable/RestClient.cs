@@ -141,9 +141,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
-                    var restResponse = new RestResponse(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse(this, request, response);
                 }
             }
         }
@@ -166,9 +164,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
-                    var restResponse = new RestResponse<T>(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse<T>(this, request, response);
                 }
             }
         }
@@ -185,9 +181,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
-                    var restResponse = new RestResponse(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse(this, request, response);
                 }
             }
         }
@@ -205,9 +199,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
-                    var restResponse = new RestResponse<T>(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse<T>(this, request, response);
                 }
             }
         }
