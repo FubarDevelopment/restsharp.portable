@@ -20,7 +20,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        internal static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             HttpContent content;
             var parameters = client.MergeParameters(request);

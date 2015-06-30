@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -75,7 +74,7 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Does the authentication module supports pre-authentication for the given <see cref="HttpRequestMessage" />?
+        /// Does the authentication module supports pre-authentication for the given <see cref="IHttpRequestMessage" />?
         /// </summary>
         /// <param name="client">Client executing this request</param>
         /// <param name="request">Request to authenticate</param>

@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AsyncLock.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DefaultHttpExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpMethodExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\DefaultHttpClientFactory.cs" />

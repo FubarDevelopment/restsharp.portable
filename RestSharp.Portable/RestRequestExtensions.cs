@@ -11,47 +11,6 @@ namespace RestSharp.Portable
     /// </summary>
     public static class RestRequestExtensions
     {
-        private static readonly JsonSerializer _defaultJsonSerializer = new JsonSerializer();
-        private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
-
-        /// <summary>
-        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.JsonSerializer"/>.
-        /// </summary>
-        /// <param name="request">
-        /// The REST request to add this parameter to
-        /// </param>
-        /// <param name="obj">
-        /// Object to serialize to the request body
-        /// </param>
-        /// <returns>
-        /// The request object to allow call chains
-        /// </returns>
-        public static IRestRequest AddJsonBody(this IRestRequest request, object obj)
-        {
-            var serializer = _defaultJsonSerializer;
-            var data = serializer.Serialize(obj);
-            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
-        }
-
-        /// <summary>
-        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.XmlDataContractSerializer"/>.
-        /// </summary>
-        /// <param name="request">
-        /// The REST request to add this parameter to
-        /// </param>
-        /// <param name="obj">
-        /// Object to serialize to the request body
-        /// </param>
-        /// <returns>
-        /// The request object to allow call chains
-        /// </returns>
-        public static IRestRequest AddXmlBody(this IRestRequest request, object obj)
-        {
-            var serializer = _defaultXmlDataContractSerializer;
-            var data = serializer.Serialize(obj);
-            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
-        }
-
         /// <summary>
         /// Returns the HttpContent for the body parameter
         /// </summary>
