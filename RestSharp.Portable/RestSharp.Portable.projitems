@@ -16,8 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DefaultHttpExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Deserializers\JsonDeserializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Deserializers\XmlDataContractDeserializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpMethodExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\DefaultHttpClientFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpClient.cs" />
@@ -36,7 +34,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestResponseT.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
   </ItemGroup>
 </Project>

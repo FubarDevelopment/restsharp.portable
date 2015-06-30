@@ -46,6 +46,7 @@
     <None Include="..\RestSharp.Portable.snk">
       <Link>RestSharp.Portable.snk</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -54,6 +55,8 @@
     <Compile Include="AuthHeader.cs" />
     <Compile Include="AuthHeaderInfo.cs" />
     <Compile Include="AuthHeaderUtilities.cs" />
+    <Compile Include="Deserializers\JsonDeserializer.cs" />
+    <Compile Include="Deserializers\XmlDataContractDeserializer.cs" />
     <Compile Include="FileParameter.cs" />
     <Compile Include="HttpHeadersExtensions.cs" />
     <Compile Include="HttpContentExtensions.cs" />
@@ -85,9 +88,17 @@
     <Compile Include="PropertyFilterMode.cs" />
     <Compile Include="RestClientExtensions.cs" />
     <Compile Include="RestRequestExtensions.cs" />
+    <Compile Include="Serializers\JsonSerializer.cs" />
+    <Compile Include="Serializers\XmlDataContractSerializer.cs" />
     <Compile Include="UrlEscapeFlags.cs" />
     <Compile Include="UrlEscapeUtility.cs" />
     <Compile Include="UrlUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

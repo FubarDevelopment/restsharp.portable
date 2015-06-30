@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
+﻿using System.Text;
 
 namespace RestSharp.Portable.Serializers
 {
@@ -9,17 +8,13 @@ namespace RestSharp.Portable.Serializers
     public class JsonSerializer : ISerializer
     {
         private static readonly Encoding _encoding = new UTF8Encoding(false);
-        private static readonly JsonSerializer _defaultJsonSerializer = new JsonSerializer();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonSerializer" /> class.
         /// </summary>
         public JsonSerializer()
         {
-            ContentType = new MediaTypeHeaderValue("application/json")
-            {
-                CharSet = _encoding.WebName,
-            }.ToString();
+            ContentType = string.Format("application/json; charset={0}", _encoding.WebName);
         }
 
         /// <summary>
@@ -29,14 +24,6 @@ namespace RestSharp.Portable.Serializers
         /// This serializer will return application/json
         /// </remarks>
         public string ContentType { get; set; }
-
-        /// <summary>
-        /// Gets the default JSON serializer for <see cref="RestRequestExtensions.AddJsonBody"/>
-        /// </summary>
-        internal static JsonSerializer Default
-        {
-            get { return _defaultJsonSerializer; }
-        }
 
         /// <summary>
         /// Serialize the object into a byte array

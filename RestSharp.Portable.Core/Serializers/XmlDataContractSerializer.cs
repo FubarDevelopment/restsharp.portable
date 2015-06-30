@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Net.Http.Headers;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
@@ -13,7 +12,6 @@ namespace RestSharp.Portable.Serializers
     {
         private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
         private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
-        private MediaTypeHeaderValue _defaultContentType;
         private string _contentType;
 
         /// <summary>
@@ -39,16 +37,7 @@ namespace RestSharp.Portable.Serializers
             get
             {
                 if (_contentType == null)
-                {
-                    if (_defaultContentType == null || _defaultContentType.CharSet != XmlWriterSettings.Encoding.WebName)
-                    {
-                        _defaultContentType = new MediaTypeHeaderValue("text/xml")
-                        {
-                            CharSet = XmlWriterSettings.Encoding.WebName,
-                        };
-                    }
-                    return _defaultContentType.ToString();
-                }
+                    return string.Format("text/xml; charset={0}", XmlWriterSettings.Encoding.WebName);
                 return _contentType;
             }
             set
