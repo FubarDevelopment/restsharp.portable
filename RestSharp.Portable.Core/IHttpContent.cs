@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -6,7 +7,7 @@ namespace RestSharp.Portable
     /// <summary>
     /// Abstraction of HTTP content used to write a request or read from a (buffered) response or buffered request.
     /// </summary>
-    public interface IHttpContent
+    public interface IHttpContent : IDisposable
     {
         /// <summary>
         /// Gets the HTTP headers for the content.

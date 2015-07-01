@@ -9,11 +9,11 @@
     <Import_RootNamespace>RestSharp.Portable.WebRequest</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpWebResponseContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\WebRequestHttpClientFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestHttpContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpRequestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpContentWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
@@ -21,5 +21,6 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskExtensions.cs" />
   </ItemGroup>
 </Project>

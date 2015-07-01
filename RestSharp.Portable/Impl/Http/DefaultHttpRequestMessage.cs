@@ -84,6 +84,14 @@ namespace RestSharp.Portable.Impl.Http
         }
 
         /// <summary>
+        /// Disposes the underlying HTTP request message
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
         /// Disposes the underlying HTTP request message when disposing is set to true
         /// </summary>
         /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
@@ -94,15 +102,9 @@ namespace RestSharp.Portable.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
+            Content.Dispose();
+            RequestMessage.Content = null;
             RequestMessage.Dispose();
-        }
-
-        /// <summary>
-        /// Disposes the underlying HTTP request message
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

@@ -1,86 +1,63 @@
 ﻿using System;
-using System.Net.Http;
 
 using JetBrains.Annotations;
 
 namespace RestSharp.Portable.WebRequest.Impl.Http
 {
     /// <summary>
-    /// Wraps an instance of the <see cref="HttpRequestMessage"/> as <see cref="IHttpRequestMessage"/>.
+    /// Wraps an instance of the <see cref="System.Net.WebRequest"/> as <see cref="IHttpRequestMessage"/>.
     /// </summary>
     public class DefaultHttpRequestMessage : IHttpRequestMessage
     {
-        private readonly DefaultHttpHeaders _requestHttpHeaders;
-
-        private IHttpContent _content;
-
         private bool _isDisposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpRequestMessage"/> class.
         /// </summary>
-        /// <param name="request">The request message to wrap</param>
-        public DefaultHttpRequestMessage([NotNull] System.Net.WebRequest request)
+        /// <param name="method">The request method</param>
+        /// <param name="requestUri">The request URI</param>
+        /// <param name="headers">The request headers to be used for the request</param>
+        /// <param name="content">The content of the request body or NULL if no content</param>
+        public DefaultHttpRequestMessage(Method method, [NotNull] Uri requestUri, [NotNull] IHttpHeaders headers, [CanBeNull] IHttpContent content)
         {
-            Request = request;
-            _requestHttpHeaders = new DefaultHttpHeaders(request.Headers);
-            _content = request.Content.AsRestHttpContent();
+            Method = method;
+            RequestUri = requestUri;
+            Headers = headers;
+            Version = new Version(1, 1);
+            Content = content;
         }
-
-        /// <summary>
-        /// Gets the HTTP request message to wrap
-        /// </summary>
-        public System.Net.WebRequest Request { get; private set; }
 
         /// <summary>
         /// Gets the HTTP headers for the request message
         /// </summary>
-        public IHttpHeaders Headers
-        {
-            get { return _requestHttpHeaders; }
-        }
+        public IHttpHeaders Headers { get; private set; }
 
         /// <summary>
         /// Gets or sets the HTTP request method
         /// </summary>
-        public Method Method
-        {
-            get { return Request.Method.ToMethod(); }
-            set { Request.Method = value.ToHttpMethod(); }
-        }
+        public Method Method { get; set; }
 
         /// <summary>
         /// Gets or sets the request URI
         /// </summary>
-        public Uri RequestUri
-        {
-            get { return Request.RequestUri; }
-            set { Request.RequestUri = value; }
-        }
+        public Uri RequestUri { get; set; }
 
         /// <summary>
         /// Gets or sets the HTTP protocol version
         /// </summary>
-        public Version Version
-        {
-            get { return Request.Version; }
-            set { Request.Version = value; }
-        }
+        public Version Version { get; set; }
 
         /// <summary>
         /// Gets or sets the content of the request message
         /// </summary>
-        public IHttpContent Content
+        public IHttpContent Content { get; set; }
+
+        /// <summary>
+        /// Disposes the underlying HTTP request message
+        /// </summary>
+        public void Dispose()
         {
-            get
-            {
-                return _content;
-            }
-            set
-            {
-                _content = value;
-                Request.Content = value.AsHttpContent();
-            }
+            Dispose(true);
         }
 
         /// <summary>
@@ -94,15 +71,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
-            Request.Dispose();
-        }
-
-        /// <summary>
-        /// Disposes the underlying HTTP request message
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
+            Content.Dispose();
         }
     }
 }

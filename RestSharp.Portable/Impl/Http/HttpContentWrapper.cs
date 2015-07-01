@@ -13,6 +13,8 @@ namespace RestSharp.Portable.Impl.Http
     /// </summary>
     public class HttpContentWrapper : HttpContent
     {
+        private bool _isDisposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpContentWrapper"/> class.
         /// </summary>
@@ -50,6 +52,19 @@ namespace RestSharp.Portable.Impl.Http
         protected override bool TryComputeLength(out long length)
         {
             return Content.TryComputeLength(out length);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by the <see cref="T:System.Net.Http.HttpContent"/> and optionally disposes of the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to releases only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (_isDisposed)
+                return;
+            _isDisposed = false;
+            base.Dispose(disposing);
+            Content.Dispose();
         }
     }
 }

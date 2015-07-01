@@ -1,39 +1,58 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
 
 using JetBrains.Annotations;
+
+using RestSharp.Portable.Impl;
 
 namespace RestSharp.Portable.WebRequest.Impl.Http
 {
     /// <summary>
-    /// Wraps a <see cref="HttpResponseMessage"/> as <see cref="IHttpResponseMessage"/>.
+    /// Wraps a <see cref="WebResponse"/> as <see cref="IHttpResponseMessage"/>.
     /// </summary>
     public class DefaultHttpResponseMessage : IHttpResponseMessage
     {
         private readonly IHttpRequestMessage _requestMessage;
 
-        private readonly DefaultHttpHeaders _responseHttpHeaders;
+        private readonly IHttpHeaders _responseHttpHeaders;
 
         private readonly IHttpContent _content;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpResponseMessage"/> class.
         /// </summary>
+        /// <param name="requestMessage">The request message for this response</param>
         /// <param name="responseMessage">The response message to wrap</param>
-        public DefaultHttpResponseMessage([NotNull] HttpResponseMessage responseMessage)
+        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [NotNull] HttpWebResponse responseMessage)
         {
             ResponseMessage = responseMessage;
-            if (responseMessage.RequestMessage != null)
-                _requestMessage = new DefaultHttpRequestMessage(responseMessage.RequestMessage);
-            _content = responseMessage.Content.AsRestHttpContent();
-            _responseHttpHeaders = new DefaultHttpHeaders(responseMessage.Headers);
+            _requestMessage = requestMessage;
+
+            var responseHeaders = new GenericHttpHeaders();
+            var contentHeaders = new GenericHttpHeaders();
+            if (responseMessage.SupportsHeaders)
+            {
+                foreach (var headerName in responseMessage.Headers.AllKeys)
+                {
+                    if (headerName.StartsWith("Content-", StringComparison.OrdinalIgnoreCase))
+                    {
+                        contentHeaders.TryAddWithoutValidation(headerName, responseMessage.Headers[headerName]);
+                    }
+                    else
+                    {
+                        responseHeaders.TryAddWithoutValidation(headerName, responseMessage.Headers[headerName]);
+                    }
+                }
+            }
+
+            _content = new HttpWebResponseContent(contentHeaders, responseMessage);
+            _responseHttpHeaders = responseHeaders;
         }
 
         /// <summary>
-        /// Gets the wrapper <see cref="HttpResponseMessage"/> instance.
+        /// Gets the wrapper <see cref="HttpWebResponse"/> instance.
         /// </summary>
-        public HttpResponseMessage ResponseMessage { get; private set; }
+        public HttpWebResponse ResponseMessage { get; private set; }
 
         /// <summary>
         /// Gets the HTTP headers returned by the response
@@ -48,7 +67,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         public bool IsSuccessStatusCode
         {
-            get { return ResponseMessage.IsSuccessStatusCode; }
+            get { return (int)ResponseMessage.StatusCode < 300; }
         }
 
         /// <summary>
@@ -56,7 +75,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         public string ReasonPhrase
         {
-            get { return ResponseMessage.ReasonPhrase; }
+            get { return ResponseMessage.StatusDescription; }
         }
 
         /// <summary>
@@ -92,6 +111,14 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         }
 
         /// <summary>
+        /// Disposes the underlying HTTP response message
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
         /// Disposes the underlying HTTP response message when disposing is set to true
         /// </summary>
         /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
@@ -101,14 +128,6 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 return;
             ResponseMessage.Dispose();
             _requestMessage.Dispose();
-        }
-
-        /// <summary>
-        /// Disposes the underlying HTTP response message
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

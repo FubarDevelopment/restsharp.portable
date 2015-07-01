@@ -14,6 +14,8 @@ namespace RestSharp.Portable.Impl.Http
     {
         private readonly IHttpHeaders _headers;
 
+        private bool _isDisposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpContent"/> class.
         /// </summary>
@@ -103,6 +105,28 @@ namespace RestSharp.Portable.Impl.Http
         {
             length = long.MaxValue;
             return false;
+        }
+
+        /// <summary>
+        /// Disposes the underlying HTTP request message
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Disposes the underlying HTTP request message when disposing is set to true
+        /// </summary>
+        /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            if (_isDisposed)
+                return;
+            _isDisposed = true;
+            Content.Dispose();
         }
     }
 }
