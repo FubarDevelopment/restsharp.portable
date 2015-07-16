@@ -148,9 +148,11 @@ namespace RestSharp.Portable.Test
                     var response = await client.Execute<RequestResponse>(req);
                     Assert.Equal(0, response.Data.Cookies.Count);
                 }
+
                 {
                     Assert.Equal(0, client.CookieContainer.Count);
                 }
+
                 {
                     var req = new RestRequest("set");
                     req.AddParameter("k1", "v1");
@@ -163,9 +165,11 @@ namespace RestSharp.Portable.Test
                             Assert.Equal("v1", kvp.Value);
                         });
                 }
+
                 {
                     Assert.Equal(1, client.CookieContainer.Count);
                 }
+
                 {
                     var req = new RestRequest();
                     var response = await client.Execute<RequestResponse>(req);
@@ -177,9 +181,11 @@ namespace RestSharp.Portable.Test
                             Assert.Equal("v1", kvp.Value);
                         });
                 }
+
                 {
                     Assert.Equal(1, client.CookieContainer.Count);
                 }
+
                 {
                     var req = new RestRequest("set");
                     req.AddParameter("k2", "v2");
@@ -197,9 +203,11 @@ namespace RestSharp.Portable.Test
                             Assert.Equal("v2", kvp.Value);
                         });
                 }
+
                 {
                     Assert.Equal(2, client.CookieContainer.Count);
                 }
+
                 {
                     var req = new RestRequest();
                     var response = await client.Execute<RequestResponse>(req);
@@ -216,6 +224,7 @@ namespace RestSharp.Portable.Test
                             Assert.Equal("v2", kvp.Value);
                         });
                 }
+
                 {
                     Assert.Equal(2, client.CookieContainer.Count);
                 }
@@ -226,6 +235,7 @@ namespace RestSharp.Portable.Test
         private class RequestResponse
         {
             public Dictionary<string, string> Form { get; set; }
+
             public Dictionary<string, string> Cookies { get; set; }
         }
     }
