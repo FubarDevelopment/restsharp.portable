@@ -163,7 +163,7 @@ namespace RestSharp.Portable.HttpClientImpl
         /// <returns>The modified HTTP request message</returns>
         protected virtual HttpRequestMessage AddHttpHeaderParameters(HttpRequestMessage message, IRestRequest request)
         {
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
+            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && !x.IsContentParameter()))
             {
                 if (message.Headers.Contains(param.Name))
                     message.Headers.Remove(param.Name);

@@ -479,6 +479,24 @@ namespace RestSharp.Portable
                     if (bodyData != null)
                         message.Content = bodyData;
 
+                    if (message.Content != null)
+                    {
+                        var content = message.Content;
+                        foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && x.IsContentParameter()))
+                        {
+                            if (content.Headers.Contains(param.Name))
+                                content.Headers.Remove(param.Name);
+                            if (param.ValidateOnAdd)
+                            {
+                                content.Headers.Add(param.Name, param.AsString());
+                            }
+                            else
+                            {
+                                content.Headers.TryAddWithoutValidation(param.Name, param.AsString());
+                            }
+                        }
+                    }
+
                     if (EnvironmentUtilities.IsSilverlight && message.Method == HttpMethod.Get)
                         _httpClient.DefaultRequestHeaders.Accept.Clear();
 

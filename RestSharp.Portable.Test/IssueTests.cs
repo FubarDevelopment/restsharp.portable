@@ -135,6 +135,38 @@ namespace RestSharp.Portable.Test
             }
         }
 
+        [Fact(DisplayName = "Issue 29 ContentCollectionMode = MultiPart")]
+        public async Task TestIssue29_CollectionModeMultiPart()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var req = new RestRequest("post", HttpMethod.Post);
+                req.AddParameter("a", "value-of-a");
+                req.ContentCollectionMode = ContentCollectionMode.MultiPart;
+                var resp = await client.Execute<RequestResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
+            }
+        }
+
+        [Fact(DisplayName = "Issue 29 ContentType as Parameter")]
+        public async Task TestIssue29_ContentTypeParameter()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var req = new RestRequest("post", HttpMethod.Post);
+                req.AddParameter("a", "value-of-a");
+                req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
+                var resp = await client.Execute<RequestResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
+            }
+        }
+
         [Fact(DisplayName = "Issue 32")]
         public async Task TestIssue32()
         {
