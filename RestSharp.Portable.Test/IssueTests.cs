@@ -263,12 +263,52 @@ namespace RestSharp.Portable.Test
             }
         }
 
+        [Fact(DisplayName = "Issue 37")]
+        public async Task TestIssue37()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var req = new RestRequest("post", HttpMethod.Post);
+                req.AddJsonBody(
+                    new ObjectA()
+                        {
+                            Name = "name",
+                            MyObjectB = new ObjectB()
+                                {
+                                    Description = "description",
+                                }
+                        });
+
+                var resp = await client.Execute<RequestResponse>(req);
+                Assert.NotNull(resp);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Json);
+                Assert.Equal("name", resp.Data.Json.Name);
+                Assert.NotNull(resp.Data.Json.MyObjectB);
+                Assert.Equal("description", resp.Data.Json.MyObjectB.Description);
+            }
+        }
+
+        private class ObjectA
+        {
+            public string Name { get; set; }
+
+            public ObjectB MyObjectB { get; set; }
+        }
+
+        public class ObjectB
+        {
+            public string Description { get; set; }
+        }
+
         [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
         private class RequestResponse
         {
             public Dictionary<string, string> Form { get; set; }
 
             public Dictionary<string, string> Cookies { get; set; }
+
+            public ObjectA Json { get; set; }
         }
     }
 }
