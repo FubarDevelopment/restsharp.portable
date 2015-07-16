@@ -10,7 +10,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// <summary>
     /// Wraps a <see cref="WebResponse"/> as <see cref="IHttpResponseMessage"/>.
     /// </summary>
-    public class DefaultHttpResponseMessage : IHttpResponseMessage
+    internal class DefaultHttpResponseMessage : IHttpResponseMessage
     {
         private readonly IHttpRequestMessage _requestMessage;
 
@@ -18,14 +18,18 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
         private readonly IHttpContent _content;
 
+        private readonly WebException _exception;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpResponseMessage"/> class.
         /// </summary>
         /// <param name="requestMessage">The request message for this response</param>
         /// <param name="responseMessage">The response message to wrap</param>
-        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [NotNull] HttpWebResponse responseMessage)
+        /// <param name="exception">The exception that occurred during the request</param>
+        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [NotNull] HttpWebResponse responseMessage, [CanBeNull] WebException exception = null)
         {
             ResponseMessage = responseMessage;
+            _exception = exception;
             _requestMessage = requestMessage;
 
             var responseHeaders = new GenericHttpHeaders();
@@ -34,14 +38,17 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             {
                 foreach (var headerName in responseMessage.Headers.AllKeys)
                 {
+                    IHttpHeaders headers;
                     if (headerName.StartsWith("Content-", StringComparison.OrdinalIgnoreCase))
                     {
-                        contentHeaders.TryAddWithoutValidation(headerName, responseMessage.Headers[headerName]);
+                        headers = contentHeaders;
                     }
                     else
                     {
-                        responseHeaders.TryAddWithoutValidation(headerName, responseMessage.Headers[headerName]);
+                        headers = responseHeaders;
                     }
+
+                    headers.TryAddWithoutValidation(headerName, responseMessage.Headers[headerName]);
                 }
             }
 
@@ -107,7 +114,8 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         public void EnsureSuccessStatusCode()
         {
-            ResponseMessage.EnsureSuccessStatusCode();
+            if (_exception != null)
+                throw new WebException(_exception.Message, _exception.InnerException, _exception.Status, _exception.Response);
         }
 
         /// <summary>

@@ -60,6 +60,16 @@ namespace RestSharp.Portable
             return parameters.OfType<FileParameter>();
         }
 
+        /// <summary>
+        /// Is the given parameter a content parameter?
+        /// </summary>
+        /// <param name="parameter">the parameter to test</param>
+        /// <returns>true when the parameter is a content parameter</returns>
+        public static bool IsContentParameter(this Parameter parameter)
+        {
+            return !string.IsNullOrEmpty(parameter.Name) && parameter.Name.StartsWith("Content-", StringComparison.OrdinalIgnoreCase);
+        }
+
         internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)
         {
             switch (parameter.Type)

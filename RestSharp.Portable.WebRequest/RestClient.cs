@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Deserializers;
+using RestSharp.Portable.WebRequest.Impl;
 
 namespace RestSharp.Portable.WebRequest
 {
+    /// <summary>
+    /// The default REST client
+    /// </summary>
     public class RestClient : IRestClient
     {
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
@@ -39,6 +44,8 @@ namespace RestSharp.Portable.WebRequest
             var xmlDataContractDeserializer = new XmlDataContractDeserializer();
             AddHandler("application/xml", xmlDataContractDeserializer);
             AddHandler("text/xml", xmlDataContractDeserializer);
+
+            HttpClientFactory = new WebRequestHttpClientFactory();
         }
 
         /// <summary>
@@ -258,7 +265,7 @@ namespace RestSharp.Portable.WebRequest
         /// <returns>The client itself, to allow call chains</returns>
         public IRestClient ReplaceHandler(Type oldType, IDeserializer deserializer)
         {
-            var contentHandlersToReplace = _contentHandlers.Where(x => oldType.IsInstanceOfType(x.Value)).ToList();
+            var contentHandlersToReplace = _contentHandlers.Where(x => x.Value.GetType().GetTypeInfo().IsAssignableFrom(oldType.GetTypeInfo())).ToList();
             foreach (var contentHandlerToReplace in contentHandlersToReplace)
             {
                 _contentHandlers.Remove(contentHandlerToReplace.Key);

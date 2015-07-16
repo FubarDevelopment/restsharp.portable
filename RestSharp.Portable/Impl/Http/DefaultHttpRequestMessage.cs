@@ -3,7 +3,7 @@ using System.Net.Http;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// Wraps an instance of the <see cref="HttpRequestMessage"/> as <see cref="IHttpRequestMessage"/>.
@@ -102,8 +102,11 @@ namespace RestSharp.Portable.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
-            Content.Dispose();
-            RequestMessage.Content = null;
+            if (Content != null)
+            {
+                Content.Dispose();
+                RequestMessage.Content = null;
+            }
             RequestMessage.Dispose();
         }
     }

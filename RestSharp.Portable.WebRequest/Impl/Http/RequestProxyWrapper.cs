@@ -6,7 +6,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// <summary>
     /// This class wraps a <see cref="IRequestProxy" /> and provides a <see cref="IWebProxy" /> compatible interface.
     /// </summary>
-    public class RequestProxyWrapper : IWebProxy
+    internal class RequestProxyWrapper : IWebProxy
     {
         private readonly IRequestProxy _proxy;
 

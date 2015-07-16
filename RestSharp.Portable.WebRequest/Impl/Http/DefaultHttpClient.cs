@@ -13,7 +13,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// <summary>
     /// Wraps a <see cref="System.Net.WebRequest"/> instance as <see cref="IHttpClient"/>.
     /// </summary>
-    public class DefaultHttpClient : IHttpClient
+    internal class DefaultHttpClient : IHttpClient
     {
         private readonly IHttpHeaders _defaultHeaders;
 
@@ -75,12 +75,24 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (Credentials != null)
                 wr.Credentials = Credentials;
             wr.Method = request.Method.ToString();
+#if !PCL
+            wr.Proxy = Proxy ?? System.Net.WebRequest.DefaultWebProxy;
+#endif
 
             // Combine all headers into one header collection
             var headers = new GenericHttpHeaders();
+
+            if (request.Content != null && request.Content.Headers != null)
+            {
+                foreach (var header in request.Content.Headers.Where(x => !headers.Contains(x.Key)))
+                {
+                    headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+            }
+
             if (request.Headers != null)
             {
-                foreach (var header in request.Headers)
+                foreach (var header in request.Headers.Where(x => !headers.Contains(x.Key)))
                 {
                     headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
@@ -111,9 +123,14 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                     if (string.Equals(header.Key, "content-length", StringComparison.OrdinalIgnoreCase))
                     {
                         hasContentLength = true;
+#if PCL
+                        wr.Headers[HttpRequestHeader.ContentLength] = value;
+#endif
                     }
-
-                    wr.Headers[header.Key] = value;
+                    else
+                    {
+                        wr.Headers[header.Key] = value;
+                    }
                 }
             }
 
@@ -125,16 +142,21 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                     long contentLength;
                     if (request.Content.TryComputeLength(out contentLength))
                     {
+#if PCL
                         wr.Headers[HttpRequestHeader.ContentLength] = contentLength.ToString();
+#else
+                        wr.ContentLength = contentLength;
+#endif
                     }
                 }
 
                 try
                 {
-                    using (var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken))
-                    {
-                        await request.Content.CopyToAsync(requestStream);
-                    }
+                    var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
+                    var temp = new System.IO.MemoryStream();
+                    await request.Content.CopyToAsync(temp);
+                    temp.Position = 0;
+                    await temp.CopyToAsync(requestStream);
                 }
                 catch (OperationCanceledException)
                 {
@@ -160,6 +182,11 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 }
 
                 return new DefaultHttpResponseMessage(request, httpWebResponse);
+            }
+            catch (WebException ex)
+            {
+                var httpWebResponse = (HttpWebResponse)ex.Response;
+                return new DefaultHttpResponseMessage(request, httpWebResponse, ex);
             }
             catch (OperationCanceledException)
             {

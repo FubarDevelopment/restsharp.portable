@@ -5,7 +5,7 @@ using System.Net.Http;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     /// <summary>
     /// The default REST request

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// Wraps a <see cref="HttpClient"/> instance as <see cref="IHttpClient"/>.
@@ -18,7 +18,7 @@ namespace RestSharp.Portable.Impl.Http
         /// Initializes a new instance of the <see cref="DefaultHttpClient"/> class.
         /// </summary>
         /// <param name="client">The <see cref="HttpClient"/> to wrap.</param>
-        public DefaultHttpClient([NotNull] HttpClient client)
+        public DefaultHttpClient([NotNull] System.Net.Http.HttpClient client)
         {
             Client = client;
             _defaultHeaders = new DefaultHttpHeaders(client.DefaultRequestHeaders);
@@ -27,7 +27,7 @@ namespace RestSharp.Portable.Impl.Http
         /// <summary>
         /// Gets the HTTP client to wrap.
         /// </summary>
-        public HttpClient Client { get; private set; }
+        public System.Net.Http.HttpClient Client { get; private set; }
 
         /// <summary>
         /// Gets or sets the base address of the HTTP client

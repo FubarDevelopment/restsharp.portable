@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.WebRequest;
+
 using Xunit;
 
-namespace RestSharp.Portable.Test
+namespace RestSharp.Portable.Test.WebRequestTests
 {
     public class OtherTests
     {

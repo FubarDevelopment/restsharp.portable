@@ -1,5 +1,7 @@
 ﻿using System;
 
+using RestSharp.Portable.HttpClient;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test

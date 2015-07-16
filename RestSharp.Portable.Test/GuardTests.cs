@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.HttpClient;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test

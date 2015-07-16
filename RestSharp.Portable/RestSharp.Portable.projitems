@@ -6,7 +6,7 @@
     <SharedGUID>6e125aed-4ff9-4294-bb38-adb498132a14</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>RestSharp.Portable</Import_RootNamespace>
+    <Import_RootNamespace>RestSharp.Portable.HttpClient</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AsyncLock.cs" />

@@ -7,7 +7,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// <summary>
     /// Wraps an instance of the <see cref="System.Net.WebRequest"/> as <see cref="IHttpRequestMessage"/>.
     /// </summary>
-    public class DefaultHttpRequestMessage : IHttpRequestMessage
+    internal class DefaultHttpRequestMessage : IHttpRequestMessage
     {
         private bool _isDisposed;
 
@@ -71,7 +71,8 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
-            Content.Dispose();
+            if (Content != null)
+                Content.Dispose();
         }
     }
 }

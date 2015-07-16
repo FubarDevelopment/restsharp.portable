@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// This class wraps a <see cref="IRequestProxy" /> and provides a <see cref="IWebProxy" /> compatible interface.

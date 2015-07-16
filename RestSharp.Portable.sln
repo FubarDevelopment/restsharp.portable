@@ -155,15 +155,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebRequest", "WebRequest", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "System.Net.Http.Primitives.Redirect", "System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.shproj", "{C7D02A59-904D-4F90-B3CB-891E40AA8EB8}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Content", "RestSharp.Portable.Content\RestSharp.Portable.Content.shproj", "{66EE6309-C369-4CD9-BD1D-3474143874AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.WebRequest.NET45", "RestSharp.Portable.WebRequest.NET45\RestSharp.Portable.WebRequest.NET45.csproj", "{D9E54193-CE87-4A25-906C-1916BD6D0F5B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
+		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{66ee6309-c369-4cd9-bd1d-3474143874ab}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{bd08a0f9-fb0d-4585-a715-e21d8dfb62e1}*SharedItemsImports = 13
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
 		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{c7d02a59-904d-4f90-b3cb-891e40aa8eb8}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
@@ -173,18 +178,22 @@ Global
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{0422e016-938b-4ea1-af92-9f8be3b23ae8}*SharedItemsImports = 13
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{9c53c4ac-1a03-4d74-a2b6-8a5968eb2cf5}*SharedItemsImports = 13
+		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
+		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{846592b7-3dc7-4c76-a04b-a224cda0a2bb}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
+		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
+		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{71d709e1-0669-4bdd-b85b-4291831b2eaf}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{0646515d-d16b-4ec2-acb2-e06020807388}*SharedItemsImports = 13
@@ -314,6 +323,10 @@ Global
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9E54193-CE87-4A25-906C-1916BD6D0F5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9E54193-CE87-4A25-906C-1916BD6D0F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9E54193-CE87-4A25-906C-1916BD6D0F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9E54193-CE87-4A25-906C-1916BD6D0F5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -367,5 +380,7 @@ Global
 		{E6B89A8B-2F79-4985-9FF0-5FB39E9929F5} = {E836D825-422E-4514-A22E-E6EA7BC28173}
 		{E711C2E5-197A-48C9-BDF0-2536EB02D397} = {E836D825-422E-4514-A22E-E6EA7BC28173}
 		{C7D02A59-904D-4F90-B3CB-891E40AA8EB8} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
+		{66EE6309-C369-4CD9-BD1D-3474143874AB} = {E836D825-422E-4514-A22E-E6EA7BC28173}
+		{D9E54193-CE87-4A25-906C-1916BD6D0F5B} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
 	EndGlobalSection
 EndGlobal

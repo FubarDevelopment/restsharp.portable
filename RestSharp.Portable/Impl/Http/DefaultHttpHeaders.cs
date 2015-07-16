@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// <see cref="IHttpHeaders"/> implementation using an underlying <see cref="HttpHeaders"/>.

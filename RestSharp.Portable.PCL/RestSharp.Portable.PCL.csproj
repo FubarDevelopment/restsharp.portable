@@ -8,8 +8,8 @@
     <ProjectGuid>{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable</RootNamespace>
-    <AssemblyName>RestSharp.Portable</AssemblyName>
+    <RootNamespace>RestSharp.Portable.HttpClient</RootNamespace>
+    <AssemblyName>RestSharp.Portable.HttpClient</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -25,7 +25,7 @@
     <DefineConstants>TRACE;DEBUG;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\RestSharp.Portable.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\RestSharp.Portable.HttpClient.xml</DocumentationFile>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
@@ -36,7 +36,7 @@
     <DefineConstants>TRACE;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\RestSharp.Portable.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\RestSharp.Portable.HttpClient.xml</DocumentationFile>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>

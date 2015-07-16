@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
-using RestSharp.Portable.Authenticators.OAuth;
-using RestSharp.Portable.Impl;
+using RestSharp.Portable.HttpClient;
+using RestSharp.Portable.HttpClient.Impl;
 
 using Xunit;
 
-namespace RestSharp.Portable.Test
+namespace RestSharp.Portable.Test.HttpClientTests
 {
     public class AuthenticationTests
     {
@@ -117,6 +116,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
+#if FALSE
         [Fact(Skip = "Requires authentication")]
         public async Task TestBitbucketOAuth10()
         {
@@ -150,6 +150,7 @@ namespace RestSharp.Portable.Test
                 }
             }
         }
+#endif
 
         [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Class gets instantiated by the RestClient")]
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]

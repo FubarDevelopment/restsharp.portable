@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     internal static class HttpMethodExtensions
     {

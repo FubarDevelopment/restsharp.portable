@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// A shallow wrapper around a <see cref="HttpContent"/> instance.

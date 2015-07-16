@@ -4,17 +4,16 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.HttpClient;
 
 using Xunit;
 
-namespace RestSharp.Portable.Test
+namespace RestSharp.Portable.Test.HttpClientTests
 {
     public class IssueTests
     {
-        [Fact(DisplayName = "Issue 12, Post 1 parameter")]
+        [Fact(DisplayName = "HttpClient - Issue 12, Post 1 parameter")]
         public async Task TestIssue12_Post1()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -33,7 +32,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 12, Post 2 parameters")]
+        [Fact(DisplayName = "HttpClient - Issue 12, Post 2 parameters")]
         public async Task TestIssue12_Post2()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -56,7 +55,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 16")]
+        [Fact(DisplayName = "HttpClient - Issue 16")]
         public void TestIssue16()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -68,7 +67,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 19")]
+        [Fact(DisplayName = "HttpClient - Issue 19")]
         public void TestIssue19()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -94,8 +93,8 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
             }
         }
-		
-        [Fact(DisplayName = "Issue 23")]
+
+        [Fact(DisplayName = "HttpClient - Issue 23")]
         public async Task TestIssue23()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -108,7 +107,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 25")]
+        [Fact(DisplayName = "HttpClient - Issue 25")]
         public void TestIssue25()
         {
             using (var client = new RestClient("http://httpbin.org/"))
@@ -132,6 +131,38 @@ namespace RestSharp.Portable.Test
                 Assert.NotNull(t2.Result.Data.Form);
                 Assert.True(t2.Result.Data.Form.ContainsKey("ab"));
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
+            }
+        }
+
+        [Fact(DisplayName = "HttpClient - Issue 29 ContentCollectionMode = MultiPart")]
+        public async Task TestIssue29_CollectionModeMultiPart()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddParameter("a", "value-of-a");
+                req.ContentCollectionMode = ContentCollectionMode.MultiPart;
+                var resp = await client.Execute<PostResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
+            }
+        }
+
+        [Fact(DisplayName = "HttpClient - Issue 29 ContentType as Parameter")]
+        public async Task TestIssue29_ContentTypeParameter()
+        {
+            using (var client = new RestClient("http://httpbin.org/"))
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddParameter("a", "value-of-a");
+                req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
+                var resp = await client.Execute<PostResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
             }
         }
 

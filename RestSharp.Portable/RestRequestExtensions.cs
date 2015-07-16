@@ -2,9 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-using RestSharp.Portable.Serializers;
-
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     /// <summary>
     /// Extension functions for REST requests

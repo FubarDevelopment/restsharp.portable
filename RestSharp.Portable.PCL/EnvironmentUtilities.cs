@@ -1,10 +1,13 @@
 ﻿using System;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
-    static class EnvironmentUtilities
+    internal static class EnvironmentUtilities
     {
         private static bool? _isMono;
+
+        private static bool? _isSilverlight;
+
         public static bool IsMono
         {
             get
@@ -15,7 +18,6 @@ namespace RestSharp.Portable
             }
         }
 
-        private static bool? _isSilverlight;
         public static bool IsSilverlight
         {
             get

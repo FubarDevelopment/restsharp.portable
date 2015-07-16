@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable.WebRequest.Impl.Http
 {
-    public class HttpWebResponseContent : IHttpContent
+    internal class HttpWebResponseContent : IHttpContent
     {
         private readonly HttpWebResponse _response;
 
@@ -58,9 +58,10 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         /// <param name="maxBufferSize">The maximum buffer size</param>
         /// <returns>The task that loads the data into an internal buffer</returns>
-        public Task LoadIntoBufferAsync(long maxBufferSize)
+        public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
-            return TaskEx.Run(() => LoadIntoBuffer(maxBufferSize, 4000));
+            LoadIntoBuffer(maxBufferSize, 4000);
+            await Task.Yield();
         }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 offset += buffer.Length;
             }
 
-            return TaskEx.FromResult(result);
+            return Task.FromResult(result);
         }
 
         /// <summary>

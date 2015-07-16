@@ -1,4 +1,5 @@
 using RestSharp.Portable;
+using RestSharp.Portable.HttpClient;
 
 namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
 {

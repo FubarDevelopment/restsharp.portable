@@ -5,9 +5,9 @@ using System.Net.Http.Headers;
 
 using JetBrains.Annotations;
 
-using RestSharp.Portable.Impl.Http;
+using RestSharp.Portable.HttpClient.Impl.Http;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     /// <summary>
     /// Extension functions for REST clients
@@ -128,6 +128,7 @@ namespace RestSharp.Portable
                         data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
                         if (!string.IsNullOrEmpty(parameter.ContentType))
                             data.Headers.ContentType = MediaTypeHeaderValue.Parse(parameter.ContentType);
+
                         multipartContent.Add(data, parameter.Name);
                     }
                 }

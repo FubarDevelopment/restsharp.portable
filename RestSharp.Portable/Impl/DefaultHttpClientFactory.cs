@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 
-using RestSharp.Portable.Impl.Http;
+using RestSharp.Portable.HttpClient.Impl.Http;
 
-namespace RestSharp.Portable.Impl
+namespace RestSharp.Portable.HttpClient.Impl
 {
     /// <summary>
     /// The default HTTP client factory
@@ -52,7 +52,7 @@ namespace RestSharp.Portable.Impl
         {
             var handler = CreateMessageHandler(client, request);
 
-            var httpClient = new HttpClient(handler, true)
+            var httpClient = new System.Net.Http.HttpClient(handler, true)
             {
                 BaseAddress = GetBaseAddress(client)
             };
@@ -167,7 +167,7 @@ namespace RestSharp.Portable.Impl
         /// <returns>The modified HTTP request message</returns>
         protected virtual HttpRequestMessage AddHttpHeaderParameters(HttpRequestMessage message, IRestRequest request)
         {
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
+            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && !x.IsContentParameter()))
             {
                 if (message.Headers.Contains(param.Name))
                     message.Headers.Remove(param.Name);
@@ -191,7 +191,7 @@ namespace RestSharp.Portable.Impl
         /// <param name="httpClient">HTTP client</param>
         /// <param name="restClient">REST client</param>
         /// <returns>The modified HTTP request message</returns>
-        protected virtual HttpClient AddHttpHeaderParameters(HttpClient httpClient, IRestClient restClient)
+        protected virtual System.Net.Http.HttpClient AddHttpHeaderParameters(System.Net.Http.HttpClient httpClient, IRestClient restClient)
         {
             foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
             {

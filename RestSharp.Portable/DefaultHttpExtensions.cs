@@ -4,9 +4,9 @@ using System.Net.Http.Headers;
 
 using JetBrains.Annotations;
 
-using RestSharp.Portable.Impl.Http;
+using RestSharp.Portable.HttpClient.Impl.Http;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     internal static class DefaultHttpExtensions
     {

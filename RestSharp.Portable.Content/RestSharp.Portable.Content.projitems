@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>66ee6309-c369-4cd9-bd1d-3474143874ab</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RestSharp.Portable.Content</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)ByteArrayContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHeaderContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHeadersExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MultipartFormDataContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringContent.cs" />
+  </ItemGroup>
+</Project>
