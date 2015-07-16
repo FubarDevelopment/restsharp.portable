@@ -24,7 +24,8 @@ Supported Platforms:
         <releaseNotes>- New timeout property to avoid problems with CancellationTokenSource (issue #13)
 - Fix NullReferenceException when using the HTTP basic authenticator (issue #23)
 - OAuth 1.0 and 2.0 can now be used at the same time in Android Apps (issue #24)
-- Using asynchronous locking (issue #25)</releaseNotes>
+- Using asynchronous locking (issue #25)
+- Allows setting of Content-* parameters (issue #29)</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>

@@ -25,8 +25,8 @@ using System.Runtime.CompilerServices;
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("2.4.0")]
-[assembly: AssemblyFileVersion("2.4.3")]
-[assembly: AssemblyInformationalVersion("2.4.3")]
+[assembly: AssemblyFileVersion("2.4.4")]
+[assembly: AssemblyInformationalVersion("2.4.4")]
 
 [assembly: InternalsVisibleTo("RestSharp.Portable.OAuth, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +
