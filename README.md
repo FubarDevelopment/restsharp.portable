@@ -1,5 +1,7 @@
 # Portable RestSharp #
 
+[![Join the chat at https://gitter.im/FubarDevelopment/restsharp.portable](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FubarDevelopment/restsharp.portable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is some kind of a RestSharp port to PCL.
 
 # [BSD 2-Clause License](LICENSE.md) #
