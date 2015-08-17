@@ -34,6 +34,7 @@
     <DefineConstants>TRACE;PCL;NO_TYPEINFO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\RestSharp.Portable.WebRequest.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
