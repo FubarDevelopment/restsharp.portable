@@ -32,6 +32,7 @@
     <DefineConstants>TRACE;PCL;ASYNC_PCL;USE_BOUNCYCASTLE;USE_TYPEINFO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\RestSharp.Portable.OAuth2.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
