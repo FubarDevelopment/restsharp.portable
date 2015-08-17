@@ -8,8 +8,8 @@
     <ProjectGuid>{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.WebRequest.PCL</RootNamespace>
-    <AssemblyName>RestSharp.Portable.WebRequest.PCL</AssemblyName>
+    <RootNamespace>RestSharp.Portable.WebRequest</RootNamespace>
+    <AssemblyName>RestSharp.Portable.WebRequest</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
