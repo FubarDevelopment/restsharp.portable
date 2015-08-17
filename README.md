@@ -21,6 +21,16 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 
 # Changes #
 
+## 3.0.0 alpha 9 ##
+
+* Added PCL for OAuth/OAuth2 with profile 259 (better for platforms that don't target .NET 4.0 or SL5)
+* Make all assemblies containing WebRequest implementations signed
+
+## 3.0.0 alpha 5-8 ##
+
+* Added RestSharp implementation using WebRequest instead of HttpClient
+* Added PCL optimizations (for .NET 4.5 and up)
+
 ## 3.0.0 alpha 4 ##
 
 * Moved all interfaces and other generic stuff into a separate core library
@@ -46,6 +56,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
   * New ```AuthenticationChallengeHandler``` which selects one of the registered
     authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
 * New Gitter OAuth 2.0 client
+
+## 2.4.4 ##
+
+* Bugfix for issue [#29](https://github.com/FubarDevelopment/restsharp.portable/issues/29).
 
 ## 2.4.3 ##
 
