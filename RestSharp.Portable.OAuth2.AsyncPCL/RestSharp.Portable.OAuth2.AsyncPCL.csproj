@@ -2,26 +2,26 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{37AA1EA7-CA0D-46A0-AB54-2685C56406F8}</ProjectGuid>
+    <ProjectGuid>{D1285F85-AF1F-4A53-B9F9-9E3627970EEA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RestSharp.Portable.WebRequest</RootNamespace>
-    <AssemblyName>RestSharp.Portable.WebRequest</AssemblyName>
+    <RootNamespace>RestSharp.Portable.OAuth2</RootNamespace>
+    <AssemblyName>RestSharp.Portable.OAuth2</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WINDOWS_STORE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PCL;ASYNC_PCL;USE_BOUNCYCASTLE;USE_TYPEINFO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -29,11 +29,9 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;WINDOWS_STORE</DefineConstants>
+    <DefineConstants>TRACE;PCL;ASYNC_PCL;USE_BOUNCYCASTLE;USE_TYPEINFO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <DocumentationFile>bin\Release\RestSharp.Portable.WebRequest.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -43,14 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
-      <Project>{5dc024cb-40c9-4573-8a51-05d80e703fe7}</Project>
-      <Name>RestSharp.Portable.Core.AsyncPCL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TargetPlatform Include="Windows, Version=8.1" />
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
+    <None Include="..\RestSharp.Portable.snk">
+      <Link>RestSharp.Portable.snk</Link>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -59,13 +53,26 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\RestSharp.Portable.snk">
-      <Link>RestSharp.Portable.snk</Link>
-    </None>
+    <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
+      <Project>{5dc024cb-40c9-4573-8a51-05d80e703fe7}</Project>
+      <Name>RestSharp.Portable.Core.AsyncPCL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth.AsyncPCL\RestSharp.Portable.OAuth.AsyncPCL.csproj">
+      <Project>{7659f0c1-6991-4a41-999d-9e438fc54a52}</Project>
+      <Name>RestSharp.Portable.OAuth.AsyncPCL</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems" Label="Shared" />
-  <Import Project="..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems" Label="Shared" />
-  <Import Project="..\System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems" Label="Shared" />
+  <ItemGroup>
+    <Reference Include="crypto, Version=1.8.5689.25754, Culture=neutral, PublicKeyToken=c23c2840b3912535, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.0-rc2\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch10+MonoAndroid10+xamarinmac20+xamarinios10\crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

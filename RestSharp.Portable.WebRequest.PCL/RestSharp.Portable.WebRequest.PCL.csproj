@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\RestSharp.Portable.WebRequest.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <ProjectReference Include="..\RestSharp.Portable.Core.PCL\RestSharp.Portable.Core.PCL.csproj">
@@ -50,6 +56,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\RestSharp.Portable.snk">
+      <Link>RestSharp.Portable.snk</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

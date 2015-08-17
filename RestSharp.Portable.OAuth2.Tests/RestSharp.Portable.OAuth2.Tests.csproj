@@ -116,7 +116,6 @@
     <Compile Include="Helpers\UriUtility.cs" />
     <Compile Include="Infrastructure\ConfigurationManagerTests.cs" />
     <Compile Include="Infrastructure\EnumerableExtensionsTests.cs" />
-    <Compile Include="Infrastructure\ObjectExtensionsTests.cs" />
     <Compile Include="Infrastructure\RequestFactory.cs" />
     <Compile Include="Infrastructure\RequestFactoryTests.cs" />
     <Compile Include="Infrastructure\SafeExtensionsTests.cs" />
