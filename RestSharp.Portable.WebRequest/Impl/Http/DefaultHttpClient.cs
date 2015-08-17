@@ -143,7 +143,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                     long contentLength;
                     if (request.Content.TryComputeLength(out contentLength))
                     {
-#if PCL
+#if PCL || NETFX_CORE || WINDOWS_STORE
                         wr.Headers[HttpRequestHeader.ContentLength] = contentLength.ToString();
 #else
                         wr.ContentLength = contentLength;
