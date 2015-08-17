@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +19,12 @@ namespace RestSharp.Portable.Content
 
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
-            using (var writer = new StreamWriter(stream, Encoding.UTF8, 128, true))
+#if PCL && !ASYNC_PCL
+            var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
+#else
+            var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);
+#endif
+            try
             {
                 writer.NewLine = "\r\n";
 
@@ -28,11 +32,16 @@ namespace RestSharp.Portable.Content
                 {
                     foreach (var header in headers)
                     {
-                        await writer.WriteLineAsync(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
+                        await
+                            writer.WriteLineAsync(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
                     }
                 }
 
                 await writer.WriteLineAsync();
+            }
+            finally
+            {
+                writer.Dispose();
             }
         }
 
@@ -68,7 +77,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that loads the data into an internal buffer</returns>
         public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
+#if PCL && !ASYNC_PCL
+            await TaskEx.Yield();
+#else
             await Task.Yield();
+#endif
         }
 
         /// <summary>

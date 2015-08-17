@@ -53,7 +53,11 @@ namespace RestSharp.Portable.Content
         public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
             _buffer = _encoding.GetBytes(_value);
+#if PCL && !ASYNC_PCL
+            await TaskEx.Yield();
+#else
             await Task.Yield();
+#endif
         }
 
         /// <summary>
@@ -63,7 +67,11 @@ namespace RestSharp.Portable.Content
         public Task<Stream> ReadAsStreamAsync()
         {
             var data = _buffer ?? _encoding.GetBytes(_value);
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult<Stream>(new MemoryStream(data));
+#else
             return Task.FromResult<Stream>(new MemoryStream(data));
+#endif
         }
 
         /// <summary>
@@ -73,7 +81,11 @@ namespace RestSharp.Portable.Content
         public Task<byte[]> ReadAsByteArrayAsync()
         {
             var data = _buffer ?? _encoding.GetBytes(_value);
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(data);
+#else
             return Task.FromResult(data);
+#endif
         }
 
         /// <summary>
@@ -82,7 +94,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as string</returns>
         public Task<string> ReadAsStringAsync()
         {
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(_value);
+#else
             return Task.FromResult(_value);
+#endif
         }
 
         /// <summary>
@@ -94,14 +110,9 @@ namespace RestSharp.Portable.Content
         /// <param name="length">The length in bytes of the HTTP content.</param>
         public bool TryComputeLength(out long length)
         {
-            if (_buffer != null)
-            {
-                length = _buffer.Length;
-            }
-            else
-            {
-                length = _encoding.GetByteCount(_value);
-            }
+            length = _buffer != null
+                ? _buffer.Length
+                : _encoding.GetByteCount(_value);
 
             return true;
         }

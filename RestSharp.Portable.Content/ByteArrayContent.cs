@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +23,12 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; private set; }
 
-        public IReadOnlyList<byte> Data
+        public int Length
+        {
+            get { return _data.Length; }
+        }
+
+        public IEnumerable<byte> Data
         {
             get { return _data; }
         }
@@ -50,7 +54,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that loads the data into an internal buffer</returns>
         public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
+#if PCL && !ASYNC_PCL
+            await TaskEx.Yield();
+#else
             await Task.Yield();
+#endif
         }
 
         /// <summary>
@@ -59,7 +67,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the stream</returns>
         public Task<Stream> ReadAsStreamAsync()
         {
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult<Stream>(new MemoryStream(_data));
+#else
             return Task.FromResult<Stream>(new MemoryStream(_data));
+#endif
         }
 
         /// <summary>
@@ -68,7 +80,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as byte array</returns>
         public Task<byte[]> ReadAsByteArrayAsync()
         {
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(_data);
+#else
             return Task.FromResult(_data);
+#endif
         }
 
         /// <summary>
@@ -77,7 +93,11 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as string</returns>
         public Task<string> ReadAsStringAsync()
         {
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));
+#else
             return Task.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));
+#endif
         }
 
         /// <summary>

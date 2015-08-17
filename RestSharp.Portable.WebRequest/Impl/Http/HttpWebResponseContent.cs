@@ -61,7 +61,11 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
             LoadIntoBuffer(maxBufferSize, 4000);
+#if PCL && !ASYNC_PCL
+            await TaskEx.Yield();
+#else
             await Task.Yield();
+#endif
         }
 
         /// <summary>
@@ -89,7 +93,11 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 offset += buffer.Length;
             }
 
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(result);
+#else
             return Task.FromResult(result);
+#endif
         }
 
         /// <summary>

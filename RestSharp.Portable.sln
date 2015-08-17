@@ -167,6 +167,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.WebReque
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.WebRequest.AsyncPCL", "RestSharp.Portable.WebRequest.AsyncPCL\RestSharp.Portable.WebRequest.AsyncPCL.csproj", "{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.WebRequest.PCL", "RestSharp.Portable.WebRequest.PCL\RestSharp.Portable.WebRequest.PCL.csproj", "{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -207,6 +209,9 @@ Global
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{0646515d-d16b-4ec2-acb2-e06020807388}*SharedItemsImports = 13
 		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{3cd384af-547e-40e7-a210-3b134c0ce422}*SharedItemsImports = 4
+		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
+		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
+		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{d32fd25d-47e9-4737-871c-c3048809a620}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{4b247f85-b30f-490f-a241-a7270ac5fa13}*SharedItemsImports = 4
@@ -335,6 +340,10 @@ Global
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEDF887E-2B58-4198-B3A3-D09BB303C3D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -391,5 +400,6 @@ Global
 		{D9E54193-CE87-4A25-906C-1916BD6D0F5B} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
 		{A8F66BC8-E698-42B7-B904-A4892307A0DF} = {01EA5D7B-8BBB-476F-871D-965B566B8D70}
 		{37B832B5-AA7C-48AC-9F27-BD222F1DB2C0} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
+		{AEDF887E-2B58-4198-B3A3-D09BB303C3D0} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
 	EndGlobalSection
 EndGlobal

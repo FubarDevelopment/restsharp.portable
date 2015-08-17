@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -152,8 +153,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
                 try
                 {
+#if PCL && ASYNC_PCL
+                    var getRequestStreamAsync = Task.Factory.FromAsync<Stream>(wr.BeginGetRequestStream, wr.EndGetRequestStream, null);
+                    var requestStream = await getRequestStreamAsync.HandleCancellation(cancellationToken);
+#else
                     var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
-                    var temp = new System.IO.MemoryStream();
+#endif
+                    var temp = new MemoryStream();
                     await request.Content.CopyToAsync(temp);
                     temp.Position = 0;
                     await temp.CopyToAsync(requestStream);
@@ -167,7 +173,12 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             try
             {
+#if PCL && ASYNC_PCL
+                var getResponseAsync = Task.Factory.FromAsync<WebResponse>(wr.BeginGetResponse, wr.EndGetResponse, null);
+                var response = await getResponseAsync.HandleCancellation(cancellationToken);
+#else
                 var response = await wr.GetResponseAsync().HandleCancellation(cancellationToken);
+#endif
                 var httpWebResponse = response as HttpWebResponse;
                 if (httpWebResponse == null)
                 {
