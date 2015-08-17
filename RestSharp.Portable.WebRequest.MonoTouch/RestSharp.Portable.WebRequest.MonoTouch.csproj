@@ -5,13 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}</ProjectGuid>
+    <ProjectGuid>{C11FAE2C-A2EC-4E3F-89A1-3026CFA2707E}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>RestSharp.Portable.HttpClient</RootNamespace>
+    <RootNamespace>RestSharp.Portable.WebRequest</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>RestSharp.Portable.HttpClient</AssemblyName>
-    <NuGetPackageImportStamp>4bd8d213</NuGetPackageImportStamp>
+    <AssemblyName>RestSharp.Portable.WebRequest</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,7 +23,6 @@
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DocumentationFile>bin\iPhone\Debug\RestSharp.Portable.HttpClient.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -34,34 +32,14 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <DocumentationFile>bin\iPhone\Release\RestSharp.Portable.HttpClient.xml</DocumentationFile>
+    <DocumentationFile>bin\iPhone\Release\RestSharp.Portable.WebRequest.XML</DocumentationFile>
     <CodeAnalysisRuleSet>..\ReleaseRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="EnvironmentUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
@@ -70,8 +48,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
   </ItemGroup>
-  <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
+  <Import Project="..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems" Label="Shared" />
+  <Import Project="..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems" Label="Shared" />
+  <Import Project="..\System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
 </Project>

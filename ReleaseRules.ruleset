@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Kopie von &quot;Regelempfehlungen (Microsoft-verwaltet)&quot;" Description="Diese Regeln zielen auf die kritischsten Probleme in Ihrem Code ab, einschließlich potenzieller Sicherheitslücken, Anwendungsabstürzen und anderer entscheidender Logik- und Entwurfsfehler. Sie sollten diesen Regelsatz in alle benutzerdefinierten Regelsätze einbinden, die Sie für Ihre Projekte erstellen." ToolsVersion="14.0">
+<RuleSet Name="Default rules for a release build" Description="Diese Regeln zielen auf die kritischsten Probleme in Ihrem Code ab, einschließlich potenzieller Sicherheitslücken, Anwendungsabstürzen und anderer entscheidender Logik- und Entwurfsfehler. Sie sollten diesen Regelsatz in alle benutzerdefinierten Regelsätze einbinden, die Sie für Ihre Projekte erstellen." ToolsVersion="14.0">
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
     <Rule Id="CA1001" Action="Warning" />
     <Rule Id="CA1009" Action="Warning" />
