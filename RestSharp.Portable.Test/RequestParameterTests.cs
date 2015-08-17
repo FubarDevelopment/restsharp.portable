@@ -5,7 +5,7 @@ using RestSharp.Portable.HttpClient;
 
 using Xunit;
 
-namespace RestSharp.Portable.Test.HttpClientTests
+namespace RestSharp.Portable.Test
 {
     public class RequestParameterTests
     {

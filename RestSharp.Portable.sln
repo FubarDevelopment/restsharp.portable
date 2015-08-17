@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B-25BC-47D2-8D80-00BA0ADD9732}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,11 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{E881237B
 		nuget-pack.ps1 = nuget-pack.ps1
 		RestSharp.Portable.Core.nuspec = RestSharp.Portable.Core.nuspec
 		RestSharp.Portable.Encodings.nuspec = RestSharp.Portable.Encodings.nuspec
+		RestSharp.Portable.HttpClient.nuspec = RestSharp.Portable.HttpClient.nuspec
+		RestSharp.Portable.HttpClient.rd.xml = RestSharp.Portable.HttpClient.rd.xml
 		RestSharp.Portable.nuspec = RestSharp.Portable.nuspec
 		RestSharp.Portable.OAuth.nuspec = RestSharp.Portable.OAuth.nuspec
 		RestSharp.Portable.OAuth2.nuspec = RestSharp.Portable.OAuth2.nuspec
-		RestSharp.Portable.rd.xml = RestSharp.Portable.rd.xml
 		RestSharp.Portable.snk = RestSharp.Portable.snk
+		RestSharp.Portable.WebRequest.nuspec = RestSharp.Portable.WebRequest.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{378BF51F-9A2C-4223-A6B8-3DC2BEAA37CD}"
@@ -55,10 +57,10 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Encoding
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{01EA5D7B-8BBB-476F-871D-965B566B8D70}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable", "RestSharp.Portable", "{16C3FD47-B862-4355-8658-80EE1DA72985}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.HttpClient", "RestSharp.Portable.HttpClient", "{16C3FD47-B862-4355-8658-80EE1DA72985}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Scripts\RestSharp.Portable\install.ps1 = NuGet\Scripts\RestSharp.Portable\install.ps1
-		NuGet\Scripts\RestSharp.Portable\uninstall.ps1 = NuGet\Scripts\RestSharp.Portable\uninstall.ps1
+		NuGet\Scripts\RestSharp.Portable.HttpClient\install.ps1 = NuGet\Scripts\RestSharp.Portable.HttpClient\install.ps1
+		NuGet\Scripts\RestSharp.Portable.HttpClient\uninstall.ps1 = NuGet\Scripts\RestSharp.Portable.HttpClient\uninstall.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.Encodings", "RestSharp.Portable.Encodings", "{239C87E3-CAC4-4FAC-A727-E966CFCAB9A4}"
@@ -159,6 +161,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Content"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.WebRequest.NET45", "RestSharp.Portable.WebRequest.NET45\RestSharp.Portable.WebRequest.NET45.csproj", "{D9E54193-CE87-4A25-906C-1916BD6D0F5B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.WebRequest", "RestSharp.Portable.WebRequest", "{A8F66BC8-E698-42B7-B904-A4892307A0DF}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Scripts\RestSharp.Portable.WebRequest\install.ps1 = NuGet\Scripts\RestSharp.Portable.WebRequest\install.ps1
+		NuGet\Scripts\RestSharp.Portable.WebRequest\uninstall.ps1 = NuGet\Scripts\RestSharp.Portable.WebRequest\uninstall.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
@@ -182,18 +190,18 @@ Global
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
 		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{846592b7-3dc7-4c76-a04b-a224cda0a2bb}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
-		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
+		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
 		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{71d709e1-0669-4bdd-b85b-4291831b2eaf}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{0646515d-d16b-4ec2-acb2-e06020807388}*SharedItemsImports = 13
@@ -206,8 +214,8 @@ Global
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01dcc8da-1b20-47aa-bb06-70933046435b}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
-		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 		System.Security.Cryptography\System.Security.Cryptography.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
+		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 		System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems*{de12bf6b-63ba-4106-be18-c59c01392afc}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -382,5 +390,6 @@ Global
 		{C7D02A59-904D-4F90-B3CB-891E40AA8EB8} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
 		{66EE6309-C369-4CD9-BD1D-3474143874AB} = {E836D825-422E-4514-A22E-E6EA7BC28173}
 		{D9E54193-CE87-4A25-906C-1916BD6D0F5B} = {E711C2E5-197A-48C9-BDF0-2536EB02D397}
+		{A8F66BC8-E698-42B7-B904-A4892307A0DF} = {01EA5D7B-8BBB-476F-871D-965B566B8D70}
 	EndGlobalSection
 EndGlobal

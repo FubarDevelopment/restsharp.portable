@@ -9,7 +9,7 @@ if ($targetFrameworkVersion -ge $ver45) {
 	$fwPath = "net45"
 }
 
-$assemblyPath = [System.IO.Path]::Combine($toolsPath, "..\..\lib\$fwPath\RestSharp.Portable.dll")
+$assemblyPath = [System.IO.Path]::Combine($toolsPath, "..\..\lib\$fwPath\RestSharp.Portable.WebRequest.dll")
 $obj = $project.Object
 $getRefsMethod = [Microsoft.VisualStudio.Project.VisualC.VCProjectEngine.VCProjectShim].GetMethod("get_References")
 $refs = $getRefsMethod.Invoke($obj, $null)

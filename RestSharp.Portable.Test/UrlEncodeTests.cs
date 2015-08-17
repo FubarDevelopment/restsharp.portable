@@ -38,9 +38,9 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestUrlEncodeComplianceUmlaut()
         {
-            const string Chars = "äöüßÄÖÜ\u007F";
-            var expected = HttpUtility.UrlEncode(Chars);
-            var test = UrlUtility.Escape(Chars, UrlEscapeFlags.LikeUrlEncode);
+            const string chars = "äöüßÄÖÜ\u007F";
+            var expected = HttpUtility.UrlEncode(chars);
+            var test = UrlUtility.Escape(chars, UrlEscapeFlags.LikeUrlEncode);
             Assert.Equal(expected, test);
         }
 

@@ -3,7 +3,7 @@
     <metadata>
         <id>FubarCoder.RestSharp.Portable</id>
         <version>$version$</version>
-        <title>RestSharp.Portable</title>
+        <title>RestSharp.Portable HttpClient (Legacy compatibility package)</title>
         <authors>Mark Junker</authors>
         <licenseUrl>http://choosealicense.com/licenses/bsd-2-clause/</licenseUrl>
         <projectUrl>https://github.com/FubarDevelopment/restsharp.portable</projectUrl>
@@ -21,93 +21,14 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Some kind of a RestSharp port to PCL</summary>
-        <releaseNotes>- Revamped authenticator API (all async now)
-- Using the new core library</releaseNotes>
+        <releaseNotes>- First version of a WebRequest based RestSharp.Portable</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
-            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
-                <dependency id="Microsoft.Bcl" version="1.1.9" />
-                <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-                <dependency id="Microsoft.Net.Http" version="2.2.28" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="net40">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
-                <dependency id="Microsoft.Bcl" version="1.1.9" />
-                <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-                <dependency id="Microsoft.Net.Http" version="2.2.28" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="sl50">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
-                <dependency id="Microsoft.Bcl" version="1.1.9" />
-                <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-                <dependency id="Microsoft.Net.Http" version="2.2.28" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="net45">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="MonoAndroid10">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="MonoTouch10">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
-            <group targetFramework="Xamarin.iOS10">
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
-            </group>
             <group>
-                <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-                <dependency id="Newtonsoft.Json" version="6.0.5" />
+                <dependency id="FubarCoder.RestSharp.Portable.HttpClient" version="$clientversion$" />
             </group>
         </dependencies>
-        <frameworkAssemblies>
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50" />
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net40" />
-            <frameworkAssembly assemblyName="System.Web" targetFramework="net40" />
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
-            <frameworkAssembly assemblyName="System.Web" targetFramework="net45" />
-            <frameworkAssembly assemblyName="System.Security" targetFramework="net45" />
-            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoAndroid10" />
-            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="MonoAndroid10" />
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoTouch10" />
-            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="MonoTouch10" />
-            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="Xamarin.iOS10" />
-            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="Xamarin.iOS10" />
-        </frameworkAssemblies>
     </metadata>
-    <files>
-      <file src="NuGet\lib\native\_._" target="lib\native\_._" />
-      <file src="NuGet\license.txt" target="license.txt" />
-      <file src="NuGet\Scripts\RestSharp.Portable\install.ps1" target="tools\native\install.ps1" />
-      <file src="NuGet\Scripts\RestSharp.Portable\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="RestSharp.Portable.rd.xml" target="content\win\" />
-      <file src="RestSharp.Portable.rd.xml" target="content\wpa81\" />
-      <file src="RestSharp.Portable.NET4\bin\$Configuration$\RestSharp.Portable.dll" target="lib\net40\" />
-      <file src="RestSharp.Portable.NET4\bin\$Configuration$\RestSharp.Portable.XML" target="lib\net40\" />
-      <file src="RestSharp.Portable.NET45\bin\$Configuration$\RestSharp.Portable.dll" target="lib\net45\" />
-      <file src="RestSharp.Portable.NET45\bin\$Configuration$\RestSharp.Portable.XML" target="lib\net45\" />
-      <file src="RestSharp.Portable.PCL\bin\$Configuration$\RestSharp.Portable.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.PCL\bin\$Configuration$\RestSharp.Portable.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.SL5\bin\$Configuration$\RestSharp.Portable.dll" target="lib\sl50\" />
-      <file src="RestSharp.Portable.SL5\bin\$Configuration$\RestSharp.Portable.XML" target="lib\sl50\" />
-      <file src="RestSharp.Portable.Android\bin\$Configuration$\RestSharp.Portable.dll" target="lib\MonoAndroid10\" />
-      <file src="RestSharp.Portable.Android\bin\$Configuration$\RestSharp.Portable.XML" target="lib\MonoAndroid10\" />
-      <file src="RestSharp.Portable.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.dll" target="lib\Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.XML" target="lib\Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.dll" target="lib\MonoTouch10\" />
-      <file src="RestSharp.Portable.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.XML" target="lib\MonoTouch10\" />
-    </files>
 </package>

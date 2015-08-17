@@ -33,10 +33,8 @@ using System;
 
 namespace System.Security.Cryptography
 {
-
     abstract class MD5 : HashAlgorithm
     {
-
         // Why is it protected when others abstract hash classes are public ?
         protected MD5()
         {
@@ -49,5 +47,3 @@ namespace System.Security.Cryptography
         }
     }
 }
-
-

@@ -1,6 +1,4 @@
-﻿using System;
-
-using RestSharp.Portable.HttpClient;
+﻿using RestSharp.Portable.HttpClient;
 
 using Xunit;
 
