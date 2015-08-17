@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.WebRequest
+namespace RestSharp.Portable
 {
     /// <summary>
     /// The default REST request
