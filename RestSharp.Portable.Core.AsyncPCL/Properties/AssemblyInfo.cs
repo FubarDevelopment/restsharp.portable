@@ -7,4 +7,4 @@ using System.Reflection;
 [assembly: AssemblyTitle("RestSharp.Portable.Core")]
 [assembly: AssemblyProduct("RestSharp.Portable.Core")]
 
-[assembly: CLSCompliant(true)]
+//[assembly: CLSCompliant(true)]
