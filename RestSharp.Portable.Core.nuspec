@@ -28,19 +28,41 @@ Supported Platforms:
         <tags>PCL RestSharp portable core</tags>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="System.Net" targetFramework="sl50" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="sl50" />
             <frameworkAssembly assemblyName="System.Net" targetFramework="net40" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net40" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="net40" />
             <frameworkAssembly assemblyName="System.Net" targetFramework="net45" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net45" />
+            <frameworkAssembly assemblyName="System.Web" targetFramework="net45" />
+            <frameworkAssembly assemblyName="System.Security" targetFramework="net45" />
             <frameworkAssembly assemblyName="System.Net" targetFramework="MonoAndroid10" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoAndroid10" />
             <frameworkAssembly assemblyName="System.Net" targetFramework="MonoTouch10" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="MonoTouch10" />
             <frameworkAssembly assemblyName="System.Net" targetFramework="Xamarin.iOS10" />
+            <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="Xamarin.iOS10" />
         </frameworkAssemblies>
+		<dependencies>
+            <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+                <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
+                <dependency id="Microsoft.Bcl" version="1.1.10" />
+                <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
+                <dependency id="Newtonsoft.Json" version="7.0.1" />
+            </group>
+            <group targetFramework="portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+                <dependency id="Newtonsoft.Json" version="7.0.1" />
+            </group>
+		</dependencies>
     </metadata>
     <files>
       <file src="NuGet\lib\native\_._" target="lib\native\_._" />
       <file src="NuGet\license.txt" target="license.txt" />
       <file src="NuGet\Scripts\RestSharp.Portable.Core\install.ps1" target="tools\native\install.ps1" />
       <file src="NuGet\Scripts\RestSharp.Portable.Core\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="RestSharp.Portable.Core\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.Core\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
     </files>
 </package>

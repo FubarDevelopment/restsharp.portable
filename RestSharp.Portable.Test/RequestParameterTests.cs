@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.HttpClient;
+
 using Xunit;
 
 namespace RestSharp.Portable.Test

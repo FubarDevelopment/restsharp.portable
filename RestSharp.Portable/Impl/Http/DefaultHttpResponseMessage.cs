@@ -4,7 +4,7 @@ using System.Net.Http;
 
 using JetBrains.Annotations;
 
-namespace RestSharp.Portable.Impl.Http
+namespace RestSharp.Portable.HttpClient.Impl.Http
 {
     /// <summary>
     /// Wraps a <see cref="HttpResponseMessage"/> as <see cref="IHttpResponseMessage"/>.
@@ -92,6 +92,14 @@ namespace RestSharp.Portable.Impl.Http
         }
 
         /// <summary>
+        /// Disposes the underlying HTTP response message
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
         /// Disposes the underlying HTTP response message when disposing is set to true
         /// </summary>
         /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
@@ -101,14 +109,6 @@ namespace RestSharp.Portable.Impl.Http
                 return;
             ResponseMessage.Dispose();
             _requestMessage.Dispose();
-        }
-
-        /// <summary>
-        /// Disposes the underlying HTTP response message
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
         }
     }
 }

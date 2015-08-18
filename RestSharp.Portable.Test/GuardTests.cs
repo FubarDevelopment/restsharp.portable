@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.HttpClient;
+
 using Xunit;
+// ReSharper disable AccessToDisposedClosure
 
 namespace RestSharp.Portable.Test
 {
@@ -62,7 +65,7 @@ namespace RestSharp.Portable.Test
                     var t2 = Task.Run(
                         async () =>
                         {
-                            Thread.Sleep(TimeSpan.FromMilliseconds(100));
+                            Thread.Sleep(TimeSpan.FromMilliseconds(200));
                             using (await guard.LockAsync(CancellationToken.None))
                                 results.Enqueue(2);
                         });
@@ -71,7 +74,7 @@ namespace RestSharp.Portable.Test
                         {
                             using (await guard.LockAsync(CancellationToken.None))
                             {
-                                Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                                Thread.Sleep(TimeSpan.FromMilliseconds(400));
                                 results.Enqueue(1);
                             }
                         });

@@ -20,6 +20,8 @@ namespace RestSharp.Portable
 
         private byte[] _buffer;
 
+        private bool _isDisposed;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PostParametersContent"/> class.
         /// </summary>
@@ -153,6 +155,27 @@ namespace RestSharp.Portable
             else
                 length = _postParameters.Sum(x => x.GetFullDataLength()) + _postParameters.Count - 1;
             return true;
+        }
+
+        /// <summary>
+        /// Disposes the underlying HTTP request message
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        /// <summary>
+        /// Disposes the underlying HTTP request message when disposing is set to true
+        /// </summary>
+        /// <param name="disposing">true, when called from <see cref="Dispose()"/>.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+            if (_isDisposed)
+                return;
+            _isDisposed = true;
         }
 
         private void WriteTo(Stream stream)

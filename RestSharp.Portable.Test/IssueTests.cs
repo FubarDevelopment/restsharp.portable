@@ -1,23 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.HttpClient;
+using RestSharp.Portable.HttpClient.Impl;
+using RestSharp.Portable.Test.HttpBin;
+using RestSharp.Portable.WebRequest.Impl;
 
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    public class IssueTests
+    [CLSCompliant(false)]
+    public class IssueTests : RestSharpTests
     {
-        [Fact(DisplayName = "Issue 12, Post 1 parameter")]
-        public async Task TestIssue12_Post1()
+        [Theory(DisplayName = "Issue 12, Post 1 parameter")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue12_Post1(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 var tmp = new string('a', 70000);
 
@@ -33,10 +39,15 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 12, Post 2 parameters")]
-        public async Task TestIssue12_Post2()
+        [Theory(DisplayName = "Issue 12, Post 2 parameters")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue12_Post2(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 var tmp = new string('a', 70000);
 
@@ -56,10 +67,15 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 16")]
-        public void TestIssue16()
+        [Theory(DisplayName = "Issue 16")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public void TestIssue16(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 var request = new RestRequest("get?a={a}");
                 request.AddParameter("a", "value-of-a", ParameterType.UrlSegment);
@@ -68,10 +84,15 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 19")]
-        public void TestIssue19()
+        [Theory(DisplayName = "Issue 19")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public void TestIssue19(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 var req1 = new RestRequest("post", Method.POST);
                 req1.AddParameter("a", "value-of-a");
@@ -94,11 +115,16 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("value-of-ab", t2.Result.Data.Form["ab"]);
             }
         }
-		
-        [Fact(DisplayName = "Issue 23")]
-        public async Task TestIssue23()
+
+        [Theory(DisplayName = "Issue 23")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue23(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 client.Authenticator = new HttpBasicAuthenticator();
                 client.Credentials = new NetworkCredential("foo", "bar");
@@ -108,10 +134,15 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact(DisplayName = "Issue 25")]
-        public void TestIssue25()
+        [Theory(DisplayName = "Issue 25")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public void TestIssue25(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 var req1 = new RestRequest("post", Method.POST);
                 req1.AddParameter("a", "value-of-a");
@@ -135,13 +166,46 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
-        private class PostResponse
+        [Theory(DisplayName = "Issue 29 ContentCollectionMode = MultiPart")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue29_CollectionModeMultiPart(Type factoryType)
         {
-            public Dictionary<string, string> Form { get; set; }
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddParameter("a", "value-of-a");
+                req.ContentCollectionMode = ContentCollectionMode.MultiPart;
+                var resp = await client.Execute<PostResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
+            }
+        }
 
-            public object Json { get; set; }
+        [Theory(DisplayName = "Issue 29 ContentType as Parameter")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue29_ContentTypeParameter(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddParameter("a", "value-of-a");
+                req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
+                var resp = await client.Execute<PostResponse>(req);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Form);
+                Assert.True(resp.Data.Form.ContainsKey("a"));
+                Assert.Equal("value-of-a", resp.Data.Form["a"]);
+            }
         }
     }
 }

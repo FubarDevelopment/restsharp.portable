@@ -5,9 +5,9 @@ using System.Net.Http.Headers;
 
 using JetBrains.Annotations;
 
-using RestSharp.Portable.Impl.Http;
+using RestSharp.Portable.HttpClient.Impl.Http;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     /// <summary>
     /// Extension functions for REST clients
@@ -20,7 +20,7 @@ namespace RestSharp.Portable
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        internal static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             HttpContent content;
             var parameters = client.MergeParameters(request);
@@ -128,6 +128,7 @@ namespace RestSharp.Portable
                         data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
                         if (!string.IsNullOrEmpty(parameter.ContentType))
                             data.Headers.ContentType = MediaTypeHeaderValue.Parse(parameter.ContentType);
+
                         multipartContent.Add(data, parameter.Name);
                     }
                 }

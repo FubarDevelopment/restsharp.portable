@@ -29,7 +29,11 @@ Supported Platforms:
     <dependencies>
       <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
         <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
-        <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
+        <dependency id="Portable.BouncyCastle" version="1.8.0-rc2" />
+      </group>
+      <group targetFramework="portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+        <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
+        <dependency id="Portable.BouncyCastle" version="1.8.0-rc2" />
       </group>
       <group targetFramework="net40">
         <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
@@ -59,6 +63,8 @@ Supported Platforms:
     <file src="RestSharp.Portable.OAuth.NET45\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\net45\" />
     <file src="RestSharp.Portable.OAuth.PCL\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
     <file src="RestSharp.Portable.OAuth.PCL\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+    <file src="RestSharp.Portable.OAuth.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
     <file src="RestSharp.Portable.OAuth.Android\bin\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\MonoAndroid10\" />
     <file src="RestSharp.Portable.OAuth.Android\bin\$Configuration$\RestSharp.Portable.OAuth.XML" target="lib\MonoAndroid10\" />
     <file src="RestSharp.Portable.OAuth.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth.dll" target="lib\Xamarin.iOS10\" />

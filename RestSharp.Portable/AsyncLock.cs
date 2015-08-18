@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     internal sealed class AsyncLock : IDisposable
     {

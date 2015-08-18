@@ -154,6 +154,10 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+# Others
 /packages
 *.nupkg
 /nuget-push.ps1
+project.lock.json
+.vs/

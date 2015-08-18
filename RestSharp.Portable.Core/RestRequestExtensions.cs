@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+#if !NO_TYPEINFO
+using System.Reflection;
+#endif
+
+using RestSharp.Portable.Serializers;
 
 namespace RestSharp.Portable
 {
@@ -11,6 +16,47 @@ namespace RestSharp.Portable
     /// </summary>
     public static class RestRequestExtensions
     {
+        private static readonly JsonSerializer _defaultJsonSerializer = new JsonSerializer();
+        private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
+
+        /// <summary>
+        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.JsonSerializer"/>.
+        /// </summary>
+        /// <param name="request">
+        /// The REST request to add this parameter to
+        /// </param>
+        /// <param name="obj">
+        /// Object to serialize to the request body
+        /// </param>
+        /// <returns>
+        /// The request object to allow call chains
+        /// </returns>
+        public static IRestRequest AddJsonBody(this IRestRequest request, object obj)
+        {
+            var serializer = _defaultJsonSerializer;
+            var data = serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
+        }
+
+        /// <summary>
+        /// Body to add to the parameters using a default <see cref="RestSharp.Portable.Serializers.XmlDataContractSerializer"/>.
+        /// </summary>
+        /// <param name="request">
+        /// The REST request to add this parameter to
+        /// </param>
+        /// <param name="obj">
+        /// Object to serialize to the request body
+        /// </param>
+        /// <returns>
+        /// The request object to allow call chains
+        /// </returns>
+        public static IRestRequest AddXmlBody(this IRestRequest request, object obj)
+        {
+            var serializer = _defaultXmlDataContractSerializer;
+            var data = serializer.Serialize(obj);
+            return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
+        }
+
         /// <summary>
         /// Body to add to the parameters using the <see cref="RestSharp.Portable.IRestRequest.Serializer" />
         /// </summary>
@@ -37,7 +83,7 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Port of AddObject to RestSharp.Portable
+        /// Automatically create parameters from object properties
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
         /// <param name="obj">Object to serialize to the request body</param>
@@ -46,61 +92,80 @@ namespace RestSharp.Portable
         /// <returns>The request object to allow call chains</returns>
         public static IRestRequest AddObject(this IRestRequest request, object obj, IEnumerable<string> objProperties, PropertyFilterMode filterMode)
         {
-            // automatically create parameters from object props
             var type = obj.GetType();
-            var props = type.GetProperties();
 
-            var objProps = objProperties == null ? null : objProperties.Where(x => x != null).ToList();
+            var objectProperties = objProperties == null ? null : new HashSet<string>(objProperties);
+            var addedProperties = new HashSet<string>();
 
-            foreach (var prop in props)
+            while (type != typeof(object))
             {
-                bool isAllowed;
+#if NO_TYPEINFO
+                var typeInfo = type;
+                var props = typeInfo.GetProperties();
+#else
+                var typeInfo = type.GetTypeInfo();
+                var props = typeInfo.DeclaredProperties;
+#endif
 
-                if (objProps == null)
+                foreach (var prop in props.Where(x => !addedProperties.Contains(x.Name)))
                 {
-                    isAllowed = true;
-                }
-                else
-                {
-                    if (filterMode == PropertyFilterMode.Include)
+                    bool isAllowed;
+
+                    if (objectProperties == null)
                     {
-                        isAllowed = objProps.Contains(prop.Name);
+                        isAllowed = true;
                     }
                     else
                     {
-                        isAllowed = !objProps.Contains(prop.Name);
-                    }
-                }
-
-                if (!isAllowed)
-                    continue;
-
-                var propType = prop.PropertyType;
-                var val = prop.GetValue(obj, null);
-
-                if (val != null)
-                {
-                    if (propType.IsArray)
-                    {
-                        var elementType = propType.GetElementType();
-
-                        if (((Array)val).Length > 0 &&
-                            (elementType.IsPrimitive || elementType.IsValueType || elementType == typeof(string)))
+                        if (filterMode == PropertyFilterMode.Include)
                         {
-                            // convert the array to an array of strings
-                            var values =
-                                (from object item in ((Array)val) select item.ToString()).ToArray<string>();
-                            val = string.Join(",", values);
+                            isAllowed = objectProperties.Contains(prop.Name);
                         }
                         else
                         {
-                            // try to cast it
-                            val = string.Join(",", (string[])val);
+                            isAllowed = !objectProperties.Contains(prop.Name);
                         }
                     }
 
-                    request.AddParameter(prop.Name, val);
+                    if (!isAllowed)
+                        continue;
+
+                    addedProperties.Add(prop.Name);
+
+                    var propType = prop.PropertyType;
+                    var val = prop.GetValue(obj, null);
+
+                    if (val != null)
+                    {
+                        if (propType.IsArray)
+                        {
+                            var elementType = propType.GetElementType();
+#if NO_TYPEINFO
+                            var elementTypeInfo = elementType;
+#else
+                            var elementTypeInfo = elementType.GetTypeInfo();
+#endif
+
+                            if (((Array)val).Length > 0 &&
+                                (elementTypeInfo.IsPrimitive || elementTypeInfo.IsValueType || elementType == typeof(string)))
+                            {
+                                // convert the array to an array of strings
+                                var values =
+                                    (from object item in ((Array)val) select item.ToString()).ToArray<string>();
+                                val = string.Join(",", values);
+                            }
+                            else
+                            {
+                                // try to cast it
+                                val = string.Join(",", (string[])val);
+                            }
+                        }
+
+                        request.AddParameter(prop.Name, val);
+                    }
                 }
+
+                type = typeInfo.BaseType;
             }
 
             return request;

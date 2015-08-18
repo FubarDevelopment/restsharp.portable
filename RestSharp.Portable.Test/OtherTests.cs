@@ -1,18 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.HttpClient;
+using RestSharp.Portable.HttpClient.Impl;
+using RestSharp.Portable.Test.HttpBin;
+using RestSharp.Portable.WebRequest.Impl;
 
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    public class OtherTests
+    [CLSCompliant(false)]
+    public class OtherTests : RestSharpTests
     {
-        [Fact]
-        public async Task TestMultipleRequests()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestMultipleRequests(Type factoryType)
         {
-            using (var client = new RestClient("http://httpbin.org/"))
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
             {
                 {
                     var request = new RestRequest("post", Method.POST);
@@ -36,13 +45,6 @@ namespace RestSharp.Portable.Test
                     Assert.Equal("param1+", response.Data.Form["param1"]);
                 }
             }
-        }
-
-        // ReSharper disable once ClassNeverInstantiated.Local
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
-        private class PostResponse
-        {
-            public Dictionary<string, string> Form { get; set; }
         }
     }
 }

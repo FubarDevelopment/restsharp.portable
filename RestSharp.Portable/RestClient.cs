@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using RestSharp.Portable.Deserializers;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.HttpClient
 {
     /// <summary>
     /// The default REST client
@@ -141,9 +141,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
-                    var restResponse = new RestResponse(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse(this, request, response);
                 }
             }
         }
@@ -166,9 +164,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, CancellationToken.None))
                 {
-                    var restResponse = new RestResponse<T>(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse<T>(this, request, response);
                 }
             }
         }
@@ -185,9 +181,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
-                    var restResponse = new RestResponse(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse(this, request, response);
                 }
             }
         }
@@ -205,9 +199,7 @@ namespace RestSharp.Portable
             {
                 using (var response = await ExecuteRequest(request, ct))
                 {
-                    var restResponse = new RestResponse<T>(this, request);
-                    await restResponse.LoadResponse(response);
-                    return restResponse;
+                    return await RestResponse.CreateResponse<T>(this, request, response);
                 }
             }
         }
@@ -432,11 +424,31 @@ namespace RestSharp.Portable
                 if (_httpClient == null)
                     _httpClient = HttpClientFactory.CreateClient(this, request);
 
-                using (var message = HttpClientFactory.CreateRequestMessage(this, request))
+                bool failed = true;
+                var message = HttpClientFactory.CreateRequestMessage(this, request);
+                try
                 {
                     var bodyData = this.GetContent(request);
                     if (bodyData != null)
                         message.Content = bodyData;
+
+                    if (message.Content != null)
+                    {
+                        var content = message.Content;
+                        foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && x.IsContentParameter()))
+                        {
+                            if (content.Headers.Contains(param.Name))
+                                content.Headers.Remove(param.Name);
+                            if (param.ValidateOnAdd)
+                            {
+                                content.Headers.Add(param.Name, param.ToRequestString());
+                            }
+                            else
+                            {
+                                content.Headers.TryAddWithoutValidation(param.Name, param.ToRequestString());
+                            }
+                        }
+                    }
 
                     if (EnvironmentUtilities.IsSilverlight && message.Method == Method.GET)
                         _httpClient.DefaultRequestHeaders.Remove("Accept");
@@ -444,20 +456,8 @@ namespace RestSharp.Portable
                     if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
                         await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
 
-                    IHttpResponseMessage response;
-                    bool failed = true;
-                    try
-                    {
-                        response = await _httpClient.SendAsync(message, ct);
-                        failed = false;
-                    }
-                    finally
-                    {
-                        if (failed)
-                            message.Dispose();
-                    }
+                    var response = await _httpClient.SendAsync(message, ct);
 
-                    failed = true;
                     try
                     {
                         if (!response.IsSuccessStatusCode)
@@ -482,10 +482,16 @@ namespace RestSharp.Portable
                                 response.Dispose();
                             else
                                 message.Dispose();
+                            message = null;
                         }
                     }
 
                     return response;
+                }
+                finally
+                {
+                    if (failed && message != null)
+                        message.Dispose();
                 }
             }
         }

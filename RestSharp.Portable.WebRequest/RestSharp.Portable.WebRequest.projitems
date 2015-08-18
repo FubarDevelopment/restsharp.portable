@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>bd08a0f9-fb0d-4585-a715-e21d8dfb62e1</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RestSharp.Portable.WebRequest</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpWebResponseContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\WebRequestHttpClientFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpRequestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TaskExtensions.cs" />
+  </ItemGroup>
+</Project>

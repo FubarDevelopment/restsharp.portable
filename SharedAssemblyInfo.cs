@@ -25,8 +25,8 @@ using System.Runtime.CompilerServices;
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.4")]
-[assembly: AssemblyInformationalVersion("3.0.0.4")]
+[assembly: AssemblyFileVersion("3.0.0.10")]
+[assembly: AssemblyInformationalVersion("3.0.0.10")]
 
 [assembly: InternalsVisibleTo("RestSharp.Portable.OAuth, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +
@@ -49,6 +49,6 @@ using System.Runtime.CompilerServices;
 "9bb2ee7a911ad43721beea1f034c3d8a87c97f5de3e575cc0db2db79d396e69eeef2461ff8615f" +
 "48df7bba")]
 
-#if !SILVERLIGHT && !PCL
+#if !NOT_CLS_COMPLIANT
 [assembly: CLSCompliant(true)]
 #endif

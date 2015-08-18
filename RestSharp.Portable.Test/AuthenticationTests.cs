@@ -1,114 +1,123 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
-using RestSharp.Portable.Authenticators.OAuth;
-using RestSharp.Portable.Impl;
+using RestSharp.Portable.HttpClient;
+using RestSharp.Portable.HttpClient.Impl;
+using RestSharp.Portable.Test.HttpBin;
+using RestSharp.Portable.WebRequest.Impl;
 
 using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    public class AuthenticationTests
+    [CLSCompliant(false)]
+    public class AuthenticationTests : RestSharpTests
     {
-        [Fact]
-        public async Task TestHttpBasicAuth()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestHttpBasicAuth(Type factoryType)
         {
-            const string Username = "user name";
-            const string Password = "passwd";
+            const string username = "user name";
+            const string password = "passwd";
 
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                HttpClientFactory = new DefaultHttpClientFactory(false),
-                Credentials = new NetworkCredential(Username, Password),
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpBasicAuthenticator(),
             })
             {
                 var request = new RestRequest("basic-auth/{username}/{password}", Method.GET);
-                request.AddUrlSegment("username", Username);
-                request.AddUrlSegment("password", Password);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
-                Assert.Equal(Username, response.Data.User);
+                Assert.Equal(username, response.Data.User);
             }
         }
 
-        [Fact]
-        public async Task TestHttpBasicAuthHidden()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestHttpBasicAuthHidden(Type factoryType)
         {
-            const string Username = "user name";
-            const string Password = "passwd";
+            const string username = "user name";
+            const string password = "passwd";
 
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                HttpClientFactory = new DefaultHttpClientFactory(false),
-                Credentials = new NetworkCredential(Username, Password),
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpHiddenBasicAuthenticator(),
             })
             {
                 var request = new RestRequest("hidden-basic-auth/{username}/{password}", Method.GET);
-                request.AddUrlSegment("username", Username);
-                request.AddUrlSegment("password", Password);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
-                Assert.Equal(Username, response.Data.User);
+                Assert.Equal(username, response.Data.User);
             }
         }
 
-        [Fact]
-        public async Task TestHttpDigestAuth()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestHttpDigestAuth(Type factoryType)
         {
-            const string Username = "user name";
-            const string Password = "passwd";
+            const string username = "user name";
+            const string password = "passwd";
 
             using (var client = new RestClient("http://httpbin.org")
             {
                 CookieContainer = new CookieContainer(),
-                HttpClientFactory = new DefaultHttpClientFactory(false),
-                Credentials = new NetworkCredential(Username, Password),
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpDigestAuthenticator()
             })
             {
                 var request = new RestRequest("digest-auth/auth/{username}/{password}", Method.GET);
-                request.AddUrlSegment("username", Username);
-                request.AddUrlSegment("password", Password);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
-                Assert.Equal(Username, response.Data.User);
+                Assert.Equal(username, response.Data.User);
             }
         }
 
-        [Fact]
-        public async Task TestHttpDigestAuthInt()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestHttpDigestAuthInt(Type factoryType)
         {
-            const string Username = "user name";
-            const string Password = "passwd";
+            const string username = "user name";
+            const string password = "passwd";
 
             using (var client = new RestClient("http://httpbin.org/digest-auth")
             {
                 CookieContainer = new CookieContainer(),
-                HttpClientFactory = new DefaultHttpClientFactory(false),
-                Credentials = new NetworkCredential(Username, Password),
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpDigestAuthenticator()
             })
             {
                 // httpbin.org only supports GET for digest-auth...
                 var request = new RestRequest("auth-int/{username}/{password}", Method.GET);
-                request.AddUrlSegment("username", Username);
-                request.AddUrlSegment("password", Password);
+                request.AddUrlSegment("username", username);
+                request.AddUrlSegment("password", password);
                 ////request.AddParameter("param1", "val1");
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
-                Assert.Equal(Username, response.Data.User);
+                Assert.Equal(username, response.Data.User);
 
                 ////Assert.NotNull(response.Data.Form);
                 ////Assert.Equal(1, response.Data.Form.Count);
@@ -117,6 +126,7 @@ namespace RestSharp.Portable.Test
             }
         }
 
+#if FALSE
         [Fact(Skip = "Requires authentication")]
         public async Task TestBitbucketOAuth10()
         {
@@ -150,16 +160,6 @@ namespace RestSharp.Portable.Test
                 }
             }
         }
-
-        [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Class gets instantiated by the RestClient")]
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "ReSharper bug")]
-        private class AuthenticationResult
-        {
-            public bool Authenticated { get; set; }
-
-            public string User { get; set; }
-
-            public Dictionary<string, string> Form { get; set; }
-        }
+#endif
     }
 }

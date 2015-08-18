@@ -30,7 +30,12 @@ Supported Platforms:
           <group targetFramework="portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
             <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
-            <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
+            <dependency id="Portable.BouncyCastle" version="1.8.0-rc2" />
+          </group>
+          <group targetFramework="portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
+            <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
+            <dependency id="Portable.BouncyCastle" version="1.8.0-rc2" />
           </group>
           <group targetFramework="net40">
             <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
@@ -65,6 +70,8 @@ Supported Platforms:
       <file src="RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net45\" />
       <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoAndroid10\" />
       <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoAndroid10\" />
       <file src="RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\Xamarin.iOS10\" />

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0646515d-d16b-4ec2-acb2-e06020807388</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>RestSharp.Portable.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AuthenticationChallengeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpBasicAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpDigestAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\HttpHiddenBasicAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Authenticators\SimpleAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AuthHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AuthHeaderUtilities.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContentCollectionMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deserializers\JsonDeserializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Deserializers\XmlDataContractDeserializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpContentExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpHeadersExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAuthenticator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDeserializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IEncoding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpClientFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpHeaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpRequestMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpResponseMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericHttpHeaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRequestProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRestResponseT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ISerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Method.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponseT.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Serializers\JsonSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Serializers\XmlDataContractSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UrlUtility.cs" />
+  </ItemGroup>
+</Project>
