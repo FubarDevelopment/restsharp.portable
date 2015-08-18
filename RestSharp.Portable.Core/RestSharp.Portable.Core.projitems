@@ -47,6 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestClientBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
