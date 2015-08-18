@@ -159,10 +159,14 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 #else
                     var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
 #endif
-                    var temp = new MemoryStream();
-                    await request.Content.CopyToAsync(temp);
-                    temp.Position = 0;
-                    await temp.CopyToAsync(requestStream);
+                    using (requestStream)
+                    {
+                        var temp = new MemoryStream();
+                        await request.Content.CopyToAsync(temp);
+                        var buffer = temp.ToArray();
+                        await requestStream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
+                        await requestStream.FlushAsync(cancellationToken);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
