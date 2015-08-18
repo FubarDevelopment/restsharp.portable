@@ -128,7 +128,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="Properties\RestSharp.Portable.WebRequest.UWP.rd.xml">
+    <Content Include="Properties\RestSharp.Portable.WebRequest.rd.xml">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
