@@ -12,7 +12,6 @@
     <RootNamespace>RestSharp.Portable.WebRequest</RootNamespace>
     <AssemblyName>RestSharp.Portable.WebRequest</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
