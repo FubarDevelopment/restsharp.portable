@@ -21,6 +21,15 @@ Version 3.0.0 will come soon and it will contain **breaking changes** for the au
 
 # Changes #
 
+## 3.0.0 alpha 11 ##
+
+* Refactoring to reduce source code duplication by adding a RestClientBase class
+* Allow customization of HttpWebRequest creation to allow the usage of client certificates
+
+## 3.0.0 alpha 10 ##
+
+* Fixed HttpWebRequest usage for Windows Store apps
+
 ## 3.0.0 alpha 9 ##
 
 * Added PCL for OAuth/OAuth2 with profile 259 (better for platforms that don't target .NET 4.0 or SL5)
