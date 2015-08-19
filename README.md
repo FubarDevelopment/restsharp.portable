@@ -20,7 +20,7 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
-## 3.0.0 alpha 11 ##
+## 3.0.0 beta 01 ##
 
 * Refactoring to reduce source code duplication by adding a ```RestClientBase``` class
 * Allow customization of ```HttpWebRequest``` creation to allow the usage of client certificates
