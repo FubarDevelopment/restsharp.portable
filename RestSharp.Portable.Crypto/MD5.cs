@@ -1,10 +1,12 @@
 ﻿//
-// System.Security.Cryptography.CryptographicUnexpectedOperationException.cs
+// System.Security.Cryptography.MD5.cs
 //
 // Authors:
-//	Thomas Neidhart (tome@sbox.tugraz.at)
-//	Sebastien Pouliot  <sebastien@ximian.com>
+//	Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
+//	Sebastien Pouliot (sebastien@ximian.com)
 //
+// Copyright 2001 by Matthew S. Ford.
+// Portions (C) 2002 Motus Technologies Inc. (http://www.motus.com)
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -29,23 +31,19 @@
 
 using System;
 
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
-    class CryptographicUnexpectedOperationException : CryptographicException
+    abstract class MD5 : HashAlgorithm
     {
-
-        public CryptographicUnexpectedOperationException()
-            : base("Unexpected error occured during a cryptographic operation.")
+        // Why is it protected when others abstract hash classes are public ?
+        protected MD5()
         {
-            // Default to CORSEC_E_CRYPTO_UNEX_OPER (CorError.h)
-            HResult = unchecked((int)0x80131431);
+            HashSizeValue = 128;
         }
 
-        public CryptographicUnexpectedOperationException(string message)
-            : base(message)
+        public static MD5 Create()
         {
-            HResult = unchecked((int)0x80131431);
+            return new MD5Managed();
         }
     }
 }
-

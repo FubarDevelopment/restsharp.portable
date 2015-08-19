@@ -1,8 +1,18 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
+
 using RestSharp.Portable.Authenticators;
+using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
 using RestSharp.Portable.HttpClient;
 using RestSharp.Portable.HttpClient.Impl;
 using RestSharp.Portable.Test.HttpBin;
@@ -126,40 +136,136 @@ namespace RestSharp.Portable.Test
             }
         }
 
-#if FALSE
-        [Fact(Skip = "Requires authentication")]
-        public async Task TestBitbucketOAuth10()
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestOAuth10_RsaSha1(Type factoryType)
         {
-            var secret = ConfigurationManager.AppSettings["bitbucket-api-secret"];
-            var key = ConfigurationManager.AppSettings["bitbucket-api-key"];
+            ISignatureProvider signatureProvider;
+            var asm = typeof(AuthenticationTests).Assembly;
+            var keyResourceName = string.Format("{0}.Resources.OAuthBin.test-rsa.key", typeof(AuthenticationTests).Namespace);
 
-            using (var client = new RestClient("https://bitbucket.org/api/")
+            using (var stream = asm.GetManifestResourceStream(keyResourceName))
             {
-                CookieContainer = new CookieContainer()
-            })
+                Assert.NotNull(stream);
+                var keyPair = (RsaPrivateCrtKeyParameters) new PemReader(new StreamReader(stream)).ReadObject();
+                var rsa = Org.BouncyCastle.Security.DotNetUtilities.ToRSA(keyPair);
+                signatureProvider = new RsaSha1SignatureProvider(rsa);
+            }
+
+            await TestOAuth10(CreateClientFactory(factoryType, false), signatureProvider);
+        }
+
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestOAuth10_HmacSha1(Type factoryType)
+        {
+            await TestOAuth10(CreateClientFactory(factoryType, false), new HmacSha1SignatureProvider());
+        }
+
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestOAuth10_PlainText(Type factoryType)
+        {
+            await TestOAuth10(CreateClientFactory(factoryType, false), new PlainTextSignatureProvider());
+        }
+
+        private async Task TestOAuth10(IHttpClientFactory httpClientFactory, ISignatureProvider signatureProvider)
+        {
+            var client = new RestClient("http://oauthbin.com/v1/")
             {
-                client.AddHandler("application/x-www-form-urlencoded", new DictionaryDeserializer());
+                HttpClientFactory = httpClientFactory,
+            };
 
-                var auth = OAuth1Authenticator.ForRequestToken(
-                    key,
-                    secret,
-                    "https://testapp.local/callback");
-                auth.ParameterHandling = OAuthParameterHandling.UrlOrPostParameters;
-                client.Authenticator = auth;
+            var consumerKey = "key";
+            var consumerSecret = "secret";
 
-                ////string token, token_secret;
-                {
-                    var request = new RestRequest("1.0/oauth/request_token", Method.POST);
-                    var response = await client.Execute<IDictionary<string, string>>(request);
+            var authenticator = OAuth1Authenticator.ForRequestToken(consumerKey, consumerSecret, "http://localhost/test");
+            authenticator.SignatureProvider = signatureProvider;
+            client.Authenticator = authenticator;
 
-                    Assert.True(response.Data.ContainsKey("oauth_callback_confirmed"));
-                    Assert.Equal("true", response.Data["oauth_callback_confirmed"]);
+            string requestToken, requestTokenSecret;
 
-                    ////token_secret = response.Data["oauth_token_secret"];
-                    ////token = response.Data["oauth_token"];
-                }
+            {
+                var request = new RestRequest("request-token");
+                var response = await client.Execute(request);
+                var requestTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
+                Assert.DoesNotContain('\n', requestTokenResponse);
+
+                var tokenInfo = (from part in requestTokenResponse.Split('&')
+                                 let equalSignPos = part.IndexOf('=')
+                                 let partKey = part.Substring(0, equalSignPos)
+                                 let partValue = part.Substring(equalSignPos + 1)
+                                 select new
+                                 {
+                                     partKey,
+                                     partValue
+                                 }).ToDictionary(x => x.partKey, x => x.partValue);
+
+                Assert.Contains("oauth_token", tokenInfo.Keys);
+                Assert.Contains("oauth_token_secret", tokenInfo.Keys);
+
+                requestToken = tokenInfo["oauth_token"];
+                requestTokenSecret = tokenInfo["oauth_token_secret"];
+            }
+
+            authenticator = OAuth1Authenticator.ForAccessToken(consumerKey, consumerSecret, requestToken, requestTokenSecret);
+            authenticator.SignatureProvider = signatureProvider;
+            client.Authenticator = authenticator;
+
+            string accessKey, accessSecret;
+
+            {
+                var request = new RestRequest("access-token");
+                var response = await client.Execute(request);
+                var accessTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
+                Assert.DoesNotContain('\n', accessTokenResponse);
+
+                var tokenInfo = (from part in accessTokenResponse.Split('&')
+                                 let equalSignPos = part.IndexOf('=')
+                                 let partKey = part.Substring(0, equalSignPos)
+                                 let partValue = part.Substring(equalSignPos + 1)
+                                 select new
+                                 {
+                                     partKey,
+                                     partValue
+                                 }).ToDictionary(x => x.partKey, x => x.partValue);
+
+                Assert.Contains("oauth_token", tokenInfo.Keys);
+                Assert.Contains("oauth_token_secret", tokenInfo.Keys);
+
+                accessKey = tokenInfo["oauth_token"];
+                accessSecret = tokenInfo["oauth_token_secret"];
+            }
+
+            authenticator = OAuth1Authenticator.ForProtectedResource(consumerKey, consumerSecret, accessKey, accessSecret);
+            authenticator.SignatureProvider = signatureProvider;
+            client.Authenticator = authenticator;
+
+            {
+                var request = new RestRequest("echo", Method.POST);
+                request.AddParameter("one", "1");
+                request.AddParameter("two", "2");
+                var response = await client.Execute(request);
+                var text = Encoding.UTF8.GetString(response.RawBytes);
+                Assert.DoesNotContain('\n', text);
+
+                var data = (from part in text.Split('&')
+                            let equalSignPos = part.IndexOf('=')
+                            let partKey = part.Substring(0, equalSignPos)
+                            let partValue = part.Substring(equalSignPos + 1)
+                            select new
+                            {
+                                partKey,
+                                partValue
+                            }).ToDictionary(x => x.partKey, x => x.partValue);
+                Assert.Contains("one", data.Keys);
+                Assert.Contains("two", data.Keys);
+                Assert.Equal("1", data["one"]);
+                Assert.Equal("2", data["two"]);
             }
         }
-#endif
     }
 }

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
+using RestSharp.Portable.Crypto;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;

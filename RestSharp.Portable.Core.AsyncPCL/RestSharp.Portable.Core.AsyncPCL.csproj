@@ -60,8 +60,7 @@
     </Reference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.Core\RestSharp.Portable.Core.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.Core\RestSharp.Portable.Core.projitems')" />
-  <Import Project="..\System.Security.Cryptography\System.Security.Cryptography.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography\System.Security.Cryptography.projitems')" />
-  <Import Project="..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems')" />
+  <Import Project="..\RestSharp.Portable.Crypto\System.Security.Cryptography.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

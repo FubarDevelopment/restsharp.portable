@@ -1,5 +1,5 @@
 ﻿//
-// System.Security.Cryptography.CryptographicException.cs
+// System.Security.Cryptography.CryptographicUnexpectedOperationException.cs
 //
 // Authors:
 //	Thomas Neidhart (tome@sbox.tugraz.at)
@@ -29,24 +29,23 @@
 
 using System;
 
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
-
-    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
-    class CryptographicException : Exception
+    class CryptographicUnexpectedOperationException : CryptographicException
     {
-        public CryptographicException()
-            : base("Error occured during a cryptographic operation.")
+
+        public CryptographicUnexpectedOperationException()
+            : base("Unexpected error occured during a cryptographic operation.")
         {
-            // default to CORSEC_E_CRYPTO
-            // defined as EMAKEHR(0x1430) in CorError.h
-            HResult = unchecked((int)0x80131430);
+            // Default to CORSEC_E_CRYPTO_UNEX_OPER (CorError.h)
+            HResult = unchecked((int)0x80131431);
         }
 
-        public CryptographicException(string message)
+        public CryptographicUnexpectedOperationException(string message)
             : base(message)
         {
-            HResult = unchecked((int)0x80131430);
+            HResult = unchecked((int)0x80131431);
         }
     }
 }
+

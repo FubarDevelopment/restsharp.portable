@@ -11,19 +11,19 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)OAuth1Authenticator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\Extensions\CollectionExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OAuth\Extensions\OAuthExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\Extensions\TimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\HttpPostParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\HttpPostParameterType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthCreateTimestampDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthParameterHandling.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthSignatureMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthSignatureTreatment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthTools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthWebQueryInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthWorkflow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth\SignatureProviders\ISignatureProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth\SignatureProviders\PlainTextSignatureProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\WebPair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\WebPairCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\WebParameter.cs" />

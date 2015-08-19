@@ -31,7 +31,7 @@
 
 using System;
 
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
 
     abstract class HashAlgorithm : ICryptoTransform

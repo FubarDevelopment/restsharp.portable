@@ -1,10 +1,10 @@
 ﻿//
-// System.Security.Cryptography ICryptoTransform interface
+// System.Security.Cryptography.CryptographicException.cs
 //
 // Authors:
-//   Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
+//	Thomas Neidhart (tome@sbox.tugraz.at)
+//	Sebastien Pouliot  <sebastien@ximian.com>
 //
-// Copyright 2001 by Matthew S. Ford.
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -28,36 +28,26 @@
 //
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
 
-    interface ICryptoTransform : IDisposable
+    [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
+    class CryptographicException : Exception
     {
-
-        bool CanReuseTransform
+        public CryptographicException()
+            : base("Error occured during a cryptographic operation.")
         {
-            get;
+            // default to CORSEC_E_CRYPTO
+            // defined as EMAKEHR(0x1430) in CorError.h
+            HResult = unchecked((int)0x80131430);
         }
 
-        bool CanTransformMultipleBlocks
+        public CryptographicException(string message)
+            : base(message)
         {
-            get;
+            HResult = unchecked((int)0x80131430);
         }
-
-        int InputBlockSize
-        {
-            get;
-        }
-
-        int OutputBlockSize
-        {
-            get;
-        }
-
-        int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset);
-
-        byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount);
     }
 }
-

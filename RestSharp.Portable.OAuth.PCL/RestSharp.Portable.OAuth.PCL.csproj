@@ -89,6 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />
+  <Import Project="..\RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

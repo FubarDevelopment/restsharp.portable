@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators.OAuth;
+using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -61,7 +62,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Gets or sets the OAuth signature method
         /// </summary>
-        public OAuthSignatureMethod SignatureMethod { get; set; }
+        public ISignatureProvider SignatureProvider { get; set; }
 
         /// <summary>
         /// Gets or sets the OAuth signature treatment
@@ -106,7 +107,7 @@ namespace RestSharp.Portable.Authenticators
             var authenticator = new OAuth1Authenticator
                 {
                     ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                    SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                    SignatureProvider = new HmacSha1SignatureProvider(),
                     SignatureTreatment = OAuthSignatureTreatment.Escaped,
                     ConsumerKey = consumerKey,
                     ConsumerSecret = consumerSecret,
@@ -142,7 +143,7 @@ namespace RestSharp.Portable.Authenticators
             var authenticator = new OAuth1Authenticator
                 {
                     ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                    SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                    SignatureProvider = new HmacSha1SignatureProvider(),
                     SignatureTreatment = OAuthSignatureTreatment.Escaped,
                     ConsumerKey = consumerKey,
                     ConsumerSecret = consumerSecret,
@@ -216,7 +217,7 @@ namespace RestSharp.Portable.Authenticators
             var authenticator = new OAuth1Authenticator
                 {
                     ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                    SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                    SignatureProvider = new HmacSha1SignatureProvider(),
                     SignatureTreatment = OAuthSignatureTreatment.Escaped,
                     ConsumerKey = consumerKey,
                     ConsumerSecret = consumerSecret,
@@ -241,7 +242,7 @@ namespace RestSharp.Portable.Authenticators
                 {
                     Type = OAuthType.ProtectedResource,
                     ParameterHandling = OAuthParameterHandling.HttpAuthorizationHeader,
-                    SignatureMethod = OAuthSignatureMethod.HmacSha1,
+                    SignatureProvider = new HmacSha1SignatureProvider(),
                     SignatureTreatment = OAuthSignatureTreatment.Escaped,
                     ConsumerKey = consumerKey,
                     ConsumerSecret = consumerSecret,
@@ -291,7 +292,7 @@ namespace RestSharp.Portable.Authenticators
                         ConsumerKey = ConsumerKey,
                         ConsumerSecret = ConsumerSecret,
                         ParameterHandling = ParameterHandling,
-                        SignatureMethod = SignatureMethod,
+                        SignatureProvider = SignatureProvider,
                         SignatureTreatment = SignatureTreatment,
                         Verifier = Verifier,
                         Version = Version,

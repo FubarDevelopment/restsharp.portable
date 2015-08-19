@@ -40,10 +40,6 @@
     <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="crypto, Version=1.8.5689.25754, Culture=neutral, PublicKeyToken=c23c2840b3912535, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.BouncyCastle.1.8.0-rc2\lib\dotnet\crypto.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

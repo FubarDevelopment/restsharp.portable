@@ -40,6 +40,10 @@
     <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -91,6 +95,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Resources\OAuthBin\test-rsa.key" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
@@ -100,6 +105,14 @@
     <ProjectReference Include="..\RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj">
       <Project>{6e25753f-f37d-4c32-931f-d4025546743d}</Project>
       <Name>RestSharp.Portable.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth.NET45\RestSharp.Portable.OAuth.NET45.csproj">
+      <Project>{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}</Project>
+      <Name>RestSharp.Portable.OAuth.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.OAuth2.NET45\RestSharp.Portable.OAuth2.NET45.csproj">
+      <Project>{01150eb4-311c-46a1-8c5b-cc5667da38ab}</Project>
+      <Name>RestSharp.Portable.OAuth2.NET45</Name>
     </ProjectReference>
     <ProjectReference Include="..\RestSharp.Portable.WebRequest.NET45\RestSharp.Portable.WebRequest.NET45.csproj">
       <Project>{d9e54193-ce87-4a25-906c-1916bd6d0f5b}</Project>

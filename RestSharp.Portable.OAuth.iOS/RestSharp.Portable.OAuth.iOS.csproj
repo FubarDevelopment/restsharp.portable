@@ -62,5 +62,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />
+  <Import Project="..\RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

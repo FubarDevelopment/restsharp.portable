@@ -1,12 +1,10 @@
 ﻿//
-// System.Security.Cryptography.MD5.cs
+// System.Security.Cryptography ICryptoTransform interface
 //
 // Authors:
-//	Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
-//	Sebastien Pouliot (sebastien@ximian.com)
+//   Matthew S. Ford (Matthew.S.Ford@Rose-Hulman.Edu)
 //
 // Copyright 2001 by Matthew S. Ford.
-// Portions (C) 2002 Motus Technologies Inc. (http://www.motus.com)
 // Copyright (C) 2004-2005 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -31,19 +29,35 @@
 
 using System;
 
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
-    abstract class MD5 : HashAlgorithm
+
+    interface ICryptoTransform : IDisposable
     {
-        // Why is it protected when others abstract hash classes are public ?
-        protected MD5()
+
+        bool CanReuseTransform
         {
-            HashSizeValue = 128;
+            get;
         }
 
-        public static MD5 Create()
+        bool CanTransformMultipleBlocks
         {
-            return new MD5Managed();
+            get;
         }
+
+        int InputBlockSize
+        {
+            get;
+        }
+
+        int OutputBlockSize
+        {
+            get;
+        }
+
+        int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset);
+
+        byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount);
     }
 }
+

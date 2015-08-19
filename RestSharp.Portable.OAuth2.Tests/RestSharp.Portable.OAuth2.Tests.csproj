@@ -37,10 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="crypto, Version=1.8.5689.25754, Culture=neutral, PublicKeyToken=c23c2840b3912535, processorArchitecture=MSIL">
-      <HintPath>..\packages\Portable.BouncyCastle.1.8.0-rc2\lib\dotnet\crypto.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FizzWare.NBuilder">
       <HintPath>..\packages\NBuilder.3.0.1.1\lib\FizzWare.NBuilder.dll</HintPath>
     </Reference>

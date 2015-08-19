@@ -8,7 +8,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
     /// <summary>
     /// Set of extension methods for <see cref="string"/>.
     /// </summary>
-    public static class StringExtensions
+    public static partial class StringExtensions
     {
         /// <summary>
         /// Alias for <code>string.Format</code>.
@@ -47,12 +47,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Infrastructure
         public static string GetMd5Hash(this string input)
         {
             var bytes = Encoding.UTF8.GetBytes(input);
-#if USE_BOUNCYCASTLE
-            bytes = Org.BouncyCastle.Security.DigestUtilities.CalculateDigest("MD5", bytes);
-#else
-            using (var digest = System.Security.Cryptography.MD5.Create())
-                bytes = digest.ComputeHash(bytes);
-#endif
+            bytes = OAuth.Crypto.Hash.MD5(bytes);
             return string.Join(string.Empty, bytes.Select(x => x.ToString("x2")));
         }
 

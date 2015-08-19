@@ -18,6 +18,8 @@ using System;
 using System.Linq;
 using System.Text;
 
+using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
+
 namespace RestSharp.Portable.Authenticators.OAuth
 {
     using Extensions;
@@ -238,13 +240,13 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// This method is used when the token secret is currently unknown.
         /// </summary>
         /// <a href="http://oauth.net/core/1.0#rfc.section.9.2"/>
-        /// <param name="signatureMethod">The hashing method</param>
+        /// <param name="signatureProvider">The hashing method</param>
         /// <param name="signatureBase">The signature base</param>
         /// <param name="consumerSecret">The consumer key</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, string signatureBase, string consumerSecret)
+        public static string GetSignature(ISignatureProvider signatureProvider, string signatureBase, string consumerSecret)
         {
-            return GetSignature(signatureMethod, OAuthSignatureTreatment.Escaped, signatureBase, consumerSecret, null);
+            return GetSignature(signatureProvider, OAuthSignatureTreatment.Escaped, signatureBase, consumerSecret, null);
         }
 
         /// <summary>
@@ -252,42 +254,42 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// This method is used when the token secret is currently unknown.
         /// </summary>
         /// <a href="http://oauth.net/core/1.0#rfc.section.9.2"/>
-        /// <param name="signatureMethod">The hashing method</param>
+        /// <param name="signatureProvider">The hashing method</param>
         /// <param name="signatureTreatment">The treatment to use on a signature value</param>
         /// <param name="signatureBase">The signature base</param>
         /// <param name="consumerSecret">The consumer key</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, OAuthSignatureTreatment signatureTreatment, string signatureBase, string consumerSecret)
+        public static string GetSignature(ISignatureProvider signatureProvider, OAuthSignatureTreatment signatureTreatment, string signatureBase, string consumerSecret)
         {
-            return GetSignature(signatureMethod, signatureTreatment, signatureBase, consumerSecret, null);
+            return GetSignature(signatureProvider, signatureTreatment, signatureBase, consumerSecret, null);
         }
 
         /// <summary>
         /// Creates a signature value given a signature base and the consumer secret and a known token secret.
         /// </summary>
         /// <a href="http://oauth.net/core/1.0#rfc.section.9.2"/>
-        /// <param name="signatureMethod">The hashing method</param>
+        /// <param name="signatureProvider">The hashing method</param>
         /// <param name="signatureBase">The signature base</param>
         /// <param name="consumerSecret">The consumer secret</param>
         /// <param name="tokenSecret">The token secret</param>
         /// <returns></returns>
-        public static string GetSignature(OAuthSignatureMethod signatureMethod, string signatureBase, string consumerSecret, string tokenSecret)
+        public static string GetSignature(ISignatureProvider signatureProvider, string signatureBase, string consumerSecret, string tokenSecret)
         {
-            return GetSignature(signatureMethod, OAuthSignatureTreatment.Escaped, consumerSecret, tokenSecret);
+            return GetSignature(signatureProvider, OAuthSignatureTreatment.Escaped, signatureBase, consumerSecret, tokenSecret);
         }
 
         /// <summary>
         /// Creates a signature value given a signature base and the consumer secret and a known token secret.
         /// </summary>
         /// <a href="http://oauth.net/core/1.0#rfc.section.9.2"/>
-        /// <param name="signatureMethod">The hashing method</param>
+        /// <param name="signatureProvider">The hashing method</param>
         /// <param name="signatureTreatment">The treatment to use on a signature value</param>
         /// <param name="signatureBase">The signature base</param>
         /// <param name="consumerSecret">The consumer secret</param>
         /// <param name="tokenSecret">The token secret</param>
         /// <returns></returns>
         public static string GetSignature(
-            OAuthSignatureMethod signatureMethod,
+            ISignatureProvider signatureProvider,
             OAuthSignatureTreatment signatureTreatment,
             string signatureBase,
             string consumerSecret,
@@ -299,33 +301,9 @@ namespace RestSharp.Portable.Authenticators.OAuth
             }
             consumerSecret = UrlEncodeRelaxed(consumerSecret);
             tokenSecret = UrlEncodeRelaxed(tokenSecret);
-            var key = string.Format("{0}&{1}", consumerSecret, tokenSecret);
-            string signature;
-            switch (signatureMethod)
-            {
-                case OAuthSignatureMethod.HmacSha1:
-                    {
-                        var keyData = _encoding.GetBytes(key);
-#if USE_BOUNCYCASTLE
-                        var digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
-                        var crypto = new Org.BouncyCastle.Crypto.Macs.HMac(digest);
-                        crypto.Init(new Org.BouncyCastle.Crypto.Parameters.KeyParameter(keyData));
-                        signature = signatureBase.HashWith(crypto);
-#else
-                        using (var digest = new System.Security.Cryptography.HMACSHA1(keyData))
-                            signature = signatureBase.HashWith(digest);
-#endif
-                        break;
-                    }
-                case OAuthSignatureMethod.PlainText:
-                    {
-                        signature = key;
-                        break;
-                    }
-
-                default:
-                    throw new NotImplementedException("Only HMAC-SHA1 is currently supported.");
-            }
+            var data = _encoding.GetBytes(signatureBase);
+            var hash = signatureProvider.CalculateSignature(data, consumerSecret, tokenSecret);
+            var signature = hash;
 
             var result = signatureTreatment == OAuthSignatureTreatment.Escaped
                              ? UrlEncodeRelaxed(signature)

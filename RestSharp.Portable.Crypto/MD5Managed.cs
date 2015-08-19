@@ -1,8 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable once CheckNamespace
-namespace System.Security.Cryptography
+namespace RestSharp.Portable.Crypto
 {
     /// <summary>
     /// MD5Managed: A HashAlgorithm implementation that acts as a thin wrapper

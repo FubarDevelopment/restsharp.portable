@@ -82,8 +82,7 @@
     </Reference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.Core\RestSharp.Portable.Core.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.Core\RestSharp.Portable.Core.projitems')" />
-  <Import Project="..\System.Security.Cryptography\System.Security.Cryptography.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography\System.Security.Cryptography.projitems')" />
-  <Import Project="..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems" Label="Shared" Condition="Exists('..\System.Security.Cryptography.MD5\System.Security.Cryptography.MD5.projitems')" />
+  <Import Project="..\RestSharp.Portable.Crypto\System.Security.Cryptography.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

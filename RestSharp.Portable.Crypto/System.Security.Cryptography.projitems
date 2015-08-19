@@ -3,12 +3,16 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>de12bf6b-63ba-4106-be18-c59c01392afc</SharedGUID>
+    <SharedGUID>9c53c4ac-1a03-4d74-a2b6-8a5968eb2cf5</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>System.Security.Cryptography</Import_RootNamespace>
+    <Import_RootNamespace>RestSharp.Portable.Crypto</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CryptographicException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CryptographicUnexpectedOperationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HashAlgorithm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICryptoTransform.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MD5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MD5Managed.cs" />
   </ItemGroup>
