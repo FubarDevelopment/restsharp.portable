@@ -49,10 +49,10 @@ namespace RestSharp.Portable.WebRequest.Impl
         {
             var headers = new GenericHttpHeaders();
             AddHttpHeaderParameters(headers, client);
-            var httpClient = new DefaultHttpClient(headers)
-                {
-                    BaseAddress = GetBaseAddress(client),
-                };
+            var httpClient = new DefaultHttpClient(this, headers)
+            {
+                BaseAddress = GetBaseAddress(client)
+            };
             if (client.Timeout.HasValue)
                 httpClient.Timeout = client.Timeout.Value;
 
@@ -211,6 +211,16 @@ namespace RestSharp.Portable.WebRequest.Impl
                     httpHeaders.TryAddWithoutValidation(param.Name, paramValue);
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="HttpWebRequest"/> using the given <paramref name="url"/>
+        /// </summary>
+        /// <param name="url">The <see cref="Uri"/> to initialize the <see cref="HttpWebRequest"/> with</param>
+        /// <returns>The new <see cref="HttpWebRequest"/></returns>
+        protected internal virtual HttpWebRequest CreateWebRequest(Uri url)
+        {
+            return System.Net.WebRequest.CreateHttp(url);
         }
     }
 }

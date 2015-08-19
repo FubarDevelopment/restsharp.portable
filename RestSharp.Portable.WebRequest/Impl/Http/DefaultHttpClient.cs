@@ -18,12 +18,16 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     {
         private readonly IHttpHeaders _defaultHeaders;
 
+        private readonly WebRequestHttpClientFactory _httpClientFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpClient"/> class.
         /// </summary>
+        /// <param name="httpClientFactory">The factory used to create this <see cref="IHttpClient"/> implementation</param>
         /// <param name="defaultHttpHeaders">The default HTTP headers</param>
-        public DefaultHttpClient([NotNull] IHttpHeaders defaultHttpHeaders)
+        public DefaultHttpClient([NotNull] WebRequestHttpClientFactory httpClientFactory, [NotNull] IHttpHeaders defaultHttpHeaders)
         {
+            _httpClientFactory = httpClientFactory;
             Timeout = TimeSpan.FromSeconds(100);
             _defaultHeaders = defaultHttpHeaders;
         }
@@ -70,7 +74,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         public async Task<IHttpResponseMessage> SendAsync(IHttpRequestMessage request, CancellationToken cancellationToken)
         {
             var uri = new Uri(BaseAddress, request.RequestUri);
-            var wr = System.Net.WebRequest.CreateHttp(uri);
+            var wr = _httpClientFactory.CreateWebRequest(uri);
             if (wr.SupportsCookieContainer && CookieContainer != null)
                 wr.CookieContainer = CookieContainer;
             if (Credentials != null)
