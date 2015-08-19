@@ -8,23 +8,24 @@ This is some kind of a RestSharp port to PCL.
 
 # News #
 
-Version 3.0.0 will come soon and it will contain **breaking changes** for the authenticators:
+Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 * The ```IRestRequest.Credentials``` property moved to ```IRestClient.Credentials```
 * Credentials for authenticators are specified using the ```IRestClient.Credentials``` property
 * New core library that contains all interfaces and other generic stuff
 * New interface for proxies
 * New interfaces that are an abstraction of the HttpClient and its request/response messages
-* Uses now a RestSharp project compatible Method enumeration for HTTP requests and
-  all constructors taking a HttpMethod are flagged as obsolete
-* The API will change again soon!
+* Uses now a RestSharp project compatible Method enumeration for HTTP requests
+* Support for WebRequest as back-end for RestSharp.Portable
 
 # Changes #
 
 ## 3.0.0 alpha 11 ##
 
-* Refactoring to reduce source code duplication by adding a RestClientBase class
-* Allow customization of HttpWebRequest creation to allow the usage of client certificates
+* Refactoring to reduce source code duplication by adding a ```RestClientBase``` class
+* Allow customization of ```HttpWebRequest``` creation to allow the usage of client certificates
+* Support for RSA-SHA1 for platforms with full .NET Framework support
+* New OAuth 1.0 test that uses [oauthbin.com](http://oauthbin.com)
 
 ## 3.0.0 alpha 10 ##
 
