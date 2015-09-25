@@ -20,6 +20,12 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 02 ##
+
+* Support more headers when using ```HttpWebRequest``` instead of ```HttpClient```
+* New ```UserAgent``` property for ```IRestClient```
+* Activated automatic decompression for ```HttpClient``` and ```HttpWebRequest```
+
 ## 3.0.0 beta 01 ##
 
 * Refactoring to reduce source code duplication by adding a ```RestClientBase``` class
