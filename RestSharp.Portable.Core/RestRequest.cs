@@ -69,7 +69,7 @@ namespace RestSharp.Portable
         /// <param name="resource">The resource this request is targeting</param>
         /// <param name="method">The HTTP request method</param>
         public RestRequest([NotNull] Uri resource, Method method)
-            : this(resource.IsAbsoluteUri ? resource.AbsolutePath + resource.Query : resource.OriginalString, method)
+            : this(resource.IsAbsoluteUri ? resource.ToString() : resource.OriginalString, method)
         {
         }
 

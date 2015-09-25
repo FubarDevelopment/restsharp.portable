@@ -73,5 +73,19 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("TestUserAgent/1", (string)client.DefaultParameters.Single(x => StringComparer.OrdinalIgnoreCase.Equals(x.Name, "User-Agent")).Value);
             }
         }
+
+        [Fact]
+        public void TestCombineRequestUrl()
+        {
+            using (var client = new RestSharp.Portable.WebRequest.RestClient("https://www.itsg-trust.de/ostc/")
+            {
+                HttpClientFactory = CreateClientFactory(typeof(WebRequestHttpClientFactory), false),
+            })
+            {
+                var request = new RestRequest(new Uri("http://www.itsg.de/tc_keys_arbeitgeberverfahren.ITSG"));
+                var targetUri = client.BuildUri(request);
+                Assert.Equal(new Uri("http://www.itsg.de/tc_keys_arbeitgeberverfahren.ITSG"), targetUri);
+            }
+        }
     }
 }
