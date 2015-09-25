@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +18,22 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// </summary>
     internal class DefaultHttpClient : IHttpClient
     {
+        private static readonly IDictionary<string, Action<HttpWebRequest, string>> _valueToWebRequest =
+            new Dictionary<string, Action<HttpWebRequest, string>>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["content-type"] = (wr, value) => wr.ContentType = value,
+                ["accept"] = (wr, value) => wr.Accept = value,
+#if !PCL && !NETFX_CORE && !WINDOWS_STORE
+                ["content-length"] = (wr, value) => wr.ContentLength = Convert.ToInt64(value, 10),
+                ["user-agent"] = (wr, value) => wr.UserAgent = value,
+                ["date"] = (wr, value) => wr.Date = DateTime.ParseExact(value, "R", CultureInfo.InvariantCulture),
+                ["expect"] = (wr, value) => wr.Expect = value,
+                ["If-Modified-Since"] = (wr, value) => wr.IfModifiedSince = DateTime.ParseExact(value, "R", CultureInfo.InvariantCulture),
+                ["Referer"] = (wr, value) => wr.Referer = value,
+                ["Transfer-Encoding"] = (wr, value) => wr.TransferEncoding = value,
+#endif
+            };
+
         private readonly IHttpHeaders _defaultHeaders;
 
         private readonly WebRequestHttpClientFactory _httpClientFactory;
@@ -114,29 +132,10 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             bool hasContentLength = false;
             foreach (var header in headers)
             {
-                var value = string.Join(", ", header.Value);
-                if (string.Equals(header.Key, "content-type", StringComparison.OrdinalIgnoreCase))
-                {
-                    wr.ContentType = value;
-                }
-                else if (string.Equals(header.Key, "accept", StringComparison.OrdinalIgnoreCase))
-                {
-                    wr.Accept = value;
-                }
-                else
-                {
-                    if (string.Equals(header.Key, "content-length", StringComparison.OrdinalIgnoreCase))
-                    {
-                        hasContentLength = true;
-#if PCL
-                        wr.Headers[HttpRequestHeader.ContentLength] = value;
-#endif
-                    }
-                    else
-                    {
-                        wr.Headers[header.Key] = value;
-                    }
-                }
+                var value = string.Join(",", header.Value);
+                SetWebRequestHeaderValue(wr, header.Key, value);
+                if (!hasContentLength && string.Equals(header.Key, "content-length", StringComparison.OrdinalIgnoreCase))
+                    hasContentLength = true;
             }
 
             if (request.Content != null)
@@ -219,6 +218,19 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         void IDisposable.Dispose()
         {
+        }
+
+        private static void SetWebRequestHeaderValue(HttpWebRequest wr, string key, string value)
+        {
+            Action<HttpWebRequest, string> setAction;
+            if (_valueToWebRequest.TryGetValue(key, out setAction))
+            {
+                setAction(wr, value);
+            }
+            else
+            {
+                wr.Headers[key] = value;
+            }
         }
     }
 }

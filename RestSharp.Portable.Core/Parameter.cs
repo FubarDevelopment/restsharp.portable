@@ -77,11 +77,11 @@ namespace RestSharp.Portable
             {
                 var dateTime = Value as DateTime?;
                 if (dateTime != null)
-                    return dateTime.Value.ToUniversalTime().ToString("R");
+                    return dateTime.Value.ToUniversalTime().ToString("R", CultureInfo.InvariantCulture);
 
                 var dateTimeOffset = Value as DateTimeOffset?;
                 if (dateTimeOffset != null)
-                    return dateTimeOffset.Value.ToUniversalTime().ToString("R");
+                    return dateTimeOffset.Value.ToUniversalTime().ToString("R", CultureInfo.InvariantCulture);
             }
 
             return string.Format(s_cultureUS, "{0}", Value);
