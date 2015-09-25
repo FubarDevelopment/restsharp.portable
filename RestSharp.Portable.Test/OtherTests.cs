@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.HttpClient;
@@ -44,6 +46,31 @@ namespace RestSharp.Portable.Test
                     Assert.True(response.Data.Form.ContainsKey("param1"));
                     Assert.Equal("param1+", response.Data.Form["param1"]);
                 }
+            }
+        }
+
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public void TestUserAgent(Type factoryType)
+        {
+            var version = typeof(RestClientBase).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
+            Assert.NotNull(version);
+
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
+            {
+                Assert.NotNull(client.UserAgent);
+                Assert.Equal(1, client.DefaultParameters.Select(x => x.Name).Count(x => StringComparer.OrdinalIgnoreCase.Equals(x, "User-Agent")));
+                Assert.Equal($"RestSharp/{version}", client.UserAgent);
+                Assert.Equal($"RestSharp/{version}", (string)client.DefaultParameters.Single(x => StringComparer.OrdinalIgnoreCase.Equals(x.Name, "User-Agent")).Value);
+
+                client.UserAgent = "TestUserAgent/1";
+                Assert.Equal(1, client.DefaultParameters.Select(x => x.Name).Count(x => StringComparer.OrdinalIgnoreCase.Equals(x, "User-Agent")));
+                Assert.Equal("TestUserAgent/1", client.UserAgent);
+                Assert.Equal("TestUserAgent/1", (string)client.DefaultParameters.Single(x => StringComparer.OrdinalIgnoreCase.Equals(x.Name, "User-Agent")).Value);
             }
         }
     }

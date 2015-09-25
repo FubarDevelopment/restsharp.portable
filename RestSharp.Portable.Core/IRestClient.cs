@@ -68,6 +68,14 @@ namespace RestSharp.Portable
         TimeSpan? Timeout { get; set; }
 
         /// <summary>
+        /// Gets or sets the user agent for the REST client
+        /// </summary>
+        /// <remarks>
+        /// The default value is "RestSharp/{version}"
+        /// </remarks>
+        string UserAgent { get; set; }
+
+        /// <summary>
         /// Execute the given request
         /// </summary>
         /// <param name="request">Request to execute</param>

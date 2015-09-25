@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-#if !NO_TYPEINFO
 using System.Reflection;
-#endif
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +15,8 @@ namespace RestSharp.Portable
     /// </summary>
     public abstract class RestClientBase : IRestClient
     {
+        private static readonly string s_defaultUserAgent = GetDefaultVersion();
+
         private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IList<string> _acceptTypes = new List<string>();
@@ -50,6 +50,8 @@ namespace RestSharp.Portable
             var xmlDataContractDeserializer = new XmlDataContractDeserializer();
             AddHandler("application/xml", xmlDataContractDeserializer);
             AddHandler("text/xml", xmlDataContractDeserializer);
+
+            UserAgent = s_defaultUserAgent;
         }
 
         /// <summary>
@@ -120,6 +122,37 @@ namespace RestSharp.Portable
         /// is used to implement the <see cref="IHttpClientFactory"/>.
         /// </remarks>
         public TimeSpan? Timeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user agent for the REST client
+        /// </summary>
+        /// <remarks>
+        /// The default value is "RestSharp/{version}"
+        /// </remarks>
+        public string UserAgent
+        {
+            get
+            {
+                var comparer = DefaultParameterNameComparer ?? StringComparer.OrdinalIgnoreCase;
+                return (string)DefaultParameters.FirstOrDefault(x => comparer.Equals(x.Name, "User-Agent"))?.Value;
+            }
+            set
+            {
+                var comparer = DefaultParameterNameComparer ?? StringComparer.OrdinalIgnoreCase;
+                var parameter = DefaultParameters.FirstOrDefault(x => comparer.Equals(x.Name, "User-Agent"));
+                if (parameter == null)
+                {
+                    parameter = new Parameter()
+                    {
+                        Name = "User-Agent",
+                        Type = ParameterType.HttpHeader,
+                        ValidateOnAdd = false,
+                    };
+                    DefaultParameters.Add(parameter);
+                }
+                parameter.Value = value;
+            }
+        }
 
         /// <summary>
         /// Gets the collection of the default parameters for all requests
@@ -501,6 +534,18 @@ namespace RestSharp.Portable
 
                 _disposedValue = true;
             }
+        }
+
+        private static string GetDefaultVersion()
+        {
+#if NO_TYPEINFO
+            var assembly = typeof(RestClientBase).Assembly;
+            var version = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false).Cast<AssemblyFileVersionAttribute>().Single();
+#else
+            var assembly = typeof(RestClientBase).GetTypeInfo().Assembly;
+            var version = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+#endif
+            return $"RestSharp/{version.Version}";
         }
 
         private void UpdateAcceptsEncodingHeader()
