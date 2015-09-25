@@ -220,7 +220,11 @@ namespace RestSharp.Portable.WebRequest.Impl
         /// <returns>The new <see cref="HttpWebRequest"/></returns>
         protected internal virtual HttpWebRequest CreateWebRequest(Uri url)
         {
-            return System.Net.WebRequest.CreateHttp(url);
+            var webRequest = System.Net.WebRequest.CreateHttp(url);
+#if !PCL && !NETFX_CORE && !WINDOWS_STORE
+            webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+#endif
+            return webRequest;
         }
     }
 }
