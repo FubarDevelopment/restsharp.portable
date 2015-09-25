@@ -239,8 +239,8 @@ namespace RestSharp.Portable.HttpClient.Impl
                     handler.Credentials = credentials;
             }
 
-            //// if (handler.SupportsAutomaticDecompression)
-            ////     handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            if (handler.SupportsAutomaticDecompression)
+                handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 
             return handler;
         }
