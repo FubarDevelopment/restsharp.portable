@@ -20,6 +20,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 03 ##
+
+* Fix for [issue #42](https://github.com/FubarDevelopment/restsharp.portable/issues/42)
+
 ## 3.0.0 beta 02 ##
 
 * Support more headers when using ```HttpWebRequest``` instead of ```HttpClient```
