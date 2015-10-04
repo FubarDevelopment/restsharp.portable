@@ -27,7 +27,7 @@ namespace RestSharp.Portable.Test
                 request.AddHeader("Restsharp-Test1", "TestValue1");
                 request.AddParameter("param1", "ParamValue1");
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.Equal("ParamValue1", response.Data.Form["param1"]);
                 Assert.Equal("TestValue1", response.Data.Headers["Restsharp-Test1"]);
             }
@@ -48,7 +48,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("post", Method.POST);
                 request.AddParameter("param1", "ParamValue1");
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.Equal("ParamValue1", response.Data.Form["param1"]);
                 Assert.Equal("TestValue2", response.Data.Headers["Restsharp-Test2"]);
             }

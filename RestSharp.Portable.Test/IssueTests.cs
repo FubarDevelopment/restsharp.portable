@@ -30,7 +30,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("post", Method.POST);
                 request.AddParameter("param1", tmp);
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -55,7 +55,7 @@ namespace RestSharp.Portable.Test
                 request.AddParameter("param1", tmp);
                 request.AddParameter("param2", "param2");
 
-                var response = await client.Execute<PostResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -96,11 +96,11 @@ namespace RestSharp.Portable.Test
             {
                 var req1 = new RestRequest("post", Method.POST);
                 req1.AddParameter("a", "value-of-a");
-                var t1 = client.Execute<PostResponse>(req1);
+                var t1 = client.Execute<HttpBinResponse>(req1);
 
                 var req2 = new RestRequest("post", Method.POST);
                 req2.AddParameter("ab", "value-of-ab");
-                var t2 = client.Execute<PostResponse>(req2);
+                var t2 = client.Execute<HttpBinResponse>(req2);
 
                 Task.WaitAll(t1, t2);
 
@@ -150,8 +150,8 @@ namespace RestSharp.Portable.Test
                 var req2 = new RestRequest("post", Method.POST);
                 req2.AddParameter("ab", "value-of-ab");
 
-                var t1 = client.Execute<PostResponse>(req1);
-                var t2 = client.Execute<PostResponse>(req2);
+                var t1 = client.Execute<HttpBinResponse>(req1);
+                var t2 = client.Execute<HttpBinResponse>(req2);
                 Task.WaitAll(t1, t2);
 
                 Assert.NotNull(t1.Result.Data);
@@ -179,7 +179,7 @@ namespace RestSharp.Portable.Test
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.ContentCollectionMode = ContentCollectionMode.MultiPart;
-                var resp = await client.Execute<PostResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));
@@ -200,7 +200,7 @@ namespace RestSharp.Portable.Test
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
-                var resp = await client.Execute<PostResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));

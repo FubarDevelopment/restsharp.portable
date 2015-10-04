@@ -30,7 +30,7 @@ namespace RestSharp.Portable.Test
                     var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1");
 
-                    var response = await client.Execute<PostResponse>(request);
+                    var response = await client.Execute<HttpBinResponse>(request);
                     Assert.NotNull(response.Data);
                     Assert.NotNull(response.Data.Form);
                     Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -41,7 +41,7 @@ namespace RestSharp.Portable.Test
                     var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1+");
 
-                    var response = await client.Execute<PostResponse>(request);
+                    var response = await client.Execute<HttpBinResponse>(request);
                     Assert.NotNull(response.Data);
                     Assert.NotNull(response.Data.Form);
                     Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -53,7 +53,7 @@ namespace RestSharp.Portable.Test
         [Theory]
         [InlineData(typeof(DefaultHttpClientFactory))]
         [InlineData(typeof(WebRequestHttpClientFactory))]
-        public async Task TestPutRequest(Type factoryType)
+        public async Task TestPutRequestByteArray(Type factoryType)
         {
             using (var client = new RestClient("http://httpbin.org/")
             {
@@ -64,9 +64,34 @@ namespace RestSharp.Portable.Test
                 var data = Encoding.UTF8.GetBytes("Hello!");
                 request.AddParameter(string.Empty, data, ParameterType.RequestBody);
 
-                var response = await client.Execute<PutResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.NotNull(response.Data);
                 Assert.Equal("Hello!", response.Data.Data);
+            }
+        }
+
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestPutRequestJson(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
+            {
+                var request = new RestRequest("put", Method.PUT);
+                request.AddObject(
+                    new
+                    {
+                        hello = "world",
+                    });
+
+                var response = await client.Execute<HttpBinResponse>(request);
+                Assert.NotNull(response.Data);
+                Assert.NotNull(response.Data.Args);
+                Assert.Contains("hello", response.Data.Args.Keys);
+                Assert.Equal("world", response.Data.Args["hello"]);
             }
         }
 
