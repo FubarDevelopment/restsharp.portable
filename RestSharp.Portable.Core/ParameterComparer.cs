@@ -29,7 +29,7 @@ namespace RestSharp.Portable
         /// <param name="stringComparer">The string comparer to use (default: Ordinal)</param>
         public ParameterComparer(IRestClient client, IRestRequest request, StringComparer stringComparer)
         {
-            _isGetRequest = request == null || client.GetEffectiveHttpMethod(request) == Method.GET;
+            _isGetRequest = request == null || client.GetEffectiveHttpMethod(request) != Method.POST;
             var nameComparer = stringComparer;
             if (nameComparer == null && request != null)
                 nameComparer = request.ParameterNameComparer;
