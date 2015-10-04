@@ -30,7 +30,7 @@ namespace RestSharp.Portable.HttpClient
             var buffer = body.Value as byte[];
             if (buffer != null)
             {
-                contentType = MediaTypeHeaderValue.Parse(body.ContentType);
+                contentType = MediaTypeHeaderValue.Parse(body.ContentType ?? "application/octet-stream");
             }
             else
             {

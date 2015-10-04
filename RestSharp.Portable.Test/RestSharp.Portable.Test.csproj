@@ -76,6 +76,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="HttpBin\AuthenticationResult.cs" />
+    <Compile Include="HttpBin\PutResponse.cs" />
     <Compile Include="HttpBin\PostResponse.cs" />
     <Compile Include="AuthenticationTests.cs" />
     <Compile Include="CustomDeserializer.cs" />

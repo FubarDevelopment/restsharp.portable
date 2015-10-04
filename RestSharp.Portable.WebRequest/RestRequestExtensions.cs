@@ -30,7 +30,7 @@ namespace RestSharp.Portable.WebRequest
             var buffer = body.Value as byte[];
             if (buffer != null)
             {
-                contentType = body.ContentType;
+                contentType = body.ContentType ?? "application/octet-stream";
             }
             else
             {

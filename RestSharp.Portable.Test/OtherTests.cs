@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.HttpClient;
@@ -46,6 +47,26 @@ namespace RestSharp.Portable.Test
                     Assert.True(response.Data.Form.ContainsKey("param1"));
                     Assert.Equal("param1+", response.Data.Form["param1"]);
                 }
+            }
+        }
+
+        [Theory]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestPutRequest(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+            })
+            {
+                var request = new RestRequest("put", Method.PUT);
+                var data = Encoding.UTF8.GetBytes("Hello!");
+                request.AddParameter(string.Empty, data, ParameterType.RequestBody);
+
+                var response = await client.Execute<PutResponse>(request);
+                Assert.NotNull(response.Data);
+                Assert.Equal("Hello!", response.Data.Data);
             }
         }
 
