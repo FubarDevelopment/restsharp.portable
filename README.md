@@ -20,6 +20,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 04 ##
+
+* Don't discard GetOrPost parameters when using PUT or PATCH
+
 ## 3.0.0 beta 03 ##
 
 * Fix for [issue #42](https://github.com/FubarDevelopment/restsharp.portable/issues/42)
