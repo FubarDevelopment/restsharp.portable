@@ -10,7 +10,7 @@ namespace RestSharp.Portable.Test.HttpBin
 
         public Dictionary<string, string> Headers { get; set; }
 
-        public string Data { get; }
+        public string Data { get; set; }
 
         public object Json { get; set; }
     }
