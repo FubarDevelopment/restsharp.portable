@@ -20,6 +20,12 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 05 ##
+
+* Revert to Portable.BouncyCastle-Signed to be able to use a release version
+* Use the JetBrains.Annotations assembly to fix problems when creating CoreCLR assemblies
+  that want to use JetBrains.Annotations too
+
 ## 3.0.0 beta 04 ##
 
 * Don't discard GetOrPost parameters when using PUT or PATCH
