@@ -20,9 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\HttpContentWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)JetBrains.Annotations.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
