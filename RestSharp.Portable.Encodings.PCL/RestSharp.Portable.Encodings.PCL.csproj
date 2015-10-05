@@ -44,8 +44,8 @@
     <AssemblyOriginatorKeyFile>..\RestSharp.Portable.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DeflateEncoding.cs" />
     <Compile Include="GzipEncoding.cs" />
