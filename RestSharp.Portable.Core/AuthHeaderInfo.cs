@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RestSharp.Portable
 {
@@ -7,25 +9,19 @@ namespace RestSharp.Portable
     /// </summary>
     public class AuthHeaderInfo
     {
-        private static readonly char[] _whiteSpaceCharacters = { ' ', '\t' };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthHeaderInfo" /> class.
         /// </summary>
-        /// <param name="headerValue">The header value to parse</param>
-        public AuthHeaderInfo(string headerValue)
+        /// <param name="name">The authentication method name</param>
+        /// <param name="rawValue">The raw authentication method values</param>
+        /// <param name="values">The parsed authentication method values</param>
+        /// <param name="rawValues">The raw parsed authentication method values</param>
+        public AuthHeaderInfo(string name, string rawValue, IEnumerable<KeyValuePair<string, string>> values, IEnumerable<KeyValuePair<string, string>> rawValues)
         {
-            var firstWhitespace = headerValue.IndexOfAny(_whiteSpaceCharacters);
-            if (firstWhitespace == -1)
-            {
-                Name = headerValue;
-                Info = null;
-            }
-            else
-            {
-                Name = headerValue.Substring(0, firstWhitespace);
-                Info = headerValue.Substring(firstWhitespace).TrimStart();
-            }
+            Name = name;
+            RawValue = rawValue;
+            Values = values.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+            RawValues = rawValues.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -36,6 +32,16 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the authorization/authentication method information
         /// </summary>
-        public string Info { get; private set; }
+        public string RawValue { get; private set; }
+
+        /// <summary>
+        /// Gets the parsed authorization/authentication method information
+        /// </summary>
+        public ILookup<string, string> Values { get; private set; }
+
+        /// <summary>
+        /// Gets the raw parsed authorization/authentication method information
+        /// </summary>
+        public ILookup<string, string> RawValues { get; private set; }
     }
 }

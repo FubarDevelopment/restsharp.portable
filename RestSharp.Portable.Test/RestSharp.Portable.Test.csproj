@@ -78,6 +78,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AuthenticationHeaderValueTests.cs" />
     <Compile Include="HttpBin\AuthenticationResult.cs" />
     <Compile Include="HttpBin\HttpBinResponse.cs" />
     <Compile Include="AuthenticationTests.cs" />
