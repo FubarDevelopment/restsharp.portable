@@ -28,33 +28,24 @@ Supported Platforms:
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
         <dependencies>
           <group targetFramework="portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
-            <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
           </group>
           <group targetFramework="portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
-            <dependency id="Portable.BouncyCastle-Signed" version="1.7.0.1" />
           </group>
           <group targetFramework="net40">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="net45">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="MonoAndroid10">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="MonoTouch10">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
           <group targetFramework="Xamarin.iOS10">
-            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
             <dependency id="FubarCoder.RestSharp.Portable.OAuth" version="$clientversion$" />
           </group>
         </dependencies>
