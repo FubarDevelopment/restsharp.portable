@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -81,8 +82,41 @@ namespace RestSharp.Portable.Authenticators
         {
             // When the authorization failed or when the Authorization header is missing, we're just adding it (again) with the
             // new AccessToken.
-            var authHeader = string.Format("{0} {1}", _tokenType, await Client.GetCurrentToken());
+            var authHeader = $"{_tokenType} {await Client.GetCurrentToken()}";
             request.SetAuthorizationHeader(AuthHeader.Www, authHeader);
+        }
+
+        /// <inheritdoc/>
+        public override bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
+        {
+            // Get authentication header using the method specified by <code>_tokenType</code> or <code>OAuth</code>
+            var authHeaderInfo = response
+                .GetAuthenticationHeaderInfo(AuthHeader.Www)
+                .FirstOrDefault(
+                    x => string.Equals(x.Name, _tokenType, StringComparison.OrdinalIgnoreCase)
+                         || string.Equals(x.Name, "OAuth", StringComparison.OrdinalIgnoreCase));
+            if (authHeaderInfo == null)
+                return false;
+
+            // Check for WWW-Authenticate when status code is 401 (Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                return authHeaderInfo.Values["error"].Any(x => string.Equals(x, "invalid_token"));
+
+            // Not a 400 (Bad Request)? Cannot handle challenge.
+            if (response.StatusCode != HttpStatusCode.BadRequest)
+                return false;
+
+            // Check for Facebooks broken WWW-Authenticate
+            var isFacebook = authHeaderInfo.Values[string.Empty].Any(x => x.Contains("Facebook"));
+            if (!isFacebook)
+                return false;
+            if (!authHeaderInfo.Values[string.Empty].Any(x => x.Equals("invalid_token", StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            if (!base.CanHandleChallenge(client, request, credentials, response))
+                return false;
+
+            return true;
         }
     }
 }

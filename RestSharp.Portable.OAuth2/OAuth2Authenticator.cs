@@ -38,19 +38,37 @@ namespace RestSharp.Portable.Authenticators
     /// </remarks>
     public abstract class OAuth2Authenticator : IAuthenticator
     {
+        private DateTimeOffset? _lastChallenge;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OAuth2Authenticator"/> class.
         /// </summary>
         /// <param name="client">The OAuth2 client</param>
         protected OAuth2Authenticator(OAuth2.OAuth2Client client)
+            : this(client, TimeSpan.FromSeconds(60))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuth2Authenticator"/> class.
+        /// </summary>
+        /// <param name="client">The OAuth2 client</param>
+        /// <param name="challengeTimespan">The time span that has to be exceeded before a new challenge can be handled</param>
+        protected OAuth2Authenticator(OAuth2.OAuth2Client client, TimeSpan challengeTimespan)
         {
             Client = client;
+            ChallengeTimespan = challengeTimespan;
         }
+
+        /// <summary>
+        /// Gets the time span that has to be exceeded before a new challenge can be handled
+        /// </summary>
+        protected TimeSpan ChallengeTimespan { get; }
 
         /// <summary>
         /// Gets the OAuth client that is used by this authenticator
         /// </summary>
-        protected OAuth2.OAuth2Client Client { get; private set; }
+        protected OAuth2.OAuth2Client Client { get; }
 
         /// <summary>
         /// Does the authentication module supports pre-authentication?
@@ -80,7 +98,19 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>true when the authenticator can handle the sent challenge</returns>
         public virtual bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
-            return !string.IsNullOrEmpty(Client.RefreshToken);
+            // No refresh token? Cannot handle challenge
+            if (string.IsNullOrEmpty(Client.RefreshToken))
+                return false;
+
+            var currentChallenge = DateTimeOffset.UtcNow;
+            if (_lastChallenge.HasValue)
+            {
+                var safetyMargin = TimeSpan.FromSeconds(60);
+                if (currentChallenge < _lastChallenge.Value + safetyMargin)
+                    return false;
+            }
+            _lastChallenge = currentChallenge;
+            return true;
         }
 
         /// <summary>
