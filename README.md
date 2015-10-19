@@ -20,6 +20,10 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 09 ##
+
+Fix endless loop for OAuth2 and failed requests when a refresh token is available.
+
 ## 3.0.0 beta 07 ##
 
 Remember the OAuth2 refresh token when calling the ```GetCurrentToken``` function with a set
