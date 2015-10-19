@@ -14,10 +14,6 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     {
         private readonly IHttpRequestMessage _requestMessage;
 
-        private readonly IHttpHeaders _responseHttpHeaders;
-
-        private readonly IHttpContent _content;
-
         private readonly WebException _exception;
 
         /// <summary>
@@ -26,7 +22,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <param name="requestMessage">The request message for this response</param>
         /// <param name="responseMessage">The response message to wrap</param>
         /// <param name="exception">The exception that occurred during the request</param>
-        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [NotNull] HttpWebResponse responseMessage, [CanBeNull] WebException exception = null)
+        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [CanBeNull] HttpWebResponse responseMessage, [CanBeNull] WebException exception = null)
         {
             ResponseMessage = responseMessage;
             _exception = exception;
@@ -34,7 +30,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             var responseHeaders = new GenericHttpHeaders();
             var contentHeaders = new GenericHttpHeaders();
-            if (responseMessage.SupportsHeaders)
+            if (responseMessage != null && responseMessage.SupportsHeaders)
             {
                 foreach (var headerName in responseMessage.Headers.AllKeys)
                 {
@@ -52,62 +48,47 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 }
             }
 
-            _content = new HttpWebResponseContent(contentHeaders, responseMessage);
-            _responseHttpHeaders = responseHeaders;
+            Content = new HttpWebResponseContent(contentHeaders, responseMessage);
+            Headers = responseHeaders;
         }
 
         /// <summary>
         /// Gets the wrapper <see cref="HttpWebResponse"/> instance.
         /// </summary>
-        public HttpWebResponse ResponseMessage { get; private set; }
+        [CanBeNull]
+        public HttpWebResponse ResponseMessage { get; }
 
         /// <summary>
         /// Gets the HTTP headers returned by the response
         /// </summary>
-        public IHttpHeaders Headers
-        {
-            get { return _responseHttpHeaders; }
-        }
+        [NotNull]
+        public IHttpHeaders Headers { get; }
 
         /// <summary>
         /// Gets a value indicating whether the request was successful
         /// </summary>
-        public bool IsSuccessStatusCode
-        {
-            get { return (int)ResponseMessage.StatusCode < 300; }
-        }
+        public bool IsSuccessStatusCode => (int)StatusCode < 300;
 
         /// <summary>
         /// Gets the reason phrase returned together with the status code
         /// </summary>
-        public string ReasonPhrase
-        {
-            get { return ResponseMessage.StatusDescription; }
-        }
+        [CanBeNull]
+        public string ReasonPhrase => ResponseMessage?.StatusDescription;
 
         /// <summary>
         /// Gets the request message this response was returned for
         /// </summary>
-        public IHttpRequestMessage RequestMessage
-        {
-            get { return _requestMessage; }
-        }
+        public IHttpRequestMessage RequestMessage => _requestMessage;
 
         /// <summary>
         /// Gets the status code
         /// </summary>
-        public HttpStatusCode StatusCode
-        {
-            get { return ResponseMessage.StatusCode; }
-        }
+        public HttpStatusCode StatusCode => ResponseMessage?.StatusCode ?? HttpStatusCode.InternalServerError;
 
         /// <summary>
         /// Gets the content of the response
         /// </summary>
-        public IHttpContent Content
-        {
-            get { return _content; }
-        }
+        public IHttpContent Content { get; }
 
         /// <summary>
         /// Throws an exception when the status doesn't indicate success.
@@ -134,7 +115,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         {
             if (!disposing)
                 return;
-            ResponseMessage.Dispose();
+            ResponseMessage?.Dispose();
             _requestMessage.Dispose();
         }
     }

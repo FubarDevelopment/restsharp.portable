@@ -34,8 +34,6 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 #endif
             };
 
-        private readonly IHttpHeaders _defaultHeaders;
-
         private readonly WebRequestHttpClientFactory _httpClientFactory;
 
         /// <summary>
@@ -47,7 +45,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         {
             _httpClientFactory = httpClientFactory;
             Timeout = TimeSpan.FromSeconds(100);
-            _defaultHeaders = defaultHttpHeaders;
+            DefaultRequestHeaders = defaultHttpHeaders;
         }
 
         /// <summary>
@@ -58,10 +56,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <summary>
         /// Gets the default request headers
         /// </summary>
-        public IHttpHeaders DefaultRequestHeaders
-        {
-            get { return _defaultHeaders; }
-        }
+        public IHttpHeaders DefaultRequestHeaders { get; }
 
         /// <summary>
         /// Gets or sets the timeout
@@ -105,7 +100,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             // Combine all headers into one header collection
             var headers = new GenericHttpHeaders();
 
-            if (request.Content != null && request.Content.Headers != null)
+            if (request.Content?.Headers != null)
             {
                 foreach (var header in request.Content.Headers.Where(x => !headers.Contains(x.Key)))
                 {

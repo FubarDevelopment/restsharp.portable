@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable.WebRequest.Impl.Http
 {
     internal class HttpWebResponseContent : IHttpContent
@@ -23,7 +25,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
         private long? _contentLength;
 
-        public HttpWebResponseContent(IHttpHeaders headers, HttpWebResponse response)
+        public HttpWebResponseContent([NotNull] IHttpHeaders headers, [CanBeNull] HttpWebResponse response)
         {
             Headers = headers;
             _response = response;
@@ -39,7 +41,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
         /// <summary>
         /// Asynchronously copy the data to the given stream.
@@ -150,7 +152,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
-            _response.Dispose();
+            _response?.Dispose();
         }
 
         private void LoadIntoBuffer(long? size, int readBlockSize)
@@ -159,8 +161,15 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 return;
             if (_bufferSize >= size)
                 return;
+            if (_response == null)
+                return;
+
             if (_responseStream == null)
                 _responseStream = _response.GetResponseStream();
+
+            if (_responseStream == null)
+                return;
+
             while (!_endOfStreamReached && (size == null || _bufferSize < size))
             {
                 var blockSize = size == null ? readBlockSize : (int)Math.Min(readBlockSize, size.Value - _bufferSize);
