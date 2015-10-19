@@ -20,6 +20,11 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 07 ##
+
+Remember the OAuth2 refresh token when calling the ```GetCurrentToken``` function with a set
+refresh token. This should fix the problem with exiring access tokens.
+
 ## 3.0.0 beta 06 ##
 
 * Revert to Portable.BouncyCastle-Signed to be able to use a release version

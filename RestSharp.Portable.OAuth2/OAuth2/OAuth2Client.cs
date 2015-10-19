@@ -46,7 +46,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// Gets the client configuration object.
         /// </summary>
-        public IClientConfiguration Configuration { get; private set; }
+        public IClientConfiguration Configuration { get; }
 
         /// <summary>
         /// Gets the friendly name of provider (OAuth2 service).
@@ -86,10 +86,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2
         /// <summary>
         /// Gets the instance of the request factory.
         /// </summary>
-        protected IRequestFactory Factory
-        {
-            get { return _factory; }
-        }
+        protected IRequestFactory Factory => _factory;
 
         /// <summary>
         /// Gets the URI of service which issues access code.
@@ -184,7 +181,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             {
                 string refreshTokenValue;
                 if (!string.IsNullOrEmpty(refreshToken))
+                {
+                    RefreshToken = refreshToken;
                     refreshTokenValue = refreshToken;
+                }
                 else if (!string.IsNullOrEmpty(RefreshToken))
                     refreshTokenValue = RefreshToken;
                 else
