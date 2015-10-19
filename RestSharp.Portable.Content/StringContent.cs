@@ -22,13 +22,13 @@ namespace RestSharp.Portable.Content
             _value = value;
             _encoding = encoding;
             Headers = new GenericHttpHeaders();
-            Headers.TryAddWithoutValidation("Content-Type", string.Format("text/plain; charset={0}", encoding.WebName));
+            Headers.TryAddWithoutValidation("Content-Type", $"text/plain; charset={encoding.WebName}");
         }
 
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
         public void Dispose()
         {
@@ -110,9 +110,7 @@ namespace RestSharp.Portable.Content
         /// <param name="length">The length in bytes of the HTTP content.</param>
         public bool TryComputeLength(out long length)
         {
-            length = _buffer != null
-                ? _buffer.Length
-                : _encoding.GetByteCount(_value);
+            length = _buffer?.Length ?? _encoding.GetByteCount(_value);
 
             return true;
         }

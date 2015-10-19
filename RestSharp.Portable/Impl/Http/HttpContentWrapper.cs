@@ -28,7 +28,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// <summary>
         /// Gets the <see cref="IHttpContent"/> to wrap.
         /// </summary>
-        public IHttpContent Content { get; private set; }
+        public IHttpContent Content { get; }
 
         /// <summary>
         /// Serialize the HTTP content to a stream as an asynchronous operation.

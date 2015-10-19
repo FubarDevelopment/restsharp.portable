@@ -78,13 +78,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
         /// </summary>
-        protected bool HasAuthorizationToken
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(_cnonce) && DateTime.Now.Subtract(_cnonceDate).TotalHours < 1.0;
-            }
-        }
+        protected bool HasAuthorizationToken => !string.IsNullOrEmpty(_cnonce) && DateTime.Now.Subtract(_cnonceDate).TotalHours < 1.0;
 
         /// <summary>
         /// Does the authentication module supports pre-authentication for the given <see cref="IRestRequest" />?
@@ -135,7 +129,7 @@ namespace RestSharp.Portable.Authenticators
                 throw new InvalidOperationException();
 
             var digestHeader = await GetDigestHeader(client, request, _authCredential);
-            var authHeaderValue = string.Format("{0} {1}", AuthenticationMethod, digestHeader);
+            var authHeaderValue = $"{AuthenticationMethod} {digestHeader}";
             request.SetAuthorizationHeader(_authHeader, authHeaderValue);
         }
 
@@ -216,7 +210,7 @@ namespace RestSharp.Portable.Authenticators
 
         private static string GrabHeaderVar(string varName, string header, string defaultValue = null)
         {
-            var regHeader = new Regex(string.Format(@"{0}\s*=\s*((""(?<qval>[^""]*)"")|(?<val>[^,]+))", varName));
+            var regHeader = new Regex($@"{varName}\s*=\s*((""(?<qval>[^""]*)"")|(?<val>[^,]+))");
             var matchHeader = regHeader.Match(header);
             if (matchHeader.Success)
             {
@@ -228,7 +222,7 @@ namespace RestSharp.Portable.Authenticators
             }
 
             if (defaultValue == null)
-                throw new WebException(string.Format("Header {0} not found", varName), WebExceptionStatus.UnknownError);
+                throw new WebException($"Header {varName} not found", WebExceptionStatus.UnknownError);
             return defaultValue;
         }
 

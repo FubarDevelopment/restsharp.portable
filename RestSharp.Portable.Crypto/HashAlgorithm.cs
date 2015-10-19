@@ -46,20 +46,14 @@ namespace RestSharp.Portable.Crypto
             _disposed = false;
         }
 
-        public virtual bool CanTransformMultipleBlocks
-        {
-            get { return true; }
-        }
+        public virtual bool CanTransformMultipleBlocks => true;
 
-        public virtual bool CanReuseTransform
-        {
-            get { return true; }
-        }
+        public virtual bool CanReuseTransform => true;
 
         public byte[] ComputeHash(byte[] buffer)
         {
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
 
             return ComputeHash(buffer, 0, buffer.Length);
         }
@@ -69,15 +63,15 @@ namespace RestSharp.Portable.Crypto
             if (_disposed)
                 throw new ObjectDisposedException("HashAlgorithm");
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset", "< 0");
+                throw new ArgumentOutOfRangeException(nameof(offset), "< 0");
             if (count < 0)
-                throw new ArgumentException("< 0", "count");
+                throw new ArgumentException("< 0", nameof(count));
             // ordered to avoid possible integer overflow
             if (offset > buffer.Length - count)
             {
-                throw new ArgumentException("Overflow", "offset");
+                throw new ArgumentException("Overflow", nameof(offset));
             }
 
             HashCore(buffer, offset, count);
@@ -103,10 +97,7 @@ namespace RestSharp.Portable.Crypto
 
         protected abstract byte[] HashFinal();
 
-        public virtual int HashSize
-        {
-            get { return HashSizeValue; }
-        }
+        public virtual int HashSize => HashSizeValue;
 
         public abstract void Initialize();
 
@@ -115,15 +106,9 @@ namespace RestSharp.Portable.Crypto
             _disposed = true;
         }
 
-        public virtual int InputBlockSize
-        {
-            get { return 1; }
-        }
+        public virtual int InputBlockSize => 1;
 
-        public virtual int OutputBlockSize
-        {
-            get { return 1; }
-        }
+        public virtual int OutputBlockSize => 1;
 
 #if NET_4_0
 		public void Dispose ()
@@ -140,27 +125,27 @@ namespace RestSharp.Portable.Crypto
         public int TransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
         {
             if (inputBuffer == null)
-                throw new ArgumentNullException("inputBuffer");
+                throw new ArgumentNullException(nameof(inputBuffer));
 
             if (inputOffset < 0)
-                throw new ArgumentOutOfRangeException("inputOffset", "< 0");
+                throw new ArgumentOutOfRangeException(nameof(inputOffset), "< 0");
             if (inputCount < 0)
-                throw new ArgumentOutOfRangeException("inputCount", "< 0");
+                throw new ArgumentOutOfRangeException(nameof(inputCount), "< 0");
 
             // ordered to avoid possible integer overflow
             if ((inputOffset < 0) || (inputOffset > inputBuffer.Length - inputCount))
-                throw new ArgumentOutOfRangeException("inputBuffer");
+                throw new ArgumentOutOfRangeException(nameof(inputBuffer));
 
             if (outputBuffer != null)
             {
                 if (outputOffset < 0)
                 {
-                    throw new ArgumentOutOfRangeException("outputOffset", "< 0");
+                    throw new ArgumentOutOfRangeException(nameof(outputOffset), "< 0");
                 }
                 // ordered to avoid possible integer overflow
                 if (outputOffset > outputBuffer.Length - inputCount)
                 {
-                    throw new ArgumentException("Overflow", "outputOffset");
+                    throw new ArgumentException("Overflow", nameof(outputOffset));
                 }
             }
 
@@ -175,13 +160,13 @@ namespace RestSharp.Portable.Crypto
         public byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount)
         {
             if (inputBuffer == null)
-                throw new ArgumentNullException("inputBuffer");
+                throw new ArgumentNullException(nameof(inputBuffer));
             if (inputCount < 0)
-                throw new ArgumentOutOfRangeException("inputCount", "< 0");
+                throw new ArgumentOutOfRangeException(nameof(inputCount), "< 0");
             // ordered to avoid possible integer overflow
             if (inputOffset > inputBuffer.Length - inputCount)
             {
-                throw new ArgumentException("Overflow", "inputOffset");
+                throw new ArgumentException("Overflow", nameof(inputOffset));
             }
 
             byte[] outputBuffer = new byte[inputCount];

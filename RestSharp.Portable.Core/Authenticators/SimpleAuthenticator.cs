@@ -52,9 +52,7 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>true when the authentication module supports pre-authentication</returns>
         public bool CanPreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            if (credentials == null)
-                return false;
-            var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            var cred = credentials?.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
             if (cred == null)
                 return false;
             return true;
@@ -87,7 +85,7 @@ namespace RestSharp.Portable.Authenticators
                     throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
                 var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
                 if (cred == null)
-                    throw new InvalidOperationException(string.Format("No credentials provided for the {0} authentication type.", AuthenticationMethod));
+                    throw new InvalidOperationException($"No credentials provided for the {AuthenticationMethod} authentication type.");
                 request.AddParameter(_usernameKey, cred.UserName, _parameterType);
                 request.AddParameter(_passwordKey, cred.Password, _parameterType);
             });

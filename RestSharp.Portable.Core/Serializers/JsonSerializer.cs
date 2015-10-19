@@ -14,7 +14,7 @@ namespace RestSharp.Portable.Serializers
         /// </summary>
         public JsonSerializer()
         {
-            ContentType = string.Format("application/json; charset={0}", _encoding.WebName);
+            ContentType = $"application/json; charset={_encoding.WebName}";
         }
 
         /// <summary>

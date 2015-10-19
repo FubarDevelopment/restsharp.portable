@@ -27,7 +27,7 @@ namespace RestSharp.Portable.HttpClient
             HttpMethod result;
             if (_methodsToHttpMethods.TryGetValue(method, out result))
                 return result;
-            throw new NotSupportedException(string.Format("Unsupported HTTP method {0}", method));
+            throw new NotSupportedException($"Unsupported HTTP method {method}");
         }
 
         public static Method ToMethod(this HttpMethod method)
@@ -35,7 +35,7 @@ namespace RestSharp.Portable.HttpClient
             Method result;
             if (_httpMethodsToMethods.TryGetValue(method.Method, out result))
                 return result;
-            throw new NotSupportedException(string.Format("Unsupported HTTP method {0}", method.Method));
+            throw new NotSupportedException($"Unsupported HTTP method {method.Method}");
         }
     }
 }

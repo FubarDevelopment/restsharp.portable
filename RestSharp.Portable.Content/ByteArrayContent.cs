@@ -21,17 +21,11 @@ namespace RestSharp.Portable.Content
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
-        public int Length
-        {
-            get { return _data.Length; }
-        }
+        public int Length => _data.Length;
 
-        public IEnumerable<byte> Data
-        {
-            get { return _data; }
-        }
+        public IEnumerable<byte> Data => _data;
 
         public void Dispose()
         {

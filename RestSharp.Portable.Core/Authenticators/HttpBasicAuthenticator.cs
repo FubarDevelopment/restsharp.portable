@@ -41,10 +41,7 @@ namespace RestSharp.Portable.Authenticators
         /// <summary>
         /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
         /// </summary>
-        protected bool HasAuthorizationToken
-        {
-            get { return _authToken != null; }
-        }
+        protected bool HasAuthorizationToken => _authToken != null;
 
         /// <summary>
         /// Does the authentication module supports pre-authentication?
@@ -95,7 +92,7 @@ namespace RestSharp.Portable.Authenticators
             {
                 if (!CanPreAuthenticate(client, request, credentials))
                     throw new InvalidOperationException();
-                var authHeaderValue = string.Format("{0} {1}", AuthenticationMethod, _authToken);
+                var authHeaderValue = $"{AuthenticationMethod} {_authToken}";
                 request.SetAuthorizationHeader(_authHeader, authHeaderValue);
             });
         }
@@ -152,7 +149,7 @@ namespace RestSharp.Portable.Authenticators
 
                 var responseUri = client.GetRequestUri(request, response);
                 _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
-                _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _authCredential.UserName, _authCredential.Password)));
+                _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_authCredential.UserName}:{_authCredential.Password}"));
             });
         }
     }

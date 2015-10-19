@@ -35,10 +35,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers
-        {
-            get { return _headers; }
-        }
+        public IHttpHeaders Headers => _headers;
 
         /// <summary>
         /// Asynchronously copy the data to the given stream.
@@ -204,7 +201,7 @@ namespace RestSharp.Portable
                 _parameter = parameter;
             }
 
-            public string Name { get; private set; }
+            public string Name { get; }
 
             public byte[] GetData()
             {
@@ -261,7 +258,6 @@ namespace RestSharp.Portable
         private class EncodedParameterStream : Stream
         {
             private readonly List<DataPart> _parts;
-            private readonly long _length;
             private long _position;
             private int _activePart;
 
@@ -279,29 +275,17 @@ namespace RestSharp.Portable
                     position += parameter.GetFullDataLength();
                 }
 
-                _length = position;
+                Length = position;
                 _position = 0;
             }
 
-            public override bool CanRead
-            {
-                get { return true; }
-            }
+            public override bool CanRead => true;
 
-            public override bool CanSeek
-            {
-                get { return true; }
-            }
+            public override bool CanSeek => true;
 
-            public override bool CanWrite
-            {
-                get { return false; }
-            }
+            public override bool CanWrite => false;
 
-            public override long Length
-            {
-                get { return _length; }
-            }
+            public override long Length { get; }
 
             public override long Position
             {
@@ -321,10 +305,7 @@ namespace RestSharp.Portable
                 }
             }
 
-            private bool IsEOF
-            {
-                get { return _activePart == _parts.Count; }
-            }
+            private bool IsEOF => _activePart == _parts.Count;
 
             public override void Flush()
             {
@@ -405,7 +386,7 @@ namespace RestSharp.Portable
                     _data = new[] { b };
                 }
 
-                public long Position { get; private set; }
+                public long Position { get; }
 
                 public long Length
                 {
@@ -417,10 +398,7 @@ namespace RestSharp.Portable
                     }
                 }
 
-                public byte[] Data
-                {
-                    get { return _data ?? (_data = _parameter.GetFullData()); }
-                }
+                public byte[] Data => _data ?? (_data = _parameter.GetFullData());
 
                 public void ReleaseData()
                 {

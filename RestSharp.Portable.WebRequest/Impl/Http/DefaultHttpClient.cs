@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if !PCL && !NETFX_CORE && !WINDOWS_STORE
 using System.Globalization;
+#endif
 using System.IO;
 using System.Linq;
 using System.Net;

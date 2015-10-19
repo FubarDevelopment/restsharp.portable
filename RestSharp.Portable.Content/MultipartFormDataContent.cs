@@ -22,17 +22,14 @@ namespace RestSharp.Portable.Content
             Headers.TryAddWithoutValidation("Content-Type", ContentType);
         }
 
-        public string Boundary { get; private set; }
+        public string Boundary { get; }
 
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
-        public string ContentType
-        {
-            get { return string.Format("multipart/form-data; boundary={0}", Boundary); }
-        }
+        public string ContentType => string.Format("multipart/form-data; boundary={0}", Boundary);
 
         public void Add([NotNull] IHttpContent content, [NotNull] string name)
         {
@@ -186,8 +183,8 @@ namespace RestSharp.Portable.Content
         {
             if (withHeaders)
                 await HttpHeaderContent.WriteTo(Headers, stream);
-            var boundaryStart = Encoding.UTF8.GetBytes(string.Format("--{0}\r\n", Boundary));
-            var boundaryEnd = Encoding.UTF8.GetBytes(string.Format("--{0}--\r\n", Boundary));
+            var boundaryStart = Encoding.UTF8.GetBytes($"--{Boundary}\r\n");
+            var boundaryEnd = Encoding.UTF8.GetBytes($"--{Boundary}--\r\n");
             var lineBreak = Encoding.UTF8.GetBytes("\r\n");
             foreach (var content in _contents)
             {

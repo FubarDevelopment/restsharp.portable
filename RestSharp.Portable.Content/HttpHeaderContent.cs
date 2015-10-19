@@ -15,7 +15,7 @@ namespace RestSharp.Portable.Content
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
@@ -33,7 +33,7 @@ namespace RestSharp.Portable.Content
                     foreach (var header in headers)
                     {
                         await
-                            writer.WriteLineAsync(string.Format("{0}: {1}", header.Key, string.Join(", ", header.Value)));
+                            writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}");
                     }
                 }
 

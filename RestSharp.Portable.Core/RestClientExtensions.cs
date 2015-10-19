@@ -139,19 +139,19 @@ namespace RestSharp.Portable
         {
             var parameters = client.MergeParameters(request);
             UriBuilder urlBuilder;
-            if (client == null || client.BaseUrl == null)
+            if (client?.BaseUrl == null)
             {
                 if (request == null)
-                    throw new ArgumentNullException("request");
+                    throw new ArgumentNullException(nameof(request));
                 if (string.IsNullOrEmpty(request.Resource))
-                    throw new ArgumentOutOfRangeException("request", "The resource must be specified and not be empty");
+                    throw new ArgumentOutOfRangeException(nameof(request), "The resource must be specified and not be empty");
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
                 urlBuilder = new UriBuilder(new Uri(resource, UriKind.RelativeOrAbsolute));
             }
-            else if (request == null || string.IsNullOrEmpty(request.Resource))
+            else if (string.IsNullOrEmpty(request?.Resource))
             {
                 if (client.BaseUrl == null)
-                    throw new ArgumentOutOfRangeException("client", "The BaseUrl must be specified");
+                    throw new ArgumentOutOfRangeException(nameof(client), "The BaseUrl must be specified");
                 var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
                 urlBuilder = new UriBuilder(new Uri(baseUrl, UriKind.RelativeOrAbsolute));
             }
@@ -239,7 +239,7 @@ namespace RestSharp.Portable
         {
             foreach (var param in parameters.Where(x => x.Type == ParameterType.UrlSegment))
             {
-                var searchText = string.Format("{{{0}}}", param.Name);
+                var searchText = $"{{{param.Name}}}";
                 var replaceText = param.ToEncodedString();
                 url = url.Replace(searchText, replaceText);
             }

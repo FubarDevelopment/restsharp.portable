@@ -87,7 +87,7 @@ namespace RestSharp.Portable.Crypto
         {
             if (null == array)
             {
-                throw new ArgumentNullException("array");
+                throw new ArgumentNullException(nameof(array));
             }
 
             if (_hashFinalCalled)
@@ -134,13 +134,7 @@ namespace RestSharp.Portable.Crypto
         }
 
         // Return size of hash in bits.
-        public override int HashSize
-        {
-            get
-            {
-                return _digest.Length * 8;
-            }
-        }
+        public override int HashSize => _digest.Length * 8;
 
         ///////////////////////////////////////////////
         // MD5 reference implementation begins here. //

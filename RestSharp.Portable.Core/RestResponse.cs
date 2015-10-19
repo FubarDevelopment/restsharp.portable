@@ -24,7 +24,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the Request that resulted in this response
         /// </summary>
-        public IRestRequest Request { get; private set; }
+        public IRestRequest Request { get; }
 
         /// <summary>
         /// Gets the full response URL
@@ -64,7 +64,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the REST client that created this response
         /// </summary>
-        protected IRestClient Client { get; private set; }
+        protected IRestClient Client { get; }
 
         /// <summary>
         /// Create a <see cref="IRestResponse"/> from a <see cref="IRestClient"/>, <see cref="IRestRequest"/> and a <see cref="IHttpResponseMessage"/>.

@@ -24,7 +24,7 @@ namespace RestSharp.Portable.HttpClient
         {
             HttpContent content;
             var parameters = client.MergeParameters(request);
-            var collectionMode = request == null ? ContentCollectionMode.MultiPartForFileParameters : request.ContentCollectionMode;
+            var collectionMode = request?.ContentCollectionMode ?? ContentCollectionMode.MultiPartForFileParameters;
             if (collectionMode != ContentCollectionMode.BasicContent)
             {
                 var fileParameters = parameters.GetFileParameters().ToList();

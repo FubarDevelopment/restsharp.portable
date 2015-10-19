@@ -86,10 +86,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the REST request parameters
         /// </summary>
-        public IList<Parameter> Parameters
-        {
-            get { return _parameters; }
-        }
+        public IList<Parameter> Parameters => _parameters;
 
         /// <summary>
         /// Gets or sets the serializer that should serialize the body

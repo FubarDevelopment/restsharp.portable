@@ -9,8 +9,6 @@ namespace RestSharp.Portable
     /// </summary>
     public class Parameter
     {
-        private static readonly CultureInfo s_cultureUS = new CultureInfo("en-US");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Parameter" /> class.
         /// </summary>
@@ -84,7 +82,7 @@ namespace RestSharp.Portable
                     return dateTimeOffset.Value.ToUniversalTime().ToString("R", CultureInfo.InvariantCulture);
             }
 
-            return string.Format(s_cultureUS, "{0}", Value);
+            return string.Format(CultureInfo.InvariantCulture, "{0}", Value);
         }
     }
 }

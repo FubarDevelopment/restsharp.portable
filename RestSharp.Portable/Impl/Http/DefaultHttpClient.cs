@@ -27,7 +27,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// <summary>
         /// Gets the HTTP client to wrap.
         /// </summary>
-        public System.Net.Http.HttpClient Client { get; private set; }
+        public System.Net.Http.HttpClient Client { get; }
 
         /// <summary>
         /// Gets or sets the base address of the HTTP client
@@ -41,10 +41,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// <summary>
         /// Gets the default request headers
         /// </summary>
-        public IHttpHeaders DefaultRequestHeaders
-        {
-            get { return _defaultHeaders; }
-        }
+        public IHttpHeaders DefaultRequestHeaders => _defaultHeaders;
 
         /// <summary>
         /// Gets or sets the timeout

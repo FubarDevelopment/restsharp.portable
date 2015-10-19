@@ -37,8 +37,7 @@ namespace RestSharp.Portable.WebRequest
 #pragma warning restore 4014
                     t => asyncTask.Exception,
                     TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
-                if (cancellationAction != null)
-                    cancellationAction(cancellationTask);
+                cancellationAction?.Invoke(cancellationTask);
             }
 
             return await readyTask;

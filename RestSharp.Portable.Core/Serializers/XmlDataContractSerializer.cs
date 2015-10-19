@@ -11,7 +11,6 @@ namespace RestSharp.Portable.Serializers
     public class XmlDataContractSerializer : ISerializer
     {
         private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
-        private static readonly XmlDataContractSerializer _defaultXmlDataContractSerializer = new XmlDataContractSerializer();
         private string _contentType;
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace RestSharp.Portable.Serializers
             get
             {
                 if (_contentType == null)
-                    return string.Format("text/xml; charset={0}", XmlWriterSettings.Encoding.WebName);
+                    return $"text/xml; charset={XmlWriterSettings.Encoding.WebName}";
                 return _contentType;
             }
             set
@@ -49,10 +48,7 @@ namespace RestSharp.Portable.Serializers
         /// <summary>
         /// Gets the default XML serializer for AddXmlBody
         /// </summary>
-        internal static XmlDataContractSerializer Default
-        {
-            get { return _defaultXmlDataContractSerializer; }
-        }
+        internal static XmlDataContractSerializer Default { get; } = new XmlDataContractSerializer();
 
         /// <summary>
         /// Gets or sets the configuration used to create an XML writer

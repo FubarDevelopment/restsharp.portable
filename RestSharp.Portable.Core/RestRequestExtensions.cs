@@ -151,7 +151,7 @@ namespace RestSharp.Portable
                             {
                                 // convert the array to an array of strings
                                 var values =
-                                    (from object item in ((Array)val) select item.ToString()).ToArray<string>();
+                                    (from object item in ((Array)val) select item.ToString()).ToArray();
                                 val = string.Join(",", values);
                             }
                             else

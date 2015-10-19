@@ -35,7 +35,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets a value that specifies the HTTP header to look for when trying to find the authentication mechanism.
         /// </summary>
-        public AuthHeader Header { get; private set; }
+        public AuthHeader Header { get; }
 
         /// <summary>
         /// Registers a new authentication module
@@ -164,9 +164,9 @@ namespace RestSharp.Portable
                 Authenticator = authenticator;
             }
 
-            public int Security { get; private set; }
+            public int Security { get; }
 
-            public IAuthenticator Authenticator { get; private set; }
+            public IAuthenticator Authenticator { get; }
         }
     }
 }

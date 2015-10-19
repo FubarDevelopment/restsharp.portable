@@ -27,10 +27,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// <summary>
         /// Gets the underlying HTTP headers
         /// </summary>
-        public HttpHeaders Headers
-        {
-            get { return _headers; }
-        }
+        public HttpHeaders Headers => _headers;
 
         /// <summary>
         /// Returns an enumerator for all headers and their values.

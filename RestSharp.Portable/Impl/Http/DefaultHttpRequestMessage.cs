@@ -30,15 +30,12 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// <summary>
         /// Gets the HTTP request message to wrap
         /// </summary>
-        public HttpRequestMessage RequestMessage { get; private set; }
+        public HttpRequestMessage RequestMessage { get; }
 
         /// <summary>
         /// Gets the HTTP headers for the request message
         /// </summary>
-        public IHttpHeaders Headers
-        {
-            get { return _requestHttpHeaders; }
-        }
+        public IHttpHeaders Headers => _requestHttpHeaders;
 
         /// <summary>
         /// Gets or sets the HTTP request method

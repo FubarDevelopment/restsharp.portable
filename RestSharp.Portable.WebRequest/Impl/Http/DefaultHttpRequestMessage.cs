@@ -30,7 +30,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <summary>
         /// Gets the HTTP headers for the request message
         /// </summary>
-        public IHttpHeaders Headers { get; private set; }
+        public IHttpHeaders Headers { get; }
 
         /// <summary>
         /// Gets or sets the HTTP request method
@@ -71,8 +71,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (_isDisposed)
                 return;
             _isDisposed = true;
-            if (Content != null)
-                Content.Dispose();
+            Content?.Dispose();
         }
     }
 }

@@ -80,7 +80,7 @@ namespace RestSharp.Portable
                     return UrlEncode(parameter, parameter.Encoding ?? DefaultEncoding, spaceAsPlus);
             }
 
-            throw new NotSupportedException(string.Format("Parameter of type {0} doesn't support an encoding.", parameter.Type));
+            throw new NotSupportedException($"Parameter of type {parameter.Type} doesn't support an encoding.");
         }
 
         private static string UrlEncode(Parameter parameter, Encoding encoding, bool spaceAsPlus)

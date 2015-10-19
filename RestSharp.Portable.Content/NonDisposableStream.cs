@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace RestSharp.Portable.Content
 {
@@ -39,25 +37,13 @@ namespace RestSharp.Portable.Content
             _baseStream.Write(buffer, offset, count);
         }
 
-        public override bool CanRead
-        {
-            get { return _baseStream.CanRead; }
-        }
+        public override bool CanRead => _baseStream.CanRead;
 
-        public override bool CanSeek
-        {
-            get { return _baseStream.CanSeek; }
-        }
+        public override bool CanSeek => _baseStream.CanSeek;
 
-        public override bool CanWrite
-        {
-            get { return _baseStream.CanWrite; }
-        }
+        public override bool CanWrite => _baseStream.CanWrite;
 
-        public override long Length
-        {
-            get { return _baseStream.Length; }
-        }
+        public override long Length => _baseStream.Length;
 
         public override long Position
         {

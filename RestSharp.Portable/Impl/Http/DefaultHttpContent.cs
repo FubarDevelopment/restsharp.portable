@@ -12,8 +12,6 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
     /// </summary>
     public class DefaultHttpContent : IHttpContent
     {
-        private readonly IHttpHeaders _headers;
-
         private bool _isDisposed;
 
         /// <summary>
@@ -23,21 +21,18 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         public DefaultHttpContent([NotNull] HttpContent content)
         {
             Content = content;
-            _headers = content.Headers.AsRestHeaders();
+            Headers = content.Headers.AsRestHeaders();
         }
 
         /// <summary>
         /// Gets the content to perform the actions on.
         /// </summary>
-        public HttpContent Content { get; private set; }
+        public HttpContent Content { get; }
 
         /// <summary>
         /// Gets the HTTP headers for the content.
         /// </summary>
-        public IHttpHeaders Headers
-        {
-            get { return _headers; }
-        }
+        public IHttpHeaders Headers { get; }
 
         /// <summary>
         /// Asynchronously copy the data to the given stream.
