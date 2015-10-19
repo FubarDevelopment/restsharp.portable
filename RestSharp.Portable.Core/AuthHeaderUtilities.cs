@@ -353,20 +353,40 @@ namespace RestSharp.Portable
                         break;
                     case '"':
                         rawTempBuffer.Append(ch);
-                        if (state == ParseState.Value)
-                            rawAuthHeaderValue.Append(ch);
                         if (isEscaped)
                         {
                             activeBuffer.Append(ch);
                         }
                         else if (!isQuoted)
                         {
+                            if (state == ParseState.Key)
+                            {
+                                state = ParseState.Value;
+                            }
+                            else if (state == ParseState.Value)
+                            {
+                                if (keyBuffer.Length == 0 || valueBuffer.Length != 0)
+                                {
+                                    var key = string.Empty;
+                                    var value = valueBuffer.ToString().Trim(whiteSpace);
+                                    var rawAuthValue = rawAuthHeaderValue.ToString().Trim(whiteSpace);
+                                    if (value.Length != 0)
+                                    {
+                                        authHeaderValues.Add(new KeyValuePair<string, string>(key.ToLowerInvariant(), value));
+                                        rawAuthHeaderValues.Add(new KeyValuePair<string, string>(key, rawAuthValue));
+                                    }
+                                    valueBuffer.Clear();
+                                    rawAuthHeaderValue.Clear();
+                                }
+                            }
                             quotePos = pos;
                         }
                         else
                         {
                             quotePos = null;
                         }
+                        if (state == ParseState.Value)
+                            rawAuthHeaderValue.Append(ch);
                         break;
                     case '=':
                         if (isEscaped || isQuoted)
@@ -466,17 +486,20 @@ namespace RestSharp.Portable
                 }
             }
 
-            if (methodBuffer.Length != 0)
+            if (keyBuffer.Length != 0 || valueBuffer.Length != 0)
             {
-                if (keyBuffer.Length != 0)
+                var key = keyBuffer.ToString().Trim(whiteSpace);
+                var value = valueBuffer.ToString().Trim(whiteSpace);
+                var rawAuthValue = rawAuthHeaderValue.ToString().Trim(whiteSpace);
+                if (value.Length != 0 || key.Length != 0)
                 {
-                    var key = keyBuffer.ToString().Trim(whiteSpace);
-                    var value = valueBuffer.ToString().Trim(whiteSpace);
-                    var rawAuthValue = rawAuthHeaderValue.ToString().Trim(whiteSpace);
                     authHeaderValues.Add(new KeyValuePair<string, string>(key.ToLowerInvariant(), value));
                     rawAuthHeaderValues.Add(new KeyValuePair<string, string>(key, rawAuthValue));
                 }
+            }
 
+            if (methodBuffer.Length != 0 || authHeaderValues.Count != 0)
+            {
                 rawValueBuffer.Append(rawTempBuffer);
                 var method = methodBuffer.ToString().Trim(whiteSpace);
                 var rawValue = rawValueBuffer.ToString().Trim(whiteSpace);

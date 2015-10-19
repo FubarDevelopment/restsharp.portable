@@ -289,5 +289,41 @@ namespace RestSharp.Portable.Test
             Assert.Equal("basic", item.Values["realm"].Single());
             Assert.Equal("\"basic", item.RawValues["realm"].Single());
         }
+
+        /// <summary>
+        /// Facebooks WWW-Authenticate is broken according to https://rnd.feide.no/2012/04/19/best-practice-for-dealing-with-oauth-2-0-token-expiration-at-the-consumer/
+        /// </summary>
+        [Fact]
+        public void TestBrokenFacebook()
+        {
+            var headers = AuthHeaderUtilities.ParseAuthenticationHeader("OAuth \"Facebook Platform\" \"invalid_token\" \r\n    \"Error validating access token: Session has expired \r\n    at unix time 1334415600.The current unix time is 1334822619.\"").ToList();
+            Assert.Equal(1, headers.Count);
+
+            var header = headers[0];
+            Assert.Equal("OAuth", header.Name);
+            Assert.Equal("\"Facebook Platform\" \"invalid_token\" \r\n    \"Error validating access token: Session has expired \r\n    at unix time 1334415600.The current unix time is 1334822619.\"", header.RawValue);
+            Assert.Collection(
+                header.Values,
+                valueItem =>
+                {
+                    Assert.Equal(string.Empty, valueItem.Key);
+                    Assert.Collection(
+                        valueItem,
+                        value => Assert.Equal("Facebook Platform", value),
+                        value => Assert.Equal("invalid_token", value),
+                        value => Assert.Equal("Error validating access token: Session has expired \r\n    at unix time 1334415600.The current unix time is 1334822619.", value));
+                });
+            Assert.Collection(
+                header.RawValues,
+                valueItem =>
+                {
+                    Assert.Equal(string.Empty, valueItem.Key);
+                    Assert.Collection(
+                        valueItem,
+                        value => Assert.Equal("\"Facebook Platform\"", value),
+                        value => Assert.Equal("\"invalid_token\"", value),
+                        value => Assert.Equal("\"Error validating access token: Session has expired \r\n    at unix time 1334415600.The current unix time is 1334822619.\"", value));
+                });
+        }
     }
 }
