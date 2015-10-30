@@ -66,6 +66,29 @@ namespace RestSharp.Portable.Test
             Assert.Equal(2, resultsData[1]);
         }
 
+        [Fact]
+        public async void TestGuardLockEarlyDispose()
+        {
+            var cts = new CancellationTokenSource();
+            var guard = new AsyncLock();
+            var task = Task.Run(
+                async () =>
+                {
+                    using (await guard.LockAsync(cts.Token))
+                    {
+                        await Task.Delay(200);
+                        cts.Token.ThrowIfCancellationRequested();
+                    }
+                },
+                cts.Token);
+            await Task.Delay(100);
+            cts.Cancel();
+            guard.Dispose();
+
+            await Task.Delay(200);
+            Assert.Equal(TaskStatus.Canceled, task.Status);
+        }
+
         private static void DoNothing()
         {
         }
