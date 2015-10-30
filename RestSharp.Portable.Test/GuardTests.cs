@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -64,6 +65,25 @@ namespace RestSharp.Portable.Test
             var resultsData = results.ToArray();
             Assert.Equal(1, resultsData[0]);
             Assert.Equal(2, resultsData[1]);
+        }
+
+        [Fact]
+        public async void TestGuardLockMultipleDispose()
+        {
+            var guard = new AsyncLock();
+            var task = Task.Run(
+                async () =>
+                {
+                    using (await guard.LockAsync(CancellationToken.None))
+                    {
+                        await Task.Delay(100);
+                        return Int32.MaxValue;
+                    }
+                });
+
+            await Task.Delay(50);
+            await Task.WhenAll(Enumerable.Repeat(Task.Run((Action)guard.Dispose), 100));
+            Assert.Equal(Int32.MaxValue, await task);
         }
 
         [Fact]
