@@ -49,10 +49,11 @@ namespace RestSharp.Portable
         {
             lock (_syncObject)
             {
-                if (_isDisposed)
-                    return;
-                _lock.Dispose();
-                _isDisposed = true;
+                if (_isDisposed == false)
+                {
+                    _isDisposed = true;
+                    _lock.Dispose();
+                }
             }
         }
 
@@ -67,11 +68,14 @@ namespace RestSharp.Portable
 
             public void Dispose()
             {
+                if (_toRelease._isDisposed == false)
+                {
 #if PCL || SILVERLIGHT || NET40
-                _toRelease._lock.Set();
+                    _toRelease._lock.Set();
 #else
-                _toRelease._lock.Release();
+                    _toRelease._lock.Release();
 #endif
+                }
             }
         }
     }
