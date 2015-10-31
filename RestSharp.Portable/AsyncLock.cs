@@ -6,8 +6,6 @@ namespace RestSharp.Portable
 {
     internal sealed class AsyncLock : IDisposable
     {
-        private readonly object _syncObject = new object();
-
 #if PCL || SILVERLIGHT || NET40
         private readonly AutoResetEvent _lock = new AutoResetEvent(true);
 #else
@@ -15,7 +13,7 @@ namespace RestSharp.Portable
 #endif
         private readonly Task<IDisposable> _releaser;
 
-        private bool _isDisposed;
+        private int _isDisposed = 0;
 
         public AsyncLock()
         {
@@ -47,12 +45,9 @@ namespace RestSharp.Portable
 
         public void Dispose()
         {
-            lock (_syncObject)
+            if (Interlocked.CompareExchange(ref _isDisposed, 1, 0) == 0)
             {
-                if (_isDisposed)
-                    return;
                 _lock.Dispose();
-                _isDisposed = true;
             }
         }
 
@@ -67,11 +62,14 @@ namespace RestSharp.Portable
 
             public void Dispose()
             {
+                if (_toRelease._isDisposed == 0)
+                {
 #if PCL || SILVERLIGHT || NET40
-                _toRelease._lock.Set();
+                    _toRelease._lock.Set();
 #else
-                _toRelease._lock.Release();
+                    _toRelease._lock.Release();
 #endif
+                }
             }
         }
     }
