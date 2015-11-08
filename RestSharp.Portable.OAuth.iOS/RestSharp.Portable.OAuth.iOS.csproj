@@ -49,6 +49,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="JetBrains.Annotations.PCL328, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.10.0.0\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\JetBrains.Annotations.PCL328.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
@@ -60,6 +64,9 @@
       <Project>{5dc024cb-40c9-4573-8a51-05d80e703fe7}</Project>
       <Name>RestSharp.Portable.Core.AsyncPCL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems')" />
   <Import Project="..\RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems" Label="Shared" />
