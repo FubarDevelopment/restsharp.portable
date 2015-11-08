@@ -1,4 +1,4 @@
-# Portable RestSharp #
+﻿# Portable RestSharp #
 
 [![Join the chat at https://gitter.im/FubarDevelopment/restsharp.portable](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FubarDevelopment/restsharp.portable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -19,6 +19,13 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 * Support for WebRequest as back-end for RestSharp.Portable
 
 # Changes #
+
+## 3.0.0 beta 11 ##
+
+* Async locking fixes (provided by [evnik](https://github.com/evnik))
+* OAuth 1.0 fixes (required for Twitter)
+  * UTF-8 encoding for characters like \u2764\uFE0F (❤️)
+  * Use [EscapeUriString](https://msdn.microsoft.com/de-de/library/system.uri.escapeuristring.aspx) compatible URL encoding for query parameters
 
 ## 3.0.0 beta 09 ##
 
