@@ -13,7 +13,7 @@ namespace RestSharp.Portable.OAuth1.Tests
     public class AuthenticatorTests
     {
         [Fact]
-        public async Task ProtectedResourceQueryUtf8()
+        public async Task ProtectedResourceQueryComplexUtf8()
         {
             var auth = OAuth1Authenticator.ForProtectedResource("consumer-key", "consumer-secret", "access-token", "access-token-secret");
             auth.RandomNumberGenerator = new MyRandomNumberGenerator();
@@ -25,6 +25,21 @@ namespace RestSharp.Portable.OAuth1.Tests
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"rXtn0AUYLME80k3dLcizx3wNLxk%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
+        }
+
+        [Fact]
+        public async Task ProtectedResourceQuerySimpleUtf8()
+        {
+            var auth = OAuth1Authenticator.ForProtectedResource("consumer-key", "consumer-secret", "access-token", "access-token-secret");
+            auth.RandomNumberGenerator = new MyRandomNumberGenerator();
+            auth.CreateTimestampFunc = () => ToUnixTime(new DateTime(2015, 11, 8, 11, 12, 13)).ToString();
+            var client = new TestRestClient();
+            var request = new RestRequest("test", Method.POST);
+            request.AddParameter("status", "☺", ParameterType.QueryString);
+            await auth.PreAuthenticate(client, request, null);
+            var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
+            Assert.NotNull(header);
+            Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"SIDMGnDWsGNw8XKV9WrrdAgynSE%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
         }
 
         private static long ToUnixTime(DateTime dateTime)
