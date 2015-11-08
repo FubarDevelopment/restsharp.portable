@@ -5,7 +5,7 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{37AA1EA7-CA0D-46A0-AB54-2685C56406F8}</ProjectGuid>
+    <ProjectGuid>{B8F1CDC3-937E-4966-9C2D-788B923E66E9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RestSharp.Portable.WebRequest</RootNamespace>
@@ -67,8 +67,10 @@
     <None Include="..\RestSharp.Portable.snk">
       <Link>RestSharp.Portable.snk</Link>
     </None>
+    <None Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </None>
     <None Include="packages.config" />
-    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Annotations.PCL328, Version=10.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
