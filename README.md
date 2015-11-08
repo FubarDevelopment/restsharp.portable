@@ -24,7 +24,7 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 * Async locking fixes (provided by [evnik](https://github.com/evnik))
 * OAuth 1.0 fixes (required for Twitter)
-  * UTF-8 encoding for characters like \u2764\uFE0F (❤️)
+  * UTF-8 encoding for characters like ```\u2764\uFE0F``` (❤️)
   * Use [EscapeUriString](https://msdn.microsoft.com/de-de/library/system.uri.escapeuristring.aspx) compatible URL encoding for query parameters
 
 ## 3.0.0 beta 09 ##
