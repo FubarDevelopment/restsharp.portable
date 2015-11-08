@@ -21,6 +21,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
+using JetBrains.Annotations;
+
 using RestSharp.Portable.Authenticators.OAuth;
 using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
 
@@ -73,6 +75,12 @@ namespace RestSharp.Portable.Authenticators
         /// Gets or sets the function to create a timestamp
         /// </summary>
         public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
+
+        /// <summary>
+        /// Gets or sets an alternative random number generator (used for Nonce generation)
+        /// </summary>
+        [CanBeNull]
+        public IRandom RandomNumberGenerator { get; set; }
 
         internal OAuthType Type { get; set; }
 
@@ -288,22 +296,23 @@ namespace RestSharp.Portable.Authenticators
             return Task.Factory.StartNew(() =>
             {
                 var workflow = new OAuthWorkflow
-                    {
-                        ConsumerKey = ConsumerKey,
-                        ConsumerSecret = ConsumerSecret,
-                        ParameterHandling = ParameterHandling,
-                        SignatureProvider = SignatureProvider,
-                        SignatureTreatment = SignatureTreatment,
-                        Verifier = Verifier,
-                        Version = Version,
-                        CallbackUrl = CallbackUrl,
-                        SessionHandle = SessionHandle,
-                        Token = Token,
-                        TokenSecret = TokenSecret,
-                        ClientUsername = ClientUsername,
-                        ClientPassword = ClientPassword,
-                        CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp
-                    };
+                {
+                    ConsumerKey = ConsumerKey,
+                    ConsumerSecret = ConsumerSecret,
+                    ParameterHandling = ParameterHandling,
+                    SignatureProvider = SignatureProvider,
+                    SignatureTreatment = SignatureTreatment,
+                    Verifier = Verifier,
+                    Version = Version,
+                    CallbackUrl = CallbackUrl,
+                    SessionHandle = SessionHandle,
+                    Token = Token,
+                    TokenSecret = TokenSecret,
+                    ClientUsername = ClientUsername,
+                    ClientPassword = ClientPassword,
+                    CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp,
+                    RandomNumberGenerator = RandomNumberGenerator ?? OAuthTools.DefaultRandomNumberGenerator,
+                };
                 AddOAuthData(client, request, workflow);
             });
         }

@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
 
 namespace RestSharp.Portable.Authenticators.OAuth
@@ -28,6 +30,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
     /// </summary>
     internal class OAuthWorkflow
     {
+        [NotNull]
         public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
         public string Version { get; set; }
         public string ConsumerKey { get; set; }
@@ -40,6 +43,8 @@ namespace RestSharp.Portable.Authenticators.OAuth
         public ISignatureProvider SignatureProvider { get; set; }
         public OAuthSignatureTreatment SignatureTreatment { get; set; }
         public OAuthParameterHandling ParameterHandling { get; set; }
+        [NotNull]
+        public IRandom RandomNumberGenerator { get; set; }
         public string ClientUsername { get; set; }
         public string ClientPassword { get; set; }
         /// <summary>
@@ -90,7 +95,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 parameters = new WebParameterCollection();
             }
             var timestamp = CreateTimestampFunc();
-            var nonce = OAuthTools.GetNonce();
+            var nonce = OAuthTools.GetNonce(RandomNumberGenerator);
             AddAuthParameters(parameters, timestamp, nonce);
             var signatureBase = OAuthTools.ConcatenateRequestElements(method, RequestTokenUrl, parameters);
             var signature = OAuthTools.GetSignature(SignatureProvider, SignatureTreatment, signatureBase, ConsumerSecret);
@@ -141,7 +146,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             }
             var uri = new Uri(AccessTokenUrl);
             var timestamp = CreateTimestampFunc();
-            var nonce = OAuthTools.GetNonce();
+            var nonce = OAuthTools.GetNonce(RandomNumberGenerator);
             AddAuthParameters(parameters, timestamp, nonce);
             var signatureBase = OAuthTools.ConcatenateRequestElements(method, uri.ToString(), parameters);
             var signature = OAuthTools.GetSignature(SignatureProvider, SignatureTreatment, signatureBase, ConsumerSecret, TokenSecret);
@@ -182,7 +187,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             }
             var uri = new Uri(AccessTokenUrl);
             var timestamp = CreateTimestampFunc();
-            var nonce = OAuthTools.GetNonce();
+            var nonce = OAuthTools.GetNonce(RandomNumberGenerator);
             AddXAuthParameters(parameters, timestamp, nonce);
             var signatureBase = OAuthTools.ConcatenateRequestElements(method, uri.ToString(), parameters);
             var signature = OAuthTools.GetSignature(SignatureProvider, SignatureTreatment, signatureBase, ConsumerSecret);
@@ -228,7 +233,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 }
             }
             var timestamp = CreateTimestampFunc();
-            var nonce = OAuthTools.GetNonce();
+            var nonce = OAuthTools.GetNonce(RandomNumberGenerator);
             AddAuthParameters(parameters, timestamp, nonce);
             var signatureBase = OAuthTools.ConcatenateRequestElements(method, url, parameters);
             var signature = OAuthTools.GetSignature(

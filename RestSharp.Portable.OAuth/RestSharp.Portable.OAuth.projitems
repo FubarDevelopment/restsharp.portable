@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\Extensions\TimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\HttpPostParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\HttpPostParameterType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OAuth\IRandom.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthCreateTimestampDelegate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthParameterHandling.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OAuth\OAuthSignatureTreatment.cs" />

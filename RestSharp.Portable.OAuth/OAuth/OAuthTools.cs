@@ -18,6 +18,8 @@ using System;
 using System.Linq;
 using System.Text;
 
+using JetBrains.Annotations;
+
 using RestSharp.Portable.Authenticators.OAuth.SignatureProviders;
 
 namespace RestSharp.Portable.Authenticators.OAuth
@@ -30,15 +32,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
 
         private const string _lower = "abcdefghijklmnopqrstuvwxyz";
 
-        private const string _upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-        private const string _alphaNumeric = _upper + _lower + _digit;
-
-        private const string _unreserved = _alphaNumeric + "-._~";
-
-        private static readonly Random _random;
-
-        private static readonly object _randomLock = new object();
+        private static readonly UrlEscapeUtility _escapeUtility = new UrlEscapeUtility(false);
 
         /// <summary>
         /// All text parameters are UTF-8 encoded (per section 5.1).
@@ -54,11 +48,14 @@ namespace RestSharp.Portable.Authenticators.OAuth
 
         private static readonly string[] _uriRfc3968EscapedHex = { "%21", "%2A", "%27", "%28", "%29" };
 
+        /// <summary>
+        /// Gets or sets the random number generator (can be changed for tests)
+        /// </summary>
+        public static IRandom DefaultRandomNumberGenerator { get; internal set; }
+
         static OAuthTools()
         {
-            var key = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
-            var seed = BitConverter.ToInt32(key, 0);
-            _random = new Random(seed);
+            DefaultRandomNumberGenerator = new DefaultRandom();
         }
 
         /// <summary>
@@ -66,17 +63,10 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// </summary>
         /// <a href="http://oauth.net/core/1.0#nonce"/>
         /// <returns></returns>
-        public static string GetNonce()
+        public static string GetNonce([NotNull] IRandom random)
         {
             const string chars = (_lower + _digit);
-            var nonce = new char[16];
-            lock (_randomLock)
-            {
-                for (var i = 0; i < nonce.Length; i++)
-                {
-                    nonce[i] = chars[_random.Next(0, chars.Length)];
-                }
-            }
+            var nonce = random.Next(0, chars.Length, 16).Select(n => chars[n]).ToArray();
             return new string(nonce);
         }
 
@@ -144,11 +134,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         public static string UrlEncodeStrict(string value)
         {
             // [JD]: We need to escape the apostrophe as well or the signature will fail
-            var original = value;
-            var ret = original.ToCharArray()
-                .Where(c => _unreserved.IndexOf(c) == -1 && c != '%')
-                .Aggregate(value, (current, c) => current.Replace(c.ToString(), c.ToString().PercentEncode()));
-            return ret.Replace("%%", "%25%"); // Revisit to encode actual %'s
+            return _escapeUtility.Escape(value, _encoding);
         }
 
         /// <summary>
@@ -173,7 +159,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <returns>A sorted parameter collection</returns>
         public static WebParameterCollection SortParametersExcludingSignature(WebParameterCollection parameters)
         {
-            var copy = new WebParameterCollection(parameters);
+            var copy = new WebParameterCollection(parameters.Select(x => new WebPair(x.Name, x.Value)));
             var exclusions = copy.Where(n => string.Equals(n.Name, "oauth_signature", StringComparison.OrdinalIgnoreCase));
             copy.RemoveAll(exclusions);
             copy.ForEach(p => { p.Name = UrlEncodeStrict(p.Name); p.Value = UrlEncodeStrict(p.Value); });
@@ -309,6 +295,50 @@ namespace RestSharp.Portable.Authenticators.OAuth
                              ? UrlEncodeRelaxed(signature)
                              : signature;
             return result;
+        }
+
+        private class DefaultRandom : IRandom
+        {
+            private static readonly object _randomLock = new object();
+
+            private readonly Random _random;
+
+            public DefaultRandom()
+            {
+                var key = BitConverter.GetBytes(DateTime.UtcNow.Ticks);
+                var seed = BitConverter.ToInt32(key, 0);
+                _random = new Random(seed);
+            }
+
+            /// <summary>
+            /// Gets the next random value with <paramref name="minValue"/> &lt;= n &lt; <paramref name="maxValue"/>
+            /// </summary>
+            /// <param name="minValue">The minimum value (inclusive)</param>
+            /// <param name="maxValue">The maximum value (exclusive)</param>
+            /// <returns>the next random value</returns>
+            public int Next(int minValue, int maxValue)
+            {
+                lock (_randomLock)
+                    return _random.Next(minValue, maxValue);
+            }
+
+            /// <summary>
+            /// Gets the next <paramref name="count"/> random values with <paramref name="minValue"/> &lt;= n &lt; <paramref name="maxValue"/>
+            /// </summary>
+            /// <param name="minValue">The minimum value (inclusive)</param>
+            /// <param name="maxValue">The maximum value (exclusive)</param>
+            /// <param name="count">The number of random values to generate</param>
+            /// <returns>the next random values</returns>
+            public int[] Next(int minValue, int maxValue, int count)
+            {
+                var result = new int[count];
+                lock (_randomLock)
+                {
+                    for (int i = 0; i != count; ++i)
+                        result[i] = _random.Next(minValue, maxValue);
+                }
+                return result;
+            }
         }
     }
 }

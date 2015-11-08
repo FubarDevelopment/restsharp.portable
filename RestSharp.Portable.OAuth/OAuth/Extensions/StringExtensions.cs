@@ -17,30 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace RestSharp.Portable.Authenticators.OAuth.Extensions
 {
     internal static class StringExtensions
     {
-        public static byte[] GetBytes(this string input)
-        {
-            return Encoding.UTF8.GetBytes(input);
-        }
-
-        public static string PercentEncode(this string s)
-        {
-            var bytes = s.GetBytes();
-            var sb = new StringBuilder();
-            foreach (var b in bytes)
-            {
-                // [DC]: Support proper encoding of special characters (\n\r\t\b)
-                sb.Append(string.Format("%{0:X2}", b));
-            }
-
-            return sb.ToString();
-        }
-
         public static IDictionary<string, string> ParseQueryString(this string query)
         {
             // [DC]: This method does not URL decode, and cannot handle decoded input
