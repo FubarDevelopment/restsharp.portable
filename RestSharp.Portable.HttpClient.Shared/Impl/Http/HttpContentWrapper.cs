@@ -61,7 +61,10 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         protected override void Dispose(bool disposing)
         {
             if (_isDisposed)
+            {
                 return;
+            }
+
             _isDisposed = false;
             base.Dispose(disposing);
             Content.Dispose();

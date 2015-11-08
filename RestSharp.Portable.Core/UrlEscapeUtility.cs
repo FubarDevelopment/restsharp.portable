@@ -9,6 +9,9 @@ using System.Web;
 
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// Helper class for URL escaping of data
+    /// </summary>
     internal class UrlEscapeUtility
     {
         private static readonly Encoding s_defaultEncoding = new UTF8Encoding(false);
@@ -31,11 +34,18 @@ namespace RestSharp.Portable
 
         private readonly bool _allowNativeConversion;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlEscapeUtility"/> class.
+        /// </summary>
         public UrlEscapeUtility()
             : this(true)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UrlEscapeUtility"/> class.
+        /// </summary>
+        /// <param name="allowNativeConversion">Is the usage of the native converison functions allowed?</param>
         public UrlEscapeUtility(bool allowNativeConversion)
         {
             _allowNativeConversion = allowNativeConversion;
@@ -108,7 +118,10 @@ namespace RestSharp.Portable
             var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;
             ISet<byte> allowedBytes;
             if (!s_allowedBytes.TryGetValue(allowedBytesIndex, out allowedBytes))
+            {
                 allowedBytes = s_allowedBytes[UrlEscapeFlags.Default];
+            }
+
             return ComputeLength(data, flags, allowedBytes);
         }
 
@@ -267,12 +280,17 @@ namespace RestSharp.Portable
             var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;
             ISet<byte> allowedBytes;
             if (!s_allowedBytes.TryGetValue(allowedBytesIndex, out allowedBytes))
+            {
                 allowedBytes = s_allowedBytes[UrlEscapeFlags.Default];
+            }
 
             var builderVariant = flags & UrlEscapeFlags.BuilderVariantMask;
             EscapeBuilderDelegate builder;
             if (!s_escapeBuilders.TryGetValue(builderVariant, out builder))
+            {
                 builder = EscapeToBytes2;
+            }
+
             return builder(data, flags, hexChars, allowedBytes);
         }
 
@@ -297,16 +315,24 @@ namespace RestSharp.Portable
             {
                 var v = data[i];
                 if (allowedBytes.Contains(v))
+                {
                     computedLength += 1;
+                }
                 else if (v == 0x20)
                 {
                     if (escapeSpaceAsPlus)
+                    {
                         computedLength += 1;
+                    }
                     else
+                    {
                         computedLength += 3;
+                    }
                 }
                 else
+                {
                     computedLength += 3;
+                }
             }
 
             return computedLength;
@@ -393,7 +419,9 @@ namespace RestSharp.Portable
             {
                 var v = data[i];
                 if (allowedBytes.Contains(v))
+                {
                     continue;
+                }
 
                 var validBytes = i - afterLastValid;
                 if (validBytes != 0)
@@ -475,10 +503,14 @@ namespace RestSharp.Portable
         {
             const int MaxLength = 32766;
             if (input == null)
+            {
                 throw new ArgumentNullException("input");
+            }
 
             if (input.Length <= MaxLength)
+            {
                 return Uri.EscapeDataString(input);
+            }
 
             StringBuilder sb = new StringBuilder(input.Length * 2);
             int index = 0;

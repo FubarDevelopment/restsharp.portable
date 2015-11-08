@@ -19,9 +19,15 @@ namespace RestSharp.Portable.Authenticators
         public override bool CanHandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             if (HasAuthorizationToken)
+            {
                 return false;
+            }
+
             if (response.StatusCode == HttpStatusCode.NotFound)
+            {
                 return true;
+            }
+
             return base.CanHandleChallenge(client, request, credentials, response);
         }
     }

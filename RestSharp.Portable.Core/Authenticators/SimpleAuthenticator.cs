@@ -54,7 +54,10 @@ namespace RestSharp.Portable.Authenticators
         {
             var cred = credentials?.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
             if (cred == null)
+            {
                 return false;
+            }
+
             return true;
         }
 
@@ -82,10 +85,16 @@ namespace RestSharp.Portable.Authenticators
             return Task.Factory.StartNew(() =>
             {
                 if (credentials == null)
+                {
                     throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
+                }
+
                 var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
                 if (cred == null)
+                {
                     throw new InvalidOperationException($"No credentials provided for the {AuthenticationMethod} authentication type.");
+                }
+
                 request.AddParameter(_usernameKey, cred.UserName, _parameterType);
                 request.AddParameter(_passwordKey, cred.Password, _parameterType);
             });

@@ -4,8 +4,19 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable.WebRequest
 {
+    /// <summary>
+    /// Task helper functions
+    /// </summary>
     internal static class TaskExtensions
     {
+        /// <summary>
+        /// Handle a cancellation when we have an non-cancellable asynchronous operation
+        /// </summary>
+        /// <typeparam name="TResult">The return type of the asynchronous operation</typeparam>
+        /// <param name="asyncTask">The asynchronous operation to handle the cancellation for</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <param name="cancellationAction">The action to perform when a cancellation occurred</param>
+        /// <returns>The result of the operation</returns>
         public static async Task<TResult> HandleCancellation<TResult>(
             this Task<TResult> asyncTask,
             CancellationToken cancellationToken,

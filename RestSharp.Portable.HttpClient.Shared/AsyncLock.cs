@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable.HttpClient
 {
+    /// <summary>
+    /// Asynchronous locking
+    /// </summary>
     internal sealed class AsyncLock : IDisposable
     {
 #if PCL || SILVERLIGHT || NET40
@@ -15,6 +18,9 @@ namespace RestSharp.Portable.HttpClient
 
         private int _isDisposed = 0;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AsyncLock"/> class.
+        /// </summary>
         public AsyncLock()
         {
             var releaserTaskSource = new TaskCompletionSource<IDisposable>();
@@ -22,6 +28,11 @@ namespace RestSharp.Portable.HttpClient
             _releaser = releaserTaskSource.Task;
         }
 
+        /// <summary>
+        /// Acquires an asynchronous lock
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The asynchronously acquired lock</returns>
         public Task<IDisposable> LockAsync(CancellationToken cancellationToken)
         {
 #if PCL || SILVERLIGHT || NET40
@@ -43,6 +54,7 @@ namespace RestSharp.Portable.HttpClient
                            TaskScheduler.Default);
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             if (Interlocked.CompareExchange(ref _isDisposed, 1, 0) == 0)

@@ -96,7 +96,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         public void EnsureSuccessStatusCode()
         {
             if (_exception != null)
+            {
                 throw new WebException(_exception.Message, _exception.InnerException, _exception.Status, _exception.Response);
+            }
         }
 
         /// <summary>
@@ -114,7 +116,10 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
+            {
                 return;
+            }
+
             ResponseMessage?.Dispose();
             _requestMessage.Dispose();
         }

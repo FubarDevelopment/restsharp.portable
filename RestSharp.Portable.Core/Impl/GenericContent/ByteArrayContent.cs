@@ -7,10 +7,17 @@ using RestSharp.Portable.Impl;
 
 namespace RestSharp.Portable.Content
 {
+    /// <summary>
+    /// A <see cref="IHttpContent"/> implementation for a byte array
+    /// </summary>
     public class ByteArrayContent : IHttpContent
     {
         private readonly byte[] _data;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ByteArrayContent"/> class.
+        /// </summary>
+        /// <param name="data">The underlying binary data</param>
         public ByteArrayContent(byte[] data)
         {
             _data = data;
@@ -23,10 +30,17 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; }
 
+        /// <summary>
+        /// Gets the content length
+        /// </summary>
         public int Length => _data.Length;
 
+        /// <summary>
+        /// Gets the content
+        /// </summary>
         public IEnumerable<byte> Data => _data;
 
+        /// <inheritdoc/>
         public void Dispose()
         {
         }

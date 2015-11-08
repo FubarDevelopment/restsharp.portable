@@ -9,6 +9,9 @@ using RestSharp.Portable.Impl;
 
 namespace RestSharp.Portable.Content
 {
+    /// <summary>
+    /// A <see cref="IHttpContent"/> implementation for a string.
+    /// </summary>
     public class StringContent : IHttpContent
     {
         private readonly string _value;
@@ -17,6 +20,11 @@ namespace RestSharp.Portable.Content
 
         private byte[] _buffer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringContent"/> class.
+        /// </summary>
+        /// <param name="value">The value of this HTTP content element</param>
+        /// <param name="encoding">The encoding when the data has to be serializes into bytes</param>
         public StringContent([NotNull] string value, [NotNull] Encoding encoding)
         {
             _value = value;
@@ -30,6 +38,7 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
         }

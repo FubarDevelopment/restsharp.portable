@@ -122,7 +122,10 @@ namespace RestSharp.Portable
             {
                 var semicolonPos = contentType.IndexOf(';');
                 if (semicolonPos != -1)
+                {
                     contentType = contentType.Substring(0, semicolonPos);
+                }
+
                 ContentType = contentType.Trim();
             }
 
@@ -131,7 +134,9 @@ namespace RestSharp.Portable
             {
                 var encoding = Client.GetEncoding(contentEncodings);
                 if (encoding != null)
+                {
                     data = encoding.Decode(data);
+                }
             }
 
             RawBytes = data;

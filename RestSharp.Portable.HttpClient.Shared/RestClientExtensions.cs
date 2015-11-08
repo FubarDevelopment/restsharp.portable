@@ -43,7 +43,9 @@ namespace RestSharp.Portable.HttpClient
             }
 
             if (content == null)
+            {
                 return null;
+            }
 
             return new DefaultHttpContent(content);
         }
@@ -127,7 +129,9 @@ namespace RestSharp.Portable.HttpClient
                         var value = parameter.ToRequestString();
                         data = new StringContent(value, parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
                         if (!string.IsNullOrEmpty(parameter.ContentType))
+                        {
                             data.Headers.ContentType = MediaTypeHeaderValue.Parse(parameter.ContentType);
+                        }
 
                         multipartContent.Add(data, parameter.Name);
                     }

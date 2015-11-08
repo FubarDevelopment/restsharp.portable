@@ -36,7 +36,10 @@ namespace RestSharp.Portable.Serializers
             get
             {
                 if (_contentType == null)
+                {
                     return $"text/xml; charset={XmlWriterSettings.Encoding.WebName}";
+                }
+
                 return _contentType;
             }
             set

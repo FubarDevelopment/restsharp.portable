@@ -20,11 +20,17 @@ namespace RestSharp.Portable
 
         private static byte[] s_unreserved;
 
+        /// <summary>
+        /// Get all bytes that represent alpha numeric characters
+        /// </summary>
         internal static byte[] AlphaNum
         {
             get { return s_alphanum ?? (s_alphanum = s_alpha.Union(s_digit).ToArray()); }
         }
 
+        /// <summary>
+        /// Get all bytes that repesent both alpha numeric and unreserved characters
+        /// </summary>
         internal static byte[] Unreserved
         {
             get { return s_unreserved ?? (s_unreserved = AlphaNum.Union(s_mark).ToArray()); }

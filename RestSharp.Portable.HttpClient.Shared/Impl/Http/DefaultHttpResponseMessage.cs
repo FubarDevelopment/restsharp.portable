@@ -23,7 +23,10 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         {
             ResponseMessage = responseMessage;
             if (responseMessage.RequestMessage != null)
+            {
                 _requestMessage = new DefaultHttpRequestMessage(responseMessage.RequestMessage);
+            }
+
             Content = responseMessage.Content.AsRestHttpContent();
             _responseHttpHeaders = new DefaultHttpHeaders(responseMessage.Headers);
         }
@@ -86,7 +89,10 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
+            {
                 return;
+            }
+
             ResponseMessage.Dispose();
             _requestMessage.Dispose();
         }

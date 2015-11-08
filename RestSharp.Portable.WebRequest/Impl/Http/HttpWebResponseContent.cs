@@ -9,6 +9,9 @@ using JetBrains.Annotations;
 
 namespace RestSharp.Portable.WebRequest.Impl.Http
 {
+    /// <summary>
+    /// A <see cref="IHttpContent"/> implementation for a <see cref="HttpWebResponse"/>
+    /// </summary>
     internal class HttpWebResponseContent : IHttpContent
     {
         private readonly HttpWebResponse _response;
@@ -25,6 +28,11 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
         private long? _contentLength;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpWebResponseContent"/> class.
+        /// </summary>
+        /// <param name="headers">The HTTP headers for the response content</param>
+        /// <param name="response">The response</param>
         public HttpWebResponseContent([NotNull] IHttpHeaders headers, [CanBeNull] HttpWebResponse response)
         {
             Headers = headers;
@@ -34,7 +42,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             {
                 var headerValue = contentLength.FirstOrDefault();
                 if (headerValue != null)
+                {
                     _contentLength = long.Parse(headerValue);
+                }
             }
         }
 
@@ -52,7 +62,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         {
             LoadIntoBuffer(null, 4000);
             foreach (var buffer in _buffers)
+            {
                 await stream.WriteAsync(buffer, 0, buffer.Length);
+            }
         }
 
         /// <summary>
@@ -148,9 +160,15 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
+            {
                 return;
+            }
+
             if (_isDisposed)
+            {
                 return;
+            }
+
             _isDisposed = true;
             _response?.Dispose();
         }
@@ -158,17 +176,29 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         private void LoadIntoBuffer(long? size, int readBlockSize)
         {
             if (_endOfStreamReached)
+            {
                 return;
+            }
+
             if (_bufferSize >= size)
+            {
                 return;
+            }
+
             if (_response == null)
+            {
                 return;
+            }
 
             if (_responseStream == null)
+            {
                 _responseStream = _response.GetResponseStream();
+            }
 
             if (_responseStream == null)
+            {
                 return;
+            }
 
             while (!_endOfStreamReached && (size == null || _bufferSize < size))
             {

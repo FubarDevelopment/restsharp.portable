@@ -2,10 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using RestSharp.Portable.Crypto;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using RestSharp.Portable.Crypto;
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -71,6 +72,7 @@ namespace RestSharp.Portable.Authenticators
         {
             Undefined = 0,
             MD5,
+
             // ReSharper disable once InconsistentNaming
             MD5sess,
         }
@@ -126,7 +128,9 @@ namespace RestSharp.Portable.Authenticators
         public async Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
             if (!CanPreAuthenticate(client, request, credentials))
+            {
                 throw new InvalidOperationException();
+            }
 
             var digestHeader = await GetDigestHeader(client, request, _authCredential);
             var authHeaderValue = $"{AuthenticationMethod} {digestHeader}";
@@ -145,18 +149,24 @@ namespace RestSharp.Portable.Authenticators
         {
             // No credentials defined?
             if (credentials == null)
+            {
                 return false;
+            }
 
             // No challenge header found?
             var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
             if (authModeInfo == null)
+            {
                 return false;
+            }
 
             // Search for credential for request URI
             var responseUri = client.GetRequestUri(request, response);
             var credential = credentials.GetCredential(responseUri, AuthenticationMethod);
             if (credential == null)
+            {
                 return false;
+            }
 
             // Did we already try to use the found credentials?
             if (ReferenceEquals(credential, _authCredential))
@@ -181,7 +191,9 @@ namespace RestSharp.Portable.Authenticators
             return Task.Factory.StartNew(() =>
             {
                 if (!CanHandleChallenge(client, request, credentials, response))
+                {
                     throw new InvalidOperationException();
+                }
 
                 var responseUri = client.GetRequestUri(request, response);
                 _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
@@ -200,11 +212,16 @@ namespace RestSharp.Portable.Authenticators
         {
             byte[] hash;
             using (var digest = MD5.Create())
+            {
                 hash = digest.ComputeHash(inputBytes);
+            }
 
             var sb = new StringBuilder();
             foreach (var b in hash)
+            {
                 sb.Append(b.ToString("x2"));
+            }
+
             return sb.ToString();
         }
 
@@ -216,13 +233,19 @@ namespace RestSharp.Portable.Authenticators
             {
                 var qval = matchHeader.Groups["qval"];
                 if (qval.Success)
+                {
                     return qval.Value;
+                }
+
                 var val = matchHeader.Groups["val"];
                 return val.Value.Trim();
             }
 
             if (defaultValue == null)
+            {
                 throw new WebException($"Header {varName} not found", WebExceptionStatus.UnknownError);
+            }
+
             return defaultValue;
         }
 
@@ -235,7 +258,9 @@ namespace RestSharp.Portable.Authenticators
             var pathAndQuery = uri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
             if (_algorithm == Algorithm.Undefined)
+            {
                 throw new InvalidOperationException("Algorithm not set");
+            }
 
             string ha2, digestResponse;
 
@@ -311,7 +336,10 @@ namespace RestSharp.Portable.Authenticators
                 .AppendFormat(", uri=\"{0}\"", pathAndQuery)
                 .AppendFormat(", nc={0:D08}", _nc);
             if (algorithm != "MD5")
+            {
                 result.AppendFormat(", algorithm=\"{0}\"", algorithm);
+            }
+
             if (!string.IsNullOrEmpty(qop))
             {
                 result
@@ -320,10 +348,14 @@ namespace RestSharp.Portable.Authenticators
             }
 
             if (!string.IsNullOrEmpty(_opaque))
+            {
                 result
                     .AppendFormat(", opaque=\"{0}\"", _opaque);
+            }
+
             result
                 .AppendFormat(", response=\"{0}\"", digestResponse);
+
             return result.ToString();
         }
 

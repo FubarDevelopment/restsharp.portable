@@ -1,4 +1,23 @@
-﻿using System;
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1116
+#pragma warning disable SA1119
+#pragma warning disable SA1120
+#pragma warning disable SA1131
+#pragma warning disable SA1201
+#pragma warning disable SA1202
+#pragma warning disable SA1203
+#pragma warning disable SA1306
+#pragma warning disable SA1400
+#pragma warning disable SA1401
+#pragma warning disable SA1502
+#pragma warning disable SA1512
+#pragma warning disable SA1515
+#pragma warning disable SA1600
+#pragma warning disable SA1616
+
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 // ReSharper disable InconsistentNaming
@@ -40,7 +59,8 @@ namespace RestSharp.Portable.Crypto
     /// These notices must be retained in any copies of any part of this
     /// documentation and/or software.
     /// </remarks>
-    class MD5Managed : MD5
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1515:Single-line comment must be preceded by blank line", Justification = "<Ausstehend>")]
+    internal class MD5Managed : MD5
     {
         // Current context
         private readonly MD5_CTX _context = new MD5_CTX();
@@ -52,7 +72,7 @@ namespace RestSharp.Portable.Crypto
         private bool _hashFinalCalled;
 
         /// <summary>
-        /// Initializes a new instance.
+        /// Initializes a new instance of the <see cref="MD5Managed"/> class.
         /// </summary>
         public MD5Managed()
         {

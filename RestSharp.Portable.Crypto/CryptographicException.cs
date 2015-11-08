@@ -1,4 +1,11 @@
-﻿//
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1120
+#pragma warning disable SA1512
+#pragma warning disable SA1600
+
+//
 // System.Security.Cryptography.CryptographicException.cs
 //
 // Authors:
@@ -32,9 +39,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace RestSharp.Portable.Crypto
 {
-
-    [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
-    class CryptographicException : Exception
+    [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic", Justification = "External code")]
+    internal class CryptographicException : Exception
     {
         public CryptographicException()
             : base("Error occured during a cryptographic operation.")

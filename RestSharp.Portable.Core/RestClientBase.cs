@@ -76,8 +76,11 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Calls <see cref="Dispose(bool)"/> with <code>false</code>
+        /// Finalizes an instance of the <see cref="RestClientBase"/> class.
         /// </summary>
+        /// <remarks>
+        /// Calls <see cref="Dispose(bool)"/> with <code>false</code>
+        /// </remarks>
         ~RestClientBase()
         {
             Dispose(false);
@@ -282,16 +285,31 @@ namespace RestSharp.Portable
         public IDeserializer GetHandler(string contentType)
         {
             if (string.IsNullOrEmpty(contentType) && _contentHandlers.ContainsKey("*"))
+            {
                 return _contentHandlers["*"];
+            }
+
             if (contentType == null)
+            {
                 contentType = string.Empty;
+            }
+
             var semicolonIndex = contentType.IndexOf(';');
             if (semicolonIndex != -1)
+            {
                 contentType = contentType.Substring(0, semicolonIndex).TrimEnd();
+            }
+
             if (_contentHandlers.ContainsKey(contentType))
+            {
                 return _contentHandlers[contentType];
+            }
+
             if (_contentHandlers.ContainsKey("*"))
+            {
                 return _contentHandlers["*"];
+            }
+
             return null;
         }
 
@@ -372,12 +390,17 @@ namespace RestSharp.Portable
                 foreach (var encodingId in encodingIds)
                 {
                     if (_encodingHandlers.ContainsKey(encodingId))
+                    {
                         return _encodingHandlers[encodingId];
+                    }
                 }
             }
 
             if (_encodingHandlers.ContainsKey("*"))
+            {
                 return _encodingHandlers["*"];
+            }
+
             return null;
         }
 
@@ -438,11 +461,15 @@ namespace RestSharp.Portable
             while (true)
             {
                 if (Authenticator != null && Authenticator.CanPreAuthenticate(this, request, Credentials))
+                {
                     await Authenticator.PreAuthenticate(this, request, Credentials);
+                }
 
                 // Lazy initialization of the HTTP client
                 if (_httpClient == null)
+                {
                     _httpClient = HttpClientFactory.CreateClient(this, request);
+                }
 
                 bool failed = true;
                 var message = HttpClientFactory.CreateRequestMessage(this, request);
@@ -450,7 +477,9 @@ namespace RestSharp.Portable
                 {
                     var bodyData = GetContent(request);
                     if (bodyData != null)
+                    {
                         message.Content = bodyData;
+                    }
 
                     if (message.Content != null)
                     {
@@ -458,7 +487,10 @@ namespace RestSharp.Portable
                         foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && x.IsContentParameter()))
                         {
                             if (content.Headers.Contains(param.Name))
+                            {
                                 content.Headers.Remove(param.Name);
+                            }
+
                             if (param.ValidateOnAdd)
                             {
                                 content.Headers.Add(param.Name, param.ToRequestString());
@@ -473,7 +505,9 @@ namespace RestSharp.Portable
                     ModifyRequestBeforeAuthentication(_httpClient, message);
 
                     if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
+                    {
                         await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
+                    }
 
                     var response = await _httpClient.SendAsync(message, ct);
 
@@ -488,7 +522,9 @@ namespace RestSharp.Portable
                             }
 
                             if (!IgnoreResponseStatusCode)
+                            {
                                 response.EnsureSuccessStatusCode();
+                            }
                         }
 
                         failed = false;
@@ -498,9 +534,14 @@ namespace RestSharp.Portable
                         if (failed)
                         {
                             if (response != null)
+                            {
                                 response.Dispose();
+                            }
                             else
+                            {
                                 message.Dispose();
+                            }
+
                             message = null;
                         }
                     }
@@ -510,7 +551,9 @@ namespace RestSharp.Portable
                 finally
                 {
                     if (failed && message != null)
+                    {
                         message.Dispose();
+                    }
                 }
             }
         }
@@ -570,7 +613,10 @@ namespace RestSharp.Portable
             foreach (var parameter in DefaultParameters.Where(x => x.Type != ParameterType.HttpHeader))
             {
                 if (request.Parameters.Contains(parameter, comparer))
+                {
                     continue;
+                }
+
                 request.Parameters.Insert(startIndex++, parameter);
             }
         }

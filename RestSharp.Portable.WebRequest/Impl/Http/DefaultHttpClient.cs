@@ -91,9 +91,15 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             var uri = new Uri(BaseAddress, request.RequestUri);
             var wr = _httpClientFactory.CreateWebRequest(uri);
             if (wr.SupportsCookieContainer && CookieContainer != null)
+            {
                 wr.CookieContainer = CookieContainer;
+            }
+
             if (Credentials != null)
+            {
                 wr.Credentials = Credentials;
+            }
+
             wr.Method = request.Method.ToString();
 #if !PCL
             wr.Proxy = Proxy ?? System.Net.WebRequest.DefaultWebProxy;
@@ -132,7 +138,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 var value = string.Join(",", header.Value);
                 SetWebRequestHeaderValue(wr, header.Key, value);
                 if (!hasContentLength && string.Equals(header.Key, "content-length", StringComparison.OrdinalIgnoreCase))
+                {
                     hasContentLength = true;
+                }
             }
 
             if (request.Content != null)

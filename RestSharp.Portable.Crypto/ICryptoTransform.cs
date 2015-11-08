@@ -1,4 +1,23 @@
-﻿//
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1116
+#pragma warning disable SA1119
+#pragma warning disable SA1120
+#pragma warning disable SA1131
+#pragma warning disable SA1201
+#pragma warning disable SA1202
+#pragma warning disable SA1203
+#pragma warning disable SA1306
+#pragma warning disable SA1400
+#pragma warning disable SA1401
+#pragma warning disable SA1502
+#pragma warning disable SA1512
+#pragma warning disable SA1515
+#pragma warning disable SA1600
+#pragma warning disable SA1616
+
+//
 // System.Security.Cryptography ICryptoTransform interface
 //
 // Authors:
@@ -31,10 +50,8 @@ using System;
 
 namespace RestSharp.Portable.Crypto
 {
-
     interface ICryptoTransform : IDisposable
     {
-
         bool CanReuseTransform
         {
             get;
@@ -60,4 +77,3 @@ namespace RestSharp.Portable.Crypto
         byte[] TransformFinalBlock(byte[] inputBuffer, int inputOffset, int inputCount);
     }
 }
-

@@ -17,7 +17,8 @@
     </AndroidUseLatestPlatformSdk>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
-    <NuGetPackageImportStamp>1f7dfc46</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems')" />

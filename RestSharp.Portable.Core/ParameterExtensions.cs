@@ -70,6 +70,12 @@ namespace RestSharp.Portable
             return !string.IsNullOrEmpty(parameter.Name) && parameter.Name.StartsWith("Content-", StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Convert the given parameter into an encoded string
+        /// </summary>
+        /// <param name="parameter">The parameter value to convert into a URL encoded string</param>
+        /// <param name="spaceAsPlus">Replace the SPC (<code>#20</code>) character with a plus</param>
+        /// <returns>The URL encoded string</returns>
         internal static string ToEncodedString(this Parameter parameter, bool spaceAsPlus = false)
         {
             switch (parameter.Type)
@@ -88,15 +94,21 @@ namespace RestSharp.Portable
             var flags = spaceAsPlus ? UrlEscapeFlags.EscapeSpaceAsPlus : UrlEscapeFlags.Default;
 
             if (parameter.Value == null)
+            {
                 return string.Empty;
+            }
 
             var s = parameter.Value as string;
             if (s != null)
+            {
                 return UrlUtility.Escape(s, encoding, flags);
+            }
 
             var bytes = parameter.Value as byte[];
             if (bytes != null)
+            {
                 return UrlUtility.Escape(bytes, flags);
+            }
 
             return UrlUtility.Escape(parameter.ToRequestString(), encoding, flags);
         }

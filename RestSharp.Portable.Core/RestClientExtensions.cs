@@ -46,7 +46,10 @@ namespace RestSharp.Portable
         public static IRestClient AddDefaultParameter(this IRestClient client, Parameter parameter)
         {
             if (parameter.Type == ParameterType.RequestBody)
+            {
                 throw new NotSupportedException("Cannot set request body from default headers. Use Request.AddBody() instead.");
+            }
+
             client.DefaultParameters.Add(parameter);
             return client;
         }
@@ -61,7 +64,10 @@ namespace RestSharp.Portable
         {
             var parameter = client.DefaultParameters.SingleOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (parameter != null)
+            {
                 client.DefaultParameters.Remove(parameter);
+            }
+
             return client;
         }
 
@@ -142,16 +148,25 @@ namespace RestSharp.Portable
             if (client?.BaseUrl == null)
             {
                 if (request == null)
+                {
                     throw new ArgumentNullException(nameof(request));
+                }
+
                 if (string.IsNullOrEmpty(request.Resource))
+                {
                     throw new ArgumentOutOfRangeException(nameof(request), "The resource must be specified and not be empty");
+                }
+
                 var resource = ReplaceUrlSegments(request.Resource, parameters);
                 urlBuilder = new UriBuilder(new Uri(resource, UriKind.RelativeOrAbsolute));
             }
             else if (string.IsNullOrEmpty(request?.Resource))
             {
                 if (client.BaseUrl == null)
+                {
                     throw new ArgumentOutOfRangeException(nameof(client), "The BaseUrl must be specified");
+                }
+
                 var baseUrl = ReplaceUrlSegments(client.BaseUrl.OriginalString, parameters);
                 urlBuilder = new UriBuilder(new Uri(baseUrl, UriKind.RelativeOrAbsolute));
             }
@@ -170,7 +185,10 @@ namespace RestSharp.Portable
                 else
                 {
                     if (!baseUrl.EndsWith("/", StringComparison.Ordinal))
+                    {
                         baseUrl += "/";
+                    }
+
                     urlBuilder = new UriBuilder(new Uri(new Uri(baseUrl), new Uri(resource, UriKind.RelativeOrAbsolute)));
                 }
             }
@@ -182,7 +200,10 @@ namespace RestSharp.Portable
                 foreach (var param in parameters.Where(x => x.Type == ParameterType.QueryString))
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
+                    {
                         queryString.Append("&");
+                    }
+
                     queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                 }
 
@@ -192,7 +213,10 @@ namespace RestSharp.Portable
                     foreach (var param in getOrPostParameters)
                     {
                         if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
+                        {
                             queryString.Append("&");
+                        }
+
                         queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
                     }
                 }
@@ -216,7 +240,10 @@ namespace RestSharp.Portable
         public static Method GetEffectiveHttpMethod([CanBeNull] this IRestClient client, IRestRequest request)
         {
             if (request == null || request.Method == Method.GET)
+            {
                 return client.GetDefaultMethod(request);
+            }
+
             return request.Method;
         }
 
@@ -231,7 +258,10 @@ namespace RestSharp.Portable
             var parameters = (client == null ? new List<Parameter>() : client.DefaultParameters)
                 .Union(request == null ? new List<Parameter>() : request.Parameters);
             if (parameters.Any(x => x.Type == ParameterType.RequestBody || (x is FileParameter)))
+            {
                 return Method.POST;
+            }
+
             return Method.GET;
         }
 

@@ -91,6 +91,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems')" />

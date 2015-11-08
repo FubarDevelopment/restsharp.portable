@@ -32,7 +32,11 @@ Supported Platforms:
                 <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
             </group>
-            <group targetFramework="net40">
+          <group targetFramework="portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10">
+            <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
+            <dependency id="Microsoft.Net.Http" version="2.2.28" />
+          </group>
+          <group targetFramework="net40">
                 <dependency id="FubarCoder.RestSharp.Portable.Core" version="$clientversion$" />
                 <dependency id="Microsoft.Net.Http" version="2.2.28" />
             </group>
@@ -74,6 +78,8 @@ Supported Platforms:
       <file src="RestSharp.Portable.HttpClient.NET4\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\net40\" />
       <file src="RestSharp.Portable.HttpClient.NET45\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\net45\" />
       <file src="RestSharp.Portable.HttpClient.NET45\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\net45\" />
+      <file src="RestSharp.Portable.HttpClient.AsyncPCL\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="RestSharp.Portable.HttpClient.AsyncPCL\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\portable-net45+dnxcore50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.HttpClient.PCL\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.HttpClient.PCL\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
       <file src="RestSharp.Portable.HttpClient.SL5\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\sl50\" />
@@ -84,5 +90,11 @@ Supported Platforms:
       <file src="RestSharp.Portable.HttpClient.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\Xamarin.iOS10\" />
       <file src="RestSharp.Portable.HttpClient.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\MonoTouch10\" />
       <file src="RestSharp.Portable.HttpClient.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\MonoTouch10\" />
+      <file src="RestSharp.Portable.HttpClient.Win81\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\portable-win81+wpa81\" />
+      <file src="RestSharp.Portable.HttpClient.Win81\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\portable-win81+wpa81\" />
+      <file src="RestSharp.Portable.HttpClient.rd.xml" target="content\portable-win81+wpa81\" />
+      <file src="RestSharp.Portable.HttpClient.UWP\bin\$Configuration$\RestSharp.Portable.HttpClient.dll" target="lib\.NETCore50\" />
+      <file src="RestSharp.Portable.HttpClient.UWP\bin\$Configuration$\RestSharp.Portable.HttpClient.XML" target="lib\.NETCore50\" />
+      <file src="RestSharp.Portable.HttpClient.rd.xml" target="content\.NETCore50\" />
     </files>
 </package>

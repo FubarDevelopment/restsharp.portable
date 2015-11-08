@@ -23,7 +23,6 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
             _headers = headers;
         }
 
-
         /// <summary>
         /// Gets the underlying HTTP headers
         /// </summary>
@@ -38,6 +37,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
             return _headers.GetEnumerator();
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

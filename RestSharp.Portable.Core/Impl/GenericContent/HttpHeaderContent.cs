@@ -5,8 +5,15 @@ using System.Threading.Tasks;
 
 namespace RestSharp.Portable.Content
 {
-    public class HttpHeaderContent : IHttpContent
+    /// <summary>
+    /// Helper class for the encapsualtion of HTTP headers for a <see cref="MultipartFormDataContent"/>
+    /// </summary>
+    internal class HttpHeaderContent : IHttpContent
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpHeaderContent"/> class.
+        /// </summary>
+        /// <param name="headers">The encapsulated headers</param>
         public HttpHeaderContent(IHttpHeaders headers)
         {
             Headers = headers;
@@ -17,6 +24,12 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; }
 
+        /// <summary>
+        /// Writes the headers to the output stream
+        /// </summary>
+        /// <param name="headers">The HTTP headers to write</param>
+        /// <param name="stream">The stream to write to</param>
+        /// <returns>The task for this asynchronous operation</returns>
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
 #if PCL && !ASYNC_PCL
@@ -32,8 +45,7 @@ namespace RestSharp.Portable.Content
                 {
                     foreach (var header in headers)
                     {
-                        await
-                            writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}");
+                        await writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}");
                     }
                 }
 
@@ -45,6 +57,11 @@ namespace RestSharp.Portable.Content
             }
         }
 
+        /// <summary>
+        /// Computes the length of the HTTP headers
+        /// </summary>
+        /// <param name="headers">The HTTP headers to compute the length for</param>
+        /// <returns>The length of the HTTP headers</returns>
         public static long ComputeLength(IHttpHeaders headers)
         {
             long result = 2;
@@ -56,6 +73,7 @@ namespace RestSharp.Portable.Content
             return result;
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
         }

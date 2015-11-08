@@ -117,9 +117,15 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
+            {
                 return;
+            }
+
             if (_isDisposed)
+            {
                 return;
+            }
+
             _isDisposed = true;
             Content.Dispose();
         }

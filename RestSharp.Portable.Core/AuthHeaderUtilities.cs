@@ -14,6 +14,13 @@ namespace RestSharp.Portable
     {
         private static readonly IEnumerable<string> _emptyHeaderValues = new List<string>();
 
+        private enum ParseState
+        {
+            Method,
+            Key,
+            Value,
+        }
+
         /// <summary>
         /// Get the absolute request URL
         /// </summary>
@@ -24,10 +31,14 @@ namespace RestSharp.Portable
         public static Uri GetRequestUri([CanBeNull] this IHttpClient client, [NotNull] IHttpRequestMessage request)
         {
             if (client?.BaseAddress == null)
+            {
                 return request.RequestUri;
+            }
 
             if (request.RequestUri != null)
+            {
                 return new Uri(client.BaseAddress, request.RequestUri);
+            }
 
             return client.BaseAddress;
         }
@@ -45,10 +56,16 @@ namespace RestSharp.Portable
             var requestUri = client.GetRequestUri(request);
             IEnumerable<string> locationValues;
             if (!response.Headers.TryGetValues("Location", out locationValues))
+            {
                 return requestUri;
+            }
+
             var location = locationValues.FirstOrDefault();
             if (string.IsNullOrWhiteSpace(location))
+            {
                 return requestUri;
+            }
+
             return new Uri(requestUri, location);
         }
 
@@ -61,7 +78,10 @@ namespace RestSharp.Portable
         public static string ToAuthorizationHeaderName(this AuthHeader header)
         {
             if (header == AuthHeader.Www)
+            {
                 return "Authorization";
+            }
+
             return "Proxy-Authorization";
         }
 
@@ -74,7 +94,10 @@ namespace RestSharp.Portable
         public static string ToAuthenticationHeaderName(this AuthHeader header)
         {
             if (header == AuthHeader.Www)
+            {
                 return "WWW-Authenticate";
+            }
+
             return "Proxy-Authenticate";
         }
 
@@ -90,10 +113,16 @@ namespace RestSharp.Portable
             var authParam = parameters.SingleOrDefault(
                 p => p.Name.Equals(header.ToAuthorizationHeaderName(), StringComparison.OrdinalIgnoreCase));
             if (authParam == null)
+            {
                 return null;
+            }
+
             var v = (string)authParam.Value;
             if (v != null && v == authValue)
+            {
                 return false;
+            }
+
             parameters.Remove(authParam);
             return true;
         }
@@ -110,7 +139,10 @@ namespace RestSharp.Portable
         {
             var result = RemoveAuthorizationHeader(client.DefaultParameters, header, authValue);
             if (result.HasValue && !result.Value)
+            {
                 return false;
+            }
+
             return RemoveAuthorizationHeader(request.Parameters, header, authValue).GetValueOrDefault(true);
         }
 
@@ -149,7 +181,10 @@ namespace RestSharp.Portable
         public static bool TrySetAuthorizationHeader([NotNull] IRestClient client, [NotNull] IRestRequest request, AuthHeader header, [NotNull] string authValue)
         {
             if (!RemoveAuthorizationHeader(client, request, header, authValue))
+            {
                 return false;
+            }
+
             SetAuthorizationHeader(request, header, authValue);
             return true;
         }
@@ -198,7 +233,10 @@ namespace RestSharp.Portable
             var headerName = header.ToAuthenticationHeaderName();
             IEnumerable<string> headerValues;
             if (!response.Headers.TryGetValues(headerName, out headerValues))
+            {
                 headerValues = _emptyHeaderValues;
+            }
+
             return headerValues
                 .SelectMany(ParseAuthenticationHeader)
                 .ToList();
@@ -224,7 +262,7 @@ namespace RestSharp.Portable
         /// Parse a string and extract all <see cref="AuthHeaderInfo"/> entries.
         /// </summary>
         /// <param name="headerValue">The string to parse</param>
-        /// <returns></returns>
+        /// <returns>An enumeration of <see cref="AuthHeaderInfo"/> elements</returns>
         public static IEnumerable<AuthHeaderInfo> ParseAuthenticationHeader(string headerValue)
         {
             var whiteSpace = new[] { ' ', '\t', '\r', '\n' };
@@ -264,20 +302,30 @@ namespace RestSharp.Portable
 
                 var appendValue = headerValue.Substring(startPos, pos - startPos);
                 if (state == ParseState.Key || state == ParseState.Value)
+                {
                     rawTempBuffer.Append(appendValue);
+                }
+
                 if (activeBuffer.Length == 0)
+                {
                     appendValue = appendValue.TrimStart(whiteSpace);
+                }
+
                 if (appendValue.Length != 0)
                 {
                     activeBuffer.Append(appendValue);
                     if (state == ParseState.Value)
+                    {
                         rawAuthHeaderValue.Append(appendValue);
+                    }
                 }
 
                 var isQuoted = quotePos != null;
                 var isEscaped = escapePos != null && escapePos == (pos - 1);
                 if (!isEscaped && escapePos != null)
+                {
                     escapePos = null;
+                }
 
                 startPos = pos + 1;
 
@@ -295,7 +343,9 @@ namespace RestSharp.Portable
                                 activeBuffer.Append(ch);
                                 rawTempBuffer.Append(ch);
                                 if (state == ParseState.Value)
+                                {
                                     rawAuthHeaderValue.Append(ch);
+                                }
                             }
                             else if (state == ParseState.Method)
                             {
@@ -316,13 +366,19 @@ namespace RestSharp.Portable
                                     {
                                         var rawValue = rawValueBuffer.ToString().Trim(whiteSpace);
                                         if (rawValue.StartsWith(","))
+                                        {
                                             rawValue = rawValue.Substring(1).TrimStart(whiteSpace);
+                                        }
+
                                         result.Add(new AuthHeaderInfo(method, rawValue, authHeaderValues, rawAuthHeaderValues));
                                     }
 
                                     var newMethod = keyBuffer.ToString().Trim(whiteSpace);
                                     if (newMethod.StartsWith(","))
+                                    {
                                         newMethod = newMethod.Substring(1).TrimStart(whiteSpace);
+                                    }
+
                                     rawValueBuffer.Clear();
                                     authHeaderValues.Clear();
                                     rawAuthHeaderValues.Clear();
@@ -343,13 +399,16 @@ namespace RestSharp.Portable
                                 activeBuffer.Append(ch);
                                 rawTempBuffer.Append(ch);
                                 if (state == ParseState.Value)
+                                {
                                     rawAuthHeaderValue.Append(ch);
+                                }
                             }
                         }
                         else if (state == ParseState.Key || state == ParseState.Value)
                         {
                             rawTempBuffer.Append(ch);
                         }
+
                         break;
                     case '"':
                         rawTempBuffer.Append(ch);
@@ -375,18 +434,24 @@ namespace RestSharp.Portable
                                         authHeaderValues.Add(new KeyValuePair<string, string>(key.ToLowerInvariant(), value));
                                         rawAuthHeaderValues.Add(new KeyValuePair<string, string>(key, rawAuthValue));
                                     }
+
                                     valueBuffer.Clear();
                                     rawAuthHeaderValue.Clear();
                                 }
                             }
+
                             quotePos = pos;
                         }
                         else
                         {
                             quotePos = null;
                         }
+
                         if (state == ParseState.Value)
+                        {
                             rawAuthHeaderValue.Append(ch);
+                        }
+
                         break;
                     case '=':
                         if (isEscaped || isQuoted)
@@ -394,7 +459,9 @@ namespace RestSharp.Portable
                             activeBuffer.Append(ch);
                             rawTempBuffer.Append(ch);
                             if (state == ParseState.Value)
+                            {
                                 rawAuthHeaderValue.Append(ch);
+                            }
                         }
                         else
                         {
@@ -402,6 +469,7 @@ namespace RestSharp.Portable
                             rawValueBuffer.Append(rawTempBuffer).Append(ch);
                             rawTempBuffer.Clear();
                         }
+
                         break;
                     case ',':
                         if (isEscaped || isQuoted)
@@ -409,7 +477,9 @@ namespace RestSharp.Portable
                             activeBuffer.Append(ch);
                             rawTempBuffer.Append(ch);
                             if (state == ParseState.Value)
+                            {
                                 rawAuthHeaderValue.Append(ch);
+                            }
                         }
                         else
                         {
@@ -421,6 +491,7 @@ namespace RestSharp.Portable
                                 authHeaderValues.Add(new KeyValuePair<string, string>(key.ToLowerInvariant(), value));
                                 rawAuthHeaderValues.Add(new KeyValuePair<string, string>(key, rawAuthValue));
                             }
+
                             state = ParseState.Key;
                             rawValueBuffer.Append(rawTempBuffer);
                             keyBuffer.Clear();
@@ -428,6 +499,7 @@ namespace RestSharp.Portable
                             rawTempBuffer.Clear().Append(ch);
                             rawAuthHeaderValue.Clear();
                         }
+
                         break;
                     case '\\':
                         if (isEscaped)
@@ -436,15 +508,20 @@ namespace RestSharp.Portable
                             activeBuffer.Append(ch);
                             rawTempBuffer.Append(ch);
                             if (state == ParseState.Value)
+                            {
                                 rawAuthHeaderValue.Append(ch);
+                            }
                         }
                         else
                         {
                             escapePos = pos;
                             rawTempBuffer.Append(ch);
                             if (state == ParseState.Value)
+                            {
                                 rawAuthHeaderValue.Append(ch);
+                            }
                         }
+
                         break;
                     default:
                         throw new NotSupportedException();
@@ -475,14 +552,22 @@ namespace RestSharp.Portable
 
                 var appendValue = headerValue.Substring(startPos, pos - startPos);
                 if (activeBuffer.Length == 0)
+                {
                     appendValue = appendValue.TrimStart(whiteSpace);
+                }
+
                 if (appendValue.Length != 0)
                 {
                     if (state == ParseState.Key || state == ParseState.Value)
+                    {
                         rawTempBuffer.Append(appendValue);
+                    }
+
                     activeBuffer.Append(appendValue);
                     if (state == ParseState.Value)
+                    {
                         rawAuthHeaderValue.Append(appendValue);
+                    }
                 }
             }
 
@@ -504,19 +589,14 @@ namespace RestSharp.Portable
                 var method = methodBuffer.ToString().Trim(whiteSpace);
                 var rawValue = rawValueBuffer.ToString().Trim(whiteSpace);
                 if (rawValue.StartsWith(","))
+                {
                     rawValue = rawValue.Substring(1).TrimStart(whiteSpace);
+                }
 
                 result.Add(new AuthHeaderInfo(method, rawValue, authHeaderValues, rawAuthHeaderValues));
             }
 
             return result;
-        }
-
-        private enum ParseState
-        {
-            Method,
-            Key,
-            Value,
         }
     }
 }

@@ -151,7 +151,9 @@ namespace RestSharp.Portable.HttpClient
             base.ModifyRequestBeforeAuthentication(httpClient, requestMessage);
 
             if (EnvironmentUtilities.IsSilverlight && requestMessage.Method == Method.GET)
+            {
                 httpClient.DefaultRequestHeaders.Remove("Accept");
+            }
         }
 
         /// <summary>

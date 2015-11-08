@@ -14,6 +14,7 @@ namespace RestSharp.Portable
         Default = 0x0000,
 
         #region Behavior Compatibility
+
         /// <summary>
         /// Compatibility with Uri.EscapeDataString(string)
         /// </summary>
@@ -23,9 +24,11 @@ namespace RestSharp.Portable
         /// Compatibility with HttpUtility.UrlEncode(string)
         /// </summary>
         LikeUrlEncode = EscapeSpaceAsPlus | LowerCaseHexCharacters | AllowLikeUrlEncode,
+
         #endregion
 
         #region Allowed character sets
+
         /// <summary>
         /// Allow all characters that are allowed by EscapeDataString
         /// </summary>
@@ -48,6 +51,7 @@ namespace RestSharp.Portable
         #endregion
 
         #region Output flags
+
         /// <summary>
         /// Lower case hexadecimal characters
         /// </summary>
@@ -60,6 +64,7 @@ namespace RestSharp.Portable
         #endregion
 
         #region Internal builder method
+
         /// <summary>
         /// The mask for all builder variants
         /// </summary>

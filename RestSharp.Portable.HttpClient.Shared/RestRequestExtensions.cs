@@ -24,7 +24,9 @@ namespace RestSharp.Portable.HttpClient
         internal static HttpContent GetBodyContent(this IRestRequest request, Parameter body)
         {
             if (body == null)
+            {
                 return null;
+            }
 
             MediaTypeHeaderValue contentType;
             var buffer = body.Value as byte[];

@@ -36,7 +36,10 @@ namespace RestSharp.Portable.Serializers
             ConfigureSerializer(serializer);
             var output = new System.IO.MemoryStream();
             using (var writer = new System.IO.StreamWriter(output))
+            {
                 serializer.Serialize(writer, obj);
+            }
+
             return output.ToArray();
         }
 

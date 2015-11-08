@@ -128,7 +128,9 @@ namespace RestSharp.Portable
                     }
 
                     if (!isAllowed)
+                    {
                         continue;
+                    }
 
                     addedProperties.Add(prop.Name);
 
@@ -150,8 +152,7 @@ namespace RestSharp.Portable
                                 (elementTypeInfo.IsPrimitive || elementTypeInfo.IsValueType || elementType == typeof(string)))
                             {
                                 // convert the array to an array of strings
-                                var values =
-                                    (from object item in ((Array)val) select item.ToString()).ToArray();
+                                var values = (from object item in (Array)val select item.ToString()).ToArray();
                                 val = string.Join(",", values);
                             }
                             else
@@ -242,7 +243,10 @@ namespace RestSharp.Portable
         public static IRestRequest AddParameter(this IRestRequest request, string name, object value, ParameterType type)
         {
             if (type == ParameterType.RequestBody && !string.IsNullOrEmpty(name))
+            {
                 return request.AddParameter(null, value, ParameterType.RequestBody, name);
+            }
+
             return request.AddParameter(new Parameter { Name = name, Value = value, Type = type });
         }
 

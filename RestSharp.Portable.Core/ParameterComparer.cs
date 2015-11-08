@@ -32,11 +32,20 @@ namespace RestSharp.Portable
             _isGetRequest = request == null || client.GetEffectiveHttpMethod(request) != Method.POST;
             var nameComparer = stringComparer;
             if (nameComparer == null && request != null)
+            {
                 nameComparer = request.ParameterNameComparer;
+            }
+
             if (nameComparer == null && client != null)
+            {
                 nameComparer = client.DefaultParameterNameComparer;
+            }
+
             if (nameComparer == null)
+            {
                 nameComparer = StringComparer.Ordinal;
+            }
+
             _stringComparer = nameComparer;
         }
 
@@ -60,11 +69,15 @@ namespace RestSharp.Portable
         {
             var paramType = obj.Type;
             if (paramType == ParameterType.RequestBody)
+            {
                 return paramType.GetHashCode();
+            }
 
             var isGetParameter = obj.Type == ParameterType.QueryString || (_isGetRequest && obj.Type == ParameterType.GetOrPost);
             if (isGetParameter)
+            {
                 paramType = ParameterType.QueryString;
+            }
 
             return obj.GetType().FullName.GetHashCode()
                 ^ _stringComparer.GetHashCode(obj.Name ?? string.Empty)
@@ -84,7 +97,9 @@ namespace RestSharp.Portable
             var yTypeName = y.GetType().FullName;
             var result = string.Compare(xTypeName, yTypeName, StringComparison.Ordinal);
             if (result != 0)
+            {
                 return result;
+            }
 
             // Types don't match?
             result = x.Type.CompareTo(y.Type);
@@ -94,12 +109,16 @@ namespace RestSharp.Portable
                 var isGetParameterX = x.Type == ParameterType.QueryString || (_isGetRequest && x.Type == ParameterType.GetOrPost);
                 var isGetParameterY = y.Type == ParameterType.QueryString || (_isGetRequest && y.Type == ParameterType.GetOrPost);
                 if (isGetParameterX != isGetParameterY)
+                {
                     return result;
+                }
             }
 
             // When the parameter type is "RequestBody", then the name is irrelevant
             if (x.Type == ParameterType.RequestBody)
+            {
                 return 0;
+            }
 
             var nameX = x.Name ?? string.Empty;
             var nameY = y.Name ?? string.Empty;

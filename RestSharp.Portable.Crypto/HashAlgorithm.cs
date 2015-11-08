@@ -1,4 +1,17 @@
-﻿//
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1120
+#pragma warning disable SA1201
+#pragma warning disable SA1202
+#pragma warning disable SA1306
+#pragma warning disable SA1400
+#pragma warning disable SA1401
+#pragma warning disable SA1512
+#pragma warning disable SA1515
+#pragma warning disable SA1600
+
+//
 // System.Security.Cryptography.HashAlgorithm.cs
 //
 // Authors:
@@ -30,13 +43,13 @@
 //
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RestSharp.Portable.Crypto
 {
-
+    [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1402:Field must be private", Justification = "<Ausstehend>")]
     abstract class HashAlgorithm : ICryptoTransform
     {
-
         protected internal byte[] HashValue;
         protected int HashSizeValue;
         private bool _disposed;
@@ -49,6 +62,22 @@ namespace RestSharp.Portable.Crypto
         public virtual bool CanTransformMultipleBlocks => true;
 
         public virtual bool CanReuseTransform => true;
+
+        public virtual byte[] Hash
+        {
+            get
+            {
+                if (HashValue == null)
+                {
+                    throw new CryptographicUnexpectedOperationException("No hash value computed.");
+                }
+                return HashValue;
+            }
+        }
+
+        public virtual int HashSize => HashSizeValue;
+
+        public virtual int InputBlockSize => 1;
 
         public byte[] ComputeHash(byte[] buffer)
         {
@@ -68,6 +97,7 @@ namespace RestSharp.Portable.Crypto
                 throw new ArgumentOutOfRangeException(nameof(offset), "< 0");
             if (count < 0)
                 throw new ArgumentException("< 0", nameof(count));
+
             // ordered to avoid possible integer overflow
             if (offset > buffer.Length - count)
             {
@@ -81,23 +111,9 @@ namespace RestSharp.Portable.Crypto
             return HashValue;
         }
 
-        public virtual byte[] Hash
-        {
-            get
-            {
-                if (HashValue == null)
-                {
-                    throw new CryptographicUnexpectedOperationException("No hash value computed.");
-                }
-                return HashValue;
-            }
-        }
-
         protected abstract void HashCore(byte[] array, int ibStart, int cbSize);
 
         protected abstract byte[] HashFinal();
-
-        public virtual int HashSize => HashSizeValue;
 
         public abstract void Initialize();
 
@@ -105,8 +121,6 @@ namespace RestSharp.Portable.Crypto
         {
             _disposed = true;
         }
-
-        public virtual int InputBlockSize => 1;
 
         public virtual int OutputBlockSize => 1;
 

@@ -91,7 +91,10 @@ namespace RestSharp.Portable.Authenticators
             return Task.Factory.StartNew(() =>
             {
                 if (!CanPreAuthenticate(client, request, credentials))
+                {
                     throw new InvalidOperationException();
+                }
+
                 var authHeaderValue = $"{AuthenticationMethod} {_authToken}";
                 request.SetAuthorizationHeader(_authHeader, authHeaderValue);
             });
@@ -109,18 +112,24 @@ namespace RestSharp.Portable.Authenticators
         {
             // No credentials defined?
             if (credentials == null)
+            {
                 return false;
+            }
 
             // No challenge header found?
             var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
             if (authModeInfo == null)
+            {
                 return false;
+            }
 
             // Search for credential for request URI
             var responseUri = client.GetRequestUri(request, response);
             var credential = credentials.GetCredential(responseUri, AuthenticationMethod);
             if (credential == null)
+            {
                 return false;
+            }
 
             // Did we already try to use the found credentials?
             if (ReferenceEquals(credential, _authCredential))
@@ -145,7 +154,9 @@ namespace RestSharp.Portable.Authenticators
             return Task.Factory.StartNew(() =>
             {
                 if (!CanHandleChallenge(client, request, credentials, response))
+                {
                     throw new InvalidOperationException();
+                }
 
                 var responseUri = client.GetRequestUri(request, response);
                 _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);

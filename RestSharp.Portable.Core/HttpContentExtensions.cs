@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
@@ -9,7 +8,7 @@ namespace RestSharp.Portable
     public static class HttpContentExtensions
     {
         /// <summary>
-        /// Loads the data into a buffer with a maximum size of <see cref="System.Int32.MaxValue"/>.
+        /// Loads the data into a buffer with a maximum size of <see cref="int.MaxValue"/>.
         /// </summary>
         /// <param name="content">The content to load the data from</param>
         /// <returns>The task that loads the content</returns>

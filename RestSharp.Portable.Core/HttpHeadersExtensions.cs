@@ -31,7 +31,10 @@ namespace RestSharp.Portable
         {
             IEnumerable<string> values;
             if (!headers.TryGetValues(name, out values))
+            {
                 return defaultValue;
+            }
+
             return values.FirstOrDefault() ?? defaultValue;
         }
     }

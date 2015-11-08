@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 
 using RestSharp.Portable.HttpClient.Impl.Http;
 
@@ -16,7 +17,7 @@ namespace RestSharp.Portable.HttpClient.Impl
     /// </remarks>
     public class DefaultHttpClientFactory : IHttpClientFactory
     {
-        private readonly System.Reflection.PropertyInfo _proxyProperty;
+        private readonly PropertyInfo _proxyProperty;
 
         private readonly bool _setCredentials;
 
@@ -34,7 +35,11 @@ namespace RestSharp.Portable.HttpClient.Impl
         /// <param name="setCredentials">Set the credentials for the native <see cref="HttpMessageHandler"/> (<see cref="HttpClientHandler"/>)?</param>
         public DefaultHttpClientFactory(bool setCredentials)
         {
+#if USE_TYPEINFO
+            _proxyProperty = typeof(HttpClientHandler).GetTypeInfo().GetDeclaredProperty("Proxy");
+#else
             _proxyProperty = typeof(HttpClientHandler).GetProperty("Proxy");
+#endif
             _setCredentials = setCredentials;
         }
 
@@ -61,7 +66,9 @@ namespace RestSharp.Portable.HttpClient.Impl
 
             var timeout = client.Timeout;
             if (timeout.HasValue)
+            {
                 httpClient.Timeout = timeout.Value;
+            }
 
             return new DefaultHttpClient(httpClient);
         }
@@ -138,13 +145,19 @@ namespace RestSharp.Portable.HttpClient.Impl
         protected virtual CookieContainer GetCookies(IRestClient client, IRestRequest request)
         {
             if (!HasCookies(client, request))
+            {
                 return null;
+            }
+
             var baseUrl = GetBaseAddress(client);
             var newCookies = client.CookieContainer = client.CookieContainer ?? new CookieContainer();
             var oldCookies = client.CookieContainer.GetCookies(baseUrl)
                 .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
             foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
+            {
                 newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.ToRequestString()));
+            }
+
             return newCookies;
         }
 
@@ -170,7 +183,10 @@ namespace RestSharp.Portable.HttpClient.Impl
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && !x.IsContentParameter()))
             {
                 if (message.Headers.Contains(param.Name))
+                {
                     message.Headers.Remove(param.Name);
+                }
+
                 var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
@@ -196,7 +212,10 @@ namespace RestSharp.Portable.HttpClient.Impl
             foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (httpClient.DefaultRequestHeaders.Contains(param.Name))
+                {
                     httpClient.DefaultRequestHeaders.Remove(param.Name);
+                }
+
                 var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
@@ -223,7 +242,9 @@ namespace RestSharp.Portable.HttpClient.Impl
 
             var proxy = GetProxy(client);
             if (handler.SupportsProxy && _proxyProperty != null && proxy != null)
+            {
                 _proxyProperty.SetValue(handler, new RequestProxyWrapper(proxy), null);
+            }
 
             var cookieContainer = GetCookies(client, request);
             if (cookieContainer != null)
@@ -236,11 +257,15 @@ namespace RestSharp.Portable.HttpClient.Impl
             {
                 var credentials = client.Credentials;
                 if (credentials != null)
+                {
                     handler.Credentials = credentials;
+                }
             }
 
             if (handler.SupportsAutomaticDecompression)
+            {
                 handler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            }
 
             return handler;
         }

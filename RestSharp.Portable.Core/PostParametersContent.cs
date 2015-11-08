@@ -69,7 +69,10 @@ namespace RestSharp.Portable
                 () =>
                     {
                         if (_buffer != null)
+                        {
                             return;
+                        }
+
                         using (var temp = new MemoryStream())
                         {
                             WriteTo(temp);
@@ -88,7 +91,9 @@ namespace RestSharp.Portable
                 () =>
                     {
                         if (_buffer != null)
+                        {
                             return new MemoryStream(_buffer, false);
+                        }
 
                         return new EncodedParameterStream(_postParameters);
                     });
@@ -148,9 +153,14 @@ namespace RestSharp.Portable
         public bool TryComputeLength(out long length)
         {
             if (_postParameters.Count == 0)
+            {
                 length = 0;
+            }
             else
+            {
                 length = _postParameters.Sum(x => x.GetFullDataLength()) + _postParameters.Count - 1;
+            }
+
             return true;
         }
 
@@ -169,9 +179,15 @@ namespace RestSharp.Portable
         protected virtual void Dispose(bool disposing)
         {
             if (!disposing)
+            {
                 return;
+            }
+
             if (_isDisposed)
+            {
                 return;
+            }
+
             _isDisposed = true;
         }
 
@@ -181,7 +197,10 @@ namespace RestSharp.Portable
             foreach (var parameter in _postParameters)
             {
                 if (!isFirst)
+                {
                     stream.WriteByte((byte)'&');
+                }
+
                 isFirst = false;
                 var tmp = ParameterExtensions.DefaultEncoding.GetBytes(parameter.Name);
                 stream.Write(tmp, 0, tmp.Length);
@@ -207,15 +226,21 @@ namespace RestSharp.Portable
             {
                 var v = _parameter.Value;
                 if (v == null)
+                {
                     return new byte[0];
+                }
 
                 var s = v as string;
                 if (s != null)
+                {
                     return UrlUtility.EscapeToBytes(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
+                }
 
                 var bytes = v as byte[];
                 if (bytes != null)
+                {
                     return UrlUtility.EscapeToBytes(bytes);
+                }
 
                 s = _parameter.ToRequestString();
                 return UrlUtility.EscapeToBytes(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
@@ -240,15 +265,21 @@ namespace RestSharp.Portable
             {
                 var v = _parameter.Value;
                 if (v == null)
+                {
                     return 0;
+                }
 
                 var s = v as string;
                 if (s != null)
+                {
                     return UrlUtility.ComputeLength(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
+                }
 
                 var bytes = v as byte[];
                 if (bytes != null)
+                {
                     return UrlUtility.ComputeLength(bytes);
+                }
 
                 s = _parameter.ToRequestString();
                 return UrlUtility.ComputeLength(s, _parameter.Encoding ?? ParameterExtensions.DefaultEncoding);
@@ -269,7 +300,10 @@ namespace RestSharp.Portable
                 foreach (var parameter in parameters)
                 {
                     if (!isFirst)
+                    {
                         _parts.Add(new DataPart(position++, (byte)'&'));
+                    }
+
                     isFirst = false;
                     _parts.Add(new DataPart(position, parameter));
                     position += parameter.GetFullDataLength();
@@ -298,9 +332,15 @@ namespace RestSharp.Portable
                     _position = value;
                     var newActivePart = FindActivePartForPosition(_position);
                     if (newActivePart == _activePart)
+                    {
                         return;
+                    }
+
                     if (!IsEOF)
+                    {
                         _parts[_activePart].ReleaseData();
+                    }
+
                     _activePart = newActivePart;
                 }
             }
@@ -314,7 +354,9 @@ namespace RestSharp.Portable
             public override int Read(byte[] buffer, int offset, int count)
             {
                 if (IsEOF)
+                {
                     return 0;
+                }
 
                 var part = _parts[_activePart];
                 var partOffset = (int)(Position - part.Position);
@@ -363,7 +405,9 @@ namespace RestSharp.Portable
                 for (var i = 0; i != _parts.Count; ++i)
                 {
                     if (_parts[i].Contains(position))
+                    {
                         return i;
+                    }
                 }
 
                 return _parts.Count;
@@ -393,7 +437,10 @@ namespace RestSharp.Portable
                     get
                     {
                         if (_parameter != null)
+                        {
                             return _parameter.GetFullDataLength();
+                        }
+
                         return _data.Length;
                     }
                 }
@@ -403,7 +450,10 @@ namespace RestSharp.Portable
                 public void ReleaseData()
                 {
                     if (_parameter == null)
+                    {
                         return;
+                    }
+
                     _data = null;
                 }
 

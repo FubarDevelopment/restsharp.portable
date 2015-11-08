@@ -29,6 +29,7 @@ namespace RestSharp.Portable.Impl
             }
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

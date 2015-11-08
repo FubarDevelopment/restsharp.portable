@@ -54,21 +54,29 @@ namespace RestSharp.Portable.WebRequest.Impl
                 BaseAddress = GetBaseAddress(client)
             };
             if (client.Timeout.HasValue)
+            {
                 httpClient.Timeout = client.Timeout.Value;
+            }
 
             var proxy = GetProxy(client);
             if (proxy != null)
+            {
                 httpClient.Proxy = new RequestProxyWrapper(proxy);
+            }
 
             var cookieContainer = GetCookies(client, request);
             if (cookieContainer != null)
+            {
                 httpClient.CookieContainer = cookieContainer;
+            }
 
             if (_setCredentials)
             {
                 var credentials = client.Credentials;
                 if (credentials != null)
+                {
                     httpClient.Credentials = credentials;
+                }
             }
 
             return httpClient;
@@ -91,6 +99,20 @@ namespace RestSharp.Portable.WebRequest.Impl
             var headers = new GenericHttpHeaders();
             AddHttpHeaderParameters(headers, request);
             return new DefaultHttpRequestMessage(method, address, headers, null);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="HttpWebRequest"/> using the given <paramref name="url"/>
+        /// </summary>
+        /// <param name="url">The <see cref="Uri"/> to initialize the <see cref="HttpWebRequest"/> with</param>
+        /// <returns>The new <see cref="HttpWebRequest"/></returns>
+        protected internal virtual HttpWebRequest CreateWebRequest(Uri url)
+        {
+            var webRequest = System.Net.WebRequest.CreateHttp(url);
+#if !PCL && !NETFX_CORE && !WINDOWS_STORE
+            webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+#endif
+            return webRequest;
         }
 
         /// <summary>
@@ -146,13 +168,19 @@ namespace RestSharp.Portable.WebRequest.Impl
         protected virtual CookieContainer GetCookies(IRestClient client, IRestRequest request)
         {
             if (!HasCookies(client, request))
+            {
                 return null;
+            }
+
             var baseUrl = GetBaseAddress(client);
             var newCookies = client.CookieContainer = client.CookieContainer ?? new CookieContainer();
             var oldCookies = client.CookieContainer.GetCookies(baseUrl)
                 .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
             foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
+            {
                 newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.ToRequestString()));
+            }
+
             return newCookies;
         }
 
@@ -177,7 +205,10 @@ namespace RestSharp.Portable.WebRequest.Impl
             foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (httpHeaders.Contains(param.Name))
+                {
                     httpHeaders.Remove(param.Name);
+                }
+
                 var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
@@ -200,7 +231,10 @@ namespace RestSharp.Portable.WebRequest.Impl
             foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (httpHeaders.Contains(param.Name))
+                {
                     httpHeaders.Remove(param.Name);
+                }
+
                 var paramValue = param.ToRequestString();
                 if (param.ValidateOnAdd)
                 {
@@ -211,20 +245,6 @@ namespace RestSharp.Portable.WebRequest.Impl
                     httpHeaders.TryAddWithoutValidation(param.Name, paramValue);
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates a <see cref="HttpWebRequest"/> using the given <paramref name="url"/>
-        /// </summary>
-        /// <param name="url">The <see cref="Uri"/> to initialize the <see cref="HttpWebRequest"/> with</param>
-        /// <returns>The new <see cref="HttpWebRequest"/></returns>
-        protected internal virtual HttpWebRequest CreateWebRequest(Uri url)
-        {
-            var webRequest = System.Net.WebRequest.CreateHttp(url);
-#if !PCL && !NETFX_CORE && !WINDOWS_STORE
-            webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
-#endif
-            return webRequest;
         }
     }
 }

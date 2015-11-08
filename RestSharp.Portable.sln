@@ -185,6 +185,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.OAuth.Bo
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Crypto", "RestSharp.Portable.Crypto\RestSharp.Portable.Crypto.shproj", "{9C53C4AC-1A03-4D74-A2B6-8A5968EB2CF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.AsyncPCL", "RestSharp.Portable.HttpClient.AsyncPCL\RestSharp.Portable.HttpClient.AsyncPCL.csproj", "{08D3F5CF-466B-4702-967D-BA07C307C2CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.Win81", "RestSharp.Portable.HttpClient.Win81\RestSharp.Portable.HttpClient.Win81.csproj", "{70D44B24-6985-4279-A86C-8FC592003546}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.UWP", "RestSharp.Portable.HttpClient.UWP\RestSharp.Portable.HttpClient.UWP.csproj", "{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems*{7659f0c1-6991-4a41-999d-9e438fc54a52}*SharedItemsImports = 4
@@ -195,6 +201,7 @@ Global
 		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
 		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
 		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{70d44b24-6985-4279-a86c-8fc592003546}*SharedItemsImports = 4
 		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{bd08a0f9-fb0d-4585-a715-e21d8dfb62e1}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems*{0af7956a-65a5-46e6-bed6-dcac1edb0bb9}*SharedItemsImports = 13
@@ -211,6 +218,7 @@ Global
 		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{89550987-88eb-4df3-9969-ee6e673dae88}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{08d3f5cf-466b-4702-967d-ba07c307c2cf}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{23041120-0054-41d1-8fa7-d66acef22a44}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01150eb4-311c-46a1-8c5b-cc5667da38ab}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
@@ -225,6 +233,7 @@ Global
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{a51c28be-21ec-4bf9-b7b4-a6a6bab65e22}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
@@ -853,6 +862,54 @@ Global
 		{D1285F85-AF1F-4A53-B9F9-9E3627970EEA}.Release|x64.Build.0 = Release|Any CPU
 		{D1285F85-AF1F-4A53-B9F9-9E3627970EEA}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1285F85-AF1F-4A53-B9F9-9E3627970EEA}.Release|x86.Build.0 = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|ARM.Build.0 = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|x64.Build.0 = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Debug|x86.Build.0 = Debug|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|ARM.Build.0 = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|x64.ActiveCfg = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|x64.Build.0 = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|x86.ActiveCfg = Release|Any CPU
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF}.Release|x86.Build.0 = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|ARM.Build.0 = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|x64.Build.0 = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Debug|x86.Build.0 = Debug|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|ARM.ActiveCfg = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|ARM.Build.0 = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|x64.ActiveCfg = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|x64.Build.0 = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|x86.ActiveCfg = Release|Any CPU
+		{70D44B24-6985-4279-A86C-8FC592003546}.Release|x86.Build.0 = Release|Any CPU
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|ARM.Build.0 = Debug|ARM
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|x64.ActiveCfg = Debug|x64
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|x64.Build.0 = Debug|x64
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|x86.ActiveCfg = Debug|x86
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Debug|x86.Build.0 = Debug|x86
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|ARM.ActiveCfg = Release|ARM
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|ARM.Build.0 = Release|ARM
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|x64.ActiveCfg = Release|x64
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|x64.Build.0 = Release|x64
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|x86.ActiveCfg = Release|x86
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -918,5 +975,8 @@ Global
 		{BDCF3523-A285-4D6B-BBED-98861A5A58F4} = {8AE32A84-9132-473F-AA04-802DE7F21920}
 		{0AF7956A-65A5-46E6-BED6-DCAC1EDB0BB9} = {8AE32A84-9132-473F-AA04-802DE7F21920}
 		{9C53C4AC-1A03-4D74-A2B6-8A5968EB2CF5} = {99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}
+		{08D3F5CF-466B-4702-967D-BA07C307C2CF} = {E6B89A8B-2F79-4985-9FF0-5FB39E9929F5}
+		{70D44B24-6985-4279-A86C-8FC592003546} = {E6B89A8B-2F79-4985-9FF0-5FB39E9929F5}
+		{A51C28BE-21EC-4BF9-B7B4-A6A6BAB65E22} = {E6B89A8B-2F79-4985-9FF0-5FB39E9929F5}
 	EndGlobalSection
 EndGlobal

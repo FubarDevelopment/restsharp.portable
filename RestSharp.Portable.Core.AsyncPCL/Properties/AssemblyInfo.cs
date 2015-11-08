@@ -6,5 +6,3 @@ using System.Reflection;
 // die einer Assembly zugeordnet sind.
 [assembly: AssemblyTitle("RestSharp.Portable.Core")]
 [assembly: AssemblyProduct("RestSharp.Portable.Core")]
-
-//[assembly: CLSCompliant(true)]

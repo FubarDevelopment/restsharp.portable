@@ -9,12 +9,19 @@ using JetBrains.Annotations;
 
 namespace RestSharp.Portable.Content
 {
+    /// <summary>
+    /// A <see cref="IHttpContent"/> implementation of <code>multipart/form-data</code>
+    /// </summary>
     public class MultipartFormDataContent : IHttpContent, IEnumerable<IHttpContent>
     {
         private readonly List<IHttpContent> _contents = new List<IHttpContent>();
 
         private byte[] _buffer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultipartFormDataContent"/> class.
+        /// </summary>
+        /// <param name="headers">The HTTP headers for this content element</param>
         public MultipartFormDataContent(IHttpHeaders headers)
         {
             Headers = headers;
@@ -22,6 +29,9 @@ namespace RestSharp.Portable.Content
             Headers.TryAddWithoutValidation("Content-Type", ContentType);
         }
 
+        /// <summary>
+        /// Gets the boundary tag
+        /// </summary>
         public string Boundary { get; }
 
         /// <summary>
@@ -29,13 +39,27 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; }
 
+        /// <summary>
+        /// Gets the content type of the <code>multipart/form-data</code>
+        /// </summary>
         public string ContentType => string.Format("multipart/form-data; boundary={0}", Boundary);
 
+        /// <summary>
+        /// Adds a content element to this <code>multipart/form-data</code>
+        /// </summary>
+        /// <param name="content">The content to add</param>
+        /// <param name="name">The name of the content to add</param>
         public void Add([NotNull] IHttpContent content, [NotNull] string name)
         {
             Add(content, name, null);
         }
 
+        /// <summary>
+        /// Adds a content element to this <code>multipart/form-data</code>
+        /// </summary>
+        /// <param name="content">The content to add</param>
+        /// <param name="name">The name of the content to add</param>
+        /// <param name="fileName">The optional file name of this content element</param>
         public void Add([NotNull] IHttpContent content, [NotNull] string name, [CanBeNull] string fileName)
         {
             if (!content.Headers.Contains("Content-Disposition"))
@@ -93,7 +117,10 @@ namespace RestSharp.Portable.Content
         public async Task<Stream> ReadAsStreamAsync()
         {
             if (_buffer != null)
+            {
                 return new MemoryStream(_buffer);
+            }
+
             var temp = new MemoryStream();
             await WriteTo(temp, false);
             return temp;
@@ -106,7 +133,10 @@ namespace RestSharp.Portable.Content
         public async Task<byte[]> ReadAsByteArrayAsync()
         {
             if (_buffer != null)
+            {
                 return _buffer;
+            }
+
             var temp = new MemoryStream();
             await WriteTo(temp, false);
             return temp.ToArray();
@@ -142,6 +172,7 @@ namespace RestSharp.Portable.Content
                     length = 0;
                     return false;
                 }
+
                 result += contentLength;
                 result += 2;
             }
@@ -173,16 +204,25 @@ namespace RestSharp.Portable.Content
         {
             var result = new StringBuilder("form-data");
             if (name != null)
+            {
                 result.AppendFormat("; name=\"{0}\"", name);
+            }
+
             if (fileName != null)
+            {
                 result.AppendFormat("; filename=\"{0}\"", fileName);
+            }
+
             return result.ToString();
         }
 
         private async Task WriteTo(Stream stream, bool withHeaders)
         {
             if (withHeaders)
+            {
                 await HttpHeaderContent.WriteTo(Headers, stream);
+            }
+
             var boundaryStart = Encoding.UTF8.GetBytes($"--{Boundary}\r\n");
             var boundaryEnd = Encoding.UTF8.GetBytes($"--{Boundary}--\r\n");
             var lineBreak = Encoding.UTF8.GetBytes("\r\n");

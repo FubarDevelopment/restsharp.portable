@@ -1,4 +1,11 @@
-﻿//
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1120
+#pragma warning disable SA1512
+#pragma warning disable SA1600
+
+//
 // System.Security.Cryptography.MD5.cs
 //
 // Authors:
@@ -33,7 +40,7 @@ using System;
 
 namespace RestSharp.Portable.Crypto
 {
-    abstract class MD5 : HashAlgorithm
+    internal abstract class MD5 : HashAlgorithm
     {
         // Why is it protected when others abstract hash classes are public ?
         protected MD5()

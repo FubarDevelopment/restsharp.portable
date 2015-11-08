@@ -1,4 +1,11 @@
-﻿//
+﻿#pragma warning disable SA1005
+#pragma warning disable SA1027
+#pragma warning disable SA1028
+#pragma warning disable SA1120
+#pragma warning disable SA1512
+#pragma warning disable SA1600
+
+//
 // System.Security.Cryptography.CryptographicUnexpectedOperationException.cs
 //
 // Authors:
@@ -31,9 +38,8 @@ using System;
 
 namespace RestSharp.Portable.Crypto
 {
-    class CryptographicUnexpectedOperationException : CryptographicException
+    internal class CryptographicUnexpectedOperationException : CryptographicException
     {
-
         public CryptographicUnexpectedOperationException()
             : base("Unexpected error occured during a cryptographic operation.")
         {
@@ -48,4 +54,3 @@ namespace RestSharp.Portable.Crypto
         }
     }
 }
-
