@@ -8,12 +8,4 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>RestSharp.Portable.Content</Import_RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ByteArrayContent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HttpHeaderContent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HttpHeadersExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MultipartFormDataContent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NonDisposableStream.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StringContent.cs" />
-  </ItemGroup>
 </Project>

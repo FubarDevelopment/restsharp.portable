@@ -32,6 +32,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)IHttpHeaders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IHttpRequestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IHttpResponseMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\ByteArrayContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\GenericContentCollector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\HttpHeaderContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\HttpHeadersExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\MultipartFormDataContent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\NonDisposableStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\StringContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericHttpHeaders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRequestProxy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />

@@ -89,7 +89,6 @@
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems" Label="Shared" />
   <Import Project="..\System.Net.Http.Primitives\System.Net.Http.Primitives.projitems" Label="Shared" />
-  <Import Project="..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

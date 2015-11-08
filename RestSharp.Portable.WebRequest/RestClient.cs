@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.Content;
 using RestSharp.Portable.WebRequest.Impl;
 
 namespace RestSharp.Portable.WebRequest
@@ -101,7 +102,7 @@ namespace RestSharp.Portable.WebRequest
         /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
         protected override IHttpContent GetContent(IRestRequest request)
         {
-            return RestClientExtensions.GetContent(this, request);
+            return GenericContentCollector.GetContent(this, request);
         }
     }
 }

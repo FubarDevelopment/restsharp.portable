@@ -9,7 +9,7 @@ using RestSharp.Portable.Impl;
 
 namespace RestSharp.Portable.Content
 {
-    internal class StringContent : IHttpContent
+    public class StringContent : IHttpContent
     {
         private readonly string _value;
 

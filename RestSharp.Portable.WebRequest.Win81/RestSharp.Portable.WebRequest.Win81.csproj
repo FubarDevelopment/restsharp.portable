@@ -70,7 +70,6 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <Import Project="..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems" Label="Shared" />
   <Import Project="..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems" Label="Shared" />
   <Import Project="..\System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

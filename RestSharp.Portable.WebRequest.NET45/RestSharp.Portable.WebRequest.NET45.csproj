@@ -72,7 +72,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems')" />
-  <Import Project="..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.Content\RestSharp.Portable.Content.projitems')" />
   <Import Project="..\System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems" Label="Shared" Condition="Exists('..\System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

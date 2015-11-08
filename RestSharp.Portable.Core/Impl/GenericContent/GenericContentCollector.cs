@@ -3,23 +3,54 @@ using System.Linq;
 
 using JetBrains.Annotations;
 
-using RestSharp.Portable.Content;
 using RestSharp.Portable.Impl;
 
-namespace RestSharp.Portable.WebRequest
+namespace RestSharp.Portable.Content
 {
-    /// <summary>
-    /// Extension functions for REST clients
-    /// </summary>
-    public static class RestClientExtensions
+    public static class GenericContentCollector
     {
+        /// <summary>
+        /// Returns the HttpContent for the body parameter
+        /// </summary>
+        /// <param name="request">
+        /// The request the body parameter belongs to
+        /// </param>
+        /// <param name="body">
+        /// The body parameter
+        /// </param>
+        /// <returns>
+        /// The resulting HttpContent
+        /// </returns>
+        internal static IHttpContent GetBodyContent(this IRestRequest request, Parameter body)
+        {
+            if (body == null)
+                return null;
+
+            string contentType;
+            var buffer = body.Value as byte[];
+            if (buffer != null)
+            {
+                contentType = body.ContentType ?? "application/octet-stream";
+            }
+            else
+            {
+                buffer = request.Serializer.Serialize(body.Value);
+                contentType = request.Serializer.ContentType;
+            }
+
+            var content = new ByteArrayContent(buffer);
+            content.Headers.ReplaceWithoutValidation("Content-Type", contentType);
+            content.Headers.ReplaceWithoutValidation("Content-Length", buffer.Length.ToString());
+            return content;
+        }
+
         /// <summary>
         /// Gets the content for a request
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        public static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
         {
             IHttpContent content;
             var parameters = client.MergeParameters(request);

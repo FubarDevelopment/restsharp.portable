@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace RestSharp.Portable.Content
 {
-    internal class MultipartFormDataContent : IHttpContent, IEnumerable<IHttpContent>
+    public class MultipartFormDataContent : IHttpContent, IEnumerable<IHttpContent>
     {
         private readonly List<IHttpContent> _contents = new List<IHttpContent>();
 

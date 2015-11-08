@@ -16,8 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\DefaultHttpResponseMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\Http\RequestProxyWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RestRequestExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TaskExtensions.cs" />
   </ItemGroup>
 </Project>

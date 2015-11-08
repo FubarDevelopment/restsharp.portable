@@ -1,15 +1,21 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.Impl;
+
 namespace RestSharp.Portable.Content
 {
-    internal class HttpHeaderContent : IHttpContent
+    public class ByteArrayContent : IHttpContent
     {
-        public HttpHeaderContent(IHttpHeaders headers)
+        private readonly byte[] _data;
+
+        public ByteArrayContent(byte[] data)
         {
-            Headers = headers;
+            _data = data;
+            Headers = new GenericHttpHeaders();
+            Headers.TryAddWithoutValidation("Content-Type", "application/octet-stream");
         }
 
         /// <summary>
@@ -17,44 +23,9 @@ namespace RestSharp.Portable.Content
         /// </summary>
         public IHttpHeaders Headers { get; }
 
-        public static async Task WriteTo(IHttpHeaders headers, Stream stream)
-        {
-#if PCL && !ASYNC_PCL
-            var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
-#else
-            var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);
-#endif
-            try
-            {
-                writer.NewLine = "\r\n";
+        public int Length => _data.Length;
 
-                if (headers != null)
-                {
-                    foreach (var header in headers)
-                    {
-                        await
-                            writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}");
-                    }
-                }
-
-                await writer.WriteLineAsync();
-            }
-            finally
-            {
-                writer.Dispose();
-            }
-        }
-
-        public static long ComputeLength(IHttpHeaders headers)
-        {
-            long result = 2;
-            foreach (var header in headers)
-            {
-                result += header.Key.Length + header.Value.Sum(x => x.Length + 2) + 2;
-            }
-
-            return result;
-        }
+        public IEnumerable<byte> Data => _data;
 
         public void Dispose()
         {
@@ -67,7 +38,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that copies the data to the stream</returns>
         public async Task CopyToAsync(Stream stream)
         {
-            await WriteTo(stream);
+            await stream.WriteAsync(_data, 0, _data.Length);
         }
 
         /// <summary>
@@ -88,32 +59,39 @@ namespace RestSharp.Portable.Content
         /// Returns the data as a stream
         /// </summary>
         /// <returns>The task that returns the stream</returns>
-        public async Task<Stream> ReadAsStreamAsync()
+        public Task<Stream> ReadAsStreamAsync()
         {
-            var stream = new MemoryStream();
-            await WriteTo(stream);
-            return stream;
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult<Stream>(new MemoryStream(_data));
+#else
+            return Task.FromResult<Stream>(new MemoryStream(_data));
+#endif
         }
 
         /// <summary>
         /// Returns the data as byte array
         /// </summary>
         /// <returns>The task that returns the data as byte array</returns>
-        public async Task<byte[]> ReadAsByteArrayAsync()
+        public Task<byte[]> ReadAsByteArrayAsync()
         {
-            var stream = new MemoryStream();
-            await WriteTo(stream);
-            return stream.ToArray();
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(_data);
+#else
+            return Task.FromResult(_data);
+#endif
         }
 
         /// <summary>
         /// Returns the data as string
         /// </summary>
         /// <returns>The task that returns the data as string</returns>
-        public async Task<string> ReadAsStringAsync()
+        public Task<string> ReadAsStringAsync()
         {
-            var buffer = await ReadAsByteArrayAsync();
-            return Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+#if PCL && !ASYNC_PCL
+            return TaskEx.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));
+#else
+            return Task.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));
+#endif
         }
 
         /// <summary>
@@ -125,13 +103,8 @@ namespace RestSharp.Portable.Content
         /// <param name="length">The length in bytes of the HTTP content.</param>
         public bool TryComputeLength(out long length)
         {
-            length = ComputeLength(Headers);
+            length = _data.Length;
             return true;
-        }
-
-        private async Task WriteTo(Stream stream)
-        {
-            await WriteTo(Headers, stream);
         }
     }
 }
