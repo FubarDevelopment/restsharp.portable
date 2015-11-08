@@ -129,7 +129,7 @@
       <Project>{5dc024cb-40c9-4573-8a51-05d80e703fe7}</Project>
       <Name>RestSharp.Portable.Core.AsyncPCL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj">
+    <ProjectReference Include="..\RestSharp.Portable.HttpClient.NET45\RestSharp.Portable.HttpClient.NET45.csproj">
       <Project>{6e25753f-f37d-4c32-931f-d4025546743d}</Project>
       <Name>RestSharp.Portable.NET45</Name>
     </ProjectReference>

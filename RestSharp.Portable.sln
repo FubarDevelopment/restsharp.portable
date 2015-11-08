@@ -35,11 +35,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth2.Tests", "RestSharp.Portable.OAuth2.Tests\RestSharp.Portable.OAuth2.Tests.csproj", "{0DA9F405-2F79-4F37-AB44-4FE54CB661F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.PCL", "RestSharp.Portable.PCL\RestSharp.Portable.PCL.csproj", "{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.PCL", "RestSharp.Portable.HttpClient.PCL\RestSharp.Portable.HttpClient.PCL.csproj", "{CF7A2DF4-2638-4991-81F5-DCF7A68A5911}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable", "RestSharp.Portable\RestSharp.Portable.shproj", "{6E125AED-4FF9-4294-BB38-ADB498132A14}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.HttpClient.Shared", "RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.shproj", "{6E125AED-4FF9-4294-BB38-ADB498132A14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.SL5", "RestSharp.Portable.SL5\RestSharp.Portable.SL5.csproj", "{B4417474-7393-40DC-8AB5-7115990C6F8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.SL5", "RestSharp.Portable.HttpClient.SL5\RestSharp.Portable.HttpClient.SL5.csproj", "{B4417474-7393-40DC-8AB5-7115990C6F8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base Library", "Base Library", "{99B46B19-E0C6-4E89-9103-DD26FE7BFFD1}"
 EndProject
@@ -115,15 +115,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Test", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.OAuth1.Tests", "RestSharp.Portable.OAuth1.Tests\RestSharp.Portable.OAuth1.Tests.csproj", "{392A32D2-5974-48B5-9604-09880285744C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.Android", "RestSharp.Portable.Android\RestSharp.Portable.Android.csproj", "{83366AF6-7732-403F-8956-66DF977F139B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.Android", "RestSharp.Portable.HttpClient.Android\RestSharp.Portable.HttpClient.Android.csproj", "{83366AF6-7732-403F-8956-66DF977F139B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.iOS", "RestSharp.Portable.iOS\RestSharp.Portable.iOS.csproj", "{01DE8F74-819F-4F49-969F-1AA7C4B65D61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.iOS", "RestSharp.Portable.HttpClient.iOS\RestSharp.Portable.HttpClient.iOS.csproj", "{01DE8F74-819F-4F49-969F-1AA7C4B65D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.MonoTouch", "RestSharp.Portable.MonoTouch\RestSharp.Portable.MonoTouch.csproj", "{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.MonoTouch", "RestSharp.Portable.HttpClient.MonoTouch\RestSharp.Portable.HttpClient.MonoTouch.csproj", "{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.NET4", "RestSharp.Portable.NET4\RestSharp.Portable.NET4.csproj", "{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.NET4", "RestSharp.Portable.HttpClient.NET4\RestSharp.Portable.HttpClient.NET4.csproj", "{8DF2ADDF-EBAF-4559-9429-85B5B8C2DCAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.NET45", "RestSharp.Portable.NET45\RestSharp.Portable.NET45.csproj", "{6E25753F-F37D-4C32-931F-D4025546743D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharp.Portable.HttpClient.NET45", "RestSharp.Portable.HttpClient.NET45\RestSharp.Portable.HttpClient.NET45.csproj", "{6E25753F-F37D-4C32-931F-D4025546743D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RestSharp.Portable.Core", "RestSharp.Portable.Core", "{B30340B0-4D38-4072-A0A8-7E51B99B95A0}"
 	ProjectSection(SolutionItems) = preProject
@@ -189,77 +189,77 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RestSharp.Portable.Crypto",
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{7659f0c1-6991-4a41-999d-9e438fc54a52}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems*{7659f0c1-6991-4a41-999d-9e438fc54a52}*SharedItemsImports = 4
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{9e95da88-9986-40fc-b8ad-801fbba1d36a}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{7659f0c1-6991-4a41-999d-9e438fc54a52}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{9e95da88-9986-40fc-b8ad-801fbba1d36a}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{9e95da88-9986-40fc-b8ad-801fbba1d36a}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{9e95da88-9986-40fc-b8ad-801fbba1d36a}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{bdcf3523-a285-4d6b-bbed-98861a5a58f4}*SharedItemsImports = 13
-		RestSharp.Portable\RestSharp.Portable.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{c8c1a1bc-95b4-4417-9e23-d1255ecc2782}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{6e125aed-4ff9-4294-bb38-adb498132a14}*SharedItemsImports = 13
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{66ee6309-c369-4cd9-bd1d-3474143874ab}*SharedItemsImports = 13
-		RestSharp.Portable\RestSharp.Portable.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{83366af6-7732-403f-8956-66df977f139b}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{01de8f74-819f-4f49-969f-1aa7c4b65d61}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{bd08a0f9-fb0d-4585-a715-e21d8dfb62e1}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems*{0af7956a-65a5-46e6-bed6-dcac1edb0bb9}*SharedItemsImports = 13
-		RestSharp.Portable\RestSharp.Portable.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{1928a21e-cf87-465d-aca0-16f95333ab46}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{b4417474-7393-40dc-8ab5-7115990c6f8d}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{1928a21e-cf87-465d-aca0-16f95333ab46}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{1928a21e-cf87-465d-aca0-16f95333ab46}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{1928a21e-cf87-465d-aca0-16f95333ab46}*SharedItemsImports = 4
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{37aa1ea7-ca0d-46a0-ab54-2685c56406f8}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{3b4caba1-b3c6-40dd-99e2-4bce7c35382f}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{37aa1ea7-ca0d-46a0-ab54-2685c56406f8}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{37aa1ea7-ca0d-46a0-ab54-2685c56406f8}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37aa1ea7-ca0d-46a0-ab54-2685c56406f8}*SharedItemsImports = 4
 		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{c7d02a59-904d-4f90-b3cb-891e40aa8eb8}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{d1285f85-af1f-4a53-b9f9-9e3627970eea}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{8df2addf-ebaf-4559-9429-85b5b8c2dcab}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{40e7ac4e-06cb-40da-b3b6-ac418d533f1a}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{89550987-88eb-4df3-9969-ee6e673dae88}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{23041120-0054-41d1-8fa7-d66acef22a44}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01150eb4-311c-46a1-8c5b-cc5667da38ab}*SharedItemsImports = 4
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{f0c273e4-854d-4140-86eb-7dc4834999b3}*SharedItemsImports = 4
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{0422e016-938b-4ea1-af92-9f8be3b23ae8}*SharedItemsImports = 13
 		RestSharp.Portable.Crypto\System.Security.Cryptography.projitems*{9c53c4ac-1a03-4d74-a2b6-8a5968eb2cf5}*SharedItemsImports = 13
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{d9e54193-ce87-4a25-906c-1916bd6d0f5b}*SharedItemsImports = 4
-		RestSharp.Portable.Crypto\System.Security.Cryptography.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
+		RestSharp.Portable.Crypto\System.Security.Cryptography.projitems*{5dc024cb-40c9-4573-8a51-05d80e703fe7}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{846592b7-3dc7-4c76-a04b-a224cda0a2bb}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{c357e7f1-f9a3-445a-ad8f-21ca0f9179dd}*SharedItemsImports = 13
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{37b832b5-aa7c-48ac-9f27-bd222f1db2c0}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{ccaaf69c-4b14-450d-bd09-ac525849b154}*SharedItemsImports = 4
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
-		RestSharp.Portable\RestSharp.Portable.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{056664a4-4180-416f-bb22-68b7984ddec9}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{cf7a2df4-2638-4991-81f5-dcf7a68a5911}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{71d709e1-0669-4bdd-b85b-4291831b2eaf}*SharedItemsImports = 13
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{96cacb80-f0bf-4953-b2bb-50a59ce1b5b3}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{0646515d-d16b-4ec2-acb2-e06020807388}*SharedItemsImports = 13
-		RestSharp.Portable\RestSharp.Portable.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
+		RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems*{6e25753f-f37d-4c32-931f-d4025546743d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{3cd384af-547e-40e7-a210-3b134c0ce422}*SharedItemsImports = 4
-		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{c11fae2c-a2ec-4e3f-89a1-3026cfa2707e}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{c11fae2c-a2ec-4e3f-89a1-3026cfa2707e}*SharedItemsImports = 4
+		System.Net.Http.Primitives.Redirect\System.Net.Http.Primitives.Redirect.projitems*{c11fae2c-a2ec-4e3f-89a1-3026cfa2707e}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{c11fae2c-a2ec-4e3f-89a1-3026cfa2707e}*SharedItemsImports = 4
 		RestSharp.Portable.Content\RestSharp.Portable.Content.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
 		System.Net.Http.Primitives\System.Net.Http.Primitives.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
 		RestSharp.Portable.WebRequest\RestSharp.Portable.WebRequest.projitems*{aedf887e-2b58-4198-b3a3-d09bb303c3d0}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{d32fd25d-47e9-4737-871c-c3048809a620}*SharedItemsImports = 4
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.NetFramework\RestSharp.Portable.OAuth.NetFramework.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{98442f49-58cb-48fa-97c0-9b77d82c49d7}*SharedItemsImports = 4
 		Zlib.Portable\Zlib.Portable.projitems*{4b247f85-b30f-490f-a241-a7270ac5fa13}*SharedItemsImports = 4
 		RestSharp.Portable.Encodings\RestSharp.Portable.Encodings.projitems*{81f196f3-0e46-4b0c-98cf-e8a43e8c5af4}*SharedItemsImports = 13
 		RestSharp.Portable.OAuth2\RestSharp.Portable.OAuth2.projitems*{01dcc8da-1b20-47aa-bb06-70933046435b}*SharedItemsImports = 4
-		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
 		RestSharp.Portable.OAuth.BouncyCastle\RestSharp.Portable.OAuth.BouncyCastle.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
-		RestSharp.Portable.Crypto\System.Security.Cryptography.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
+		RestSharp.Portable.OAuth\RestSharp.Portable.OAuth.projitems*{99a06c44-0c23-496a-bbb5-fb86f19dc52d}*SharedItemsImports = 4
 		RestSharp.Portable.Core\RestSharp.Portable.Core.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
+		RestSharp.Portable.Crypto\System.Security.Cryptography.projitems*{dc82cbd4-3a23-4a78-87b0-95d0bc716f08}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

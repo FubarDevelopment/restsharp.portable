@@ -5,13 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C8C1A1BC-95B4-4417-9E23-D1255ECC2782}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{01DE8F74-819F-4F49-969F-1AA7C4B65D61}</ProjectGuid>
+    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>RestSharp.Portable.HttpClient</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>RestSharp.Portable.HttpClient</AssemblyName>
-    <NuGetPackageImportStamp>4bd8d213</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,7 +64,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
+    <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestSharp.Portable.Core.AsyncPCL\RestSharp.Portable.Core.AsyncPCL.csproj">
@@ -76,6 +75,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <Import Project="..\RestSharp.Portable\RestSharp.Portable.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable\RestSharp.Portable.projitems')" />
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="..\RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems" Label="Shared" Condition="Exists('..\RestSharp.Portable.HttpClient.Shared\RestSharp.Portable.HttpClient.Shared.projitems')" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
