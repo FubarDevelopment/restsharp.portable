@@ -22,35 +22,35 @@ namespace RestSharp.Portable.Test
                 {
                     using (var guard = new AsyncLock())
                     {
-            var results = new ConcurrentQueue<int>();
-            var t1 = Task.Run(
-                async () =>
-                    {
-                        using (await guard.LockAsync(CancellationToken.None))
-                        {
+                        var results = new ConcurrentQueue<int>();
+                        var t1 = Task.Run(
+                            async () =>
+                            {
+                                using (await guard.LockAsync(CancellationToken.None))
+                                {
                                     evt.Set();
                                     evt.WaitOne();
-                            Thread.Sleep(TimeSpan.FromMilliseconds(500));
-                        results.Enqueue(1);
+                                    Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                                    results.Enqueue(1);
                                 }
-                    });
+                            });
                         evt.WaitOne();
 
-            var t2 = Task.Run(
-                async () =>
-                {
+                        var t2 = Task.Run(
+                            async () =>
+                            {
                                 evt.Set();
-                    using (await guard.LockAsync(CancellationToken.None))
+                                using (await guard.LockAsync(CancellationToken.None))
                                 {
-                    results.Enqueue(2);
+                                    results.Enqueue(2);
                                 }
-                });
+                            });
 
-            Task.WaitAll(t1, t2);
-            var resultsData = results.ToArray();
-            Assert.Equal(1, resultsData[0]);
-            Assert.Equal(2, resultsData[1]);
-        }
+                        Task.WaitAll(t1, t2);
+                        var resultsData = results.ToArray();
+                        Assert.Equal(1, resultsData[0]);
+                        Assert.Equal(2, resultsData[1]);
+                    }
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace RestSharp.Portable.Test
         }
 
         [Fact]
-        public async void TestGuardLockMultipleDispose()
+        public async Task TestGuardLockMultipleDispose()
         {
             var guard = new AsyncLock();
             var task = Task.Run(
@@ -107,7 +107,7 @@ namespace RestSharp.Portable.Test
         }
 
         [Fact]
-        public async void TestGuardLockEarlyDispose()
+        public async Task TestGuardLockEarlyDispose()
         {
             var cts = new CancellationTokenSource();
             var guard = new AsyncLock();
@@ -116,16 +116,16 @@ namespace RestSharp.Portable.Test
                 {
                     using (await guard.LockAsync(cts.Token))
                     {
-                        await Task.Delay(200);
+                        await Task.Delay(200, CancellationToken.None);
                         cts.Token.ThrowIfCancellationRequested();
                     }
                 },
                 cts.Token);
-            await Task.Delay(100);
+            await Task.Delay(100, CancellationToken.None);
             cts.Cancel();
             guard.Dispose();
 
-            await Task.Delay(200);
+            await Task.Delay(200, CancellationToken.None);
             Assert.Equal(TaskStatus.Canceled, task.Status);
         }
     }
