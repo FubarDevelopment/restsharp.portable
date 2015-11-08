@@ -371,12 +371,25 @@ namespace RestSharp.Portable.Authenticators
                                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters
                                    && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
-            var requestParameters = client.MergeParameters(request).Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
-            if (!useMultiPart)
+            var requestParameters = client.MergeParameters(request).AsEnumerable();
+            var effectiveMethod = client.GetEffectiveHttpMethod(request);
+            if (effectiveMethod == Method.GET)
             {
+                requestParameters = requestParameters.Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
                 foreach (var p in requestParameters)
                 {
-                    parameters.Add(new WebPair(p.Name, p.Value.ToString()));
+                    parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Query));
+                }
+            }
+            else if (!useMultiPart && effectiveMethod == Method.POST)
+            {
+                foreach (var p in requestParameters.Where(x => x.Type == ParameterType.QueryString))
+                {
+                    parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Query));
+                }
+                foreach (var p in requestParameters.Where(x => x.Type == ParameterType.GetOrPost))
+                {
+                    parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Post));
                 }
             }
             else
@@ -384,7 +397,7 @@ namespace RestSharp.Portable.Authenticators
                 // if we are sending a multipart request, only the "oauth_" parameters should be included in the signature
                 foreach (var p in requestParameters.Where(p => p.Name.StartsWith("oauth_", StringComparison.Ordinal)))
                 {
-                    parameters.Add(new WebPair(p.Name, p.Value.ToString()));
+                    parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Internal));
                 }
             }
 
@@ -412,11 +425,11 @@ namespace RestSharp.Portable.Authenticators
             switch (ParameterHandling)
             {
                 case OAuthParameterHandling.HttpAuthorizationHeader:
-                    parameters.Add("oauth_signature", oauth.Signature);
+                    parameters.Add("oauth_signature", oauth.Signature, WebParameterType.Internal);
                     request.AddHeader("Authorization", GetAuthorizationHeader(parameters));
                     break;
                 case OAuthParameterHandling.UrlOrPostParameters:
-                    parameters.Add("oauth_signature", oauth.Signature);
+                    parameters.Add("oauth_signature", oauth.Signature, WebParameterType.Internal);
                     foreach (var parameter in parameters.Where(
                         parameter => !string.IsNullOrEmpty(parameter.Name)
                                      && (parameter.Name.StartsWith("oauth_") || parameter.Name.StartsWith("x_auth_"))))
@@ -432,7 +445,7 @@ namespace RestSharp.Portable.Authenticators
             }
         }
 
-        private string GetAuthorizationHeader(WebPairCollection parameters)
+        private string GetAuthorizationHeader(WebParameterCollection parameters)
         {
             var sb = new StringBuilder();
             if (!string.IsNullOrEmpty(Realm))

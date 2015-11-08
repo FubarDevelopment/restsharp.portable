@@ -222,15 +222,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
             var urlParameters = uri.Query.ParseQueryString();
             foreach (var parameter in urlParameters.Keys)
             {
-                switch (method.ToUpperInvariant())
-                {
-                    case "POST":
-                        parameters.Add(new HttpPostParameter(parameter, urlParameters[parameter]));
-                        break;
-                    default:
-                        parameters.Add(parameter, urlParameters[parameter]);
-                        break;
-                }
+                parameters.Add(new WebParameter(parameter, urlParameters[parameter], WebParameterType.Query));
             }
             var timestamp = CreateTimestampFunc();
             var nonce = OAuthTools.GetNonce(RandomNumberGenerator);
@@ -320,49 +312,49 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 throw new ArgumentException("You must specify a consumer secret");
             }
         }
-        private void AddAuthParameters(ICollection<WebPair> parameters, string timestamp, string nonce)
+        private void AddAuthParameters(ICollection<WebParameter> parameters, string timestamp, string nonce)
         {
             var authParameters = new WebParameterCollection
             {
-                new WebPair("oauth_consumer_key", ConsumerKey),
-                new WebPair("oauth_nonce", nonce),
-                new WebPair("oauth_signature_method", SignatureProvider.Id),
-                new WebPair("oauth_timestamp", timestamp),
-                new WebPair("oauth_version", Version ?? "1.0")
+                new WebParameter("oauth_consumer_key", ConsumerKey, WebParameterType.Internal),
+                new WebParameter("oauth_nonce", nonce, WebParameterType.Internal),
+                new WebParameter("oauth_signature_method", SignatureProvider.Id, WebParameterType.Internal),
+                new WebParameter("oauth_timestamp", timestamp, WebParameterType.Internal),
+                new WebParameter("oauth_version", Version ?? "1.0", WebParameterType.Internal)
             };
             if (!string.IsNullOrEmpty(Token))
             {
-                authParameters.Add(new WebPair("oauth_token", Token));
+                authParameters.Add(new WebParameter("oauth_token", Token, WebParameterType.Internal));
             }
             if (!string.IsNullOrEmpty(CallbackUrl))
             {
-                authParameters.Add(new WebPair("oauth_callback", CallbackUrl));
+                authParameters.Add(new WebParameter("oauth_callback", CallbackUrl, WebParameterType.Internal));
             }
             if (!string.IsNullOrEmpty(Verifier))
             {
-                authParameters.Add(new WebPair("oauth_verifier", Verifier));
+                authParameters.Add(new WebParameter("oauth_verifier", Verifier, WebParameterType.Internal));
             }
             if (!string.IsNullOrEmpty(SessionHandle))
             {
-                authParameters.Add(new WebPair("oauth_session_handle", SessionHandle));
+                authParameters.Add(new WebParameter("oauth_session_handle", SessionHandle, WebParameterType.Internal));
             }
             foreach (var authParameter in authParameters)
             {
                 parameters.Add(authParameter);
             }
         }
-        private void AddXAuthParameters(ICollection<WebPair> parameters, string timestamp, string nonce)
+        private void AddXAuthParameters(ICollection<WebParameter> parameters, string timestamp, string nonce)
         {
             var authParameters = new WebParameterCollection
             {
-                new WebPair("x_auth_username", ClientUsername),
-                new WebPair("x_auth_password", ClientPassword),
-                new WebPair("x_auth_mode", "client_auth"),
-                new WebPair("oauth_consumer_key", ConsumerKey),
-                new WebPair("oauth_signature_method", SignatureProvider.Id),
-                new WebPair("oauth_timestamp", timestamp),
-                new WebPair("oauth_nonce", nonce),
-                new WebPair("oauth_version", Version ?? "1.0")
+                new WebParameter("x_auth_username", ClientUsername, WebParameterType.Internal),
+                new WebParameter("x_auth_password", ClientPassword, WebParameterType.Internal),
+                new WebParameter("x_auth_mode", "client_auth", WebParameterType.Internal),
+                new WebParameter("oauth_consumer_key", ConsumerKey, WebParameterType.Internal),
+                new WebParameter("oauth_signature_method", SignatureProvider.Id, WebParameterType.Internal),
+                new WebParameter("oauth_timestamp", timestamp, WebParameterType.Internal),
+                new WebParameter("oauth_nonce", nonce, WebParameterType.Internal),
+                new WebParameter("oauth_version", Version ?? "1.0", WebParameterType.Internal)
             };
             foreach (var authParameter in authParameters)
             {

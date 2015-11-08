@@ -134,7 +134,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         public static string UrlEncodeStrict(string value)
         {
             // [JD]: We need to escape the apostrophe as well or the signature will fail
-            return _escapeUtility.Escape(value, _encoding);
+            return _escapeUtility.Escape(value, _encoding, UrlEscapeFlags.AllowAllUnreserved);
         }
 
         /// <summary>
@@ -159,10 +159,23 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// <returns>A sorted parameter collection</returns>
         public static WebParameterCollection SortParametersExcludingSignature(WebParameterCollection parameters)
         {
-            var copy = new WebParameterCollection(parameters.Select(x => new WebPair(x.Name, x.Value)));
+            var copy = new WebParameterCollection(parameters.Select(x => new WebParameter(x.Name, x.Value, x.Type)));
             var exclusions = copy.Where(n => string.Equals(n.Name, "oauth_signature", StringComparison.OrdinalIgnoreCase));
             copy.RemoveAll(exclusions);
-            copy.ForEach(p => { p.Name = UrlEncodeStrict(p.Name); p.Value = UrlEncodeStrict(p.Value); });
+            copy.ForEach(p =>
+            {
+                p.Name = UrlEncodeStrict(p.Name);
+                if (p.Type == WebParameterType.Query)
+                {
+                    // Parameter provided by the user
+                    p.Value = _escapeUtility.Escape(p.Value, _encoding, UrlEscapeFlags.AllowLikeEscapeUriString);
+                }
+                else
+                {
+                    // Authorization or POST parameter
+                    p.Value = UrlEncodeStrict(p.Value);
+                }
+            });
             copy.Sort(
             (x, y) =>
             string.CompareOrdinal(x.Name, y.Name) != 0

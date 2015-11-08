@@ -30,7 +30,7 @@ namespace RestSharp.Portable
         #region Allowed character sets
 
         /// <summary>
-        /// Allow all characters that are allowed by EscapeDataString
+        /// Allow all characters that are allowed by <see cref="Uri.EscapeDataString(string)"/>
         /// </summary>
         AllowLikeEscapeDataString = 0x0000,
 
@@ -43,6 +43,11 @@ namespace RestSharp.Portable
         /// Allow all characters that are allowed by UrlEncode
         /// </summary>
         AllowLikeUrlEncode = 0x0002,
+
+        /// <summary>
+        /// Allow all characters that are allowed by <see cref="Uri.EscapeUriString(string)"/>
+        /// </summary>
+        AllowLikeEscapeUriString = 0x0003,
 
         /// <summary>
         /// The mask for all variants of allowed character sets

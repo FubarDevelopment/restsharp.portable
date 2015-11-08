@@ -16,9 +16,10 @@
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
-    internal enum HttpPostParameterType
+    internal enum WebParameterType
     {
-        Field,
-        File
+        Query,
+        Post,
+        Internal,
     }
 }

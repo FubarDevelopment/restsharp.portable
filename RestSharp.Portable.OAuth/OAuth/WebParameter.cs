@@ -16,9 +16,16 @@
 
 namespace RestSharp.Portable.Authenticators.OAuth
 {
-    internal class WebParameter : WebPair
+    internal class WebParameter
     {
-        public WebParameter(string name, string value)
-            : base(name, value) { }
+        public WebParameter(string name, string value, WebParameterType type)
+        {
+            Name = name;
+            Value = value;
+            Type = type;
+        }
+        public string Value { get; set; }
+        public string Name { get; set; }
+        public WebParameterType Type { get; set; }
     }
 }
