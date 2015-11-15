@@ -44,6 +44,24 @@ namespace RestSharp.Portable.Test
             Assert.Equal(expected, test);
         }
 
+        [Fact]
+        public void TestEncodeLikeEscapeUriString()
+        {
+            const string chars = ".:#&?=!$%'()*+,/;@[]-_~{} ";
+            var expected = Uri.EscapeUriString(chars);
+            var test = UrlUtility.Escape(chars, UrlEscapeFlags.AllowLikeEscapeUriString);
+            Assert.Equal(expected, test);
+        }
+
+        [Fact]
+        public void TestEncodeLikeUrlEncode()
+        {
+            const string chars = ".:#&?=!$%'()*+,/;@[]-_~{} ";
+            var expected = HttpUtility.UrlEncode(chars);
+            var test = UrlUtility.Escape(chars, UrlEscapeFlags.LikeUrlEncode);
+            Assert.Equal(expected, test);
+        }
+
 #if ENABLE_MULTI_TEST
         [Fact]
         public void TestEscapeDataStringComplianceASCII100000()
