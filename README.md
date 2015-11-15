@@ -103,6 +103,10 @@ refresh token. This should fix the problem with exiring access tokens.
     authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
 * New Gitter OAuth 2.0 client
 
+## 2.4.5 ##
+
+* Async locking fixes (provided by [evnik](https://github.com/evnik))
+
 ## 2.4.4 ##
 
 * Bugfix for issue [#29](https://github.com/FubarDevelopment/restsharp.portable/issues/29).
