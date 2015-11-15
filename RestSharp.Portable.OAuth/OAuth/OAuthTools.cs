@@ -168,7 +168,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
                 if (p.Type == WebParameterType.Query)
                 {
                     // Parameter provided by the user
-                    p.Value = _escapeUtility.Escape(p.Value, _encoding, UrlEscapeFlags.AllowLikeEscapeUriString);
+                    p.Value = _escapeUtility.Escape(p.Value, _encoding, UrlEscapeFlags.AllowLikeWebRequest);
                 }
                 else
                 {
