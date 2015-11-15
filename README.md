@@ -20,6 +20,11 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 
 # Changes #
 
+## 3.0.0 beta 12 ##
+
+* A special URL encoding is required for query parameters used to calculate
+  the OAuth 1.0 signature - fixes sending a URL as Twitter status
+
 ## 3.0.0 beta 11 ##
 
 * Async locking fixes (provided by [evnik](https://github.com/evnik))
