@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using RestSharp.Portable.Authenticators;
 using RestSharp.Portable.Authenticators.OAuth;
 
 using Xunit;
+using RestSharp.Portable.WebRequest;
 
 namespace RestSharp.Portable.OAuth1.Tests
 {
@@ -70,6 +72,41 @@ namespace RestSharp.Portable.OAuth1.Tests
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"SIDMGnDWsGNw8XKV9WrrdAgynSE%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
+        }
+
+        [Theory]
+        [InlineData(":/#&?")]
+        [InlineData("-_.~'")]
+        [InlineData("!*()")]
+        [InlineData("=,;$@{}[]")]
+        public async Task TestTumblr(string text)
+        {
+            var consumerId = ConfigurationManager.AppSettings["tumblr-consumer-id"];
+            var consumerSecret = ConfigurationManager.AppSettings["tumblr-consumer-secret"];
+            var accessToken = ConfigurationManager.AppSettings["tumblr-access-token"];
+            var accessSecret = ConfigurationManager.AppSettings["tumblr-access-secret"];
+            var hostName = ConfigurationManager.AppSettings["tumblr-blog-hostname"];
+
+            if (string.IsNullOrEmpty(consumerId)
+                || string.IsNullOrEmpty(consumerSecret)
+                || string.IsNullOrEmpty(accessToken)
+                || string.IsNullOrEmpty(accessSecret)
+                || string.IsNullOrEmpty(hostName))
+                return;
+
+            using (var client = new RestClient("https://api.tumblr.com/")
+            {
+                Authenticator = OAuth1Authenticator.ForProtectedResource(consumerId, consumerSecret, accessToken, accessSecret),
+            })
+            {
+                var request = new RestRequest("v2/blog/{hostName}/post", Method.POST);
+                request.AddUrlSegment("hostName", hostName);
+                request.AddParameter("type", "text");
+                request.AddParameter("body", text);
+
+                var response = await client.Execute(request);
+                Assert.NotNull(response);
+            }
         }
 
         private static long ToUnixTime(DateTime dateTime)

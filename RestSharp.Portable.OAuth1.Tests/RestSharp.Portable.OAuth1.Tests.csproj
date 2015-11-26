@@ -44,6 +44,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -75,6 +76,7 @@
     <None Include="..\RestSharp.Portable.snk">
       <Link>RestSharp.Portable.snk</Link>
     </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +87,10 @@
     <ProjectReference Include="..\RestSharp.Portable.OAuth.NET45\RestSharp.Portable.OAuth.NET45.csproj">
       <Project>{3B4CABA1-B3C6-40DD-99E2-4BCE7C35382F}</Project>
       <Name>RestSharp.Portable.OAuth.NET45</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RestSharp.Portable.WebRequest.NET45\RestSharp.Portable.WebRequest.NET45.csproj">
+      <Project>{d9e54193-ce87-4a25-906c-1916bd6d0f5b}</Project>
+      <Name>RestSharp.Portable.WebRequest.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

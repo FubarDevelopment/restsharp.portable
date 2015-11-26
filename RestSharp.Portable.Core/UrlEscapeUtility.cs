@@ -25,7 +25,7 @@ namespace RestSharp.Portable
             { UrlEscapeFlags.AllowAllUnreserved, new HashSet<byte>(UrlUtility.Unreserved) },
             { UrlEscapeFlags.AllowLikeUrlEncode, new HashSet<byte>(UrlUtility.AlphaNum.Union(Encoding.UTF8.GetBytes("-_.!*()"))) },
             { UrlEscapeFlags.AllowLikeEscapeUriString, new HashSet<byte>(UrlUtility.Unreserved.Union(Encoding.UTF8.GetBytes(":&/?+#=$,;@[]"))) },
-            { UrlEscapeFlags.AllowLikeWebRequest, new HashSet<byte>(UrlUtility.AlphaNum.Union(Encoding.UTF8.GetBytes("-_.~")).Union(Encoding.UTF8.GetBytes(":"))) },
+            { UrlEscapeFlags.AllowLikeWebRequest, new HashSet<byte>(UrlUtility.AlphaNum.Union(Encoding.UTF8.GetBytes("-_.~:"))) },
         };
 
         private static readonly Dictionary<UrlEscapeFlags, EscapeBuilderDelegate> s_escapeBuilders = new Dictionary<UrlEscapeFlags, EscapeBuilderDelegate>

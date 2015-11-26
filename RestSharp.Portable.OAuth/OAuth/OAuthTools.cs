@@ -134,7 +134,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         public static string UrlEncodeStrict(string value)
         {
             // [JD]: We need to escape the apostrophe as well or the signature will fail
-            return _escapeUtility.Escape(value, _encoding, UrlEscapeFlags.AllowAllUnreserved);
+            return _escapeUtility.Escape(value, _encoding, UrlEscapeFlags.Default);
         }
 
         /// <summary>
