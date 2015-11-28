@@ -6,9 +6,11 @@ This is some kind of a RestSharp port to PCL.
 
 # [BSD 2-Clause License](LICENSE.md) #
 
-# News #
+# Changes #
 
-Version 3.0.0 will come soon and it will contain **breaking changes**:
+## 3.1.0 ##
+
+This is the final release for version 3. Be aware that version 3.1 contains many **breaking changes**:
 
 * The ```IRestRequest.Credentials``` property moved to ```IRestClient.Credentials```
 * Credentials for authenticators are specified using the ```IRestClient.Credentials``` property
@@ -17,8 +19,6 @@ Version 3.0.0 will come soon and it will contain **breaking changes**:
 * New interfaces that are an abstraction of the HttpClient and its request/response messages
 * Uses now a RestSharp project compatible Method enumeration for HTTP requests
 * Support for WebRequest as back-end for RestSharp.Portable
-
-# Changes #
 
 ## 3.0.0 beta 12 ##
 
