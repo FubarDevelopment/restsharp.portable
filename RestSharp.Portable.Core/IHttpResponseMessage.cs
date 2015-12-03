@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable
 {
     /// <summary>
@@ -36,6 +38,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the content of the response
         /// </summary>
+        [CanBeNull]
         IHttpContent Content { get; }
 
         /// <summary>

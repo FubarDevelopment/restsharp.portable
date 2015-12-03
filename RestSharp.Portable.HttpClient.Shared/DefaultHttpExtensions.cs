@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 
 using JetBrains.Annotations;
@@ -33,20 +32,11 @@ namespace RestSharp.Portable.HttpClient
         /// </summary>
         /// <param name="headers">The <see cref="IHttpHeaders"/> to convert</param>
         /// <returns>The converted <see cref="IHttpHeaders"/></returns>
+        [CanBeNull]
         public static HttpHeaders AsHttpHeaders([CanBeNull] this IHttpHeaders headers)
         {
-            if (headers == null)
-            {
-                return null;
-            }
-
             var defaultHeaders = headers as DefaultHttpHeaders;
-            if (defaultHeaders != null)
-            {
-                return defaultHeaders.Headers;
-            }
-
-            throw new InvalidOperationException();
+            return defaultHeaders?.Headers;
         }
 
         /// <summary>
@@ -75,6 +65,7 @@ namespace RestSharp.Portable.HttpClient
         /// </summary>
         /// <param name="content">The <see cref="IHttpContent"/> to convert</param>
         /// <returns>The converted <see cref="IHttpContent"/></returns>
+        [CanBeNull]
         public static HttpContent AsHttpContent([CanBeNull] this IHttpContent content)
         {
             if (content == null)

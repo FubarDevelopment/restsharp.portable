@@ -207,5 +207,22 @@ namespace RestSharp.Portable.Test
                 Assert.Equal("value-of-a", resp.Data.Form["a"]);
             }
         }
+
+        [Theory(DisplayName = "Issue 53", Skip = "Cannot reproduce this problem")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue53(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("get", Method.GET);
+                var resp = await client.Execute<HttpBinResponse>(req);
+                Assert.Null(resp.Data);
+            }
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         {
             var requestMessage = request.AsHttpRequestMessage();
             var response = await Client.SendAsync(requestMessage, cancellationToken);
-            return new DefaultHttpResponseMessage(response);
+            return new DefaultHttpResponseMessage(requestMessage, response);
         }
 
         /// <summary>

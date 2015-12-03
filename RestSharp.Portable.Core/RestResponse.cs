@@ -111,35 +111,45 @@ namespace RestSharp.Portable
 
             var requestUri = Client.BuildUri(Request, false);
             ResponseUri = new Uri(requestUri, response.Headers.GetValue("Location", requestUri.ToString()));
-            var data = await response.Content.ReadAsByteArrayAsync();
 
-            var contentType = response.Content.Headers.GetValue("Content-Type");
-            if (string.IsNullOrEmpty(contentType))
+            var content = response.Content;
+
+            if (content == null)
             {
-                ContentType = string.Empty;
+                RawBytes = new byte[0];
             }
             else
             {
-                var semicolonPos = contentType.IndexOf(';');
-                if (semicolonPos != -1)
+                var contentType = content.Headers.GetValue("Content-Type");
+                if (string.IsNullOrEmpty(contentType))
                 {
-                    contentType = contentType.Substring(0, semicolonPos);
+                    ContentType = string.Empty;
+                }
+                else
+                {
+                    var semicolonPos = contentType.IndexOf(';');
+                    if (semicolonPos != -1)
+                    {
+                        contentType = contentType.Substring(0, semicolonPos);
+                    }
+
+                    ContentType = contentType.Trim();
                 }
 
-                ContentType = contentType.Trim();
-            }
+                var data = await content.ReadAsByteArrayAsync();
 
-            IEnumerable<string> contentEncodings;
-            if (response.Content.Headers.TryGetValues("Content-Encoding", out contentEncodings))
-            {
-                var encoding = Client.GetEncoding(contentEncodings);
-                if (encoding != null)
+                IEnumerable<string> contentEncodings;
+                if (content.Headers.TryGetValues("Content-Encoding", out contentEncodings))
                 {
-                    data = encoding.Decode(data);
+                    var encoding = Client.GetEncoding(contentEncodings);
+                    if (encoding != null)
+                    {
+                        data = encoding.Decode(data);
+                    }
                 }
-            }
 
-            RawBytes = data;
+                RawBytes = data;
+            }
         }
     }
 }

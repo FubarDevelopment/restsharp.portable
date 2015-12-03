@@ -160,3 +160,4 @@ $RECYCLE.BIN/
 /nuget-push.ps1
 project.lock.json
 .vs/
+*.targets
