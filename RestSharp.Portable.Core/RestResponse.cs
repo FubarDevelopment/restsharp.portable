@@ -101,7 +101,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="response">Response that will be used to initialize this response.</param>
         /// <returns>Task, because this function runs asynchronously</returns>
-        protected async virtual Task LoadResponse(IHttpResponseMessage response)
+        protected virtual async Task LoadResponse(IHttpResponseMessage response)
         {
             Headers = response.Headers;
 

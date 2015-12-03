@@ -13,16 +13,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Configuration
         /// <summary>
         /// Returns settings for service client with given name.
         /// </summary>
-        public new IClientConfiguration this[string clientTypeName]
-        {
-            get { return this.Services[clientTypeName]; }
-        }
+        public new IClientConfiguration this[string clientTypeName] => Services[clientTypeName];
 
         [ConfigurationProperty(CollectionName), ConfigurationCollection(typeof(ServiceCollection))]
-        public ServiceCollection Services
-        {
-            get { return (ServiceCollection) base[CollectionName]; }
-        }
+        public ServiceCollection Services => (ServiceCollection) base[CollectionName];
 
         public System.Collections.Generic.IEnumerator<IClientConfiguration> GetEnumerator()
         {
