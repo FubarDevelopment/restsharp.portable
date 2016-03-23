@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fubar Development Junker, RestSharp.Portable community and others")]
-[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project 2013-2015")]
+[assembly: AssemblyCopyright("Copyright © RestSharp.Portable project 2013-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
@@ -24,9 +24,9 @@ using System.Runtime.CompilerServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.1.0.0")]
-[assembly: AssemblyFileVersion("3.1.0.0")]
-[assembly: AssemblyInformationalVersion("3.1.0.0")]
+[assembly: AssemblyVersion("3.1.1")]
+[assembly: AssemblyFileVersion("3.1.1")]
+[assembly: AssemblyInformationalVersion("3.1.1")]
 
 [assembly: InternalsVisibleTo("RestSharp.Portable.OAuth, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +

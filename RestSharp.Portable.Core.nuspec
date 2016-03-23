@@ -25,7 +25,7 @@ Supported Platforms:
         <releaseNotes>- New core library that contains all interfaces and some generic stuff
 - New UserAgent property
 - Fix for issue #42</releaseNotes>
-        <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
+        <copyright>Copyright © RestSharp.Portable project 2013-2016</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable core</tags>
         <frameworkAssemblies>

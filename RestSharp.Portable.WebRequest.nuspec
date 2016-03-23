@@ -24,7 +24,7 @@ Supported Platforms:
         <releaseNotes>- First version of a WebRequest based RestSharp.Portable
 - New UserAgent property
 - Enable automatic decompression (if available)</releaseNotes>
-        <copyright>Copyright © RestSharp.Portable project 2013-2015</copyright>
+        <copyright>Copyright © RestSharp.Portable project 2013-2016</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable</tags>
         <dependencies>
