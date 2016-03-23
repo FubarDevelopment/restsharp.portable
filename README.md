@@ -8,12 +8,16 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
+## 3.1.1 ##
+
+* Fix for [issue #57](https://github.com/FubarDevelopment/restsharp.portable/issues/57) (thanks to zevsst)
+
 ## 3.1.0 ##
 
 This is the final release for version 3. Be aware that version 3.1 contains many **breaking changes**:
 
-* The ```IRestRequest.Credentials``` property moved to ```IRestClient.Credentials```
-* Credentials for authenticators are specified using the ```IRestClient.Credentials``` property
+* The `IRestRequest.Credentials` property moved to `IRestClient.Credentials`
+* Credentials for authenticators are specified using the `IRestClient.Credentials` property
 * New core library that contains all interfaces and other generic stuff
 * New interface for proxies
 * New interfaces that are an abstraction of the HttpClient and its request/response messages
@@ -29,7 +33,7 @@ This is the final release for version 3. Be aware that version 3.1 contains many
 
 * Async locking fixes (provided by [evnik](https://github.com/evnik))
 * OAuth 1.0 fixes (required for Twitter)
-  * UTF-8 encoding for characters like ```\u2764\uFE0F``` (❤️)
+  * UTF-8 encoding for characters like `\u2764\uFE0F` (❤️)
   * Use [EscapeUriString](https://msdn.microsoft.com/de-de/library/system.uri.escapeuristring.aspx) compatible URL encoding for query parameters
 
 ## 3.0.0 beta 09 ##
@@ -38,7 +42,7 @@ Fix endless loop for OAuth2 and failed requests when a refresh token is availabl
 
 ## 3.0.0 beta 07 ##
 
-Remember the OAuth2 refresh token when calling the ```GetCurrentToken``` function with a set
+Remember the OAuth2 refresh token when calling the `GetCurrentToken` function with a set
 refresh token. This should fix the problem with exiring access tokens.
 
 ## 3.0.0 beta 06 ##
@@ -57,14 +61,14 @@ refresh token. This should fix the problem with exiring access tokens.
 
 ## 3.0.0 beta 02 ##
 
-* Support more headers when using ```HttpWebRequest``` instead of ```HttpClient```
-* New ```UserAgent``` property for ```IRestClient```
-* Activated automatic decompression for ```HttpClient``` and ```HttpWebRequest```
+* Support more headers when using `HttpWebRequest` instead of `HttpClient`
+* New `UserAgent` property for `IRestClient`
+* Activated automatic decompression for `HttpClient` and `HttpWebRequest`
 
 ## 3.0.0 beta 01 ##
 
-* Refactoring to reduce source code duplication by adding a ```RestClientBase``` class
-* Allow customization of ```HttpWebRequest``` creation to allow the usage of client certificates
+* Refactoring to reduce source code duplication by adding a `RestClientBase` class
+* Allow customization of `HttpWebRequest` creation to allow the usage of client certificates
 * Support for RSA-SHA1 for platforms with full .NET Framework support
 * New OAuth 1.0 test that uses [oauthbin.com](http://oauthbin.com)
 
@@ -97,15 +101,15 @@ refresh token. This should fix the problem with exiring access tokens.
 ## 3.0.0 alpha 3 ##
 
 * Revamped authenticator interfaces
-  * Provide a way to process the ```Www-Authenticate``` header
-  * Make HTTP Basic/Digest authenticators work with ```Proxy-Authenticate``` header
-  * Credentials property moved from ```IRestRequest``` to ```IRestClient```
+  * Provide a way to process the `Www-Authenticate` header
+  * Make HTTP Basic/Digest authenticators work with `Proxy-Authenticate` header
+  * Credentials property moved from `IRestRequest` to `IRestClient`
   * The NTLM authenticator is not needed anymore, because the the credentials from 
-    the ```IRestRequest``` are automatically used in the ```HttpClientHandler``` which handles
+    the `IRestRequest` are automatically used in the `HttpClientHandler` which handles
     the Basic/Digest/NTLM authentication automatically
   * All authenticators should query the credentials passed to the authenticator
-  * New ```AuthenticationChallengeHandler``` which selects one of the registered
-    authenticators in response to a ```Www-Authenticate``` or ```Proxy-Authenticate``` challenge.
+  * New `AuthenticationChallengeHandler` which selects one of the registered
+    authenticators in response to a `Www-Authenticate` or `Proxy-Authenticate` challenge.
 * New Gitter OAuth 2.0 client
 
 ## 2.4.5 ##
@@ -133,7 +137,7 @@ refresh token. This should fix the problem with exiring access tokens.
 
 ## 2.4.0 ##
 
-* New ```Timeout``` property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
+* New `Timeout` property to fix issue [#13](https://github.com/FubarDevelopment/restsharp.portable/issues/13) with [CancellationTokenSource.CancelAfter](https://msdn.microsoft.com/de-de/library/hh194678%28v=vs.110%29.aspx)
 
 ## 2.3.2 ##
 
@@ -279,7 +283,7 @@ We use the class with:
 ```csharp
 using (var client = new RestClient(new Uri("https://www.bitstamp.net/api/")))
 {
-    var request = new RestRequest("ticker", HttpMethod.Get);
+    var request = new RestRequest("ticker", Method.GET);
     var result = await client.Execute<TickerResult>(request);
 }
 ```
