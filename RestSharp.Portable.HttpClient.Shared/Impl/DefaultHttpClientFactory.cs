@@ -19,6 +19,8 @@ namespace RestSharp.Portable.HttpClient.Impl
     {
         private readonly PropertyInfo _proxyProperty;
 
+        private readonly FieldInfo _proxyField;
+
         private readonly bool _setCredentials;
 
         /// <summary>
@@ -40,6 +42,16 @@ namespace RestSharp.Portable.HttpClient.Impl
 #else
             _proxyProperty = typeof(HttpClientHandler).GetProperty("Proxy");
 #endif
+            if (_proxyProperty == null)
+            {
+#if USE_TYPEINFO
+                var proxyField = typeof(HttpClientHandler).GetTypeInfo().GetDeclaredField("proxy");
+#else
+                var proxyField = typeof(HttpClientHandler).GetField("proxy", BindingFlags.NonPublic);
+#endif
+                if (proxyField != null && proxyField.FieldType == typeof(IWebProxy) && !proxyField.IsInitOnly)
+                    _proxyField = proxyField;
+            }
             _setCredentials = setCredentials;
         }
 
@@ -241,9 +253,16 @@ namespace RestSharp.Portable.HttpClient.Impl
             var handler = new HttpClientHandler();
 
             var proxy = GetProxy(client);
-            if (handler.SupportsProxy && _proxyProperty != null && proxy != null)
+            if (handler.SupportsProxy && proxy != null)
             {
-                _proxyProperty.SetValue(handler, new RequestProxyWrapper(proxy), null);
+                if (_proxyProperty != null)
+                {
+                    _proxyProperty.SetValue(handler, new RequestProxyWrapper(proxy), null);
+                }
+                else if (_proxyField != null)
+                {
+                    _proxyField.SetValue(handler, new RequestProxyWrapper(proxy));
+                }
             }
 
             var cookieContainer = GetCookies(client, request);
