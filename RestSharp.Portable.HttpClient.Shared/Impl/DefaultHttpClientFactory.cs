@@ -45,7 +45,7 @@ namespace RestSharp.Portable.HttpClient.Impl
             if (_proxyProperty == null)
             {
 #if USE_TYPEINFO
-                var proxyField = typeof(HttpClientHandler).GetTypeInfo().GetDeclaredField("proxy");
+                var proxyField = typeof(HttpClientHandler).GetTypeInfo().DeclaredFields.FirstOrDefault(x => x.Name == "proxy" && x.IsPrivate);
 #else
                 var proxyField = typeof(HttpClientHandler).GetField("proxy", BindingFlags.NonPublic | BindingFlags.Instance);
 #endif
