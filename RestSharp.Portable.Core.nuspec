@@ -22,9 +22,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Core RestSharp.Portable library</summary>
-        <releaseNotes>- New core library that contains all interfaces and some generic stuff
-- New UserAgent property
-- Fix for issue #42</releaseNotes>
+        <releaseNotes>- Fix for issue #55</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2016</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable core</tags>
