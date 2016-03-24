@@ -39,6 +39,48 @@ namespace RestSharp.Portable.Authenticators
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// </summary>
+        /// <param name="credentials">The credentials to use for preauthentication</param>
+        public HttpBasicAuthenticator(NetworkCredential credentials)
+            : this(credentials, AuthHeader.Www)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// </summary>
+        /// <param name="credentials">The credentials to use for preauthentication</param>
+        /// <param name="authHeader">Authentication/Authorization header type</param>
+        public HttpBasicAuthenticator(NetworkCredential credentials, AuthHeader authHeader)
+            : this(credentials.UserName, credentials.Password, authHeader)
+        {
+            _authCredential = credentials;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// </summary>
+        /// <param name="userName">The user name to be used for authentication</param>
+        /// <param name="password">The password to be used for authentication</param>
+        public HttpBasicAuthenticator(string userName, string password)
+            : this(userName, password, AuthHeader.Www)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpBasicAuthenticator" /> class.
+        /// </summary>
+        /// <param name="userName">The user name to be used for authentication</param>
+        /// <param name="password">The password to be used for authentication</param>
+        /// <param name="authHeader">Authentication/Authorization header type</param>
+        public HttpBasicAuthenticator(string userName, string password, AuthHeader authHeader)
+        {
+            _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userName}:{password}"));
+            _authHeader = authHeader;
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the authenticator already as an authorization token available for pre-authentication.
         /// </summary>
         protected bool HasAuthorizationToken => _authToken != null;
@@ -88,16 +130,19 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>The task the authentication is performed on</returns>
         public Task PreAuthenticate(IHttpClient client, IHttpRequestMessage request, ICredentials credentials)
         {
-            return Task.Factory.StartNew(() =>
+            if (!HasAuthorizationToken)
             {
-                if (!CanPreAuthenticate(client, request, credentials))
-                {
-                    throw new InvalidOperationException();
-                }
+                throw new InvalidOperationException();
+            }
 
-                var authHeaderValue = $"{AuthenticationMethod} {_authToken}";
-                request.SetAuthorizationHeader(_authHeader, authHeaderValue);
-            });
+            var authHeaderValue = $"{AuthenticationMethod} {_authToken}";
+            request.SetAuthorizationHeader(_authHeader, authHeaderValue);
+
+#if ASYNC_PCL
+            return Task.FromResult(0);
+#else
+            return new Task(() => { });
+#endif
         }
 
         /// <summary>
@@ -151,17 +196,20 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
         public Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
-            return Task.Factory.StartNew(() =>
+            if (!CanHandleChallenge(client, request, credentials, response))
             {
-                if (!CanHandleChallenge(client, request, credentials, response))
-                {
-                    throw new InvalidOperationException();
-                }
+                throw new InvalidOperationException();
+            }
 
-                var responseUri = client.GetRequestUri(request, response);
-                _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
-                _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_authCredential.UserName}:{_authCredential.Password}"));
-            });
+            var responseUri = client.GetRequestUri(request, response);
+            _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
+            _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_authCredential.UserName}:{_authCredential.Password}"));
+
+#if ASYNC_PCL
+            return Task.FromResult(0);
+#else
+            return new Task(() => { });
+#endif
         }
     }
 }
