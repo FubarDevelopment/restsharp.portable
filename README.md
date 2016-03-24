@@ -8,7 +8,7 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
-## 3.1.2 ##
+## 3.1.3 ##
 
 * Fix for [issue #57](https://github.com/FubarDevelopment/restsharp.portable/issues/57) (thanks to zevsst)
 * Fix for [issue #55](https://github.com/FubarDevelopment/restsharp.portable/issues/55)
