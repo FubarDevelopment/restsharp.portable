@@ -48,5 +48,10 @@ namespace RestSharp.Portable
         /// Gets the description for the HTTP status code
         /// </summary>
         string StatusDescription { get; }
+
+        /// <summary>
+        /// String representation of response content
+        /// </summary>
+        string Content {get;}
     }
 }

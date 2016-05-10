@@ -10,6 +10,8 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestResponse : IRestResponse
     {
+        private string content;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RestResponse" /> class.
         /// </summary>
@@ -60,6 +62,15 @@ namespace RestSharp.Portable
         /// Gets the description for the HTTP status code
         /// </summary>
         public string StatusDescription { get; private set; }
+
+        /// <summary>
+        /// String representation of response content
+        /// </summary>
+        public string Content
+        {
+            get { return this.content ?? (this.content = this.RawBytes.AsString()); }
+            set { this.content = value; }
+        }
 
         /// <summary>
         /// Gets the REST client that created this response

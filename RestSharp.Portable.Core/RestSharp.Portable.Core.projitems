@@ -64,5 +64,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeFlags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlEscapeUtility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UrlUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestResponseExtensions.cs" />
   </ItemGroup>
 </Project>
