@@ -21,7 +21,8 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the raw data
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays", Justification = "Required for RestSharp compatibility")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays",
+            Justification = "Required for RestSharp compatibility")]
         byte[] RawBytes { get; }
 
         /// <summary>
@@ -50,8 +51,8 @@ namespace RestSharp.Portable
         string StatusDescription { get; }
 
         /// <summary>
-        /// String representation of response content
+        /// Gets the string representation of response content
         /// </summary>
-        string Content {get;}
+        string Content { get; }
     }
 }
