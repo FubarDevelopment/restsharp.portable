@@ -24,9 +24,9 @@ using System.Runtime.CompilerServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.1.3")]
-[assembly: AssemblyFileVersion("3.1.3")]
-[assembly: AssemblyInformationalVersion("3.1.3")]
+[assembly: AssemblyVersion("3.2.0")]
+[assembly: AssemblyFileVersion("3.2.0")]
+[assembly: AssemblyInformationalVersion("3.2.0")]
 
 [assembly: InternalsVisibleTo("RestSharp.Portable.OAuth, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +
