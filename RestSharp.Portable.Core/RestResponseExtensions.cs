@@ -11,7 +11,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// The default encoding, when none could be detected
         /// </summary>
-        private static readonly Encoding _defaultEncoding = Encoding.GetEncoding("iso-8859-15");
+        private static readonly Encoding _defaultEncoding = Encoding.UTF8;
 
         /// <summary>
         /// Converts a byte array to a string, using its byte order mark to convert it to the right encoding.
@@ -26,7 +26,7 @@ namespace RestSharp.Portable
             if (buffer == null)
                 return string.Empty;
 
-            // Ansi as default
+            // UTF-8 as default
             var encoding = _defaultEncoding;
 
             if (buffer.Length == 0)
@@ -40,11 +40,7 @@ namespace RestSharp.Portable
                 00 00 FE FF         UTF-32, big-endian
             */
 
-            if (buffer.Length > 2 && buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
-            {
-                encoding = Encoding.UTF8;
-            }
-            else if (buffer.Length > 1 && buffer[0] == 0xfe && buffer[1] == 0xff)
+            if (buffer.Length > 1 && buffer[0] == 0xfe && buffer[1] == 0xff)
             {
                 encoding = Encoding.Unicode;
             }
