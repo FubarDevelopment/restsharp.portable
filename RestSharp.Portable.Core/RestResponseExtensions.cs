@@ -1,52 +1,54 @@
-﻿using System.Text;
-using System.IO;
+﻿using System.IO;
+using System.Text;
 
 namespace RestSharp.Portable
 {
     /// <summary>
     /// Extensions for <see cref="RestResponse"/>
     /// </summary>
-    public static class RestResponseExtensions
+    internal static class RestResponseExtensions
     {
+        /// <summary>
+        /// The default encoding, when none could be detected
+        /// </summary>
+        private static readonly Encoding _defaultEncoding = Encoding.GetEncoding("iso-8859-15");
+
         /// <summary>
         /// Converts a byte array to a string, using its byte order mark to convert it to the right encoding.
         /// http://www.shrinkrays.net/code-snippets/csharp/an-extension-method-for-converting-a-byte-array-to-a-string.aspx
         /// </summary>
-        /// <param name="buffer">An array of bytes to convert</param>
-        /// <returns>The byte as a string.</returns>
-        public static string AsString(this byte[] buffer)
+        /// <param name="response">The REST response</param>
+        /// <returns><see cref="IRestResponse.RawBytes"/> as a string</returns>
+        public static string GetStringContent(this IRestResponse response)
         {
+            var buffer = response.RawBytes;
+
             if (buffer == null)
-            {
-                return "";
-            }
+                return string.Empty;
 
             // Ansi as default
-            Encoding encoding = Encoding.UTF8;
+            var encoding = _defaultEncoding;
 
-#if !PCL
-            return encoding.GetString(buffer, 0, buffer.Length);
-#else
             if (buffer.Length == 0)
-                return "";
+                return string.Empty;
 
             /*
-                EF BB BF            UTF-8 
-                FF FE UTF-16        little endian 
-                FE FF UTF-16        big endian 
-                FF FE 00 00         UTF-32, little endian 
-                00 00 FE FF         UTF-32, big-endian 
+                EF BB BF            UTF-8
+                FF FE UTF-16        little endian
+                FE FF UTF-16        big endian
+                FF FE 00 00         UTF-32, little endian
+                00 00 FE FF         UTF-32, big-endian
             */
 
-            if (buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
+            if (buffer.Length > 2 && buffer[0] == 0xef && buffer[1] == 0xbb && buffer[2] == 0xbf)
             {
                 encoding = Encoding.UTF8;
             }
-            else if (buffer[0] == 0xfe && buffer[1] == 0xff)
+            else if (buffer.Length > 1 && buffer[0] == 0xfe && buffer[1] == 0xff)
             {
                 encoding = Encoding.Unicode;
             }
-            else if (buffer[0] == 0xfe && buffer[1] == 0xff)
+            else if (buffer.Length > 1 && buffer[0] == 0xfe && buffer[1] == 0xff)
             {
                 encoding = Encoding.BigEndianUnicode; // utf-16be
             }
@@ -61,8 +63,6 @@ namespace RestSharp.Portable
                     return reader.ReadToEnd();
                 }
             }
-            #endif
         }
     }
 }
-

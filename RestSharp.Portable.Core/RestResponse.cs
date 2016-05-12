@@ -10,7 +10,7 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestResponse : IRestResponse
     {
-        private string content;
+        private readonly Lazy<string> _content;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestResponse" /> class.
@@ -21,6 +21,7 @@ namespace RestSharp.Portable
         {
             Client = client;
             Request = request;
+            _content = new Lazy<string>(() => this.GetStringContent());
         }
 
         /// <summary>
@@ -63,14 +64,8 @@ namespace RestSharp.Portable
         /// </summary>
         public string StatusDescription { get; private set; }
 
-        /// <summary>
-        /// String representation of response content
-        /// </summary>
-        public string Content
-        {
-            get { return this.content ?? (this.content = this.RawBytes.AsString()); }
-            set { this.content = value; }
-        }
+        /// <inheritdoc />
+        public string Content => _content.Value;
 
         /// <summary>
         /// Gets the REST client that created this response
