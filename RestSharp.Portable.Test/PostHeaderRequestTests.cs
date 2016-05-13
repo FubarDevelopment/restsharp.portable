@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.HttpClient;
@@ -21,14 +20,13 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
-                Timeout = TimeSpan.FromSeconds(10),
             })
             {
                 var request = new RestRequest("post", Method.POST);
                 request.AddHeader("Restsharp-Test1", "TestValue1");
                 request.AddParameter("param1", "ParamValue1");
 
-                var response = await client.Execute<HttpBinResponse>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.Equal("ParamValue1", response.Data.Form["param1"]);
                 Assert.Equal("TestValue1", response.Data.Headers["Restsharp-Test1"]);
             }
@@ -42,7 +40,6 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
-                Timeout = TimeSpan.FromSeconds(10),
             })
             {
                 client.AddDefaultParameter("Restsharp-Test2", "TestValue2", ParameterType.HttpHeader);
@@ -50,7 +47,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("post", Method.POST);
                 request.AddParameter("param1", "ParamValue1");
 
-                var response = await client.Execute<HttpBinResponse>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
+                var response = await client.Execute<HttpBinResponse>(request);
                 Assert.Equal("ParamValue1", response.Data.Form["param1"]);
                 Assert.Equal("TestValue2", response.Data.Headers["Restsharp-Test2"]);
             }
