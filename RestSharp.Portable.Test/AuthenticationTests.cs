@@ -24,7 +24,6 @@ using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [CLSCompliant(false)]
     public class AuthenticationTests : RestSharpTests
     {
         [Theory]

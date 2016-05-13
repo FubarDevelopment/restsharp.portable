@@ -13,9 +13,11 @@ namespace RestSharp.Portable.Test
 {
     public class GuardTests
     {
-        [Fact]
+        [SkippableFact]
         public void TestGuardLock1()
         {
+            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
+
             for (int i = 0; i != 10; ++i)
             {
                 using (var evt = new AutoResetEvent(false))
@@ -55,9 +57,11 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact]
+        [SkippableFact]
         public void TestGuardLock2()
         {
+            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
+
             for (int i = 0; i != 10; ++i)
             {
                 using (var guard = new AsyncLock())
@@ -87,9 +91,11 @@ namespace RestSharp.Portable.Test
             }
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task TestGuardLockMultipleDispose()
         {
+            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
+
             var guard = new AsyncLock();
             var task = Task.Run(
                 async () =>
@@ -106,9 +112,11 @@ namespace RestSharp.Portable.Test
             Assert.Equal(Int32.MaxValue, await task);
         }
 
-        [Fact]
+        [SkippableFact]
         public async Task TestGuardLockEarlyDispose()
         {
+            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
+
             var cts = new CancellationTokenSource();
             var guard = new AsyncLock();
             var task = Task.Run(

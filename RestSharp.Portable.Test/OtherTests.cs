@@ -14,7 +14,6 @@ using Xunit;
 
 namespace RestSharp.Portable.Test
 {
-    [CLSCompliant(false)]
     public class OtherTests : RestSharpTests
     {
         [Theory]
