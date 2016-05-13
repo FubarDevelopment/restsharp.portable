@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
@@ -23,6 +24,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var tmp = new string('a', 70000);
@@ -30,7 +32,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("post", Method.POST);
                 request.AddParameter("param1", tmp);
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -47,6 +49,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var tmp = new string('a', 70000);
@@ -55,7 +58,7 @@ namespace RestSharp.Portable.Test
                 request.AddParameter("param1", tmp);
                 request.AddParameter("param2", "param2");
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -75,6 +78,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var request = new RestRequest("get?a={a}");
@@ -92,15 +96,16 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var req1 = new RestRequest("post", Method.POST);
                 req1.AddParameter("a", "value-of-a");
-                var t1 = client.Execute<HttpBinResponse>(req1);
+                var t1 = client.Execute<HttpBinResponse>(req1, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 var req2 = new RestRequest("post", Method.POST);
                 req2.AddParameter("ab", "value-of-ab");
-                var t2 = client.Execute<HttpBinResponse>(req2);
+                var t2 = client.Execute<HttpBinResponse>(req2, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 Task.WaitAll(t1, t2);
 
@@ -124,13 +129,14 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 client.Authenticator = new HttpBasicAuthenticator();
                 client.Credentials = new NetworkCredential("foo", "bar");
                 var request = new RestRequest("post", Method.GET);
                 request.AddJsonBody("foo");
-                await client.Execute(request);
+                await client.Execute(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
             }
         }
 
@@ -142,6 +148,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var req1 = new RestRequest("post", Method.POST);
@@ -150,8 +157,8 @@ namespace RestSharp.Portable.Test
                 var req2 = new RestRequest("post", Method.POST);
                 req2.AddParameter("ab", "value-of-ab");
 
-                var t1 = client.Execute<HttpBinResponse>(req1);
-                var t2 = client.Execute<HttpBinResponse>(req2);
+                var t1 = client.Execute<HttpBinResponse>(req1, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
+                var t2 = client.Execute<HttpBinResponse>(req2, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Task.WaitAll(t1, t2);
 
                 Assert.NotNull(t1.Result.Data);
@@ -174,12 +181,13 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.ContentCollectionMode = ContentCollectionMode.MultiPart;
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));
@@ -195,12 +203,13 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));
@@ -216,11 +225,12 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10),
                 IgnoreResponseStatusCode = true,
             })
             {
                 var req = new RestRequest("get", Method.GET);
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                 Assert.Null(resp.Data);
             }
         }

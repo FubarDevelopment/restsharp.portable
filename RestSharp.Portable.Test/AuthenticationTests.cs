@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Org.BouncyCastle.Crypto;
@@ -38,6 +39,7 @@ namespace RestSharp.Portable.Test
             {
                 CookieContainer = new CookieContainer(),
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10),
                 Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpBasicAuthenticator(),
             })
@@ -45,7 +47,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -64,6 +66,7 @@ namespace RestSharp.Portable.Test
             {
                 CookieContainer = new CookieContainer(),
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10),
                 Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpHiddenBasicAuthenticator(),
             })
@@ -71,7 +74,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("hidden-basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -90,6 +93,7 @@ namespace RestSharp.Portable.Test
             {
                 CookieContainer = new CookieContainer(),
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10),
                 Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpDigestAuthenticator()
             })
@@ -97,7 +101,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("digest-auth/auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -116,6 +120,7 @@ namespace RestSharp.Portable.Test
             {
                 CookieContainer = new CookieContainer(),
                 HttpClientFactory = CreateClientFactory(factoryType, false),
+                Timeout = TimeSpan.FromSeconds(10),
                 Credentials = new NetworkCredential(username, password),
                 Authenticator = new HttpDigestAuthenticator()
             })
@@ -125,7 +130,7 @@ namespace RestSharp.Portable.Test
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
                 ////request.AddParameter("param1", "val1");
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -178,6 +183,7 @@ namespace RestSharp.Portable.Test
             using (var client = new RestClient("http://oauthbin.com/v1/")
             {
                 HttpClientFactory = httpClientFactory,
+                Timeout = TimeSpan.FromSeconds(10)
             })
             {
                 var consumerKey = "key";
@@ -191,7 +197,7 @@ namespace RestSharp.Portable.Test
 
                 {
                     var request = new RestRequest("request-token");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                     var requestTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', requestTokenResponse);
 
@@ -220,7 +226,7 @@ namespace RestSharp.Portable.Test
 
                 {
                     var request = new RestRequest("access-token");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                     var accessTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', accessTokenResponse);
 
@@ -249,7 +255,7 @@ namespace RestSharp.Portable.Test
                     var request = new RestRequest("echo", Method.POST);
                     request.AddParameter("one", "1");
                     request.AddParameter("two", "2");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request, new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token);
                     var text = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', text);
 
