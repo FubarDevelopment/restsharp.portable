@@ -1,19 +1,26 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
-using RestSharp.Portable.Authenticators;
-using RestSharp.Portable.Authenticators.OAuth;
+using Microsoft.Extensions.Configuration;
+
+using RestSharp.Portable.HttpClient;
 
 using Xunit;
-using RestSharp.Portable.WebRequest;
 
 namespace RestSharp.Portable.OAuth1.Tests
 {
     public class AuthenticatorTests
     {
+        private readonly IConfigurationRoot _configRoot;
+
+        public AuthenticatorTests()
+        {
+            var cfgBuilder = new ConfigurationBuilder()
+                .AddUserSecrets("restsharp.portable.oauth1.tests");
+            _configRoot = cfgBuilder.Build();
+        }
+
         [Fact]
         public async Task ProtectedResourceQueryAsPostComplexUtf8()
         {
@@ -74,25 +81,36 @@ namespace RestSharp.Portable.OAuth1.Tests
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"SIDMGnDWsGNw8XKV9WrrdAgynSE%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
         }
 
-        [Theory]
+        [SkippableTheory]
         [InlineData(":/#&?")]
         [InlineData("-_.~'")]
         [InlineData("!*()")]
         [InlineData("=,;$@{}[]")]
         public async Task TestTumblr(string text)
         {
-            var consumerId = ConfigurationManager.AppSettings["tumblr-consumer-id"];
-            var consumerSecret = ConfigurationManager.AppSettings["tumblr-consumer-secret"];
-            var accessToken = ConfigurationManager.AppSettings["tumblr-access-token"];
-            var accessSecret = ConfigurationManager.AppSettings["tumblr-access-secret"];
-            var hostName = ConfigurationManager.AppSettings["tumblr-blog-hostname"];
+            var clientConfig = _configRoot.GetSection("Tumblr");
 
-            if (string.IsNullOrEmpty(consumerId)
-                || string.IsNullOrEmpty(consumerSecret)
-                || string.IsNullOrEmpty(accessToken)
-                || string.IsNullOrEmpty(accessSecret)
-                || string.IsNullOrEmpty(hostName))
-                return;
+            // Set the configuration values from the command line with:
+            //
+            // dotnet user-secrets set Tumblr:ConsumerId my-consumer-id
+            // dotnet user-secrets set Tumblr:ConsumerSecret my-consumer-secret
+            // dotnet user-secrets set Tumblr:AccessToken my-access-token
+            // dotnet user-secrets set Tumblr:AccessSecret my-access-secret
+            // dotnet user-secrets set Tumblr:BlogHostname my-blog-hostname
+
+            var consumerId = clientConfig["ConsumerId"];
+            var consumerSecret = clientConfig["ConsumerSecret"];
+            var accessToken = clientConfig["AccessToken"];
+            var accessSecret = clientConfig["AccessSecret"];
+            var hostName = clientConfig["BlogHostname"];
+
+            var configEmpty = string.IsNullOrEmpty(consumerId)
+                              || string.IsNullOrEmpty(consumerSecret)
+                              || string.IsNullOrEmpty(accessToken)
+                              || string.IsNullOrEmpty(accessSecret)
+                              || string.IsNullOrEmpty(hostName);
+
+            Skip.If(configEmpty, "Tumblr configuration empty");
 
             using (var client = new RestClient("https://api.tumblr.com/")
             {
@@ -148,7 +166,7 @@ namespace RestSharp.Portable.OAuth1.Tests
             }
         }
 
-        class TestRestClient : RestClientBase
+        private class TestRestClient : RestClientBase
         {
             public TestRestClient()
                 : base(null)
@@ -156,64 +174,9 @@ namespace RestSharp.Portable.OAuth1.Tests
                 BaseUrl = new Uri("https://test.lacolhost/");
             }
 
-            /// <summary>
-            /// Execute the given request
-            /// </summary>
-            /// <param name="request">Request to execute</param>
-            /// <returns>Response returned</returns>
-            public override Task<IRestResponse> Execute(IRestRequest request)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Execute the given request
-            /// </summary>
-            /// <typeparam name="T">
-            /// The type to deserialize the response to.
-            /// </typeparam>
-            /// <param name="request">
-            /// Request to execute
-            /// </param>
-            /// <returns>
-            /// Response returned, with a deserialized object
-            /// </returns>
-            public override Task<IRestResponse<T>> Execute<T>(IRestRequest request)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Gets the content for a request.
-            /// </summary>
-            /// <param name="request">The <see cref="IRestRequest"/> to get the content for.</param>
-            /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
             protected override IHttpContent GetContent(IRestRequest request)
             {
                 return null;
-            }
-
-            /// <summary>
-            /// Cancellable request execution
-            /// </summary>
-            /// <typeparam name="T">The type to deserialize to</typeparam>
-            /// <param name="request">Request to execute</param>
-            /// <param name="ct">The cancellation token</param>
-            /// <returns>Response returned, with a deserialized object</returns>
-            public override Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
-            {
-                throw new NotImplementedException();
-            }
-
-            /// <summary>
-            /// Cancellable request execution
-            /// </summary>
-            /// <param name="request">Request to execute</param>
-            /// <param name="ct">The cancellation token</param>
-            /// <returns>Response returned</returns>
-            public override Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
-            {
-                throw new NotImplementedException();
             }
         }
     }

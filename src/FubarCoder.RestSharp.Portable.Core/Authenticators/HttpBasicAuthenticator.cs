@@ -138,10 +138,10 @@ namespace RestSharp.Portable.Authenticators
             var authHeaderValue = $"{AuthenticationMethod} {_authToken}";
             request.SetAuthorizationHeader(_authHeader, authHeaderValue);
 
-#if ASYNC_PCL
-            return Task.FromResult(0);
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
 #else
-            return new Task(() => { });
+            return Task.FromResult(0);
 #endif
         }
 
@@ -205,10 +205,10 @@ namespace RestSharp.Portable.Authenticators
             _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
             _authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_authCredential.UserName}:{_authCredential.Password}"));
 
-#if ASYNC_PCL
-            return Task.FromResult(0);
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
 #else
-            return new Task(() => { });
+            return Task.FromResult(0);
 #endif
         }
     }

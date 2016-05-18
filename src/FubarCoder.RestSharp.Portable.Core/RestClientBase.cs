@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -16,20 +17,20 @@ namespace RestSharp.Portable
     public abstract class RestClientBase : IRestClient
     {
         private static readonly string s_defaultUserAgent = GetDefaultVersion();
-
-        private readonly IDictionary<string, IDeserializer> _contentHandlers = new Dictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
+        
+        private readonly ObservableDictionary<string, IDeserializer> _contentHandlers = new ObservableDictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IList<string> _acceptTypes = new List<string>();
 
-        private readonly IDictionary<string, IEncoding> _encodingHandlers = new Dictionary<string, IEncoding>(StringComparer.OrdinalIgnoreCase);
+        private readonly ObservableDictionary<string, IEncoding> _encodingHandlers = new ObservableDictionary<string, IEncoding>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IList<string> _acceptEncodings = new List<string>();
 
         private readonly List<Parameter> _defaultParameters = new List<Parameter>();
 
-        private bool _disposedValue; // For the detection of multiple calls
+        private readonly Lazy<IHttpClient> _httpClient;
 
-        private IHttpClient _httpClient;
+        private bool _disposedValue; // For the detection of multiple calls
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestClientBase" /> class.
@@ -37,19 +38,26 @@ namespace RestSharp.Portable
         /// <param name="httpClientFactory">The HTTP client factory to use</param>
         protected RestClientBase(IHttpClientFactory httpClientFactory)
         {
+            _httpClient = new Lazy<IHttpClient>(() => httpClientFactory.CreateClient(this));
+
             HttpClientFactory = httpClientFactory;
 
-            var jsonDeserializer = new JsonDeserializer();
-
             // register default handlers
-            AddHandler("application/json", jsonDeserializer);
-            AddHandler("text/json", jsonDeserializer);
-            AddHandler("text/x-json", jsonDeserializer);
-            AddHandler("text/javascript", jsonDeserializer);
+            var jsonDeserializer = new JsonDeserializer();
+            _contentHandlers.Add("application/json", jsonDeserializer);
+            _contentHandlers.Add("text/json", jsonDeserializer);
+            _contentHandlers.Add("text/x-json", jsonDeserializer);
+            _contentHandlers.Add("text/javascript", jsonDeserializer);
 
             var xmlDataContractDeserializer = new XmlDataContractDeserializer();
-            AddHandler("application/xml", xmlDataContractDeserializer);
-            AddHandler("text/xml", xmlDataContractDeserializer);
+            _contentHandlers.Add("application/xml", xmlDataContractDeserializer);
+            _contentHandlers.Add("text/xml", xmlDataContractDeserializer);
+
+            _contentHandlers.CollectionChanged += ContentHandlersOnCollectionChanged;
+
+            UpdateAcceptsHeader();
+
+            _encodingHandlers.CollectionChanged += EncodingHandlersOnCollectionChanged;
 
             UserAgent = s_defaultUserAgent;
         }
@@ -126,6 +134,12 @@ namespace RestSharp.Portable
         /// </remarks>
         public TimeSpan? Timeout { get; set; }
 
+        /// <inheritdoc />
+        public IDictionary<string, IDeserializer> ContentHandlers => _contentHandlers;
+
+        /// <inheritdoc />
+        public IDictionary<string, IEncoding> EncodingHandlers => _encodingHandlers;
+
         /// <summary>
         /// Gets or sets the user agent for the REST client
         /// </summary>
@@ -160,10 +174,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the collection of the default parameters for all requests
         /// </summary>
-        public IList<Parameter> DefaultParameters
-        {
-            get { return _defaultParameters; }
-        }
+        public IList<Parameter> DefaultParameters => _defaultParameters;
 
         /// <summary>
         /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
@@ -178,7 +189,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the proxy to use for the requests
         /// </summary>
-        public IRequestProxy Proxy { get; set; }
+        public IWebProxy Proxy { get; set; }
 
         /// <summary>
         /// Disposes the used HTTP client
@@ -194,21 +205,27 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="request">Request to execute</param>
         /// <returns>Response returned</returns>
-        public abstract Task<IRestResponse> Execute(IRestRequest request);
+        public virtual async Task<IRestResponse> Execute(IRestRequest request)
+        {
+            using (var response = await ExecuteRequest(request, CancellationToken.None))
+            {
+                return await RestResponse.CreateResponse(this, request, response);
+            }
+        }
 
         /// <summary>
         /// Execute the given request
         /// </summary>
-        /// <typeparam name="T">
-        /// The type to deserialize the response to.
-        /// </typeparam>
-        /// <param name="request">
-        /// Request to execute
-        /// </param>
-        /// <returns>
-        /// Response returned, with a deserialized object
-        /// </returns>
-        public abstract Task<IRestResponse<T>> Execute<T>(IRestRequest request);
+        /// <typeparam name="T">The type to deserialize to</typeparam>
+        /// <param name="request">Request to execute</param>
+        /// <returns>Response returned, with a deserialized object</returns>
+        public virtual async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
+        {
+            using (var response = await ExecuteRequest(request, CancellationToken.None))
+            {
+                return await RestResponse.CreateResponse<T>(this, request, response);
+            }
+        }
 
         /// <summary>
         /// Cancellable request execution
@@ -216,7 +233,13 @@ namespace RestSharp.Portable
         /// <param name="request">Request to execute</param>
         /// <param name="ct">The cancellation token</param>
         /// <returns>Response returned</returns>
-        public abstract Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct);
+        public virtual async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
+        {
+            using (var response = await ExecuteRequest(request, ct))
+            {
+                return await RestResponse.CreateResponse(this, request, response);
+            }
+        }
 
         /// <summary>
         /// Cancellable request execution
@@ -225,53 +248,12 @@ namespace RestSharp.Portable
         /// <param name="request">Request to execute</param>
         /// <param name="ct">The cancellation token</param>
         /// <returns>Response returned, with a deserialized object</returns>
-        public abstract Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct);
-
-        /// <summary>
-        /// Add a new content type handler
-        /// </summary>
-        /// <param name="contentType">The Accept header value</param>
-        /// <param name="deserializer">The deserializer to decode the content</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient AddHandler(string contentType, IDeserializer deserializer)
+        public virtual async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
         {
-            _contentHandlers[contentType] = deserializer;
-            if (contentType != "*")
+            using (var response = await ExecuteRequest(request, ct))
             {
-                _acceptTypes.Add(contentType);
-                UpdateAcceptsHeader();
+                return await RestResponse.CreateResponse<T>(this, request, response);
             }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Remove a previously added content type handler
-        /// </summary>
-        /// <param name="contentType">The Accept header value that identifies the handler</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient RemoveHandler(string contentType)
-        {
-            _contentHandlers.Remove(contentType);
-            if (contentType != "*")
-            {
-                _acceptTypes.Remove(contentType);
-                UpdateAcceptsHeader();
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Remove all previously added content type handlers
-        /// </summary>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient ClearHandlers()
-        {
-            _contentHandlers.Clear();
-            _acceptTypes.Clear();
-            UpdateAcceptsHeader();
-            return this;
         }
 
         /// <summary>
@@ -314,68 +296,6 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Replace all handlers of a given type with a new deserializer
-        /// </summary>
-        /// <param name="oldType">The type of the old deserializer</param>
-        /// <param name="deserializer">The new deserializer</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient ReplaceHandler(Type oldType, IDeserializer deserializer)
-        {
-#if NO_TYPEINFO
-            var contentHandlersToReplace = _contentHandlers.Where(x => x.Value.GetType().IsAssignableFrom(oldType)).ToList();
-#else
-            var contentHandlersToReplace = _contentHandlers.Where(x => x.Value.GetType().GetTypeInfo().IsAssignableFrom(oldType.GetTypeInfo())).ToList();
-#endif
-            foreach (var contentHandlerToReplace in contentHandlersToReplace)
-            {
-                _contentHandlers.Remove(contentHandlerToReplace.Key);
-                _contentHandlers.Add(contentHandlerToReplace.Key, deserializer);
-            }
-
-            UpdateAcceptsHeader();
-            return this;
-        }
-
-        /// <summary>
-        /// Add a new content encoding handler
-        /// </summary>
-        /// <param name="encodingId">The Accept-Encoding header value</param>
-        /// <param name="encoding">The encoding engine to decode the content</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient AddEncoding(string encodingId, IEncoding encoding)
-        {
-            _encodingHandlers[encodingId] = encoding;
-            _acceptEncodings.Add(encodingId);
-            UpdateAcceptsEncodingHeader();
-            return this;
-        }
-
-        /// <summary>
-        /// Remove a previously added content encoding handler
-        /// </summary>
-        /// <param name="encodingId">The Accept-Encoding header value that identifies the handler</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient RemoveEncoding(string encodingId)
-        {
-            _encodingHandlers.Remove(encodingId);
-            _acceptEncodings.Remove(encodingId);
-            UpdateAcceptsEncodingHeader();
-            return this;
-        }
-
-        /// <summary>
-        /// Remove all previously added content encoding handlers
-        /// </summary>
-        /// <returns>The client itself, to allow call chains</returns>
-        public IRestClient ClearEncodings()
-        {
-            _encodingHandlers.Clear();
-            _acceptEncodings.Clear();
-            UpdateAcceptsEncodingHeader();
-            return this;
-        }
-
-        /// <summary>
         /// Get a previously added content encoding handler
         /// </summary>
         /// <param name="encodingIds">The Accept-Encoding header value that identifies the handler</param>
@@ -407,8 +327,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Updates the <code>Accepts</code> default header parameter
         /// </summary>
-        /// <param name="validateOnAdd"><code>true</code> when the header value should be validated when added for the request.</param>
-        protected void UpdateAcceptsHeader(bool validateOnAdd)
+        protected void UpdateAcceptsHeader()
         {
             this.RemoveDefaultParameter("Accept");
             if (_acceptTypes.Count != 0)
@@ -419,17 +338,9 @@ namespace RestSharp.Portable
                     Name = "Accept",
                     Value = accepts,
                     Type = ParameterType.HttpHeader,
-                    ValidateOnAdd = validateOnAdd,
+                    ValidateOnAdd = false,
                 });
             }
-        }
-
-        /// <summary>
-        /// Updates the <code>Accepts</code> default header parameter
-        /// </summary>
-        protected virtual void UpdateAcceptsHeader()
-        {
-            UpdateAcceptsHeader(true);
         }
 
         /// <summary>
@@ -465,13 +376,8 @@ namespace RestSharp.Portable
                     await Authenticator.PreAuthenticate(this, request, Credentials);
                 }
 
-                // Lazy initialization of the HTTP client
-                if (_httpClient == null)
-                {
-                    _httpClient = HttpClientFactory.CreateClient(this, request);
-                }
-
                 bool failed = true;
+                var httpClient = _httpClient.Value;
                 var message = HttpClientFactory.CreateRequestMessage(this, request);
                 try
                 {
@@ -502,22 +408,22 @@ namespace RestSharp.Portable
                         }
                     }
 
-                    ModifyRequestBeforeAuthentication(_httpClient, message);
+                    ModifyRequestBeforeAuthentication(httpClient, message);
 
-                    if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
+                    if (Authenticator != null && Authenticator.CanPreAuthenticate(httpClient, message, Credentials))
                     {
-                        await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
+                        await Authenticator.PreAuthenticate(httpClient, message, Credentials);
                     }
 
-                    var response = await _httpClient.SendAsync(message, ct);
+                    var response = await httpClient.SendAsync(message, ct);
 
                     try
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            if (Authenticator != null && Authenticator.CanHandleChallenge(_httpClient, message, Credentials, response))
+                            if (Authenticator != null && Authenticator.CanHandleChallenge(httpClient, message, Credentials, response))
                             {
-                                await Authenticator.HandleChallenge(_httpClient, message, Credentials, response);
+                                await Authenticator.HandleChallenge(httpClient, message, Credentials, response);
                                 continue;
                             }
 
@@ -568,10 +474,9 @@ namespace RestSharp.Portable
             {
                 if (disposing)
                 {
-                    if (_httpClient != null)
+                    if (_httpClient.IsValueCreated)
                     {
-                        _httpClient.Dispose();
-                        _httpClient = null;
+                        _httpClient.Value.Dispose();
                     }
                 }
 
@@ -581,7 +486,7 @@ namespace RestSharp.Portable
 
         private static string GetDefaultVersion()
         {
-#if NO_TYPEINFO
+#if NET40
             var assembly = typeof(RestClientBase).Assembly;
             var version = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false).Cast<AssemblyFileVersionAttribute>().Single();
 #else
@@ -619,6 +524,64 @@ namespace RestSharp.Portable
 
                 request.Parameters.Insert(startIndex++, parameter);
             }
+        }
+
+        /// <summary>
+        /// Updates the <code>Accepts</code> header whenever the list of content handlers changes
+        /// </summary>
+        /// <param name="sender">The observable dictionary</param>
+        /// <param name="args">The changes</param>
+        private void ContentHandlersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var contentType in args.NewItems.Cast<KeyValuePair<string, IDeserializer>>().Where(x => x.Key != "*").Select(x => x.Key))
+                    {
+                        _acceptTypes.Add(contentType);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    _acceptTypes.Clear();
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var contentType in args.OldItems.Cast<KeyValuePair<string, IDeserializer>>().Where(x => x.Key != "*").Select(x => x.Key))
+                    {
+                        _acceptTypes.Remove(contentType);
+                    }
+                    break;
+            }
+
+            UpdateAcceptsHeader();
+        }
+
+        /// <summary>
+        /// Updates the <code>Accept-Encoding</code> header whenever the list of encoding handlers changes
+        /// </summary>
+        /// <param name="sender">The observable dictionary</param>
+        /// <param name="args">The changes</param>
+        private void EncodingHandlersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var contentType in args.NewItems.Cast<KeyValuePair<string, IEncoding>>().Select(x => x.Key))
+                    {
+                        _acceptEncodings.Add(contentType);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    _acceptEncodings.Clear();
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var contentType in args.OldItems.Cast<KeyValuePair<string, IEncoding>>().Select(x => x.Key))
+                    {
+                        _acceptEncodings.Remove(contentType);
+                    }
+                    break;
+            }
+
+            UpdateAcceptsEncodingHeader();
         }
     }
 }

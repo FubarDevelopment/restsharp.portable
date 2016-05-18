@@ -1,0 +1,62 @@
+﻿{
+  "name": "FubarCoder.RestSharp.Portable.OAuth1",
+  "version": "4.0.0-alpha1-*",
+  "title": "RestSharp.Portable OAuth 1.0 authenticator",
+  "authors": [ "Mark Junker", "Fubar Development Junker" ],
+  "description": "This library contains the OAuth 1.0 authenticator for RestSharp.Portable, which is a port of the OAuth 1.0 authenticator from the original RestSharp project. The authenticator was moved to a different library, to keep the number of dependencies of the RestSharp.Portable package as small as possible.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4",
+  "copyright": "Copyright © RestSharp.Portable project 2013-2016",
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none",
+        "xmlDoc": true
+      }
+    }
+  },
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ]
+  },
+  "packOptions": {
+    "summary": "OAuth 1.0 authenticator",
+    "owners": [ "FubarCoder" ],
+    "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
+    "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
+    "tags": [ "PCL", "RestSharp", "portable", "OAuth" ],
+    "releaseNotes": "- Using the new core library",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FubarDevelopment/restsharp.portable"
+    },
+    "files": {
+      "mappings": {
+        "/": "../../*.md"
+      }
+    }
+  },
+  "dependencies": {
+    "JetBrains.Annotations": {
+      "version": "*",
+      "type": "build"
+    },
+    "FubarCoder.RestSharp.Portable.Core": {
+      "target": "project",
+      "version": ""
+    }
+  },
+  "frameworks": {
+    "netstandard1.3": {
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*"
+      }
+    },
+    "net40": {
+    }
+  }
+}

@@ -1,0 +1,91 @@
+﻿{
+  "name": "FubarCoder.RestSharp.Portable.Core",
+  "version": "4.0.0-alpha1-*",
+  "title": "RestSharp.Portable core library",
+  "authors": [ "Mark Junker", "Fubar Development Junker" ],
+  "description": "This is the core RestSharp.Portable library which contains mostly interfaces to allow dependent libraries to use as few dependencies as possible.\n\nSupported Platforms:\n- .NET Standard 1.1\n- .NET Framework 4",
+  "copyright": "Copyright © RestSharp.Portable project 2013-2016",
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none",
+        "xmlDoc": true
+      }
+    }
+  },
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ]
+  },
+  "packOptions": {
+    "summary": "Core RestSharp.Portable library",
+    "owners": [ "FubarCoder" ],
+    "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
+    "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
+    "tags": [ "PCL", "RestSharp", "portable", "core" ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FubarDevelopment/restsharp.portable"
+    },
+    "files": {
+      "mappings": {
+        "/": "../../*.md"
+      }
+    }
+  },
+  "dependencies": {
+    "JetBrains.Annotations": {
+      "version": "*",
+      "type": "build"
+    }
+  },
+  "frameworks": {
+    "netstandard1.1": {
+      "buildOptions": {
+        "define": [ "HAS_STREAM_WRITER_KEEP_OPEN" ],
+        "compile": {
+          "include": [ 
+            "../../shared/crypto/*.cs",
+            "../../GlobalAssemblyInfo.cs" 
+          ]
+        }
+      },
+      "imports": [ "dnxcore50", "portable-net45+win8+wp8+wpa81" ],
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-*",
+        "System.Runtime.Serialization.Xml": "4.1.1-rc2-*",
+        "Newtonsoft.Json": "6.0.*"
+      }
+    },
+    "netstandard1.3": {
+      "buildOptions": {
+        "define": [ "HAS_STREAM_WRITER_KEEP_OPEN" ]
+      },
+      "imports": [ "dnxcore50", "portable-net45+win8+wp8+wpa81" ],
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-*",
+        "System.Runtime.Serialization.Xml": "4.1.1-rc2-*",
+        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*",
+        "Newtonsoft.Json": "6.0.*"
+      }
+    },
+    "net40": {
+      "buildOptions": {
+        "define": [ "USE_TASKEX" ]
+      },
+      "frameworkAssemblies": {
+        "System.Runtime.Serialization": "",
+        "System.Xml": ""
+      },
+      "dependencies": {
+        "Microsoft.Bcl.Async": "1.0.*",
+        "Newtonsoft.Json": "6.0.*"
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable.Authenticators
+namespace RestSharp.Portable.OAuth2
 {
     /// <summary>
     /// The OAuth 2 authenticator using the authorization request header field.
@@ -19,7 +19,7 @@ namespace RestSharp.Portable.Authenticators
         /// Initializes a new instance of the <see cref="OAuth2AuthorizationRequestHeaderAuthenticator"/> class.
         /// </summary>
         /// <param name="client">The OAuth2 client</param>
-        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2.OAuth2Client client)
+        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2Client client)
             : this(client, string.IsNullOrEmpty(client.TokenType) ? "OAuth" : client.TokenType)
         {
         }
@@ -29,7 +29,7 @@ namespace RestSharp.Portable.Authenticators
         /// </summary>
         /// <param name="client">The OAuth2 client</param>
         /// <param name="tokenType">The token type.</param>
-        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2.OAuth2Client client, string tokenType)
+        public OAuth2AuthorizationRequestHeaderAuthenticator(OAuth2Client client, string tokenType)
             : base(client)
         {
             _tokenType = tokenType;

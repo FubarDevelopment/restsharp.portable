@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable.Authenticators
+namespace RestSharp.Portable.OAuth2
 {
     /// <summary>
     /// The OAuth 2 authenticator using URI query parameter.

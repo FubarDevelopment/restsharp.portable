@@ -30,7 +30,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             var responseHeaders = new GenericHttpHeaders();
             var contentHeaders = new GenericHttpHeaders();
-            if (responseMessage != null && responseMessage.SupportsHeaders)
+            if (responseMessage != null && responseMessage.HasHeaderSupport())
             {
                 foreach (var headerName in responseMessage.Headers.AllKeys)
                 {
@@ -120,7 +120,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 return;
             }
 
+#if !NET40
             ResponseMessage?.Dispose();
+#endif
             _requestMessage.Dispose();
         }
     }

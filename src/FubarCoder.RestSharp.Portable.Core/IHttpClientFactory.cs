@@ -15,13 +15,12 @@ namespace RestSharp.Portable
         /// Create the client
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP client</param>
-        /// <param name="request">The REST request for which the HTTP client is created</param>
         /// <returns>A new HttpClient object</returns>
         /// <remarks>
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        IHttpClient CreateClient(IRestClient client, IRestRequest request);
+        IHttpClient CreateClient(IRestClient client);
 
         /// <summary>
         /// Create the request message

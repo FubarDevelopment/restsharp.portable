@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 using RestSharp.Portable.Content;
 using RestSharp.Portable.WebRequest.Impl;
@@ -18,6 +16,10 @@ namespace RestSharp.Portable.WebRequest
         public RestClient()
             : base(new WebRequestHttpClientFactory())
         {
+#if NETSTANDARD1_1
+            EncodingHandlers.Add("gzip", new Encodings.GzipEncoding());
+            EncodingHandlers.Add("deflate", new Encodings.GzipEncoding());
+#endif            
         }
 
         /// <summary>
@@ -37,62 +39,6 @@ namespace RestSharp.Portable.WebRequest
         public RestClient(string baseUrl)
             : this(new Uri(baseUrl))
         {
-        }
-
-        /// <summary>
-        /// Execute the given request
-        /// </summary>
-        /// <param name="request">Request to execute</param>
-        /// <returns>Response returned</returns>
-        public override async Task<IRestResponse> Execute(IRestRequest request)
-        {
-            using (var response = await ExecuteRequest(request, CancellationToken.None))
-            {
-                return await RestResponse.CreateResponse(this, request, response);
-            }
-        }
-
-        /// <summary>
-        /// Execute the given request
-        /// </summary>
-        /// <typeparam name="T">The type to deserialize to</typeparam>
-        /// <param name="request">Request to execute</param>
-        /// <returns>Response returned, with a deserialized object</returns>
-        public override async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
-        {
-            using (var response = await ExecuteRequest(request, CancellationToken.None))
-            {
-                return await RestResponse.CreateResponse<T>(this, request, response);
-            }
-        }
-
-        /// <summary>
-        /// Cancellable request execution
-        /// </summary>
-        /// <param name="request">Request to execute</param>
-        /// <param name="ct">The cancellation token</param>
-        /// <returns>Response returned</returns>
-        public override async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
-        {
-            using (var response = await ExecuteRequest(request, ct))
-            {
-                return await RestResponse.CreateResponse(this, request, response);
-            }
-        }
-
-        /// <summary>
-        /// Cancellable request execution
-        /// </summary>
-        /// <typeparam name="T">The type to deserialize to</typeparam>
-        /// <param name="request">Request to execute</param>
-        /// <param name="ct">The cancellation token</param>
-        /// <returns>Response returned, with a deserialized object</returns>
-        public override async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
-        {
-            using (var response = await ExecuteRequest(request, ct))
-            {
-                return await RestResponse.CreateResponse<T>(this, request, response);
-            }
         }
 
         /// <summary>

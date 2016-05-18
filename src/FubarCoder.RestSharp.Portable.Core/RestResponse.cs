@@ -10,8 +10,6 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestResponse : IRestResponse
     {
-        private readonly Lazy<string> _content;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RestResponse" /> class.
         /// </summary>
@@ -21,7 +19,6 @@ namespace RestSharp.Portable
         {
             Client = client;
             Request = request;
-            _content = new Lazy<string>(() => this.GetStringContent());
         }
 
         /// <summary>
@@ -63,9 +60,6 @@ namespace RestSharp.Portable
         /// Gets the description for the HTTP status code
         /// </summary>
         public string StatusDescription { get; private set; }
-
-        /// <inheritdoc />
-        public string Content => _content.Value;
 
         /// <summary>
         /// Gets the REST client that created this response

@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EFF4A179-C4F6-42C3-BC01-555A026678D1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F21E30E-ACA0-436C-911C-32CF4F78E06C}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.Core", "src\FubarCoder.RestSharp.Portable.Core\FubarCoder.RestSharp.Portable.Core.xproj", "{C4190A2A-C62E-4BB2-9384-F62847D82D77}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.Encodings", "src\FubarCoder.RestSharp.Portable.Encodings\FubarCoder.RestSharp.Portable.Encodings.xproj", "{7F408AE9-D156-4D1C-95E2-9B6705949B07}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.HttpClient", "src\FubarCoder.RestSharp.Portable.HttpClient\FubarCoder.RestSharp.Portable.HttpClient.xproj", "{0457804C-BDDA-45F6-9D85-7894BE4A9466}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.WebRequest", "src\FubarCoder.RestSharp.Portable.WebRequest\FubarCoder.RestSharp.Portable.WebRequest.xproj", "{1395B21C-574D-458B-8CEB-8D111A456471}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.OAuth1", "src\FubarCoder.RestSharp.Portable.OAuth1\FubarCoder.RestSharp.Portable.OAuth1.xproj", "{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.OAuth2", "src\FubarCoder.RestSharp.Portable.OAuth2\FubarCoder.RestSharp.Portable.OAuth2.xproj", "{B83803B6-9C66-4778-9A36-63F60D01776B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3D996933-0CC8-4653-B4D0-793425E20EF3}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.Tests", "test\FubarCoder.RestSharp.Portable.Tests\FubarCoder.RestSharp.Portable.Tests.xproj", "{E98094F5-A7C8-424C-BECD-05B49BF36185}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarCoder.RestSharp.Portable.OAuth1.Tests", "test\FubarCoder.RestSharp.Portable.OAuth1.Tests\FubarCoder.RestSharp.Portable.OAuth1.Tests.xproj", "{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4190A2A-C62E-4BB2-9384-F62847D82D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4190A2A-C62E-4BB2-9384-F62847D82D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4190A2A-C62E-4BB2-9384-F62847D82D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4190A2A-C62E-4BB2-9384-F62847D82D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F408AE9-D156-4D1C-95E2-9B6705949B07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F408AE9-D156-4D1C-95E2-9B6705949B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F408AE9-D156-4D1C-95E2-9B6705949B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F408AE9-D156-4D1C-95E2-9B6705949B07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0457804C-BDDA-45F6-9D85-7894BE4A9466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0457804C-BDDA-45F6-9D85-7894BE4A9466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0457804C-BDDA-45F6-9D85-7894BE4A9466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0457804C-BDDA-45F6-9D85-7894BE4A9466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1395B21C-574D-458B-8CEB-8D111A456471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1395B21C-574D-458B-8CEB-8D111A456471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1395B21C-574D-458B-8CEB-8D111A456471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1395B21C-574D-458B-8CEB-8D111A456471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83803B6-9C66-4778-9A36-63F60D01776B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83803B6-9C66-4778-9A36-63F60D01776B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83803B6-9C66-4778-9A36-63F60D01776B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83803B6-9C66-4778-9A36-63F60D01776B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E98094F5-A7C8-424C-BECD-05B49BF36185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E98094F5-A7C8-424C-BECD-05B49BF36185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E98094F5-A7C8-424C-BECD-05B49BF36185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E98094F5-A7C8-424C-BECD-05B49BF36185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4190A2A-C62E-4BB2-9384-F62847D82D77} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{7F408AE9-D156-4D1C-95E2-9B6705949B07} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{0457804C-BDDA-45F6-9D85-7894BE4A9466} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{1395B21C-574D-458B-8CEB-8D111A456471} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{750BA618-F9EF-4DCC-B6EC-62E207D4BFBA} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{B83803B6-9C66-4778-9A36-63F60D01776B} = {EFF4A179-C4F6-42C3-BC01-555A026678D1}
+		{E98094F5-A7C8-424C-BECD-05B49BF36185} = {3D996933-0CC8-4653-B4D0-793425E20EF3}
+		{36A3A0E4-A95F-4499-AD8D-9CA0EF83E0E1} = {3D996933-0CC8-4653-B4D0-793425E20EF3}
+	EndGlobalSection
+EndGlobal

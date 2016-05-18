@@ -60,12 +60,12 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="maxBufferSize">The maximum buffer size</param>
         /// <returns>The task that loads the data into an internal buffer</returns>
-        public async Task LoadIntoBufferAsync(long maxBufferSize)
+        public Task LoadIntoBufferAsync(long maxBufferSize)
         {
-#if PCL && !ASYNC_PCL
-            await TaskEx.Yield();
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
 #else
-            await Task.Yield();
+            return Task.FromResult(0);
 #endif
         }
 
@@ -75,7 +75,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the stream</returns>
         public Task<Stream> ReadAsStreamAsync()
         {
-#if PCL && !ASYNC_PCL
+#if USE_TASKEX
             return TaskEx.FromResult<Stream>(new MemoryStream(_data));
 #else
             return Task.FromResult<Stream>(new MemoryStream(_data));
@@ -88,7 +88,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as byte array</returns>
         public Task<byte[]> ReadAsByteArrayAsync()
         {
-#if PCL && !ASYNC_PCL
+#if USE_TASKEX
             return TaskEx.FromResult(_data);
 #else
             return Task.FromResult(_data);
@@ -101,7 +101,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as string</returns>
         public Task<string> ReadAsStringAsync()
         {
-#if PCL && !ASYNC_PCL
+#if USE_TASKEX
             return TaskEx.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));
 #else
             return Task.FromResult(Encoding.UTF8.GetString(_data, 0, _data.Length));

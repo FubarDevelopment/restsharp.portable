@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-#if HAS_SYSTEM_WEB
-using System.Web;
-#endif
 
 namespace RestSharp.Portable
 {
     /// <summary>
     /// Helper class for URL escaping of data
     /// </summary>
-    internal class UrlEscapeUtility
+    internal static class UrlEscapeUtility
     {
         private static readonly Encoding s_defaultEncoding = new UTF8Encoding(false);
 
@@ -33,25 +29,6 @@ namespace RestSharp.Portable
             { UrlEscapeFlags.BuilderVariantListByte, EscapeToBytes1 },
             { UrlEscapeFlags.BuilderVariantListByteArray, EscapeToBytes2 },
         };
-
-        private readonly bool _allowNativeConversion;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UrlEscapeUtility"/> class.
-        /// </summary>
-        public UrlEscapeUtility()
-            : this(true)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UrlEscapeUtility"/> class.
-        /// </summary>
-        /// <param name="allowNativeConversion">Is the usage of the native converison functions allowed?</param>
-        public UrlEscapeUtility(bool allowNativeConversion)
-        {
-            _allowNativeConversion = allowNativeConversion;
-        }
 
         private delegate byte[] EscapeBuilderDelegate(byte[] data, UrlEscapeFlags flags, byte[] hexChars, ISet<byte> allowedBytes);
 
@@ -132,7 +109,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="data">The data to escape</param>
         /// <returns>The escaped data</returns>
-        public string Escape(string data)
+        public static string Escape(string data)
         {
             return Escape(data, UrlEscapeFlags.Default);
         }
@@ -143,7 +120,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
         /// <returns>The escaped data</returns>
-        public string Escape(string data, Encoding encoding)
+        public static string Escape(string data, Encoding encoding)
         {
             return Escape(data, encoding, UrlEscapeFlags.Default);
         }
@@ -153,7 +130,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="data">The data to escape</param>
         /// <returns>The escaped data</returns>
-        public string Escape(byte[] data)
+        public static string Escape(byte[] data)
         {
             return Escape(data, UrlEscapeFlags.Default);
         }
@@ -163,7 +140,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="data">The data to escape</param>
         /// <returns>The escaped data</returns>
-        public byte[] EscapeToBytes(string data)
+        public static byte[] EscapeToBytes(string data)
         {
             return EscapeToBytes(data, UrlEscapeFlags.Default);
         }
@@ -174,7 +151,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
         /// <returns>The escaped data</returns>
-        public byte[] EscapeToBytes(string data, Encoding encoding)
+        public static byte[] EscapeToBytes(string data, Encoding encoding)
         {
             return EscapeToBytes(data, encoding, UrlEscapeFlags.Default);
         }
@@ -184,7 +161,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="data">The data to escape</param>
         /// <returns>The escaped data</returns>
-        public byte[] EscapeToBytes(byte[] data)
+        public static byte[] EscapeToBytes(byte[] data)
         {
             return EscapeToBytes(data, UrlEscapeFlags.Default);
         }
@@ -195,12 +172,8 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        public string Escape(string data, UrlEscapeFlags flags)
+        public static string Escape(string data, UrlEscapeFlags flags)
         {
-#if HAS_SYSTEM_WEB
-            if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
-                return HttpUtility.UrlEncode(data);
-#endif
             return Escape(data, s_defaultEncoding, flags);
         }
 
@@ -211,13 +184,9 @@ namespace RestSharp.Portable
         /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        public string Escape(string data, Encoding encoding, UrlEscapeFlags flags)
+        public static string Escape(string data, Encoding encoding, UrlEscapeFlags flags)
         {
-#if HAS_SYSTEM_WEB
-            if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
-                return HttpUtility.UrlEncode(data, encoding);
-#endif
-            if (_allowNativeConversion && (flags == UrlEscapeFlags.LikeEscapeDataString) && string.Equals(encoding.WebName, "utf-8", StringComparison.OrdinalIgnoreCase))
+            if (flags == UrlEscapeFlags.LikeEscapeDataString && string.Equals(encoding.WebName, "utf-8", StringComparison.OrdinalIgnoreCase))
                 return EscapeDataString(data);
             return ConvertEscapedBytesToString(EscapeToBytes(data, encoding, flags));
         }
@@ -228,12 +197,8 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        public string Escape(byte[] data, UrlEscapeFlags flags)
+        public static string Escape(byte[] data, UrlEscapeFlags flags)
         {
-#if HAS_SYSTEM_WEB
-            if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
-                return HttpUtility.UrlEncode(data);
-#endif
             return ConvertEscapedBytesToString(EscapeToBytes(data, flags));
         }
 
@@ -243,7 +208,7 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        public byte[] EscapeToBytes(string data, UrlEscapeFlags flags)
+        public static byte[] EscapeToBytes(string data, UrlEscapeFlags flags)
         {
             return EscapeToBytes(data, s_defaultEncoding, flags);
         }
@@ -255,12 +220,8 @@ namespace RestSharp.Portable
         /// <param name="encoding">The encoding to use to convert the string to a byte array</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        public byte[] EscapeToBytes(string data, Encoding encoding, UrlEscapeFlags flags)
+        public static byte[] EscapeToBytes(string data, Encoding encoding, UrlEscapeFlags flags)
         {
-#if HAS_SYSTEM_WEB
-            if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
-                return HttpUtility.UrlEncodeToBytes(data, encoding);
-#endif
             return EscapeToBytes(encoding.GetBytes(data), flags);
         }
 
@@ -270,13 +231,8 @@ namespace RestSharp.Portable
         /// <param name="data">The data to escape</param>
         /// <param name="flags">The flags to modify the behavior</param>
         /// <returns>The escaped data</returns>
-        [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic", Justification = "Cannot be static when HAS_SYSTEM_WEB is defined.")]
-        public byte[] EscapeToBytes(byte[] data, UrlEscapeFlags flags)
+        public static byte[] EscapeToBytes(byte[] data, UrlEscapeFlags flags)
         {
-#if HAS_SYSTEM_WEB
-            if (_allowNativeConversion && flags == UrlEscapeFlags.LikeUrlEncode)
-                return HttpUtility.UrlEncodeToBytes(data);
-#endif
             var hexChars = ((flags & UrlEscapeFlags.LowerCaseHexCharacters) != UrlEscapeFlags.Default) ? s_hexCharsLow : s_hexCharsUp;
 
             var allowedBytesIndex = flags & UrlEscapeFlags.AllowMask;
@@ -308,12 +264,8 @@ namespace RestSharp.Portable
             var escapeSpaceAsPlus = (flags & UrlEscapeFlags.EscapeSpaceAsPlus) == UrlEscapeFlags.EscapeSpaceAsPlus;
             long computedLength = 0;
 
-#if PCL || SILVERLIGHT
-            long len = data.Length;
-#else
-            var len = data.LongLength;
-#endif
-            for (long i = 0; i != len; ++i)
+            var len = data.Length;
+            for (var i = 0; i != len; ++i)
             {
                 var v = data[i];
                 if (allowedBytes.Contains(v))
@@ -503,13 +455,13 @@ namespace RestSharp.Portable
 
         private static string EscapeDataString(string input)
         {
-            const int MaxLength = 32766;
+            const int maxLength = 32766;
             if (input == null)
             {
-                throw new ArgumentNullException("input");
+                throw new ArgumentNullException(nameof(input));
             }
 
-            if (input.Length <= MaxLength)
+            if (input.Length <= maxLength)
             {
                 return Uri.EscapeDataString(input);
             }
@@ -518,7 +470,7 @@ namespace RestSharp.Portable
             int index = 0;
             while (index < input.Length)
             {
-                int length = Math.Min(input.Length - index, MaxLength);
+                int length = Math.Min(input.Length - index, maxLength);
                 string subString = input.Substring(index, length);
                 sb.Append(Uri.EscapeDataString(subString));
                 index += subString.Length;

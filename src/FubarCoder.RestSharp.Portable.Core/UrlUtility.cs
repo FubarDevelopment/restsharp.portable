@@ -14,27 +14,20 @@ namespace RestSharp.Portable
         private static readonly byte[] s_alpha = s_lowalpha.Union(s_upalpha).ToArray();
         private static readonly byte[] s_digit = Encoding.UTF8.GetBytes("0123456789");
         private static readonly byte[] s_mark = Encoding.UTF8.GetBytes("-_.!~*'()");
-        private static readonly UrlEscapeUtility s_defaultEscapeUtility = new UrlEscapeUtility();
 
-        private static byte[] s_alphanum;
+        private static readonly Lazy<byte[]> s_alphanum = new Lazy<byte[]>(() => s_alpha.Union(s_digit).ToArray());
 
-        private static byte[] s_unreserved;
+        private static readonly Lazy<byte[]> s_unreserved = new Lazy<byte[]>(() => AlphaNum.Union(s_mark).ToArray());
 
         /// <summary>
         /// Get all bytes that represent alpha numeric characters
         /// </summary>
-        internal static byte[] AlphaNum
-        {
-            get { return s_alphanum ?? (s_alphanum = s_alpha.Union(s_digit).ToArray()); }
-        }
+        internal static byte[] AlphaNum => s_alphanum.Value;
 
         /// <summary>
         /// Get all bytes that repesent both alpha numeric and unreserved characters
         /// </summary>
-        internal static byte[] Unreserved
-        {
-            get { return s_unreserved ?? (s_unreserved = AlphaNum.Union(s_mark).ToArray()); }
-        }
+        internal static byte[] Unreserved => s_unreserved.Value;
 
         /// <summary>
         /// URL escape
@@ -43,7 +36,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(string data)
         {
-            return s_defaultEscapeUtility.Escape(data);
+            return UrlEscapeUtility.Escape(data);
         }
 
         /// <summary>
@@ -54,7 +47,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(string data, Encoding encoding)
         {
-            return s_defaultEscapeUtility.Escape(data, encoding);
+            return UrlEscapeUtility.Escape(data, encoding);
         }
 
         /// <summary>
@@ -64,7 +57,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(byte[] data)
         {
-            return s_defaultEscapeUtility.Escape(data);
+            return UrlEscapeUtility.Escape(data);
         }
 
         /// <summary>
@@ -74,7 +67,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(string data)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data);
+            return UrlEscapeUtility.EscapeToBytes(data);
         }
 
         /// <summary>
@@ -85,7 +78,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(string data, Encoding encoding)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data, encoding);
+            return UrlEscapeUtility.EscapeToBytes(data, encoding);
         }
 
         /// <summary>
@@ -95,7 +88,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(byte[] data)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data);
+            return UrlEscapeUtility.EscapeToBytes(data);
         }
 
         /// <summary>
@@ -106,7 +99,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(string data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.Escape(data, flags);
+            return UrlEscapeUtility.Escape(data, flags);
         }
 
         /// <summary>
@@ -118,7 +111,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(string data, Encoding encoding, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.Escape(data, encoding, flags);
+            return UrlEscapeUtility.Escape(data, encoding, flags);
         }
 
         /// <summary>
@@ -129,7 +122,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static string Escape(byte[] data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.Escape(data, flags);
+            return UrlEscapeUtility.Escape(data, flags);
         }
 
         /// <summary>
@@ -140,7 +133,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(string data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data, flags);
+            return UrlEscapeUtility.EscapeToBytes(data, flags);
         }
 
         /// <summary>
@@ -152,7 +145,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(string data, Encoding encoding, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data, encoding, flags);
+            return UrlEscapeUtility.EscapeToBytes(data, encoding, flags);
         }
 
         /// <summary>
@@ -163,7 +156,7 @@ namespace RestSharp.Portable
         /// <returns>Returns the escaped data</returns>
         public static byte[] EscapeToBytes(byte[] data, UrlEscapeFlags flags)
         {
-            return s_defaultEscapeUtility.EscapeToBytes(data, flags);
+            return UrlEscapeUtility.EscapeToBytes(data, flags);
         }
 
         /// <summary>

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if !PCL && !NETFX_CORE && !WINDOWS_STORE
 using System.Globalization;
-#endif
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -25,7 +23,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             {
                 ["content-type"] = (wr, value) => wr.ContentType = value,
                 ["accept"] = (wr, value) => wr.Accept = value,
-#if !PCL && !NETFX_CORE && !WINDOWS_STORE
+#if NET40 || NET45
                 ["content-length"] = (wr, value) => wr.ContentLength = Convert.ToInt64(value, 10),
                 ["user-agent"] = (wr, value) => wr.UserAgent = value,
                 ["date"] = (wr, value) => wr.Date = DateTime.ParseExact(value, "R", CultureInfo.InvariantCulture),
@@ -90,7 +88,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         {
             var uri = new Uri(BaseAddress, request.RequestUri);
             var wr = _httpClientFactory.CreateWebRequest(uri);
-            if (wr.SupportsCookieContainer && CookieContainer != null)
+            if (wr.HasCookieContainerSupport() && CookieContainer != null)
             {
                 wr.CookieContainer = CookieContainer;
             }
@@ -101,9 +99,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             }
 
             wr.Method = request.Method.ToString();
-#if !PCL
             wr.Proxy = Proxy ?? System.Net.WebRequest.DefaultWebProxy;
-#endif
 
             // Combine all headers into one header collection
             var headers = new GenericHttpHeaders();
@@ -151,22 +147,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                     long contentLength;
                     if (request.Content.TryComputeLength(out contentLength))
                     {
-#if PCL || NETFX_CORE || WINDOWS_STORE
-                        wr.Headers[HttpRequestHeader.ContentLength] = contentLength.ToString();
-#else
-                        wr.ContentLength = contentLength;
-#endif
+                        SetWebRequestHeaderValue(wr, "Content-Length", contentLength.ToString());
                     }
                 }
 
                 try
                 {
-#if PCL && ASYNC_PCL
-                    var getRequestStreamAsync = Task.Factory.FromAsync<Stream>(wr.BeginGetRequestStream, wr.EndGetRequestStream, null);
-                    var requestStream = await getRequestStreamAsync.HandleCancellation(cancellationToken);
-#else
                     var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
-#endif
                     using (requestStream)
                     {
                         var temp = new MemoryStream();
@@ -185,16 +172,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             try
             {
-#if PCL && ASYNC_PCL
-                var getResponseAsync = Task.Factory.FromAsync<WebResponse>(wr.BeginGetResponse, wr.EndGetResponse, null);
-                var response = await getResponseAsync.HandleCancellation(cancellationToken);
-#else
                 var response = await wr.GetResponseAsync().HandleCancellation(cancellationToken);
-#endif
                 var httpWebResponse = response as HttpWebResponse;
                 if (httpWebResponse == null)
                 {
+#if !NET40
                     response.Dispose();
+#endif
                     throw new ProtocolViolationException("No HTTP request")
                         {
                             Data =

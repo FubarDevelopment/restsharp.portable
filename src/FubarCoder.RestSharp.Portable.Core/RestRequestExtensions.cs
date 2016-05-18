@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-#if !NO_TYPEINFO
-using System.Reflection;
-#endif
 
 using RestSharp.Portable.Serializers;
 
@@ -99,15 +96,16 @@ namespace RestSharp.Portable
 
             while (type != typeof(object))
             {
-#if NO_TYPEINFO
+#if NET40
                 var typeInfo = type;
                 var props = typeInfo.GetProperties();
 #else
-                var typeInfo = type.GetTypeInfo();
+                var typeInfo = System.Reflection.IntrospectionExtensions.GetTypeInfo(type);
                 var props = typeInfo.DeclaredProperties;
 #endif
 
-                foreach (var prop in props.Where(x => !addedProperties.Contains(x.Name)))
+                var missingProps = props.Where(x => !addedProperties.Contains(x.Name));
+                foreach (var prop in missingProps)
                 {
                     bool isAllowed;
 
@@ -142,10 +140,10 @@ namespace RestSharp.Portable
                         if (propType.IsArray)
                         {
                             var elementType = propType.GetElementType();
-#if NO_TYPEINFO
+#if NET40
                             var elementTypeInfo = elementType;
 #else
-                            var elementTypeInfo = elementType.GetTypeInfo();
+                            var elementTypeInfo = System.Reflection.IntrospectionExtensions.GetTypeInfo(elementType);
 #endif
 
                             if (((Array)val).Length > 0 &&

@@ -1,0 +1,67 @@
+﻿{
+  "name": "FubarCoder.RestSharp.Portable.OAuth2",
+  "version": "4.0.0-alpha1-*",
+  "title": "RestSharp.Portable OAuth 2.0 authenticator",
+  "authors": [ "Mark Junker", "Fubar Development Junker" ],
+  "description": "This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4",
+  "copyright": "Copyright © RestSharp.Portable project 2013-2016",
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none",
+        "xmlDoc": true
+      }
+    }
+  },
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ]
+  },
+  "packOptions": {
+    "summary": "OAuth 1.0 authenticator",
+    "owners": [ "FubarCoder" ],
+    "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
+    "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
+    "tags": [ "PCL", "RestSharp", "portable", "OAuth", "2.0", "OAuth2" ],
+    "releaseNotes": "- Using the new core library",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FubarDevelopment/restsharp.portable"
+    },
+    "files": {
+      "mappings": {
+        "/": "../../*.md"
+      }
+    }
+  },
+  "dependencies": {
+    "JetBrains.Annotations": {
+      "version": "*",
+      "type": "build"
+    },
+    "FubarCoder.RestSharp.Portable.OAuth1": {
+      "target": "project",
+      "version": ""
+    }
+  },
+  "frameworks": {
+    "netstandard1.3": {
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*",
+        "System.Dynamic.Runtime": "4.0.11-rc2-*"
+      }
+    },
+    "net40": {
+      "frameworkAssemblies": {
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    }
+  }
+}

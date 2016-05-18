@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 using JetBrains.Annotations;
 
@@ -245,6 +246,28 @@ namespace RestSharp.Portable
             }
 
             return request.Method;
+        }
+
+        /// <summary>
+        /// Replace all handlers of a given type with a new deserializer
+        /// </summary>
+        /// <param name="client">The REST client</param>
+        /// <param name="oldType">The type of the old deserializer</param>
+        /// <param name="deserializer">The new deserializer</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        public static IRestClient ReplaceHandler(this IRestClient client, Type oldType, IDeserializer deserializer)
+        {
+#if NET40
+            var contentHandlersToReplace = client.ContentHandlers.Where(x => x.Value.GetType().IsAssignableFrom(oldType)).ToList();
+#else
+            var contentHandlersToReplace = client.ContentHandlers.Where(x => x.Value.GetType().GetTypeInfo().IsAssignableFrom(oldType.GetTypeInfo())).ToList();
+#endif
+            foreach (var contentHandlerToReplace in contentHandlersToReplace)
+            {
+                client.ContentHandlers[contentHandlerToReplace.Key] = deserializer;
+            }
+
+            return client;
         }
 
         /// <summary>

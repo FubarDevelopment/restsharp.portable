@@ -32,7 +32,7 @@ namespace RestSharp.Portable.WebRequest
 
             // Create a task that completes when either the async operation completes,
             // or cancellation is requested.
-#if PCL && !ASYNC_PCL
+#if USE_TASKEX
             var readyTask = await TaskEx.WhenAny(asyncTask, cancellationTask);
 #else
             var readyTask = await Task.WhenAny(asyncTask, cancellationTask);

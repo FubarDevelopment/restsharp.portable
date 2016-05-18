@@ -20,7 +20,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace RestSharp.Portable.Authenticators
+namespace RestSharp.Portable.OAuth2
 {
     /// <summary>
     /// Base class for OAuth 2 Authenticators.

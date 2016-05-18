@@ -28,11 +28,6 @@
         /// <summary>
         /// The parameter will be sent in the HTTP POST body
         /// </summary>
-        RequestBody,
-
-        /// <summary>
-        /// The parameter will be sent as cookie value.
-        /// </summary>
-        Cookie,
+        RequestBody
     }
 }

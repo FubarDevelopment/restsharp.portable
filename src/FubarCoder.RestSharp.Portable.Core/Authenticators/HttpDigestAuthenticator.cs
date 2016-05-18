@@ -6,7 +6,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+#if NETSTANDARD1_1
 using RestSharp.Portable.Crypto;
+#else
+using System.Security.Cryptography;
+#endif
 
 namespace RestSharp.Portable.Authenticators
 {
@@ -243,7 +247,7 @@ namespace RestSharp.Portable.Authenticators
 
             if (defaultValue == null)
             {
-                throw new WebException($"Header {varName} not found", WebExceptionStatus.UnknownError);
+                throw new InvalidOperationException($"Header {varName} not found");
             }
 
             return defaultValue;
@@ -264,13 +268,13 @@ namespace RestSharp.Portable.Authenticators
 
             string ha2, digestResponse;
 
-            var ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", credential.UserName, _realm, credential.Password));
+            var ha1 = CalculateMd5Hash($"{credential.UserName}:{_realm}:{credential.Password}");
 
             string algorithm;
             switch (_algorithm)
             {
                 case Algorithm.MD5sess:
-                    ha1 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, _cnonce));
+                    ha1 = CalculateMd5Hash($"{ha1}:{_nonce}:{_cnonce}");
                     algorithm = "MD5-sess";
                     break;
                 default:
@@ -310,10 +314,10 @@ namespace RestSharp.Portable.Authenticators
                         ha2 = CalculateMd5Hash(entityBody);
                     }
 
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}:{2}", request.Method, pathAndQuery, ha2));
+                    ha2 = CalculateMd5Hash($"{request.Method}:{pathAndQuery}:{ha2}");
                     break;
                 default:
-                    ha2 = CalculateMd5Hash(string.Format("{0}:{1}", request.Method, pathAndQuery));
+                    ha2 = CalculateMd5Hash($"{request.Method}:{pathAndQuery}");
                     break;
             }
 
@@ -321,10 +325,10 @@ namespace RestSharp.Portable.Authenticators
             {
                 case QualityOfProtection.AuthInt:
                 case QualityOfProtection.Auth:
-                    digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2:D8}:{3}:{4}:{5}", ha1, _nonce, _nc, _cnonce, qop, ha2));
+                    digestResponse = CalculateMd5Hash($"{ha1}:{_nonce}:{_nc:D8}:{_cnonce}:{qop}:{ha2}");
                     break;
                 default:
-                    digestResponse = CalculateMd5Hash(string.Format("{0}:{1}:{2}", ha1, _nonce, ha2));
+                    digestResponse = CalculateMd5Hash($"{ha1}:{_nonce}:{ha2}");
                     break;
             }
 
@@ -374,7 +378,7 @@ namespace RestSharp.Portable.Authenticators
                     _algorithm = Algorithm.MD5sess;
                     break;
                 default:
-                    throw new NotSupportedException(string.Format("Unsupported algorithm {0}", algorithm));
+                    throw new NotSupportedException($"Unsupported algorithm {algorithm}");
             }
 
             var qopParts = GrabHeaderVar("qop", authenticateHeader, string.Empty)
@@ -391,7 +395,7 @@ namespace RestSharp.Portable.Authenticators
                         _qop |= QualityOfProtection.AuthInt;
                         break;
                     default:
-                        throw new NotSupportedException(string.Format("Unsupported QOP {0}", qopPart));
+                        throw new NotSupportedException($"Unsupported QOP {qopPart}");
                 }
             }
 

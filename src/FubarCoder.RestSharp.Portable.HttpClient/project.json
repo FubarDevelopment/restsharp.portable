@@ -1,0 +1,67 @@
+﻿{
+  "name": "FubarCoder.RestSharp.Portable.HttpClient",
+  "version": "4.0.0-alpha1-*",
+  "title": "RestSharp.Portable HttpClient engine",
+  "authors": [ "Mark Junker", "Fubar Development Junker" ],
+  "description": "Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!\n\nSupported Platforms:\n- .NET Standard 1.1\n- .NET Framework 4",
+  "copyright": "Copyright © RestSharp.Portable project 2013-2016",
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none",
+        "xmlDoc": true
+      }
+    }
+  },
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ]
+  },
+  "packOptions": {
+    "summary": "Some kind of a RestSharp port to PCL",
+    "owners": [ "FubarCoder" ],
+    "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
+    "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
+    "tags": [ "PCL", "RestSharp", "portable", "HttpClient" ],
+    "releaseNotes": "- Using the new core library",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FubarDevelopment/restsharp.portable"
+    },
+    "files": {
+      "mappings": {
+        "/": "../../*.md"
+      }
+    }
+  },
+  "dependencies": {
+    "JetBrains.Annotations": {
+      "version": "*",
+      "type": "build"
+    },
+    "FubarCoder.RestSharp.Portable.Core": {
+      "target": "project",
+      "version": ""
+    }
+  },
+  "frameworks": {
+    "netstandard1.1": {
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-*",
+        "System.Net.Http": "4.0.1-rc2-*",
+        "System.Net.Requests": "4.0.11-rc2-*"
+      }
+    },
+    "net40": {
+      "dependencies": {
+        "Microsoft.Net.Http": "2.2.29"
+      }
+    }
+  }
+}

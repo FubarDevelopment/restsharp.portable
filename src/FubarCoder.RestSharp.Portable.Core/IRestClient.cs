@@ -38,7 +38,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets a proxy to use for the requests
         /// </summary>
-        IRequestProxy Proxy { get; set; }
+        IWebProxy Proxy { get; set; }
 
         /// <summary>
         /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
@@ -76,6 +76,16 @@ namespace RestSharp.Portable
         string UserAgent { get; set; }
 
         /// <summary>
+        /// Gets the dictionary that maps the content type to its handler
+        /// </summary>
+        IDictionary<string, IDeserializer> ContentHandlers { get; }
+
+        /// <summary>
+        /// Gets the dictionary that maps the encoding to its handler
+        /// </summary>
+        IDictionary<string, IEncoding> EncodingHandlers { get; }
+
+        /// <summary>
         /// Execute the given request
         /// </summary>
         /// <param name="request">Request to execute</param>
@@ -110,29 +120,6 @@ namespace RestSharp.Portable
         Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct);
 
         /// <summary>
-        /// Add a new content type handler
-        /// </summary>
-        /// <param name="contentType">The Accept header value</param>
-        /// <param name="deserializer">The deserializer to decode the content</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "AddHandler", Justification = "Required for RestSharp compatibility")]
-        IRestClient AddHandler(string contentType, IDeserializer deserializer);
-
-        /// <summary>
-        /// Remove a previously added content type handler
-        /// </summary>
-        /// <param name="contentType">The Accept header value that identifies the handler</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        [SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "RemoveHandler", Justification = "Required for RestSharp compatibility")]
-        IRestClient RemoveHandler(string contentType);
-
-        /// <summary>
-        /// Remove all previously added content type handlers
-        /// </summary>
-        /// <returns>The client itself, to allow call chains</returns>
-        IRestClient ClearHandlers();
-
-        /// <summary>
         /// Get a previously added content type handler
         /// </summary>
         /// <param name="contentType">The Accept header value that identifies the handler</param>
@@ -141,35 +128,6 @@ namespace RestSharp.Portable
         /// This function returns NULL if the handler for the given content type cannot be found.
         /// </remarks>
         IDeserializer GetHandler(string contentType);
-
-        /// <summary>
-        /// Replace all handlers of a given type with a new deserializer
-        /// </summary>
-        /// <param name="oldType">The type of the old deserializer</param>
-        /// <param name="deserializer">The new deserializer</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        IRestClient ReplaceHandler(Type oldType, IDeserializer deserializer);
-
-        /// <summary>
-        /// Add a new content encoding handler
-        /// </summary>
-        /// <param name="encodingId">The Accept-Encoding header value</param>
-        /// <param name="encoding">The encoding engine to decode the content</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        IRestClient AddEncoding(string encodingId, IEncoding encoding);
-
-        /// <summary>
-        /// Remove a previously added content encoding handler
-        /// </summary>
-        /// <param name="encodingId">The Accept-Encoding header value that identifies the handler</param>
-        /// <returns>The client itself, to allow call chains</returns>
-        IRestClient RemoveEncoding(string encodingId);
-
-        /// <summary>
-        /// Remove all previously added content encoding handlers
-        /// </summary>
-        /// <returns>The client itself, to allow call chains</returns>
-        IRestClient ClearEncodings();
 
         /// <summary>
         /// Get a previously added content encoding handler

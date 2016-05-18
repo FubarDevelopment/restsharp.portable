@@ -72,13 +72,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         /// <param name="maxBufferSize">The maximum buffer size</param>
         /// <returns>The task that loads the data into an internal buffer</returns>
-        public async Task LoadIntoBufferAsync(long maxBufferSize)
+        public Task LoadIntoBufferAsync(long maxBufferSize)
         {
             LoadIntoBuffer(maxBufferSize, 4000);
-#if PCL && !ASYNC_PCL
-            await TaskEx.Yield();
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
 #else
-            await Task.Yield();
+            return Task.FromResult(0);
 #endif
         }
 
@@ -107,7 +107,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 offset += buffer.Length;
             }
 
-#if PCL && !ASYNC_PCL
+#if USE_TASKEX
             return TaskEx.FromResult(result);
 #else
             return Task.FromResult(result);
@@ -170,7 +170,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             }
 
             _isDisposed = true;
+#if !NET40
             _response?.Dispose();
+#endif
         }
 
         private void LoadIntoBuffer(long? size, int readBlockSize)

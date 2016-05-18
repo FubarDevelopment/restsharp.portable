@@ -8,11 +8,6 @@ This is some kind of a RestSharp port to PCL.
 
 # Changes #
 
-## 3.2.0 ##
-
-* New `Content` property for `IRestResponse`
-* Updated Android targets to 4.0.3 (due to 2.3.3 SDK not being installable)
-
 ## 3.1.3 ##
 
 * Fix for [issue #57](https://github.com/FubarDevelopment/restsharp.portable/issues/57) (thanks to zevsst)

@@ -1,0 +1,43 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "embed": {
+      "include": [ "Resources/**/*" ]
+    }
+  },
+
+  "dependencies": {
+    "NETStandard.Library": "1.5.0-rc2-24027",
+    "xunit": "2.1.0-*",
+    "dotnet-test-xunit": {
+      "version": "1.0.0-rc2-*",
+      "target": "package"
+    },
+    "FubarCoder.RestSharp.Portable.HttpClient": {
+      "target": "project",
+      "version": ""
+    },
+    "FubarCoder.RestSharp.Portable.WebRequest": {
+      "target": "project",
+      "version": ""
+    },
+    "FubarCoder.RestSharp.Portable.OAuth1": {
+      "target": "project",
+      "version": ""
+    },
+    "BouncyCastle": "*",
+    "Xunit.SkippableFact": "1.2.*"
+  },
+
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Web": ""
+      }
+    }
+  },
+
+  "testRunner": "xunit"
+}

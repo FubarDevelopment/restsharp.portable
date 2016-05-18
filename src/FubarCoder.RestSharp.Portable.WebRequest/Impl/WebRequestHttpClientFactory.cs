@@ -39,13 +39,12 @@ namespace RestSharp.Portable.WebRequest.Impl
         /// Create the client
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP client</param>
-        /// <param name="request">The REST request for which the HTTP client is created</param>
         /// <returns>A new HttpClient object</returns>
         /// <remarks>
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        public virtual IHttpClient CreateClient(IRestClient client, IRestRequest request)
+        public virtual IHttpClient CreateClient(IRestClient client)
         {
             var headers = new GenericHttpHeaders();
             AddHttpHeaderParameters(headers, client);
@@ -58,16 +57,14 @@ namespace RestSharp.Portable.WebRequest.Impl
                 httpClient.Timeout = client.Timeout.Value;
             }
 
-            var proxy = GetProxy(client);
-            if (proxy != null)
+            if (client.Proxy != null)
             {
-                httpClient.Proxy = new RequestProxyWrapper(proxy);
+                httpClient.Proxy = client.Proxy;
             }
 
-            var cookieContainer = GetCookies(client, request);
-            if (cookieContainer != null)
+            if (client.CookieContainer != null)
             {
-                httpClient.CookieContainer = cookieContainer;
+                httpClient.CookieContainer = client.CookieContainer;
             }
 
             if (_setCredentials)
@@ -108,22 +105,11 @@ namespace RestSharp.Portable.WebRequest.Impl
         /// <returns>The new <see cref="HttpWebRequest"/></returns>
         protected internal virtual HttpWebRequest CreateWebRequest(Uri url)
         {
-            var webRequest = System.Net.WebRequest.CreateHttp(url);
-#if !PCL && !NETFX_CORE && !WINDOWS_STORE
+            var webRequest = (HttpWebRequest)System.Net.WebRequest.Create(url);
+#if NET40
             webRequest.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
 #endif
             return webRequest;
-        }
-
-        /// <summary>
-        /// Returns if the HTTP client should be aware of cookies
-        /// </summary>
-        /// <param name="client">REST client</param>
-        /// <param name="request">REST request</param>
-        /// <returns>true == HTTP client should use a cookie container</returns>
-        protected virtual bool HasCookies(IRestClient client, IRestRequest request)
-        {
-            return client.CookieContainer != null || request.Parameters.Any(x => x.Type == ParameterType.Cookie);
         }
 
         /// <summary>
@@ -148,42 +134,7 @@ namespace RestSharp.Portable.WebRequest.Impl
             var url = client.BuildUri(null, false).MakeRelativeUri(fullUrl);
             return url;
         }
-
-        /// <summary>
-        /// The proxy to be used by the HTTP client
-        /// </summary>
-        /// <param name="client">REST client</param>
-        /// <returns>Proxy object or null</returns>
-        protected virtual IRequestProxy GetProxy(IRestClient client)
-        {
-            return client.Proxy;
-        }
-
-        /// <summary>
-        /// Get the cookies for the HTTP client
-        /// </summary>
-        /// <param name="client">REST client</param>
-        /// <param name="request">REST request</param>
-        /// <returns>The cookie container or null</returns>
-        protected virtual CookieContainer GetCookies(IRestClient client, IRestRequest request)
-        {
-            if (!HasCookies(client, request))
-            {
-                return null;
-            }
-
-            var baseUrl = GetBaseAddress(client);
-            var newCookies = client.CookieContainer = client.CookieContainer ?? new CookieContainer();
-            var oldCookies = client.CookieContainer.GetCookies(baseUrl)
-                .Cast<Cookie>().ToDictionary(x => x.Name, StringComparer.OrdinalIgnoreCase);
-            foreach (var cookieParameter in request.Parameters.Where(x => x.Type == ParameterType.Cookie && !oldCookies.ContainsKey(x.Name)))
-            {
-                newCookies.Add(baseUrl, new Cookie(cookieParameter.Name, cookieParameter.ToRequestString()));
-            }
-
-            return newCookies;
-        }
-
+        
         /// <summary>
         /// Returns the HTTP method for the request message.
         /// </summary>

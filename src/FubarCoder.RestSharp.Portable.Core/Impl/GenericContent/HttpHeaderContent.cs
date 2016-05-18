@@ -32,10 +32,10 @@ namespace RestSharp.Portable.Content
         /// <returns>The task for this asynchronous operation</returns>
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
-#if PCL && !ASYNC_PCL
-            var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
-#else
+#if HAS_STREAM_WRITER_KEEP_OPEN
             var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);
+#else
+            var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
 #endif
             try
             {
@@ -93,12 +93,12 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="maxBufferSize">The maximum buffer size</param>
         /// <returns>The task that loads the data into an internal buffer</returns>
-        public async Task LoadIntoBufferAsync(long maxBufferSize)
+        public Task LoadIntoBufferAsync(long maxBufferSize)
         {
-#if PCL && !ASYNC_PCL
-            await TaskEx.Yield();
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
 #else
-            await Task.Yield();
+            return Task.FromResult(0);
 #endif
         }
 
