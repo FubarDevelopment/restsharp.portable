@@ -55,19 +55,19 @@ Supported Platforms:
       <file src="NuGet\license-restsharp.txt" target="license.txt" />
       <file src="NuGet\Scripts\RestSharp.Portable.OAuth2\install.ps1" target="tools\native\install.ps1" />
       <file src="NuGet\Scripts\RestSharp.Portable.OAuth2\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net40\" />
-      <file src="RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net40\" />
-      <file src="RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net45\" />
-      <file src="RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net45\" />
-      <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoAndroid10\" />
-      <file src="RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoAndroid10\" />
-      <file src="RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoTouch10\" />
-      <file src="RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoTouch10\" />
+      <file src="src\RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net40\" />
+      <file src="src\RestSharp.Portable.OAuth2.NET4\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net40\" />
+      <file src="src\RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\net45\" />
+      <file src="src\RestSharp.Portable.OAuth2.NET45\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\net45\" />
+      <file src="src\RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.PCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net403+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.AsyncPCL\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoAndroid10\" />
+      <file src="src\RestSharp.Portable.OAuth2.Android\bin\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoAndroid10\" />
+      <file src="src\RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.iOS\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.dll" target="lib\MonoTouch10\" />
+      <file src="src\RestSharp.Portable.OAuth2.MonoTouch\bin\iPhone\$Configuration$\RestSharp.Portable.OAuth2.XML" target="lib\MonoTouch10\" />
     </files>
 </package>

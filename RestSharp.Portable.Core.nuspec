@@ -60,9 +60,9 @@ Supported Platforms:
       <file src="NuGet\license.txt" target="license.txt" />
       <file src="NuGet\Scripts\RestSharp.Portable.Core\install.ps1" target="tools\native\install.ps1" />
       <file src="NuGet\Scripts\RestSharp.Portable.Core\uninstall.ps1" target="tools\native\uninstall.ps1" />
-      <file src="RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
-      <file src="RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.Core.PCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
+      <file src="src\RestSharp.Portable.Core.AsyncPCL\bin\$Configuration$\RestSharp.Portable.Core.XML" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\" />
     </files>
 </package>
