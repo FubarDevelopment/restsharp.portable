@@ -47,11 +47,10 @@
   "frameworks": {
     "netstandard1.1": {
       "buildOptions": {
-        "define": [ "HAS_STREAM_WRITER_KEEP_OPEN" ],
         "compile": {
-          "include": [ 
+          "include": [
             "../../shared/crypto/*.cs",
-            "../../GlobalAssemblyInfo.cs" 
+            "../../GlobalAssemblyInfo.cs"
           ]
         }
       },
@@ -63,9 +62,6 @@
       }
     },
     "netstandard1.3": {
-      "buildOptions": {
-        "define": [ "HAS_STREAM_WRITER_KEEP_OPEN" ]
-      },
       "imports": [ "dnxcore50", "portable-net45+win8+wp8+wpa81" ],
       "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-*",
@@ -84,6 +80,15 @@
       },
       "dependencies": {
         "Microsoft.Bcl.Async": "1.0.*",
+        "Newtonsoft.Json": "6.0.*"
+      }
+    },
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Runtime.Serialization": "",
+        "System.Xml": ""
+      },
+      "dependencies": {
         "Newtonsoft.Json": "6.0.*"
       }
     }

@@ -32,10 +32,10 @@ namespace RestSharp.Portable.Content
         /// <returns>The task for this asynchronous operation</returns>
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
-#if HAS_STREAM_WRITER_KEEP_OPEN
-            var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);
-#else
+#if NET40
             var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
+#else
+            var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);
 #endif
             try
             {
