@@ -16,7 +16,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion("4.0")]
 [assembly: AssemblyFileVersion("4.0.0")]
-[assembly: AssemblyInformationalVersion("4.0.0-alpha1")]
+[assembly: AssemblyInformationalVersion("4.0.0")]
 
 [assembly: InternalsVisibleTo("FubarCoder.RestSharp.Portable.OAuth1, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +
