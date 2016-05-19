@@ -3,9 +3,6 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 
-// Allgemeine Informationen über eine Assembly werden über folgende
-// Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
-// die einer Assembly zugeordnet sind.
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
 #else
@@ -17,16 +14,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
-// Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
-//
-//      Hauptversion
-//      Nebenversion
-//      Buildnummer
-//      Revision
-//
-// Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern
-// durch Einsatz von '*', wie in nachfolgendem Beispiel:
-// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("4.0")]
+[assembly: AssemblyFileVersion("4.0.0")]
+[assembly: AssemblyInformationalVersion("4.0.0-alpha1")]
 
 [assembly: InternalsVisibleTo("FubarCoder.RestSharp.Portable.OAuth1, PublicKey=" +
 "00240000048000009400000006020000002400005253413100040000010001000f8415df6f1232" +
