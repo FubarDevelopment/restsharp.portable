@@ -37,7 +37,9 @@
       "mappings": {
         "/": {
           "include": [ "../../*.md", "../../license-restsharp.txt" ]
-        }
+        },
+        "lib/native/": "lib/native/_._",
+        "tools/native/": "tools/native/*.ps1"
       }
     }
   },

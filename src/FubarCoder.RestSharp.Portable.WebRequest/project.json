@@ -35,7 +35,9 @@
     },
     "files": {
       "mappings": {
-        "/": "../../*.md"
+        "/": "../../*.md",
+        "lib/native/": "lib/native/_._",
+        "tools/native/": "tools/native/*.ps1"
       }
     }
   },

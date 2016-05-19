@@ -37,7 +37,9 @@
       "mappings": {
         "/": {
           "include": [ "../../*.md", "../../license-oauth2.txt" ]
-        }
+        },
+        "lib/native/": "lib/native/_._",
+        "tools/native/": "tools/native/*.ps1"
       }
     }
   },

@@ -34,7 +34,9 @@
     },
     "files": {
       "mappings": {
-        "/": "../../*.md"
+        "/": "../../*.md",
+        "lib/native/": "lib/native/_._",
+        "tools/native/": "tools/native/*.ps1"
       }
     }
   },
@@ -48,7 +50,11 @@
   "frameworks": {
     ".NETPortable,Version=v4.0,Profile=Profile328": {
       "buildOptions": {
-        "compile": [ "../../GlobalAssemblyInfo.cs" ],
+        "compile": [
+          "../../GlobalAssemblyInfo.cs",
+          "../../shared/RestSharp.Portable.Crypto/*.cs",
+          "../../shared/System.Collections.Specialized/*.cs"
+        ],
         "define": [ "USE_TASKEX", "CUSTOM_CRYPTO", "PROFILE328" ]
       },
       "frameworkAssemblies": {
@@ -60,45 +66,35 @@
         "System.Xml": { "type": "build" }
       },
       "dependencies": {
-        "Microsoft.Bcl.Async": "1.0.*",
-        "RestSharp.Portable.Crypto": {
-          "target": "project",
-          "type": "build"
-        },
-        "System.Collections.Specialized": {
-          "target": "project",
-          "type": "build"
-        }
+        "Microsoft.Bcl.Async": "1.0.*"
       }
     },
     "netstandard1.0": {
       "imports": [ "dotnet" ],
       "buildOptions": {
-        "compile": [ "../../GlobalAssemblyInfo.cs" ],
+        "compile": [
+          "../../GlobalAssemblyInfo.cs",
+          "../../shared/RestSharp.Portable.Crypto/*.cs"
+        ],
         "define": [ "CUSTOM_CRYPTO" ]
       },
       "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-*",
         "System.Runtime.Serialization.Xml": "4.1.1-rc2-*",
-        "RestSharp.Portable.Crypto": {
-          "target": "project",
-          "type": "build"
-        }
       }
     },
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "buildOptions": {
-        "compile": [ "../../GlobalAssemblyInfo.cs" ],
+        "compile": [
+          "../../GlobalAssemblyInfo.cs",
+          "../../shared/RestSharp.Portable.Crypto/*.cs"
+        ],
         "define": [ "CUSTOM_CRYPTO" ]
       },
       "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-*",
         "System.Runtime.Serialization.Xml": "4.1.1-rc2-*",
-        "RestSharp.Portable.Crypto": {
-          "target": "project",
-          "type": "build"
-        }
       }
     },
     "netstandard1.3": {
