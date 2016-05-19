@@ -56,7 +56,10 @@
       "buildOptions": {
         "compile": [
           "../../GlobalAssemblyInfo.cs",
-          "../../shared/Zlib.Portable/**/*.cs"
+          "../../shared/Zlib.Portable/*.cs",
+          "../../shared/Zlib.Portable/Crc/*.cs",
+          "../../shared/Zlib.Portable/Encoding/*.cs",
+          "../../shared/Zlib.Portable/IO/*.cs"
         ],
         "define": [ "PROFILE328" ]
       },
@@ -73,7 +76,10 @@
       "buildOptions": {
         "compile": [
           "../../GlobalAssemblyInfo.cs",
-          "../../shared/Zlib.Portable/**/*.cs"
+          "../../shared/Zlib.Portable/*.cs",
+          "../../shared/Zlib.Portable/Crc/*.cs",
+          "../../shared/Zlib.Portable/Encoding/*.cs",
+          "../../shared/Zlib.Portable/IO/*.cs"
         ],
         "define": [ "PROFILE328" ]
       },
