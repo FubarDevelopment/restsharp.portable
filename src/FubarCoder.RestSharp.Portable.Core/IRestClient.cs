@@ -35,10 +35,12 @@ namespace RestSharp.Portable
         /// </remarks>
         CookieContainer CookieContainer { get; set; }
 
+#if !NETSTANDARD1_0
         /// <summary>
         /// Gets or sets a proxy to use for the requests
         /// </summary>
         IWebProxy Proxy { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets the credentials used for the request (e.g. NTLM authentication)

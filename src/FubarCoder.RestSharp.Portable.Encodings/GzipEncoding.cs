@@ -1,5 +1,7 @@
 ﻿using System.IO;
+#if !NETSTANDARD1_0
 using System.IO.Compression;
+#endif
 
 namespace RestSharp.Portable.Encodings
 {
@@ -15,11 +17,15 @@ namespace RestSharp.Portable.Encodings
         /// <returns>Decoded content</returns>
         public byte[] Decode(byte[] data)
         {
+#if NETSTANDARD1_0
+            return Zlib.Portable.GZipStream.UncompressBuffer(data);
+#else
             var output = new MemoryStream();
             var input = new MemoryStream(data);
             using (var stream = new GZipStream(input, CompressionMode.Decompress))
                 stream.CopyTo(output);
             return output.ToArray();
+#endif
         }
     }
 }

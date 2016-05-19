@@ -50,6 +50,12 @@
     }
   },
   "frameworks": {
+    "netstandard1.0": {
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "Portable.BouncyCastle": "1.8.1"
+      }
+    },
     "netstandard1.3": {
       "imports": [ "dnxcore50" ],
       "dependencies": {

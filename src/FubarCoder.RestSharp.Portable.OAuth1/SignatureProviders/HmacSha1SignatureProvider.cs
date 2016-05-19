@@ -1,5 +1,14 @@
-﻿using System.Security.Cryptography;
+﻿#if !NETSTANDARD1_0
+using System.Security.Cryptography;
+#endif
 using System.Text;
+
+#if NETSTANDARD1_0
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Macs;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+#endif
 
 namespace RestSharp.Portable.OAuth1.SignatureProviders
 {
@@ -17,10 +26,7 @@ namespace RestSharp.Portable.OAuth1.SignatureProviders
         /// <summary>
         /// The ID (also used as signature method name for requests) of the signature provider
         /// </summary>
-        public string Id
-        {
-            get { return "HMAC-SHA1"; }
-        }
+        public string Id => "HMAC-SHA1";
 
         /// <summary>
         /// Calculate the signature of <paramref name="data"/>
@@ -31,13 +37,22 @@ namespace RestSharp.Portable.OAuth1.SignatureProviders
         /// <returns>The signature</returns>
         public string CalculateSignature(byte[] data, string consumerSecret, string tokenSecret)
         {
-            var key = string.Format("{0}&{1}", consumerSecret, tokenSecret);
+            var key = $"{consumerSecret}&{tokenSecret}";
             var keyData = _encoding.GetBytes(key);
+#if NETSTANDARD1_0
+            var digest = new Sha1Digest();
+            var crypto = new HMac(digest);
+            crypto.Init(new KeyParameter(keyData));
+            crypto.BlockUpdate(data, 0, data.Length);
+            var hash = MacUtilities.DoFinal(crypto);
+            return System.Convert.ToBase64String(hash);
+#else
             using (var digest = new HMACSHA1(keyData))
             {
                 var hash = digest.ComputeHash(data);
                 return System.Convert.ToBase64String(hash);
             }
+#endif
         }
     }
 }

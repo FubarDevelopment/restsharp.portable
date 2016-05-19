@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NETSTANDARD1_0
+using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
@@ -55,3 +56,4 @@ namespace RestSharp.Portable.OAuth1.SignatureProviders
         }
     }
 }
+#endif

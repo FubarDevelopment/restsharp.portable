@@ -50,6 +50,15 @@
     }
   },
   "frameworks": {
+    "netstandard1.0": {
+      "imports": [ "dnxcore50" ],
+      "dependencies": {
+        "Zlib.Portable": {
+          "target": "project",
+          "type": "build"
+        }
+      }
+    },
     "netstandard1.1": {
       "imports": [ "dnxcore50" ],
       "dependencies": {

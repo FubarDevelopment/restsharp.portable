@@ -63,10 +63,12 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
+#if !NETSTANDARD1_0
         /// <summary>
         /// Gets or sets the proxy to use for the client
         /// </summary>
         public IWebProxy Proxy { get; set; }
+#endif
 
         /// <summary>
         /// Gets or sets the cookie container that will hold all cookies
@@ -99,7 +101,10 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             }
 
             wr.Method = request.Method.ToString();
+
+#if !NETSTANDARD1_0
             wr.Proxy = Proxy ?? System.Net.WebRequest.DefaultWebProxy;
+#endif
 
             // Combine all headers into one header collection
             var headers = new GenericHttpHeaders();
@@ -153,7 +158,12 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
                 try
                 {
+#if NETSTANDARD1_0
+                    var getRequestStreamAsync = Task.Factory.FromAsync(wr.BeginGetRequestStream, wr.EndGetRequestStream, null);
+                    var requestStream = await getRequestStreamAsync.HandleCancellation(cancellationToken);
+#else
                     var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
+#endif
                     using (requestStream)
                     {
                         var temp = new MemoryStream();
@@ -172,7 +182,12 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             try
             {
+#if NETSTANDARD1_0
+                var getResponseAsync = Task.Factory.FromAsync(wr.BeginGetResponse, wr.EndGetResponse, null);
+                var response = await getResponseAsync.HandleCancellation(cancellationToken);
+#else
                 var response = await wr.GetResponseAsync().HandleCancellation(cancellationToken);
+#endif
                 var httpWebResponse = response as HttpWebResponse;
                 if (httpWebResponse == null)
                 {

@@ -186,10 +186,12 @@ namespace RestSharp.Portable
         /// </summary>
         public bool IgnoreResponseStatusCode { get; set; }
 
+#if !NETSTANDARD1_0
         /// <summary>
         /// Gets or sets the proxy to use for the requests
         /// </summary>
         public IWebProxy Proxy { get; set; }
+#endif
 
         /// <summary>
         /// Disposes the used HTTP client
