@@ -50,7 +50,7 @@ namespace RestSharp.Portable
         AllowLikeEscapeUriString = 0x0003,
 
         /// <summary>
-        /// Allow all characters that are allowed by a <see cref="System.Net.WebRequest"/>
+        /// Allow all characters that are allowed by a <see cref="T:System.Net.WebRequest"/>
         /// </summary>
         AllowLikeWebRequest = 0x0004,
 
