@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-#if NETSTANDARD1_1 || NETSTANDARD1_0 || PROFILE328
+#if CUSTOM_CRYPTO
 using RestSharp.Portable.Crypto;
 #else
 using System.Security.Cryptography;

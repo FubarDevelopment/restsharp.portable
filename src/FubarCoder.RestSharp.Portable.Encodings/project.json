@@ -27,7 +27,7 @@
     "owners": [ "FubarCoder" ],
     "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
     "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
-    "tags": [ "PCL", "RestSharp", "portable", "core" ],
+    "tags": [ "PCL", "RestSharp", "portable", "encoding", "gzip", "deflate" ],
     "releaseNotes": "- Using the new core library",
     "repository": {
       "type": "git",
@@ -71,7 +71,7 @@
       }
     },
     "netstandard1.0": {
-      "imports": [ "dnxcore50" ],
+      "imports": [ "dotnet" ],
       "dependencies": {
         "Zlib.Portable": {
           "target": "project",
@@ -80,7 +80,7 @@
       }
     },
     "netstandard1.1": {
-      "imports": [ "dnxcore50" ],
+      "imports": [ "dotnet" ],
       "dependencies": {
         "System.IO.Compression": "4.1.0-rc2-*"
       }

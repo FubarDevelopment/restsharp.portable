@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -96,6 +97,8 @@ namespace RestSharp.Portable
 
             while (type != typeof(object))
             {
+                Debug.Assert(type != null, "type != null");
+
 #if NET40 || PROFILE328
                 var typeInfo = type;
                 var props = typeInfo.GetProperties();
