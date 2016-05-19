@@ -186,7 +186,7 @@ namespace RestSharp.Portable
         /// </summary>
         public bool IgnoreResponseStatusCode { get; set; }
 
-#if !NETSTANDARD1_0
+#if !NETSTANDARD1_0 && !PROFILE328
         /// <summary>
         /// Gets or sets the proxy to use for the requests
         /// </summary>
@@ -488,7 +488,7 @@ namespace RestSharp.Portable
 
         private static string GetDefaultVersion()
         {
-#if NET40
+#if NET40 || PROFILE328
             var assembly = typeof(RestClientBase).Assembly;
             var version = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false).Cast<AssemblyFileVersionAttribute>().Single();
 #else

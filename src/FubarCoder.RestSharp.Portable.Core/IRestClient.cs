@@ -35,7 +35,7 @@ namespace RestSharp.Portable
         /// </remarks>
         CookieContainer CookieContainer { get; set; }
 
-#if !NETSTANDARD1_0
+#if !NETSTANDARD1_0 && !PROFILE328
         /// <summary>
         /// Gets or sets a proxy to use for the requests
         /// </summary>

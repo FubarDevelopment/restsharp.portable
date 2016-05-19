@@ -96,7 +96,7 @@ namespace RestSharp.Portable
 
             while (type != typeof(object))
             {
-#if NET40
+#if NET40 || PROFILE328
                 var typeInfo = type;
                 var props = typeInfo.GetProperties();
 #else
@@ -140,7 +140,7 @@ namespace RestSharp.Portable
                         if (propType.IsArray)
                         {
                             var elementType = propType.GetElementType();
-#if NET40
+#if NET40 || PROFILE328
                             var elementTypeInfo = elementType;
 #else
                             var elementTypeInfo = System.Reflection.IntrospectionExtensions.GetTypeInfo(elementType);

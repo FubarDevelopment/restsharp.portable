@@ -257,7 +257,7 @@ namespace RestSharp.Portable
         /// <returns>The client itself, to allow call chains</returns>
         public static IRestClient ReplaceHandler(this IRestClient client, Type oldType, IDeserializer deserializer)
         {
-#if NET40
+#if NET40 || PROFILE328
             var contentHandlersToReplace = client.ContentHandlers.Where(x => x.Value.GetType().IsAssignableFrom(oldType)).ToList();
 #else
             var contentHandlersToReplace = client.ContentHandlers.Where(x => x.Value.GetType().GetTypeInfo().IsAssignableFrom(oldType.GetTypeInfo())).ToList();
