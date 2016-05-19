@@ -35,7 +35,9 @@
     },
     "files": {
       "mappings": {
-        "/": "../../*.md"
+        "/": {
+          "include": [ "../../*.md", "../../license-oauth2.txt" ]
+        }
       }
     }
   },
