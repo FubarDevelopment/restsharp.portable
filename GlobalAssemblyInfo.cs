@@ -49,4 +49,6 @@ using System.Runtime.CompilerServices;
 "9bb2ee7a911ad43721beea1f034c3d8a87c97f5de3e575cc0db2db79d396e69eeef2461ff8615f" +
 "48df7bba")]
 
+#if !PROFILE259
 [assembly: CLSCompliant(true)]
+#endif

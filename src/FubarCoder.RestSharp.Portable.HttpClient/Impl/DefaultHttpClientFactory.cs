@@ -183,11 +183,13 @@ namespace RestSharp.Portable.HttpClient.Impl
         protected virtual HttpMessageHandler CreateMessageHandler(IRestClient client)
         {
             var handler = new HttpClientHandler();
-            
+
+#if !PROFILE259
             if (handler.SupportsProxy && client.Proxy != null)
             {
                 handler.Proxy = client.Proxy;
             }
+#endif
 
             if (client.CookieContainer != null)
             {

@@ -50,6 +50,24 @@
     }
   },
   "frameworks": {
+    ".NETPortable,Version=v4.5,Profile=Profile259": {
+      "imports": [ "portable-net40+sl4+win8+wp71+wpa81" ],
+      "buildOptions": {
+        "compile": [ "../../GlobalAssemblyInfo.cs" ],
+        "define": [ "PROFILE259" ]
+      },
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net.Primitives": { "type": "build" },
+        "System.Net.Requests": { "type": "build" },
+        "System.Resources.ResourceManager": { "type": "build" }
+      },
+      "dependencies": {
+        "Microsoft.Net.Http": "2.2.29"
+      }
+    },
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "dependencies": {
