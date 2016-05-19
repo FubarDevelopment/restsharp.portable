@@ -1,5 +1,5 @@
 ﻿using System.IO;
-#if !NETSTANDARD1_0
+#if !NETSTANDARD1_0 && !PROFILE328
 using System.IO.Compression;
 #endif
 
@@ -17,7 +17,7 @@ namespace RestSharp.Portable.Encodings
         /// <returns>Decoded content</returns>
         public byte[] Decode(byte[] data)
         {
-#if NETSTANDARD1_0
+#if NETSTANDARD1_0 || PROFILE328
             return Zlib.Portable.DeflateStream.UncompressBuffer(data);
 #else
             var output = new MemoryStream();
