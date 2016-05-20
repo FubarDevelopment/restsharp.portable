@@ -17,7 +17,11 @@ namespace RestSharp.Portable
     public abstract class RestClientBase : IRestClient
     {
         private static readonly string s_defaultUserAgent = GetDefaultVersion();
-        
+
+        private static readonly Lazy<bool> s_isSilverlight = new Lazy<bool>(() => PlatformSupport.IsSilverlight);
+
+        private static readonly Lazy<bool> s_isMono = new Lazy<bool>(() => PlatformSupport.IsMono);
+
         private readonly ObservableDictionary<string, IDeserializer> _contentHandlers = new ObservableDictionary<string, IDeserializer>(StringComparer.OrdinalIgnoreCase);
 
         private readonly IList<string> _acceptTypes = new List<string>();
@@ -327,9 +331,9 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
-        /// Updates the <code>Accepts</code> default header parameter
+        /// Updates the <code>Accept</code> default header parameter
         /// </summary>
-        protected void UpdateAcceptsHeader()
+        protected void UpdateAcceptHeader()
         {
             this.RemoveDefaultParameter("Accept");
             if (_acceptTypes.Count != 0)
@@ -360,6 +364,11 @@ namespace RestSharp.Portable
         /// <param name="requestMessage">The <see cref="IHttpRequestMessage"/> to send</param>
         protected virtual void ModifyRequestBeforeAuthentication(IHttpClient httpClient, IHttpRequestMessage requestMessage)
         {
+            // Remove the Accept header for GET requests on Silverlight platforms
+            if (s_isSilverlight.Value && requestMessage.Method == Method.GET)
+            {
+                httpClient.DefaultRequestHeaders.Remove("Accept");
+            }
         }
 
         /// <summary>
@@ -535,6 +544,10 @@ namespace RestSharp.Portable
         /// <param name="args">The changes</param>
         private void ContentHandlersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
+            // Don't update the Accept header, when we're running on Mono (is this still needed?)
+            if (s_isMono.Value)
+                return;
+
             switch (args.Action)
             {
                 case NotifyCollectionChangedAction.Add:
@@ -554,7 +567,7 @@ namespace RestSharp.Portable
                     break;
             }
 
-            UpdateAcceptsHeader();
+            UpdateAcceptHeader();
         }
 
         /// <summary>
