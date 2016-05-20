@@ -57,9 +57,12 @@ namespace RestSharp.Portable
             _contentHandlers.Add("application/xml", xmlDataContractDeserializer);
             _contentHandlers.Add("text/xml", xmlDataContractDeserializer);
 
-            _contentHandlers.CollectionChanged += ContentHandlersOnCollectionChanged;
-
-            UpdateAcceptsHeader();
+            // Don't automatically update the Accept header, when we're running on Mono (is this still needed?)
+            if (!s_isMono.Value)
+            {
+                _contentHandlers.CollectionChanged += ContentHandlersOnCollectionChanged;
+                UpdateAcceptHeader();
+            }
 
             _encodingHandlers.CollectionChanged += EncodingHandlersOnCollectionChanged;
 
@@ -544,10 +547,6 @@ namespace RestSharp.Portable
         /// <param name="args">The changes</param>
         private void ContentHandlersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            // Don't update the Accept header, when we're running on Mono (is this still needed?)
-            if (s_isMono.Value)
-                return;
-
             switch (args.Action)
             {
                 case NotifyCollectionChangedAction.Add:
