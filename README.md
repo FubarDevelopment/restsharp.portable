@@ -1,6 +1,6 @@
 ﻿# Portable RestSharp #
 
-[![Build status](https://build.fubar-dev.de/app/rest/builds/buildType:%28id:RestSharpPortable_ReleaseBuild%29/statusIcon)](https://build.fubar-dev.com/project.html?projectId=RestSharpPortable)
+[![Build status](https://build.fubar-dev.de/app/rest/builds/buildType:%28id:RestSharpPortable_40Preview%29/statusIcon)](https://build.fubar-dev.com/project.html?projectId=RestSharpPortable)
 
 [![Join the chat at https://gitter.im/FubarDevelopment/restsharp.portable](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FubarDevelopment/restsharp.portable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -14,12 +14,12 @@ This project is licensed using the [BSD 2-Clause License](LICENSE.md)
 
 | Description				                | Badge |
 |-------------------------------------------|-------|
-| Core library				                | [![FubarCoder.RestSharp.Portable.Core](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.Core.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.Core) |
-| Request engine using `HttpWebRequest`	    | [![FubarCoder.RestSharp.Portable.WebRequest](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.WebRequest.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.WebRequest) |
-| Request engine using `HttpClient`		    | [![FubarCoder.RestSharp.Portable.HttpClient](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.HttpClient.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.HttpClient) |
-| OAuth 1.0(a) authentication support	    | [![FubarCoder.RestSharp.Portable.OAuth](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.OAuth.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.OAuth) |
-| OAuth 2.0 authentication support	        | [![FubarCoder.RestSharp.Portable.OAuth2](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.OAuth2.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.OAuth2) |
-| Content encoding support (GZip/Deflate)   | [![FubarCoder.RestSharp.Portable.Encodings](https://img.shields.io/nuget/v/FubarCoder.RestSharp.Portable.Encodings.svg)](https://www.nuget.org/packages/FubarCoder.RestSharp.Portable.Encodings) |
+| Core library				                | [![FubarCoder.RestSharp.Portable.Core](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.Core.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.Core) |
+| Request engine using `HttpWebRequest`	    | [![FubarCoder.RestSharp.Portable.WebRequest](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.WebRequest.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.WebRequest) |
+| Request engine using `HttpClient`		    | [![FubarCoder.RestSharp.Portable.HttpClient](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.HttpClient.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.HttpClient) |
+| OAuth 1.0(a) authentication support	    | [![FubarCoder.RestSharp.Portable.OAuth](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.OAuth.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.OAuth) |
+| OAuth 2.0 authentication support	        | [![FubarCoder.RestSharp.Portable.OAuth2](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.OAuth2.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.OAuth2) |
+| Content encoding support (GZip/Deflate)   | [![FubarCoder.RestSharp.Portable.Encodings](https://img.shields.io/myget/restsharp-portable/v/FubarCoder.RestSharp.Portable.Encodings.svg)](https://www.myget.org/feed/restsharp-portable/package/nuget/FubarCoder.RestSharp.Portable.Encodings) |
 
 # Request engines
 
