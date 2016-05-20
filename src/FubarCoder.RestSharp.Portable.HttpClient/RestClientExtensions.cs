@@ -66,7 +66,8 @@ namespace RestSharp.Portable.HttpClient
             }
             else
             {
-                if (client.GetEffectiveHttpMethod(request) == Method.POST)
+                var effectiveMethod = client.GetEffectiveHttpMethod(request);
+                if (effectiveMethod != Method.GET)
                 {
                     var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
                     if (getOrPostParameters.Count != 0)
