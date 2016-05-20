@@ -186,7 +186,7 @@ namespace RestSharp.Portable
         /// </summary>
         public bool IgnoreResponseStatusCode { get; set; }
 
-#if !NETSTANDARD1_0 && !PROFILE328
+#if !NO_PROXY
         /// <summary>
         /// Gets or sets the proxy to use for the requests
         /// </summary>

@@ -63,7 +63,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         public TimeSpan Timeout { get; set; }
 
-#if !NETSTANDARD1_0
+#if !NO_PROXY
         /// <summary>
         /// Gets or sets the proxy to use for the client
         /// </summary>
@@ -102,7 +102,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             wr.Method = request.Method.ToString();
 
-#if !NETSTANDARD1_0
+#if !NO_PROXY
             wr.Proxy = Proxy ?? System.Net.WebRequest.DefaultWebProxy;
 #endif
 
@@ -158,7 +158,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
                 try
                 {
-#if NETSTANDARD1_0
+#if NETSTANDARD1_0 || PROFILE259
                     var getRequestStreamAsync = Task.Factory.FromAsync(wr.BeginGetRequestStream, wr.EndGetRequestStream, null);
                     var requestStream = await getRequestStreamAsync.HandleCancellation(cancellationToken);
 #else
@@ -182,7 +182,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             try
             {
-#if NETSTANDARD1_0
+#if NETSTANDARD1_0 || PROFILE259
                 var getResponseAsync = Task.Factory.FromAsync(wr.BeginGetResponse, wr.EndGetResponse, null);
                 var response = await getResponseAsync.HandleCancellation(cancellationToken);
 #else

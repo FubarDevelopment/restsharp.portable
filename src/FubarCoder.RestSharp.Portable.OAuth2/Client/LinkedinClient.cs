@@ -1,6 +1,8 @@
 using System;
+#if !PROFILE328
 using System.Linq;
 using System.Xml.Linq;
+#endif
 using RestSharp.Portable.OAuth2.Configuration;
 using RestSharp.Portable.OAuth2.Infrastructure;
 using RestSharp.Portable.OAuth2.Models;
@@ -101,6 +103,9 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <param name="content">The content which is received from third-party service.</param>
         protected override UserInfo ParseUserInfo(string content)
         {
+#if PROFILE328
+            throw new NotSupportedException("You're currently using/delivering the PCL version of the assembly that doesn't support all features. Add the NuGet package FubarCoder.RestSharp.Portable.OAuth2 to your application.");
+#else
             var document  = XDocument.Parse(content);
             var avatarUri = document.Element("person").Elements("picture-url").Select(x => x.Value).SingleOrDefault();
             var avatarSizeTemplate = "{0}_{0}";
@@ -124,6 +129,7 @@ namespace RestSharp.Portable.OAuth2.Client
                         Large  = avatarUri.Replace(avatarDefaultSize, string.Format(avatarSizeTemplate, AvatarInfo.LargeSize))
                     }
             };
+#endif
         }
 
 

@@ -80,8 +80,7 @@
           "../../shared/Zlib.Portable/Crc/*.cs",
           "../../shared/Zlib.Portable/Encoding/*.cs",
           "../../shared/Zlib.Portable/IO/*.cs"
-        ],
-        "define": [ "PROFILE328" ]
+        ]
       },
       "imports": [ "dotnet" ]
     },

@@ -57,7 +57,7 @@ namespace RestSharp.Portable.WebRequest.Impl
                 httpClient.Timeout = client.Timeout.Value;
             }
 
-#if !NETSTANDARD1_0
+#if !NO_PROXY
             if (client.Proxy != null)
             {
                 httpClient.Proxy = client.Proxy;

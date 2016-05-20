@@ -1,9 +1,9 @@
-﻿#if !NETSTANDARD1_0
+﻿#if !USE_BOUNCYCASTLE
 using System.Security.Cryptography;
 #endif
 using System.Text;
 
-#if NETSTANDARD1_0
+#if USE_BOUNCYCASTLE
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Macs;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -39,7 +39,7 @@ namespace RestSharp.Portable.OAuth1.SignatureProviders
         {
             var key = $"{consumerSecret}&{tokenSecret}";
             var keyData = _encoding.GetBytes(key);
-#if NETSTANDARD1_0
+#if USE_BOUNCYCASTLE
             var digest = new Sha256Digest();
             var crypto = new HMac(digest);
             crypto.Init(new KeyParameter(keyData));

@@ -1,4 +1,4 @@
-﻿#if NETSTANDARD1_0
+﻿#if USE_BOUNCYCASTLE
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Security;
 #endif
@@ -17,7 +17,7 @@ namespace RestSharp.Portable.OAuth1.Crypto
         /// <returns>The calculated hash</returns>
         public static byte[] MD5(byte[] data)
         {
-#if NETSTANDARD1_0
+#if USE_BOUNCYCASTLE
             var digest = new MD5Digest();
             return DigestUtilities.DoFinal(digest, data);
 #else

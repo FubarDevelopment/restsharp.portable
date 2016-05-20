@@ -1,4 +1,4 @@
-﻿#if !NETSTANDARD1_0
+﻿#if !USE_BOUNCYCASTLE
 using System;
 using System.Diagnostics;
 using System.Security.Cryptography;

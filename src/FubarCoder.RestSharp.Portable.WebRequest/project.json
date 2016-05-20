@@ -52,7 +52,52 @@
     }
   },
   "frameworks": {
+    ".NETPortable,Version=v4.0,Profile=Profile328": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "PROFILE328", "NO_PROXY", "USE_TASKEX" ]
+      },
+      "dependencies": {
+        "Microsoft.Bcl.Async": "1.0.168",
+        "FubarCoder.RestSharp.Portable.Encodings": {
+          "target": "project",
+          "version": ""
+        }
+      },
+      "frameworkAssemblies": {
+        "mscorlib": "",
+        "System": "",
+        "System.Net": ""
+      }
+    },
+    ".NETPortable,Version=v4.5,Profile=Profile259": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "PROFILE259", "NO_PROXY" ]
+      },
+      "dependencies": {
+        "FubarCoder.RestSharp.Portable.Encodings": {
+          "target": "project",
+          "version": ""
+        }
+      },
+      "frameworkAssemblies": {
+        "mscorlib": "",
+        "System": "",
+        "System.Net.Requests": ""
+      }
+    },
     "netstandard1.0": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "NO_PROXY" ]
+      },
       "imports": [ "dotnet" ],
       "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-*",

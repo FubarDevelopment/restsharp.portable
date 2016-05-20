@@ -184,7 +184,7 @@ namespace RestSharp.Portable.HttpClient.Impl
         {
             var handler = new HttpClientHandler();
 
-#if !PROFILE259
+#if !NO_PROXY
             if (handler.SupportsProxy && client.Proxy != null)
             {
                 handler.Proxy = client.Proxy;

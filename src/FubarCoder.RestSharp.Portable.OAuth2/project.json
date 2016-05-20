@@ -54,6 +54,27 @@
     }
   },
   "frameworks": {
+    ".NETPortable,Version=v4.0,Profile=Profile328": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "PROFILE328" ]
+      },
+      "frameworkAssemblies": {
+        "mscorlib": "",
+        "System": "",
+        "System.Xml": ""
+      }
+    },
+    ".NETPortable,Version=v4.5,Profile=Profile259": {
+      "frameworkAssemblies": {
+        "mscorlib": "",
+        "System.Runtime": "",
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    },
     "netstandard1.0": {
       "imports": [ "dotnet" ],
       "dependencies": {
