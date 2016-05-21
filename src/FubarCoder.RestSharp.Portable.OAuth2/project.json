@@ -59,7 +59,7 @@
         "compile": [
           "../../GlobalAssemblyInfo.cs"
         ],
-        "define": [ "PROFILE328" ]
+        "define": [ "PROFILE328", "USE_TASKEX" ]
       },
       "frameworkAssemblies": {
         "mscorlib": "",
@@ -82,6 +82,12 @@
       }
     },
     "net40": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "USE_TASKEX" ]
+      },
       "frameworkAssemblies": {
         "System.Xml": "",
         "System.Xml.Linq": ""

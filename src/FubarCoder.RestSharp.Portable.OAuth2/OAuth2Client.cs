@@ -134,7 +134,7 @@ namespace RestSharp.Portable.OAuth2
                         Request = request,
                         Configuration = Configuration,
                     });
-            return await Task<string>.Factory.StartNew(() => client.BuildUri(request).ToString());
+            return client.BuildUri(request).ToString();
         }
 
         /// <summary>
@@ -279,9 +279,13 @@ namespace RestSharp.Portable.OAuth2
         /// </summary>
         /// <param name="args">The request/response arguments</param>
         /// <returns>The task this handler is processed on</returns>
-        protected virtual async Task BeforeGetLoginLinkUri(BeforeAfterRequestArgs args)
+        protected virtual Task BeforeGetLoginLinkUri(BeforeAfterRequestArgs args)
         {
-            await Task.Factory.StartNew(() => { });
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         /// <summary>

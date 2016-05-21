@@ -44,18 +44,20 @@ namespace RestSharp.Portable
         /// <returns>The task that copies the data to the stream</returns>
         public Task CopyToAsync(Stream stream)
         {
-            return Task.Factory.StartNew(
-                () =>
-                    {
-                        if (_buffer != null)
-                        {
-                            stream.Write(_buffer, 0, _buffer.Length);
-                        }
-                        else
-                        {
-                            WriteTo(stream);
-                        }
-                    });
+            if (_buffer != null)
+            {
+                stream.Write(_buffer, 0, _buffer.Length);
+            }
+            else
+            {
+                WriteTo(stream);
+            }
+
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         /// <summary>
@@ -65,20 +67,20 @@ namespace RestSharp.Portable
         /// <returns>The task that loads the data into an internal buffer</returns>
         public Task LoadIntoBufferAsync(long maxBufferSize)
         {
-            return Task.Factory.StartNew(
-                () =>
-                    {
-                        if (_buffer != null)
-                        {
-                            return;
-                        }
+            if (_buffer == null)
+            {
+                using (var temp = new MemoryStream())
+                {
+                    WriteTo(temp);
+                    _buffer = temp.ToArray();
+                }
+            }
 
-                        using (var temp = new MemoryStream())
-                        {
-                            WriteTo(temp);
-                            _buffer = temp.ToArray();
-                        }
-                    });
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         /// <summary>
@@ -87,16 +89,21 @@ namespace RestSharp.Portable
         /// <returns>The task that returns the stream</returns>
         public Task<Stream> ReadAsStreamAsync()
         {
-            return Task.Factory.StartNew<Stream>(
-                () =>
-                    {
-                        if (_buffer != null)
-                        {
-                            return new MemoryStream(_buffer, false);
-                        }
+            Stream result;
+            if (_buffer != null)
+            {
+                result = new MemoryStream(_buffer, false);
+            }
+            else
+            {
+                result = new EncodedParameterStream(_postParameters);
+            }
 
-                        return new EncodedParameterStream(_postParameters);
-                    });
+#if USE_TASKEX
+            return TaskEx.FromResult(result);
+#else
+            return Task.FromResult(result);
+#endif
         }
 
         /// <summary>
@@ -105,22 +112,23 @@ namespace RestSharp.Portable
         /// <returns>The task that returns the data as byte array</returns>
         public Task<byte[]> ReadAsByteArrayAsync()
         {
-            return Task.Factory.StartNew(
-                () =>
-                    {
-                        if (_buffer == null)
-                        {
-                            using (var tempStream = new MemoryStream())
-                            {
-                                WriteTo(tempStream);
-                                _buffer = tempStream.ToArray();
-                            }
-                        }
+            if (_buffer == null)
+            {
+                using (var tempStream = new MemoryStream())
+                {
+                    WriteTo(tempStream);
+                    _buffer = tempStream.ToArray();
+                }
+            }
 
-                        var temp = new byte[_buffer.Length];
-                        Array.Copy(_buffer, temp, _buffer.Length);
-                        return temp;
-                    });
+            var temp = new byte[_buffer.Length];
+            Array.Copy(_buffer, temp, _buffer.Length);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(temp);
+#else
+            return Task.FromResult(temp);
+#endif
         }
 
         /// <summary>
@@ -129,20 +137,22 @@ namespace RestSharp.Portable
         /// <returns>The task that returns the data as string</returns>
         public Task<string> ReadAsStringAsync()
         {
-            return Task.Factory.StartNew(
-                () =>
+            if (_buffer == null)
+            {
+                using (var temp = new MemoryStream())
                 {
-                    if (_buffer == null)
-                    {
-                        using (var temp = new MemoryStream())
-                        {
-                            WriteTo(temp);
-                            _buffer = temp.ToArray();
-                        }
-                    }
+                    WriteTo(temp);
+                    _buffer = temp.ToArray();
+                }
+            }
 
-                    return Encoding.UTF8.GetString(_buffer, 0, _buffer.Length);
-                });
+            var result = Encoding.UTF8.GetString(_buffer, 0, _buffer.Length);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(result);
+#else
+            return Task.FromResult(result);
+#endif
         }
 
         /// <summary>

@@ -292,28 +292,31 @@ namespace RestSharp.Portable.OAuth1
         /// <returns>The task the authentication is performed on</returns>
         public Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            return Task.Factory.StartNew(() =>
+            var workflow = new OAuthWorkflow
             {
-                var workflow = new OAuthWorkflow
-                {
-                    ConsumerKey = ConsumerKey,
-                    ConsumerSecret = ConsumerSecret,
-                    ParameterHandling = ParameterHandling,
-                    SignatureProvider = SignatureProvider,
-                    SignatureTreatment = SignatureTreatment,
-                    Verifier = Verifier,
-                    Version = Version,
-                    CallbackUrl = CallbackUrl,
-                    SessionHandle = SessionHandle,
-                    Token = Token,
-                    TokenSecret = TokenSecret,
-                    ClientUsername = ClientUsername,
-                    ClientPassword = ClientPassword,
-                    CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp,
-                    RandomNumberGenerator = RandomNumberGenerator ?? OAuthTools.DefaultRandomNumberGenerator,
-                };
-                AddOAuthData(client, request, workflow);
-            });
+                ConsumerKey = ConsumerKey,
+                ConsumerSecret = ConsumerSecret,
+                ParameterHandling = ParameterHandling,
+                SignatureProvider = SignatureProvider,
+                SignatureTreatment = SignatureTreatment,
+                Verifier = Verifier,
+                Version = Version,
+                CallbackUrl = CallbackUrl,
+                SessionHandle = SessionHandle,
+                Token = Token,
+                TokenSecret = TokenSecret,
+                ClientUsername = ClientUsername,
+                ClientPassword = ClientPassword,
+                CreateTimestampFunc = CreateTimestampFunc ?? OAuthTools.GetTimestamp,
+                RandomNumberGenerator = RandomNumberGenerator ?? OAuthTools.DefaultRandomNumberGenerator,
+            };
+            AddOAuthData(client, request, workflow);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         /// <summary>

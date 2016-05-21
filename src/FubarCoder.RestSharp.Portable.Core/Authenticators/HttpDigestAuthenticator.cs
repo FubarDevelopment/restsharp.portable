@@ -192,18 +192,21 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
         public Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
-            return Task.Factory.StartNew(() =>
+            if (!CanHandleChallenge(client, request, credentials, response))
             {
-                if (!CanHandleChallenge(client, request, credentials, response))
-                {
-                    throw new InvalidOperationException();
-                }
+                throw new InvalidOperationException();
+            }
 
-                var responseUri = client.GetRequestUri(request, response);
-                _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
-                var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
-                ParseResponseHeader(authModeInfo);
-            });
+            var responseUri = client.GetRequestUri(request, response);
+            _authCredential = credentials.GetCredential(responseUri, AuthenticationMethod);
+            var authModeInfo = response.GetAuthenticationMethodValue(_authHeader, AuthenticationMethod);
+            ParseResponseHeader(authModeInfo);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         private static string CalculateMd5Hash(string input)
