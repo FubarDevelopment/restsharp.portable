@@ -82,22 +82,26 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>The task the authentication is performed on</returns>
         public Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            return Task.Factory.StartNew(() =>
+            if (credentials == null)
             {
-                if (credentials == null)
-                {
-                    throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
-                }
+                throw new InvalidOperationException("The credentials must be set using the IRestClient.Credential property.");
+            }
 
-                var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
-                if (cred == null)
-                {
-                    throw new InvalidOperationException($"No credentials provided for the {AuthenticationMethod} authentication type.");
-                }
+            var cred = credentials.GetCredential(client.BuildUri(request, false), AuthenticationMethod);
+            if (cred == null)
+            {
+                throw new InvalidOperationException($"No credentials provided for the {AuthenticationMethod} authentication type.");
+            }
 
-                request.AddParameter(_usernameKey, cred.UserName, _parameterType);
-                request.AddParameter(_passwordKey, cred.Password, _parameterType);
-            });
+            request.AddParameter(_usernameKey, cred.UserName, _parameterType);
+            request.AddParameter(_passwordKey, cred.Password, _parameterType);
+
+
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
 
         /// <summary>
