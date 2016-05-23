@@ -86,9 +86,15 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Obtains user information using provider API.
         /// </summary>
-        protected override async Task<UserInfo> GetUserInfo()
+        protected override Task<UserInfo> GetUserInfo()
         {
-            return await Task<UserInfo>.Factory.StartNew(() => ParseUserInfo(_accessUserInfo));
+            var result = ParseUserInfo(_accessUserInfo);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(result);
+#else
+            return Task.FromResult(result);
+#endif
         }
 
         /// <summary>

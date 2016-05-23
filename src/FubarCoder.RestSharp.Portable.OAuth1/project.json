@@ -59,7 +59,7 @@
         "compile": [
           "../../GlobalAssemblyInfo.cs"
         ],
-        "define": [ "USE_BOUNCYCASTLE" ]
+        "define": [ "USE_BOUNCYCASTLE", "USE_TASKEX" ]
       },
       "dependencies": {
         "Portable.BouncyCastle": "1.8.1"
@@ -95,6 +95,12 @@
       }
     },
     "net40": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ],
+        "define": [ "USE_TASKEX" ]
+      }
     }
   }
 }

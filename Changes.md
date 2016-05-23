@@ -1,5 +1,18 @@
 ﻿# Changes #
 
+## 4.0.0
+
+### Breaking changes
+
+* OAuth 1.0 Package renamed to FubarCoder.RestSharp.Portable.OAuth1
+* The `AddHandler`, `RemoveHandler`, `ClearHandlers` replaced by `ContentHandlers` dictionary
+* The `AddEncoding`, `RemoveEncoding`, `ClearEncodings` replaced by `EncodingHandlers` dictionary
+* `IRequestProxy` removed. We're now using `IWebProxy`. The `Proxy` property doesn't exist any more on unsupported platforms
+
+### Probably breaking Changes
+
+* `GetOrPost` parameters are sent as `x-www-form-urlencoded` when the request method is **not** `GET`
+
 ## 3.2.0 ##
 
 * New `Content` property for `IRestResponse`
