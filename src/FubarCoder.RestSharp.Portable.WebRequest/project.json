@@ -100,7 +100,6 @@
       },
       "imports": [ "dotnet" ],
       "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-*",
         "System.Net.Requests": "4.0.11-rc2-*",
         "FubarCoder.RestSharp.Portable.Encodings": {
           "target": "project",
@@ -111,7 +110,6 @@
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-*",
         "System.Net.Requests": "4.0.11-rc2-*",
         "FubarCoder.RestSharp.Portable.Encodings": {
           "target": "project",
