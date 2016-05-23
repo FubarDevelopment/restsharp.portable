@@ -1,6 +1,6 @@
 ﻿{
   "name": "FubarCoder.RestSharp.Portable.OAuth1",
-  "version": "4.0.0-alpha1-*",
+  "version": "4.0.0-beta-*",
   "title": "RestSharp.Portable OAuth 1.0 authenticator",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
   "description": "This library contains the OAuth 1.0 authenticator for RestSharp.Portable, which is a port of the OAuth 1.0 authenticator from the original RestSharp project. The authenticator was moved to a different library, to keep the number of dependencies of the RestSharp.Portable package as small as possible.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4",

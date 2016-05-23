@@ -1,6 +1,6 @@
 ﻿{
   "name": "FubarCoder.RestSharp.Portable.HttpClient",
-  "version": "4.0.0-alpha1-*",
+  "version": "4.0.0-beta-*",
   "title": "RestSharp.Portable HttpClient engine",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
   "description": "Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!\n\nSupported Platforms:\n- .NET Standard 1.1\n- .NET Framework 4",

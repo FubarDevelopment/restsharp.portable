@@ -1,5 +1,5 @@
 ﻿{
-  "version": "4.0.0-alpha1-*",
+  "version": "4.0.0-beta-*",
 
   "shared": [
     "*.cs",
