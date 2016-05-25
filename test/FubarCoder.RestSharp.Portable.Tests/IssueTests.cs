@@ -83,13 +83,11 @@ namespace RestSharp.Portable.Tests
             }
         }
 
-        [SkippableTheory(DisplayName = "Issue 19")]
+        [Theory(DisplayName = "Issue 19")]
         [InlineData(typeof(DefaultHttpClientFactory))]
         [InlineData(typeof(WebRequestHttpClientFactory))]
         public void TestIssue19(Type factoryType)
         {
-            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
-
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
@@ -135,13 +133,11 @@ namespace RestSharp.Portable.Tests
             }
         }
 
-        [SkippableTheory(DisplayName = "Issue 25")]
+        [Theory(DisplayName = "Issue 25")]
         [InlineData(typeof(DefaultHttpClientFactory))]
         [InlineData(typeof(WebRequestHttpClientFactory))]
         public void TestIssue25(Type factoryType)
         {
-            Skip.IfNot(Environment.ProcessorCount > 1, "Only works on multi-core systems");
-
             using (var client = new RestClient("http://httpbin.org/")
             {
                 HttpClientFactory = CreateClientFactory(factoryType, false),
