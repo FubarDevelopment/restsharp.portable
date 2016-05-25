@@ -17,27 +17,47 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The merged request parameters</param>
         /// <returns>The HTTP content to be sent</returns>
-        public static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        public static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
             IHttpContent content;
-            var parameters = client.MergeParameters(request);
             var collectionMode = request?.ContentCollectionMode ?? ContentCollectionMode.MultiPartForFileParameters;
             if (collectionMode != ContentCollectionMode.BasicContent)
             {
-                var fileParameters = parameters.GetFileParameters().ToList();
+                var fileParameters = parameters.OtherParameters.GetFileParameters().ToList();
                 if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
                 {
-                    content = client.GetMultiPartContent(request);
+                    content = client.GetMultiPartContent(request, parameters);
                 }
                 else
                 {
-                    content = client.GetBasicContent(request);
+                    content = client.GetBasicContent(request, parameters);
                 }
             }
             else
             {
-                content = client.GetBasicContent(request);
+                content = client.GetBasicContent(request, parameters);
+            }
+
+            if (content == null)
+                return null;
+
+            foreach (var param in parameters.ContentHeaderParameters)
+            {
+                if (content.Headers.Contains(param.Name))
+                {
+                    content.Headers.Remove(param.Name);
+                }
+
+                if (param.ValidateOnAdd)
+                {
+                    content.Headers.Add(param.Name, param.ToRequestString());
+                }
+                else
+                {
+                    content.Headers.TryAddWithoutValidation(param.Name, param.ToRequestString());
+                }
             }
 
             return content;
@@ -80,27 +100,28 @@ namespace RestSharp.Portable.Content
             return content;
         }
 
+
         /// <summary>
         /// Gets the basic content (without files) for a request
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The merged request parameters</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static IHttpContent GetBasicContent([CanBeNull] this IRestClient client, IRestRequest request)
+        private static IHttpContent GetBasicContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
             IHttpContent content;
-            var parameters = client.MergeParameters(request);
-            var body = parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
+            var body = parameters.OtherParameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
             if (body != null)
             {
                 content = request.GetBodyContent(body);
             }
             else
             {
-                var effectiveMethod = client.GetEffectiveHttpMethod(request);
+                var effectiveMethod = client.GetEffectiveHttpMethod(request, parameters.OtherParameters);
                 if (effectiveMethod != Method.GET)
                 {
-                    var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
+                    var getOrPostParameters = parameters.OtherParameters.GetGetOrPostParameters().ToList();
                     if (getOrPostParameters.Count != 0)
                     {
                         content = new PostParametersContent(getOrPostParameters);
@@ -124,13 +145,13 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The merged request parameters</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static IHttpContent GetMultiPartContent([CanBeNull] this IRestClient client, IRestRequest request)
+        private static IHttpContent GetMultiPartContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
-            var isPostMethod = client.GetEffectiveHttpMethod(request) == Method.POST;
+            var isPostMethod = client.GetEffectiveHttpMethod(request, parameters.OtherParameters) == Method.POST;
             var multipartContent = new MultipartFormDataContent(new GenericHttpHeaders());
-            var parameters = client.MergeParameters(request);
-            foreach (var parameter in parameters)
+            foreach (var parameter in parameters.OtherParameters)
             {
                 var fileParameter = parameter as FileParameter;
                 if (fileParameter != null)

@@ -79,10 +79,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             // http://api.mail.ru/docs/guides/restapi/
             // http://api.mail.ru/docs/reference/rest/users.getInfo/
 
-            args.Request.AddParameter("app_id", _configuration.ClientId);
-            args.Request.AddParameter("method", "users.getInfo");
-            args.Request.AddParameter("secure", "1");            
-            args.Request.AddParameter("session_key", AccessToken);
+            args.Request.AddOrUpdateParameter("app_id", _configuration.ClientId);
+            args.Request.AddOrUpdateParameter("method", "users.getInfo");
+            args.Request.AddOrUpdateParameter("secure", "1");            
+            args.Request.AddOrUpdateParameter("session_key", AccessToken);
 
             // workaround for current design, oauth_token is always present in URL, so we need emulate it for correct request signing 
             var fakeParam = new Parameter { Name = "oauth_token", Value = AccessToken };
@@ -94,7 +94,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
 
             args.Request.Parameters.Remove(fakeParam);
 
-            args.Request.AddParameter("sig", signature);            
+            args.Request.AddOrUpdateParameter("sig", signature);            
         }
 
         /// <summary>

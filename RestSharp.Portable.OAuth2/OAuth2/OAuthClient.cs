@@ -195,10 +195,10 @@ namespace RestSharp.Portable.Authenticators.OAuth2
             var client = _factory.CreateClient(LoginServiceEndpoint);
             var request = _factory.CreateRequest(LoginServiceEndpoint);
 
-            request.AddParameter(_oAuthTokenKey, AccessToken);
+            request.AddOrUpdateParameter(_oAuthTokenKey, AccessToken);
             if (!state.IsEmpty())
             {
-                request.AddParameter("state", state);
+                request.AddOrUpdateParameter("state", state);
             }
 
             return client.BuildUri(request).ToString();

@@ -30,7 +30,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         {
             await base.BeforeGetLoginLinkUri(args);
             // This allows us to get a refresh token
-            args.Request.AddParameter("access_type", "offline");
+            args.Request.AddOrUpdateParameter("access_type", "offline");
         }
 
         /// <summary>

@@ -43,10 +43,7 @@ namespace RestSharp.Portable.Test
         [Fact]
         public void TestParameterCaseInsensitive()
         {
-            using (var client = new RestClient("http://localhost")
-            {
-                DefaultParameterNameComparer = StringComparer.OrdinalIgnoreCase,
-            })
+            using (var client = new RestClient("http://localhost"))
             {
                 client.AddDefaultParameter("param1", "value1");
 
@@ -56,7 +53,7 @@ namespace RestSharp.Portable.Test
                     .AddParameter("Param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.Equal("http://localhost/?Param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?param1=value1&param2=value2&Param1=value1.1", uri);
             }
         }
 
@@ -70,7 +67,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest();
                 request
                     .AddParameter("param2", "value2")
-                    .AddParameter("param1", "value1.1");
+                    .AddOrUpdateParameter("param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
                 Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
@@ -86,7 +83,7 @@ namespace RestSharp.Portable.Test
                 request
                     .AddParameter("param1", "value1")
                     .AddParameter("param2", "value2")
-                    .AddParameter("param1", "value1.1");
+                    .AddOrUpdateParameter("param1", "value1.1");
 
                 var uri = client.BuildUri(request).ToString();
                 Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
@@ -102,10 +99,10 @@ namespace RestSharp.Portable.Test
                 request
                     .AddParameter("param1", "value1", ParameterType.GetOrPost)
                     .AddParameter("param2", "value2")
-                    .AddParameter("param1", "value1.1", ParameterType.QueryString);
+                    .AddOrUpdateParameter("param1", "value1.1", ParameterType.QueryString);
 
                 var uri = client.BuildUri(request).ToString();
-                Assert.Equal("http://localhost/?param1=value1.1&param2=value2", uri);
+                Assert.Equal("http://localhost/?param1=value1&param2=value2&param1=value1.1", uri);
             }
         }
 
@@ -118,12 +115,13 @@ namespace RestSharp.Portable.Test
                 request
                     .AddParameter("param1", "value1", ParameterType.GetOrPost)
                     .AddParameter("param2", "value2")
-                    .AddParameter("param1", "value1.1", ParameterType.QueryString);
+                    .AddOrUpdateParameter("param1", "value1.1", ParameterType.QueryString);
 
                 var uri = client.BuildUri(request).ToString();
                 Assert.Equal("http://localhost/?param1=value1.1", uri);
 
-                var body = await client.GetContent(request).ReadAsStringAsync();
+                var requestParameters = client.MergeParameters(request);
+                var body = await client.GetContent(request, requestParameters).ReadAsStringAsync();
                 Assert.Equal("param1=value1&param2=value2", body);
             }
         }

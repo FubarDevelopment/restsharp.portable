@@ -2,12 +2,19 @@
 
 ## 4.0.0
 
+### New features
+
+* Support for `netstandard1.0` and above
+* Support for `HMAC-SHA256`
+
 ### Breaking changes
 
 * OAuth 1.0 Package renamed to FubarCoder.RestSharp.Portable.OAuth1
 * The `AddHandler`, `RemoveHandler`, `ClearHandlers` replaced by `ContentHandlers` dictionary
 * The `AddEncoding`, `RemoveEncoding`, `ClearEncodings` replaced by `EncodingHandlers` dictionary
 * `IRequestProxy` removed. We're now using `IWebProxy`. The `Proxy` property doesn't exist any more on unsupported platforms
+* The same parameter is allowed multiple times. You can use the `AddOrUpdate*` functions when you only want to have one parameter with the same name
+* `GetOrPost` and `QueryString` parameters are different - even when issuing a GET request
 
 ### Probably breaking Changes
 

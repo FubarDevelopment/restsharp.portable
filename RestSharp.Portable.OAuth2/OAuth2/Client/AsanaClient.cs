@@ -78,7 +78,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// </param>
         protected override void BeforeGetUserInfo(BeforeAfterRequestArgs args)
         {
-            args.Request.AddParameter("opt_fields", "id,name,photo.image_128x128,photo.image_60x60,photo.image_36x36,email");
+            args.Request.AddOrUpdateParameter("opt_fields", "id,name,photo.image_128x128,photo.image_60x60,photo.image_36x36,email");
             args.Client.Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(this, "Bearer");
         }
 

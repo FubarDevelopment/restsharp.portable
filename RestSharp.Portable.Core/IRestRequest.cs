@@ -26,19 +26,11 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the REST request parameters
         /// </summary>
-        IList<Parameter> Parameters { get; }
+        IParameterCollection Parameters { get; }
 
         /// <summary>
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         ContentCollectionMode ContentCollectionMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="StringComparer"/> to be used for this request.
-        /// </summary>
-        /// <remarks>
-        /// If this property is null, the <see cref="IRestClient.DefaultParameterNameComparer"/> is used.
-        /// </remarks>
-        StringComparer ParameterNameComparer { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace RestSharp.Portable.Authenticators
         /// <returns>The task the authentication is performed on</returns>
         public override async Task PreAuthenticate(IRestClient client, IRestRequest request, ICredentials credentials)
         {
-            request.AddParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
+            request.AddOrUpdateParameter("oauth_token", await Client.GetCurrentToken(), ParameterType.GetOrPost);
         }
 
         /// <summary>

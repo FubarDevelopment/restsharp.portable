@@ -374,7 +374,7 @@ namespace RestSharp.Portable.Authenticators
                                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters
                                    && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
-            var requestParameters = client.MergeParameters(request).AsEnumerable();
+            var requestParameters = client.MergeParameters(request).OtherParameters.AsEnumerable();
             var effectiveMethod = client.GetEffectiveHttpMethod(request);
             if (effectiveMethod == Method.GET)
             {
@@ -439,7 +439,7 @@ namespace RestSharp.Portable.Authenticators
                     {
                         var v = parameter.Value;
                         v = Uri.UnescapeDataString(v.Replace('+', ' '));
-                        request.AddParameter(parameter.Name, v);
+                        request.AddOrUpdateParameter(parameter.Name, v);
                     }
 
                     break;

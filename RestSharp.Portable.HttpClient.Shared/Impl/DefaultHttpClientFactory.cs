@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -74,8 +75,6 @@ namespace RestSharp.Portable.HttpClient.Impl
                 BaseAddress = GetBaseAddress(client)
             };
 
-            httpClient = AddHttpHeaderParameters(httpClient, client);
-
             var timeout = client.Timeout;
             if (timeout.HasValue)
             {
@@ -90,17 +89,18 @@ namespace RestSharp.Portable.HttpClient.Impl
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP request message</param>
         /// <param name="request">The REST request for which the HTTP request message is created</param>
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
         /// <returns>A new HttpRequestMessage object</returns>
         /// <remarks>
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        public virtual IHttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
+        public virtual IHttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request, IList<Parameter> parameters)
         {
             var address = GetMessageAddress(client, request);
             var method = GetHttpMethod(client, request).ToHttpMethod();
             var message = new HttpRequestMessage(method, address);
-            message = AddHttpHeaderParameters(message, request);
+            message = AddHttpHeaderParameters(message, request, parameters);
             return new DefaultHttpRequestMessage(message);
         }
 
@@ -189,10 +189,11 @@ namespace RestSharp.Portable.HttpClient.Impl
         /// </summary>
         /// <param name="message">HTTP request message</param>
         /// <param name="request">REST request</param>
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
         /// <returns>The modified HTTP request message</returns>
-        protected virtual HttpRequestMessage AddHttpHeaderParameters(HttpRequestMessage message, IRestRequest request)
+        protected virtual HttpRequestMessage AddHttpHeaderParameters(HttpRequestMessage message, IRestRequest request, IList<Parameter> parameters)
         {
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && !x.IsContentParameter()))
+            foreach (var param in parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (message.Headers.Contains(param.Name))
                 {
@@ -211,35 +212,6 @@ namespace RestSharp.Portable.HttpClient.Impl
             }
 
             return message;
-        }
-
-        /// <summary>
-        /// Returns a modified HTTP client object with the default HTTP header parameters
-        /// </summary>
-        /// <param name="httpClient">HTTP client</param>
-        /// <param name="restClient">REST client</param>
-        /// <returns>The modified HTTP request message</returns>
-        protected virtual System.Net.Http.HttpClient AddHttpHeaderParameters(System.Net.Http.HttpClient httpClient, IRestClient restClient)
-        {
-            foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
-            {
-                if (httpClient.DefaultRequestHeaders.Contains(param.Name))
-                {
-                    httpClient.DefaultRequestHeaders.Remove(param.Name);
-                }
-
-                var paramValue = param.ToRequestString();
-                if (param.ValidateOnAdd)
-                {
-                    httpClient.DefaultRequestHeaders.Add(param.Name, paramValue);
-                }
-                else
-                {
-                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation(param.Name, paramValue);
-                }
-            }
-
-            return httpClient;
         }
 
         /// <summary>

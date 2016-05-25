@@ -72,7 +72,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
         /// </summary>
         protected override void BeforeGetUserInfo(BeforeAfterRequestArgs args)
         {
-            args.Request.AddParameter("access_token", AccessToken);
+            args.Request.AddOrUpdateParameter("access_token", AccessToken);
         }
 
         /// <summary>

@@ -108,10 +108,9 @@ namespace RestSharp.Portable
         /// <param name="header">The type of the HTTP header that stores the authorization information</param>
         /// <param name="authValue">The authorization header value</param>
         /// <returns>true = header removed, false = same header already exists, null = header not found</returns>
-        public static bool? RemoveAuthorizationHeader([NotNull, ItemNotNull] IList<Parameter> parameters, AuthHeader header, [NotNull] string authValue)
+        public static bool? RemoveAuthorizationHeader([NotNull, ItemNotNull] IParameterCollection parameters, AuthHeader header, [NotNull] string authValue)
         {
-            var authParam = parameters.SingleOrDefault(
-                p => p.Name.Equals(header.ToAuthorizationHeaderName(), StringComparison.OrdinalIgnoreCase));
+            var authParam = parameters.Find(ParameterType.HttpHeader, header.ToAuthorizationHeaderName()).FirstOrDefault();
             if (authParam == null)
             {
                 return null;
@@ -154,7 +153,7 @@ namespace RestSharp.Portable
         /// <param name="authValue">The authorization header value</param>
         public static void SetAuthorizationHeader([NotNull] IRestRequest request, AuthHeader header, [NotNull] string authValue)
         {
-            request.AddParameter(header.ToAuthorizationHeaderName(), authValue, ParameterType.HttpHeader);
+            request.Parameters.AddOrUpdate(new Parameter { Name = header.ToAuthorizationHeaderName(), Value = authValue, Type = ParameterType.HttpHeader });
         }
 
         /// <summary>

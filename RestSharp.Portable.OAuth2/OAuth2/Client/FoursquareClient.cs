@@ -75,7 +75,7 @@ namespace RestSharp.Portable.Authenticators.OAuth2.Client
             // Source documents 
             // https://developer.foursquare.com/overview/auth.html
             // https://developer.foursquare.com/overview/versioning
-            args.Request.AddParameter("v", System.DateTime.Now.ToString("yyyyMMdd"));
+            args.Request.AddOrUpdateParameter("v", System.DateTime.Now.ToString("yyyyMMdd"));
         }
 
         /// <summary>

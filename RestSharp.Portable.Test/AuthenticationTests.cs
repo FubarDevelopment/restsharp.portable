@@ -119,7 +119,7 @@ namespace RestSharp.Portable.Test
                 var request = new RestRequest("auth-int/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                ////request.AddParameter("param1", "val1");
+                ////request.AddOrUpdateParameter("param1", "val1");
                 var response = await client.Execute<AuthenticationResult>(request);
 
                 Assert.True(response.Data.Authenticated);
@@ -242,8 +242,8 @@ namespace RestSharp.Portable.Test
 
                 {
                     var request = new RestRequest("echo", Method.POST);
-                    request.AddParameter("one", "1");
-                    request.AddParameter("two", "2");
+                    request.AddOrUpdateParameter("one", "1");
+                    request.AddOrUpdateParameter("two", "2");
                     var response = await client.Execute(request);
                     var text = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', text);
