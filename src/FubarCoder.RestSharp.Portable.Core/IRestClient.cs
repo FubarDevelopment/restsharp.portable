@@ -25,7 +25,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the default parameters for all requests
         /// </summary>
-        IList<Parameter> DefaultParameters { get; }
+        IParameterCollection DefaultParameters { get; }
 
         /// <summary>
         /// Gets or sets the cookies for all requests
@@ -51,14 +51,6 @@ namespace RestSharp.Portable
         /// Gets or sets a value indicating whether the response status code should be ignored?
         /// </summary>
         bool IgnoreResponseStatusCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the default <see cref="StringComparer"/> to be used for the requests.
-        /// </summary>
-        /// <remarks>
-        /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
-        /// </remarks>
-        StringComparer DefaultParameterNameComparer { get; set; }
 
         /// <summary>
         /// Gets or sets the timeout to be used for requests.

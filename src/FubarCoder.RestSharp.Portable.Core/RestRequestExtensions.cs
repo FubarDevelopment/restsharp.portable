@@ -181,7 +181,26 @@ namespace RestSharp.Portable
         /// <returns>The request object to allow call chains</returns>
         public static IRestRequest AddParameter(this IRestRequest request, Parameter parameter)
         {
-            request.Parameters.Add(parameter);
+            if (parameter.Type == ParameterType.UrlSegment || parameter.Type == ParameterType.RequestBody || parameter is FileParameter)
+            {
+                request.Parameters.AddOrUpdate(parameter);
+            }
+            else
+            {
+                request.Parameters.Add(parameter);
+            }
+            return request;
+        }
+
+        /// <summary>
+        /// Generic add or update parameters function
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="parameter">Parameter to add</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddOrUpdateParameter(this IRestRequest request, Parameter parameter)
+        {
+            request.Parameters.AddOrUpdate(parameter);
             return request;
         }
 
@@ -198,6 +217,18 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Add or update a query parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddOrUpdateQueryParameter(this IRestRequest request, string name, object value)
+        {
+            return request.AddOrUpdateParameter(new Parameter { Name = name, Value = value, Type = ParameterType.QueryString });
+        }
+
+        /// <summary>
         /// Add an URL segment parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
@@ -206,7 +237,8 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddUrlSegment(this IRestRequest request, string name, object value)
         {
-            return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.UrlSegment });
+            request.Parameters.AddOrUpdate(new Parameter { Name = name, Value = value, Type = ParameterType.UrlSegment });
+            return request;
         }
 
         /// <summary>
@@ -222,6 +254,18 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Add or update a HTTP HEADER parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddOrUpdateHeader(this IRestRequest request, string name, object value)
+        {
+            return request.AddOrUpdateParameter(new Parameter { Name = name, Value = value, Type = ParameterType.HttpHeader });
+        }
+
+        /// <summary>
         /// Add a parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
@@ -231,6 +275,18 @@ namespace RestSharp.Portable
         public static IRestRequest AddParameter(this IRestRequest request, string name, object value)
         {
             return request.AddParameter(new Parameter { Name = name, Value = value, Type = ParameterType.GetOrPost });
+        }
+
+        /// <summary>
+        /// Add or updates a parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add or update this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddOrUpdateParameter(this IRestRequest request, string name, object value)
+        {
+            return request.AddOrUpdateParameter(new Parameter { Name = name, Value = value, Type = ParameterType.GetOrPost });
         }
 
         /// <summary>
@@ -252,6 +308,24 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Add or update a parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <param name="type">Type of the parameter</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddOrUpdateParameter(this IRestRequest request, string name, object value, ParameterType type)
+        {
+            if (type == ParameterType.RequestBody && !string.IsNullOrEmpty(name))
+            {
+                return request.AddOrUpdateParameter(null, value, ParameterType.RequestBody, name);
+            }
+
+            return request.AddOrUpdateParameter(new Parameter { Name = name, Value = value, Type = type });
+        }
+
+        /// <summary>
         /// Add a parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
@@ -266,6 +340,20 @@ namespace RestSharp.Portable
         }
 
         /// <summary>
+        /// Add or update a parameter to a REST request
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">Name of the parameter</param>
+        /// <param name="value">Value of the parameter</param>
+        /// <param name="type">Type of the parameter</param>
+        /// <param name="contentType">Content type for the parameter (only applicable to a Body parameter)</param>
+        /// <returns>The REST request to allow call chains</returns>
+        public static IRestRequest AddOrUpdateParameter(this IRestRequest request, string name, object value, ParameterType type, string contentType)
+        {
+            return request.AddOrUpdateParameter(new Parameter { Name = name, Value = value, Type = type, ContentType = contentType });
+        }
+
+        /// <summary>
         /// Add a file parameter to a REST request
         /// </summary>
         /// <param name="request">The REST request to add this parameter to</param>
@@ -275,7 +363,7 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddFile(this IRestRequest request, string name, byte[] bytes, string fileName)
         {
-            return request.AddParameter(FileParameter.Create(name, bytes, fileName));
+            return request.AddOrUpdateParameter(FileParameter.Create(name, bytes, fileName));
         }
 
         /// <summary>
@@ -289,7 +377,7 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddFile(this IRestRequest request, string name, byte[] bytes, string fileName, string contentType)
         {
-            return request.AddParameter(FileParameter.Create(name, bytes, fileName, contentType));
+            return request.AddOrUpdateParameter(FileParameter.Create(name, bytes, fileName, contentType));
         }
 
         /// <summary>
@@ -302,7 +390,7 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddFile(this IRestRequest request, string name, Stream input, string fileName)
         {
-            return request.AddParameter(FileParameter.Create(name, input, fileName));
+            return request.AddOrUpdateParameter(FileParameter.Create(name, input, fileName));
         }
 
         /// <summary>
@@ -316,7 +404,7 @@ namespace RestSharp.Portable
         /// <returns>The REST request to allow call chains</returns>
         public static IRestRequest AddFile(this IRestRequest request, string name, Stream input, string fileName, string contentType)
         {
-            return request.AddParameter(FileParameter.Create(name, input, fileName, contentType));
+            return request.AddOrUpdateParameter(FileParameter.Create(name, input, fileName, contentType));
         }
 
         /// <summary>
@@ -328,7 +416,7 @@ namespace RestSharp.Portable
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = "Communicate to the caller that a file parameter is required.")]
         public static IRestRequest AddFile(this IRestRequest request, FileParameter parameter)
         {
-            return request.AddParameter(parameter);
+            return request.AddOrUpdateParameter(parameter);
         }
     }
 }

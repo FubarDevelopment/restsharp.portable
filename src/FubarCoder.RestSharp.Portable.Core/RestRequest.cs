@@ -11,7 +11,7 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestRequest : IRestRequest
     {
-        private readonly List<Parameter> _parameters = new List<Parameter>();
+        private readonly IParameterCollection _parameters = new ParameterCollection();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
@@ -86,7 +86,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the REST request parameters
         /// </summary>
-        public IList<Parameter> Parameters => _parameters;
+        public IParameterCollection Parameters => _parameters;
 
         /// <summary>
         /// Gets or sets the serializer that should serialize the body
@@ -97,13 +97,5 @@ namespace RestSharp.Portable
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         public ContentCollectionMode ContentCollectionMode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="StringComparer"/> to be used for this request.
-        /// </summary>
-        /// <remarks>
-        /// If this property is null, the <see cref="IRestClient.DefaultParameterNameComparer"/> is used.
-        /// </remarks>
-        public StringComparer ParameterNameComparer { get; set; }
     }
 }

@@ -101,6 +101,13 @@
         ],
         "define": [ "USE_TASKEX" ]
       }
+    },
+    "net45": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs"
+        ]
+      }
     }
   }
 }

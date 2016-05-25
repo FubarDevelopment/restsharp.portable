@@ -72,7 +72,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override void BeforeGetUserInfo(BeforeAfterRequestArgs args)
         {
-            args.Request.AddParameter("fields", "id,first_name,last_name,email,picture");
+            args.Request.AddOrUpdateParameter("fields", "id,first_name,last_name,email,picture");
         }
 
         /// <summary>

@@ -34,14 +34,10 @@ namespace RestSharp.Portable.HttpClient
         {
         }
 
-        /// <summary>
-        /// Gets the content for a request.
-        /// </summary>
-        /// <param name="request">The <see cref="IRestRequest"/> to get the content for.</param>
-        /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
-        protected override IHttpContent GetContent(IRestRequest request)
+        /// <inheritdoc/>
+        protected override IHttpContent GetContent(IRestRequest request, RequestParameters parameters)
         {
-            return RestClientExtensions.GetContent(this, request);
+            return RestClientExtensions.GetContent(this, request, parameters);
         }
     }
 }

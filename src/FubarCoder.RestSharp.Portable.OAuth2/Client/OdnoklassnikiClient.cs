@@ -79,12 +79,12 @@ namespace RestSharp.Portable.OAuth2.Client
             // Source document
             // http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032
 
-            args.Request.AddParameter("application_key", _configuration.ClientPublic);
-            args.Request.AddParameter("method", "users.getCurrentUser");
+            args.Request.AddOrUpdateParameter("application_key", _configuration.ClientPublic);
+            args.Request.AddOrUpdateParameter("method", "users.getCurrentUser");
 
             // workaround for current design, oauth_token is always present in URL, so we need emulate it for correct request signing 
             var fakeParam = new Parameter() { Name = "oauth_token", Value = AccessToken };
-            args.Request.AddParameter(fakeParam);
+            args.Request.AddOrUpdateParameter(fakeParam);
 
             // Signing.
             // Call API methods using access_token instead of session_key parameter
@@ -98,8 +98,8 @@ namespace RestSharp.Portable.OAuth2.Client
             // Removing fake param to prevent dups
             args.Request.Parameters.Remove(fakeParam);
 
-            args.Request.AddParameter("access_token", AccessToken);
-            args.Request.AddParameter("sig", signature);
+            args.Request.AddOrUpdateParameter("access_token", AccessToken);
+            args.Request.AddOrUpdateParameter("sig", signature);
         }
 
         /// <summary>

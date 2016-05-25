@@ -45,10 +45,11 @@ namespace RestSharp.Portable.WebRequest
         /// Gets the content for a request.
         /// </summary>
         /// <param name="request">The <see cref="IRestRequest"/> to get the content for.</param>
+        /// <param name="parameters">The request parameters for the REST request (read-only)</param>
         /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
-        protected override IHttpContent GetContent(IRestRequest request)
+        protected override IHttpContent GetContent(IRestRequest request, RequestParameters parameters)
         {
-            return GenericContentCollector.GetContent(this, request);
+            return GenericContentCollector.GetContent(this, request, parameters);
         }
     }
 }

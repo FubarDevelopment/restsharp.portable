@@ -30,7 +30,7 @@ namespace RestSharp.Portable
 
         private readonly IList<string> _acceptEncodings = new List<string>();
 
-        private readonly List<Parameter> _defaultParameters = new List<Parameter>();
+        private readonly IParameterCollection _defaultParameters = new ParameterCollection();
 
         private readonly Lazy<IHttpClient> _httpClient;
 
@@ -125,14 +125,6 @@ namespace RestSharp.Portable
         public CookieContainer CookieContainer { get; set; }
 
         /// <summary>
-        /// Gets or sets the default <see cref="StringComparer"/> to be used for the requests.
-        /// </summary>
-        /// <remarks>
-        /// If this property is null, the <see cref="StringComparer.Ordinal"/> is used.
-        /// </remarks>
-        public StringComparer DefaultParameterNameComparer { get; set; }
-
-        /// <summary>
         /// Gets or sets the timeout to be used for requests.
         /// </summary>
         /// <remarks>
@@ -157,31 +149,19 @@ namespace RestSharp.Portable
         {
             get
             {
-                var comparer = DefaultParameterNameComparer ?? StringComparer.OrdinalIgnoreCase;
-                return (string)DefaultParameters.FirstOrDefault(x => comparer.Equals(x.Name, "User-Agent"))?.Value;
+                var userAgentParameter = DefaultParameters.Find(ParameterType.HttpHeader, "User-Agent").FirstOrDefault();
+                return (string)userAgentParameter?.Value;
             }
             set
             {
-                var comparer = DefaultParameterNameComparer ?? StringComparer.OrdinalIgnoreCase;
-                var parameter = DefaultParameters.FirstOrDefault(x => comparer.Equals(x.Name, "User-Agent"));
-                if (parameter == null)
-                {
-                    parameter = new Parameter()
-                    {
-                        Name = "User-Agent",
-                        Type = ParameterType.HttpHeader,
-                        ValidateOnAdd = false,
-                    };
-                    DefaultParameters.Add(parameter);
-                }
-                parameter.Value = value;
+                DefaultParameters.AddOrUpdate(new Parameter { Type = ParameterType.HttpHeader, Name = "User-Agent", Value = value, ValidateOnAdd = false });
             }
         }
 
         /// <summary>
         /// Gets the collection of the default parameters for all requests
         /// </summary>
-        public IList<Parameter> DefaultParameters => _defaultParameters;
+        public IParameterCollection DefaultParameters => _defaultParameters;
 
         /// <summary>
         /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
@@ -356,8 +336,9 @@ namespace RestSharp.Portable
         /// Gets the content for a request.
         /// </summary>
         /// <param name="request">The <see cref="IRestRequest"/> to get the content for.</param>
+        /// <param name="parameters">The request parameters for the REST request (read-only)</param>
         /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
-        protected abstract IHttpContent GetContent(IRestRequest request);
+        protected abstract IHttpContent GetContent(IRestRequest request, RequestParameters parameters);
 
         /// <summary>
         /// Allows the implementor to modify the <paramref name="httpClient"/> and the <paramref name="requestMessage"/>
@@ -382,7 +363,6 @@ namespace RestSharp.Portable
         /// <returns>The <see cref="IHttpResponseMessage"/> for the request</returns>
         protected async Task<IHttpResponseMessage> ExecuteRequest(IRestRequest request, CancellationToken ct)
         {
-            AddDefaultParameters(request);
             while (true)
             {
                 if (Authenticator != null && Authenticator.CanPreAuthenticate(this, request, Credentials))
@@ -390,36 +370,16 @@ namespace RestSharp.Portable
                     await Authenticator.PreAuthenticate(this, request, Credentials);
                 }
 
+                var requestParameters = this.MergeParameters(request);
                 bool failed = true;
                 var httpClient = _httpClient.Value;
-                var message = HttpClientFactory.CreateRequestMessage(this, request);
+                var message = HttpClientFactory.CreateRequestMessage(this, request, requestParameters.OtherParameters);
                 try
                 {
-                    var bodyData = GetContent(request);
+                    var bodyData = GetContent(request, requestParameters);
                     if (bodyData != null)
                     {
                         message.Content = bodyData;
-                    }
-
-                    if (message.Content != null)
-                    {
-                        var content = message.Content;
-                        foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader && x.IsContentParameter()))
-                        {
-                            if (content.Headers.Contains(param.Name))
-                            {
-                                content.Headers.Remove(param.Name);
-                            }
-
-                            if (param.ValidateOnAdd)
-                            {
-                                content.Headers.Add(param.Name, param.ToRequestString());
-                            }
-                            else
-                            {
-                                content.Headers.TryAddWithoutValidation(param.Name, param.ToRequestString());
-                            }
-                        }
                     }
 
                     ModifyRequestBeforeAuthentication(httpClient, message);
@@ -517,26 +477,6 @@ namespace RestSharp.Portable
             {
                 var accepts = string.Join(", ", _acceptEncodings);
                 this.AddDefaultParameter("Accept-Encoding", accepts, ParameterType.HttpHeader);
-            }
-        }
-
-        /// <summary>
-        /// Add overridable default parameters to the request
-        /// </summary>
-        /// <param name="request">The requests to add the default parameters to.</param>
-        private void AddDefaultParameters(IRestRequest request)
-        {
-            var comparer = new ParameterComparer(this, request);
-
-            var startIndex = 0;
-            foreach (var parameter in DefaultParameters.Where(x => x.Type != ParameterType.HttpHeader))
-            {
-                if (request.Parameters.Contains(parameter, comparer))
-                {
-                    continue;
-                }
-
-                request.Parameters.Insert(startIndex++, parameter);
             }
         }
 

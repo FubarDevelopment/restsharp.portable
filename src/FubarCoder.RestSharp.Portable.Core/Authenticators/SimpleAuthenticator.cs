@@ -93,9 +93,8 @@ namespace RestSharp.Portable.Authenticators
                 throw new InvalidOperationException($"No credentials provided for the {AuthenticationMethod} authentication type.");
             }
 
-            request.AddParameter(_usernameKey, cred.UserName, _parameterType);
-            request.AddParameter(_passwordKey, cred.Password, _parameterType);
-
+            request.Parameters.AddOrUpdate(new Parameter { Type = _parameterType, Name = _usernameKey, Value = cred.UserName, ValidateOnAdd = false });
+            request.Parameters.AddOrUpdate(new Parameter { Type = _parameterType, Name = _passwordKey, Value = cred.Password, ValidateOnAdd = false });
 
 #if USE_TASKEX
             return TaskEx.FromResult(0);

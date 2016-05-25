@@ -67,7 +67,7 @@ namespace RestSharp.Portable
         /// <returns>true when the parameter is a content parameter</returns>
         public static bool IsContentParameter(this Parameter parameter)
         {
-            return !string.IsNullOrEmpty(parameter.Name) && parameter.Name.StartsWith("Content-", StringComparison.OrdinalIgnoreCase);
+            return parameter.Type == ParameterType.HttpHeader && !string.IsNullOrEmpty(parameter.Name) && parameter.Name.StartsWith("Content-", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

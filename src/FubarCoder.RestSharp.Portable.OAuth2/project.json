@@ -56,9 +56,6 @@
   "frameworks": {
     ".NETPortable,Version=v4.0,Profile=Profile328": {
       "buildOptions": {
-        "compile": [
-          "../../GlobalAssemblyInfo.cs"
-        ],
         "define": [ "PROFILE328", "USE_TASKEX" ]
       },
       "frameworkAssemblies": {
@@ -83,11 +80,14 @@
     },
     "net40": {
       "buildOptions": {
-        "compile": [
-          "../../GlobalAssemblyInfo.cs"
-        ],
         "define": [ "USE_TASKEX" ]
       },
+      "frameworkAssemblies": {
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    },
+    "net45": {
       "frameworkAssemblies": {
         "System.Xml": "",
         "System.Xml.Linq": ""

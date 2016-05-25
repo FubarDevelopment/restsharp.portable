@@ -36,7 +36,7 @@ namespace RestSharp.Portable.OAuth1.SignatureProviders
         public string CalculateSignature(byte[] data, string consumerSecret, string tokenSecret)
         {
             var hash = CalculateHash(data);
-#if NET40
+#if NET40 || NET45
             var signatureFormatter = new RSAPKCS1SignatureFormatter(_privateKey);
             signatureFormatter.SetHashAlgorithm("SHA1");
             var signature = signatureFormatter.CreateSignature(hash);

@@ -174,7 +174,7 @@ namespace RestSharp.Portable.OAuth1.Tests
                 BaseUrl = new Uri("https://test.lacolhost/");
             }
 
-            protected override IHttpContent GetContent(IRestRequest request)
+            protected override IHttpContent GetContent(IRestRequest request, RequestParameters parameters)
             {
                 return null;
             }

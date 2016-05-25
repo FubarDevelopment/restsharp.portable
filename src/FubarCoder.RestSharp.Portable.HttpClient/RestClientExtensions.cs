@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -18,32 +19,49 @@ namespace RestSharp.Portable.HttpClient
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The request parameters for the REST request (read-only)</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request)
+        internal static IHttpContent GetContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
             HttpContent content;
-            var parameters = client.MergeParameters(request);
             var collectionMode = request?.ContentCollectionMode ?? ContentCollectionMode.MultiPartForFileParameters;
             if (collectionMode != ContentCollectionMode.BasicContent)
             {
-                var fileParameters = parameters.GetFileParameters().ToList();
+                var fileParameters = parameters.OtherParameters.GetFileParameters().ToList();
                 if (collectionMode == ContentCollectionMode.MultiPart || fileParameters.Count != 0)
                 {
-                    content = client.GetMultiPartContent(request);
+                    content = client.GetMultiPartContent(request, parameters);
                 }
                 else
                 {
-                    content = client.GetBasicContent(request);
+                    content = client.GetBasicContent(request, parameters);
                 }
             }
             else
             {
-                content = client.GetBasicContent(request);
+                content = client.GetBasicContent(request, parameters);
             }
 
             if (content == null)
             {
                 return null;
+            }
+
+            foreach (var param in parameters.ContentHeaderParameters)
+            {
+                if (content.Headers.Contains(param.Name))
+                {
+                    content.Headers.Remove(param.Name);
+                }
+
+                if (param.ValidateOnAdd)
+                {
+                    content.Headers.Add(param.Name, param.ToRequestString());
+                }
+                else
+                {
+                    content.Headers.TryAddWithoutValidation(param.Name, param.ToRequestString());
+                }
             }
 
             return new DefaultHttpContent(content);
@@ -54,12 +72,12 @@ namespace RestSharp.Portable.HttpClient
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The request parameters for the REST request (read-only)</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static HttpContent GetBasicContent([CanBeNull] this IRestClient client, IRestRequest request)
+        private static HttpContent GetBasicContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
             HttpContent content;
-            var parameters = client.MergeParameters(request);
-            var body = parameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
+            var body = parameters.OtherParameters.FirstOrDefault(x => x.Type == ParameterType.RequestBody);
             if (body != null)
             {
                 content = request.GetBodyContent(body);
@@ -69,7 +87,7 @@ namespace RestSharp.Portable.HttpClient
                 var effectiveMethod = client.GetEffectiveHttpMethod(request);
                 if (effectiveMethod != Method.GET)
                 {
-                    var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
+                    var getOrPostParameters = parameters.OtherParameters.GetGetOrPostParameters().ToList();
                     if (getOrPostParameters.Count != 0)
                     {
                         content = new PostParametersContent(getOrPostParameters).AsHttpContent();
@@ -93,13 +111,13 @@ namespace RestSharp.Portable.HttpClient
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">REST request to get the content for</param>
+        /// <param name="parameters">The request parameters for the REST request (read-only)</param>
         /// <returns>The HTTP content to be sent</returns>
-        internal static HttpContent GetMultiPartContent([CanBeNull] this IRestClient client, IRestRequest request)
+        private static HttpContent GetMultiPartContent([CanBeNull] this IRestClient client, IRestRequest request, RequestParameters parameters)
         {
             var isPostMethod = client.GetEffectiveHttpMethod(request) == Method.POST;
             var multipartContent = new MultipartFormDataContent();
-            var parameters = client.MergeParameters(request);
-            foreach (var parameter in parameters)
+            foreach (var parameter in parameters.OtherParameters)
             {
                 var fileParameter = parameter as FileParameter;
                 if (fileParameter != null)

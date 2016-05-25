@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
@@ -47,7 +48,6 @@ namespace RestSharp.Portable.WebRequest.Impl
         public virtual IHttpClient CreateClient(IRestClient client)
         {
             var headers = new GenericHttpHeaders();
-            AddHttpHeaderParameters(headers, client);
             var httpClient = new DefaultHttpClient(this, headers)
             {
                 BaseAddress = GetBaseAddress(client)
@@ -86,17 +86,18 @@ namespace RestSharp.Portable.WebRequest.Impl
         /// </summary>
         /// <param name="client">The REST client that wants to create the HTTP request message</param>
         /// <param name="request">The REST request for which the HTTP request message is created</param>
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
         /// <returns>A new HttpRequestMessage object</returns>
         /// <remarks>
         /// The DefaultHttpClientFactory contains some helpful protected methods that helps gathering
         /// the data required for a proper configuration of the HttpClient.
         /// </remarks>
-        public virtual IHttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request)
+        public virtual IHttpRequestMessage CreateRequestMessage(IRestClient client, IRestRequest request, IList<Parameter> parameters)
         {
             var address = GetMessageAddress(client, request);
             var method = GetHttpMethod(client, request);
             var headers = new GenericHttpHeaders();
-            AddHttpHeaderParameters(headers, request);
+            AddHttpHeaderParameters(headers, request, parameters);
             return new DefaultHttpRequestMessage(method, address, headers, null);
         }
 
@@ -153,35 +154,10 @@ namespace RestSharp.Portable.WebRequest.Impl
         /// </summary>
         /// <param name="httpHeaders">HTTP headers</param>
         /// <param name="request">REST request</param>
-        protected virtual void AddHttpHeaderParameters(IHttpHeaders httpHeaders, IRestRequest request)
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
+        protected virtual void AddHttpHeaderParameters(IHttpHeaders httpHeaders, IRestRequest request, IList<Parameter> parameters)
         {
-            foreach (var param in request.Parameters.Where(x => x.Type == ParameterType.HttpHeader))
-            {
-                if (httpHeaders.Contains(param.Name))
-                {
-                    httpHeaders.Remove(param.Name);
-                }
-
-                var paramValue = param.ToRequestString();
-                if (param.ValidateOnAdd)
-                {
-                    httpHeaders.Add(param.Name, paramValue);
-                }
-                else
-                {
-                    httpHeaders.TryAddWithoutValidation(param.Name, paramValue);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns a modified HTTP client object with the default HTTP header parameters
-        /// </summary>
-        /// <param name="httpHeaders">HTTP headers</param>
-        /// <param name="restClient">REST client</param>
-        protected virtual void AddHttpHeaderParameters(IHttpHeaders httpHeaders, IRestClient restClient)
-        {
-            foreach (var param in restClient.DefaultParameters.Where(x => x.Type == ParameterType.HttpHeader))
+            foreach (var param in parameters.Where(x => x.Type == ParameterType.HttpHeader))
             {
                 if (httpHeaders.Contains(param.Name))
                 {

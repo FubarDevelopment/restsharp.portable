@@ -71,48 +71,7 @@ namespace RestSharp.Portable
 
             return client;
         }
-
-        /// <summary>
-        /// Merge parameters from client and request
-        /// </summary>
-        /// <param name="client">The REST client that will execute the request</param>
-        /// <param name="request">The REST request</param>
-        /// <returns>A list of merged parameters</returns>
-        public static IList<Parameter> MergeParameters([CanBeNull] this IRestClient client, IRestRequest request)
-        {
-            var parameters = new List<Parameter>();
-
-            // Add default parameters first
-            if (client != null)
-            {
-                parameters.AddRange(client.DefaultParameters);
-            }
-
-            // Now the client parameters
-            if (request != null)
-            {
-                parameters.AddRange(request.Parameters);
-            }
-
-            var comparer = new ParameterComparer(client, request);
-
-            var result = parameters
-                .Select((p, i) => new { Parameter = p, Index = i })
-
-                // Group by parameter type/name
-                .GroupBy(x => x.Parameter, comparer)
-
-                // Select only the last of all duplicate parameters
-                .Select(x => new { x.Last().Parameter, x.First().Index })
-
-                // Sort by appearance
-                .OrderBy(x => x.Index)
-                .Select(x => x.Parameter)
-                .ToList();
-
-            return result;
-        }
-
+        
         /// <summary>
         /// Build the full URL for a request
         /// </summary>
@@ -144,7 +103,7 @@ namespace RestSharp.Portable
         [NotNull]
         public static Uri BuildUri([CanBeNull] this IRestClient client, IRestRequest request, bool withQuery)
         {
-            var parameters = client.MergeParameters(request);
+            var parameters = client.MergeParameters(request).OtherParameters;
             UriBuilder urlBuilder;
             if (client?.BaseUrl == null)
             {
@@ -198,7 +157,11 @@ namespace RestSharp.Portable
             {
                 var queryString = new StringBuilder(urlBuilder.Query);
                 var startsWithQuestionmark = queryString.ToString().StartsWith("?");
-                foreach (var param in parameters.Where(x => x.Type == ParameterType.QueryString))
+                var effectiveMethod = client.GetEffectiveHttpMethod(request, parameters);
+                var queryParams = effectiveMethod != Method.POST
+                    ? parameters.Where(x => x.Type == ParameterType.QueryString || x.Type == ParameterType.GetOrPost)
+                    : parameters.Where(x => x.Type == ParameterType.QueryString);
+                foreach (var param in queryParams)
                 {
                     if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
                     {
@@ -206,20 +169,6 @@ namespace RestSharp.Portable
                     }
 
                     queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
-                }
-
-                if (client.GetEffectiveHttpMethod(request) != Method.POST)
-                {
-                    var getOrPostParameters = parameters.GetGetOrPostParameters().ToList();
-                    foreach (var param in getOrPostParameters)
-                    {
-                        if (queryString.Length > (startsWithQuestionmark ? 1 : 0))
-                        {
-                            queryString.Append("&");
-                        }
-
-                        queryString.AppendFormat("{0}={1}", UrlUtility.Escape(param.Name), param.ToEncodedString());
-                    }
                 }
 
                 urlBuilder.Query = queryString.ToString().Substring(startsWithQuestionmark ? 1 : 0);
@@ -242,7 +191,25 @@ namespace RestSharp.Portable
         {
             if (request == null || request.Method == Method.GET)
             {
-                return client.GetDefaultMethod(request);
+                var parameters = client.MergeParameters(request).OtherParameters;
+                return client.GetDefaultMethod(request, parameters);
+            }
+
+            return request.Method;
+        }
+
+        /// <summary>
+        /// Returns the real HTTP method that must be used to execute a request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The request to determine the HTTP method for</param>
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
+        /// <returns>The real HTTP method that must be used</returns>
+        public static Method GetEffectiveHttpMethod([CanBeNull] this IRestClient client, IRestRequest request, IList<Parameter> parameters)
+        {
+            if (request == null || request.Method == Method.GET)
+            {
+                return client.GetDefaultMethod(request, parameters);
             }
 
             return request.Method;
@@ -270,16 +237,20 @@ namespace RestSharp.Portable
             return client;
         }
 
+        public static RequestParameters MergeParameters(this IRestClient client, IRestRequest request)
+        {
+            return new RequestParameters(client, request);
+        }
+
         /// <summary>
         /// Returns the HTTP method GET or POST - depending on the parameters
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>
         /// <param name="request">The request to determine the HTTP method for</param>
+        /// <param name="parameters">The request parameters for the REST request except the content header parameters (read-only)</param>
         /// <returns>GET or POST</returns>
-        internal static Method GetDefaultMethod([CanBeNull] this IRestClient client, IRestRequest request)
+        internal static Method GetDefaultMethod([CanBeNull] this IRestClient client, IRestRequest request, IList<Parameter> parameters)
         {
-            var parameters = (client == null ? new List<Parameter>() : client.DefaultParameters)
-                .Union(request == null ? new List<Parameter>() : request.Parameters);
             if (parameters.Any(x => x.Type == ParameterType.RequestBody || (x is FileParameter)))
             {
                 return Method.POST;
