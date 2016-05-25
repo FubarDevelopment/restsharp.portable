@@ -214,6 +214,12 @@ namespace RestSharp.Portable
             return request.Method;
         }
 
+        /// <summary>
+        /// Merge parameters from client and request
+        /// </summary>
+        /// <param name="client">The REST client that will execute the request</param>
+        /// <param name="request">The REST request</param>
+        /// <returns>A <see cref="RequestParameters"/> object that contains the merged parameters</returns>
         public static RequestParameters MergeParameters(this IRestClient client, IRestRequest request)
         {
             return new RequestParameters(client, request);
