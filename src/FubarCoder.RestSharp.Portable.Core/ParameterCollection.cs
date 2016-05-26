@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable
 {
     internal class ParameterCollection : IParameterCollection
@@ -19,7 +21,7 @@ namespace RestSharp.Portable
 
         public bool IsReadOnly => false;
 
-        public IList<Parameter> Find(ParameterType type, string name)
+        public IList<Parameter> Find(ParameterType type, [NotNull] string name)
         {
             var key = new ParameterKey(type, name);
             if (!_dictionary.ContainsKey(key))
@@ -96,7 +98,7 @@ namespace RestSharp.Portable
             return _dictionary.Remove(key, entry);
         }
 
-        public bool Remove(ParameterType type, string name)
+        public bool Remove(ParameterType type, [NotNull] string name)
         {
             var key = new ParameterKey(type, name);
             return _dictionary.Remove(key);

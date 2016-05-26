@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Text;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable
 {
     /// <summary>
@@ -20,6 +22,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets or sets the name of the parameter
         /// </summary>
+        [CanBeNull]
         public string Name { get; set; }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="parameter">The parameter to create the key from</param>
         public ParameterKey(Parameter parameter)
-            : this(parameter.Type, parameter.Name)
+            : this(parameter.Type, parameter.Name ?? string.Empty)
         {
         }
 

@@ -49,7 +49,7 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="content">The content to add</param>
         /// <param name="name">The name of the content to add</param>
-        public void Add([NotNull] IHttpContent content, [NotNull] string name)
+        public void Add([NotNull] IHttpContent content, [CanBeNull] string name)
         {
             Add(content, name, null);
         }
@@ -60,7 +60,7 @@ namespace RestSharp.Portable.Content
         /// <param name="content">The content to add</param>
         /// <param name="name">The name of the content to add</param>
         /// <param name="fileName">The optional file name of this content element</param>
-        public void Add([NotNull] IHttpContent content, [NotNull] string name, [CanBeNull] string fileName)
+        public void Add([NotNull] IHttpContent content, [CanBeNull] string name, [CanBeNull] string fileName)
         {
             if (!content.Headers.Contains("Content-Disposition"))
             {

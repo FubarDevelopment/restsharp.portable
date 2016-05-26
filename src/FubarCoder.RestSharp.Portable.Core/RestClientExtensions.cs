@@ -65,7 +65,7 @@ namespace RestSharp.Portable
         /// <returns>The REST client to allow call chains</returns>
         public static IRestClient RemoveDefaultParameter(this IRestClient client, string name)
         {
-            var parameter = client.DefaultParameters.SingleOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var parameter = client.DefaultParameters.SingleOrDefault(p => p.Name != null && p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (parameter != null)
             {
                 client.DefaultParameters.Remove(parameter);
