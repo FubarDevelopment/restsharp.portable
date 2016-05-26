@@ -42,7 +42,7 @@ namespace RestSharp.Portable.Content
         /// <summary>
         /// Gets the content type of the <code>multipart/form-data</code>
         /// </summary>
-        public string ContentType => string.Format("multipart/form-data; boundary={0}", Boundary);
+        public string ContentType => $"multipart/form-data; boundary={Boundary}";
 
         /// <summary>
         /// Adds a content element to this <code>multipart/form-data</code>

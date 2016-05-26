@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using JetBrains.Annotations;
 
@@ -122,14 +121,7 @@ namespace RestSharp.Portable.Content
                 if (effectiveMethod != Method.GET)
                 {
                     var getOrPostParameters = parameters.OtherParameters.GetGetOrPostParameters().ToList();
-                    if (getOrPostParameters.Count != 0)
-                    {
-                        content = new PostParametersContent(getOrPostParameters);
-                    }
-                    else
-                    {
-                        content = null;
-                    }
+                    content = getOrPostParameters.Count == 0 ? null : new PostParametersContent(getOrPostParameters);
                 }
                 else
                 {

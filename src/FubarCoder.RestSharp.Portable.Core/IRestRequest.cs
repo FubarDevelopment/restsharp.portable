@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RestSharp.Portable
+﻿namespace RestSharp.Portable
 {
     /// <summary>
     /// Defines a REST request

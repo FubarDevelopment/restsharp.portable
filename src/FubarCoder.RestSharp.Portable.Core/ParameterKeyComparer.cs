@@ -15,17 +15,13 @@ namespace RestSharp.Portable
         {
             if (ReferenceEquals(x, y))
                 return 0;
-            if (ReferenceEquals(x, null))
-                return -1;
-            if (ReferenceEquals(y, null))
-                return 1;
 
             var diff = x.Type.CompareTo(y.Type);
             if (diff != 0)
                 return diff;
 
             var comparer = x.Type == ParameterType.HttpHeader ? _httpHeaderComparer : _defaultComparer;
-            diff = comparer.Compare(x.Name ?? string.Empty, y.Name ?? string.Empty);
+            diff = comparer.Compare(x.Name, y.Name);
             return diff;
         }
 
@@ -36,10 +32,8 @@ namespace RestSharp.Portable
 
         public int GetHashCode(ParameterKey obj)
         {
-            if (ReferenceEquals(obj, null))
-                return 0;
             var comparer = obj.Type == ParameterType.HttpHeader ? _httpHeaderComparer : _defaultComparer;
-            return obj.Type.GetHashCode() ^ comparer.GetHashCode(obj.Name ?? string.Empty);
+            return obj.Type.GetHashCode() ^ comparer.GetHashCode(obj.Name);
         }
     }
 }

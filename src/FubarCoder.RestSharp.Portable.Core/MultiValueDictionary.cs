@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
@@ -35,19 +34,19 @@ namespace RestSharp.Portable
         /// <summary>
         /// The private dictionary that this class effectively wraps around
         /// </summary>
-        private Dictionary<TKey, InnerCollectionView> dictionary;
+        private readonly Dictionary<TKey, InnerCollectionView> _dictionary;
 
         /// <summary>
         /// The function to construct a new <see cref="ICollection{TValue}"/>
         /// </summary>
         /// <returns></returns>
-        private Func<ICollection<TValue>> NewCollectionFactory = () => new List<TValue>();
+        private Func<ICollection<TValue>> _newCollectionFactory = () => new List<TValue>();
 
         /// <summary>
         /// The current version of this MultiValueDictionary used to determine MultiValueDictionary modification
         /// during enumeration
         /// </summary>
-        private int version;
+        private int _version;
 
         #endregion
 
@@ -63,7 +62,7 @@ namespace RestSharp.Portable
         /// </summary>
         public MultiValueDictionary()
         {
-            dictionary = new Dictionary<TKey, InnerCollectionView>();
+            _dictionary = new Dictionary<TKey, InnerCollectionView>();
         }
 
         /// <summary>
@@ -77,7 +76,7 @@ namespace RestSharp.Portable
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity), "Non-negative number required.");
-            dictionary = new Dictionary<TKey, InnerCollectionView>(capacity);
+            _dictionary = new Dictionary<TKey, InnerCollectionView>(capacity);
         }
 
         /// <summary>
@@ -89,7 +88,7 @@ namespace RestSharp.Portable
         /// <remarks>If <paramref name="comparer"/> is set to null, then the default <see cref="IEqualityComparer" /> for <typeparamref name="TKey"/> is used.</remarks>
         public MultiValueDictionary(IEqualityComparer<TKey> comparer)
         {
-            dictionary = new Dictionary<TKey, InnerCollectionView>(comparer);
+            _dictionary = new Dictionary<TKey, InnerCollectionView>(comparer);
         }
 
         /// <summary>
@@ -105,7 +104,7 @@ namespace RestSharp.Portable
         {
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity), "Non-negative number required.");
-            dictionary = new Dictionary<TKey, InnerCollectionView>(capacity, comparer);
+            _dictionary = new Dictionary<TKey, InnerCollectionView>(capacity, comparer);
         }
 
         /// <summary>
@@ -131,9 +130,9 @@ namespace RestSharp.Portable
         public MultiValueDictionary(IEnumerable<KeyValuePair<TKey, IReadOnlyCollection<TValue>>> enumerable, IEqualityComparer<TKey> comparer)
         {
             if (enumerable == null)
-                throw new ArgumentNullException("enumerable");
+                throw new ArgumentNullException(nameof(enumerable));
 
-            dictionary = new Dictionary<TKey, InnerCollectionView>(comparer);
+            _dictionary = new Dictionary<TKey, InnerCollectionView>(comparer);
             foreach (var pair in enumerable)
                 AddRange(pair.Key, pair.Value);
         }
@@ -171,8 +170,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>();
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             return multiValueDictionary;
         }
 
@@ -206,8 +207,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity);
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity)
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             return multiValueDictionary;
         }
 
@@ -239,8 +242,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer);
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer)
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             return multiValueDictionary;
         }
 
@@ -276,8 +281,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity, comparer);
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity, comparer)
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             return multiValueDictionary;
         }
 
@@ -311,8 +318,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>();
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             foreach (var pair in enumerable)
                 multiValueDictionary.AddRange(pair.Key, pair.Value);
             return multiValueDictionary;
@@ -350,8 +359,10 @@ namespace RestSharp.Portable
             if (new TValueCollection().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer);
-            multiValueDictionary.NewCollectionFactory = () => new TValueCollection();
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer)
+            {
+                _newCollectionFactory = () => new TValueCollection()
+            };
             foreach (var pair in enumerable)
                 multiValueDictionary.AddRange(pair.Key, pair.Value);
             return multiValueDictionary;
@@ -392,8 +403,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException(("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection."));
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>();
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             return multiValueDictionary;
         }
 
@@ -429,8 +442,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity);
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity)
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             return multiValueDictionary;
         }
 
@@ -464,8 +479,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer);
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer)
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             return multiValueDictionary;
         }
 
@@ -503,8 +520,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity, comparer);
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(capacity, comparer)
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             return multiValueDictionary;
         }
 
@@ -540,8 +559,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>();
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             foreach (var pair in enumerable)
                 multiValueDictionary.AddRange(pair.Key, pair.Value);
             return multiValueDictionary;
@@ -581,8 +602,10 @@ namespace RestSharp.Portable
             if (collectionFactory().IsReadOnly)
                 throw new InvalidOperationException("The specified TValueCollection creates collections that have IsReadOnly set to true by default. TValueCollection must be a mutable ICollection.");
 
-            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer);
-            multiValueDictionary.NewCollectionFactory = (Func<ICollection<TValue>>)(Delegate)collectionFactory;
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>(comparer)
+            {
+                _newCollectionFactory = (Func<ICollection<TValue>>) (Delegate) collectionFactory
+            };
             foreach (var pair in enumerable)
                 multiValueDictionary.AddRange(pair.Key, pair.Value);
             return multiValueDictionary;
@@ -613,15 +636,15 @@ namespace RestSharp.Portable
         public void Add(TKey key, TValue value)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             InnerCollectionView collection;
-            if (!dictionary.TryGetValue(key, out collection))
+            if (!_dictionary.TryGetValue(key, out collection))
             {
-                collection = new InnerCollectionView(key, NewCollectionFactory());
-                dictionary.Add(key, collection);
+                collection = new InnerCollectionView(_newCollectionFactory());
+                _dictionary.Add(key, collection);
             }
             collection.AddValue(value);
-            version++;
+            _version++;
         }
 
         /// <summary>
@@ -639,21 +662,21 @@ namespace RestSharp.Portable
         public void AddRange(TKey key, IEnumerable<TValue> values)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             if (values == null)
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
 
             InnerCollectionView collection;
-            if (!dictionary.TryGetValue(key, out collection))
+            if (!_dictionary.TryGetValue(key, out collection))
             {
-                collection = new InnerCollectionView(key, NewCollectionFactory());
-                dictionary.Add(key, collection);
+                collection = new InnerCollectionView(_newCollectionFactory());
+                _dictionary.Add(key, collection);
             }
             foreach (TValue value in values)
             {
                 collection.AddValue(value);
             }
-            version++;
+            _version++;
         }
 
         /// <summary>
@@ -666,12 +689,12 @@ namespace RestSharp.Portable
         public bool Remove(TKey key)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             InnerCollectionView collection;
-            if (dictionary.TryGetValue(key, out collection) && dictionary.Remove(key))
+            if (_dictionary.TryGetValue(key, out collection) && _dictionary.Remove(key))
             {
-                version++;
+                _version++;
                 return true;
             }
             return false;
@@ -694,14 +717,14 @@ namespace RestSharp.Portable
         public bool Remove(TKey key, TValue value)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             InnerCollectionView collection;
-            if (dictionary.TryGetValue(key, out collection) && collection.RemoveValue(value))
+            if (_dictionary.TryGetValue(key, out collection) && collection.RemoveValue(value))
             {
                 if (collection.Count == 0)
-                    dictionary.Remove(key);
-                version++;
+                    _dictionary.Remove(key);
+                _version++;
                 return true;
             }
             return false;
@@ -718,10 +741,10 @@ namespace RestSharp.Portable
         public bool Contains(TKey key, TValue value)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             InnerCollectionView collection;
-            return (dictionary.TryGetValue(key, out collection) && collection.Contains(value));
+            return (_dictionary.TryGetValue(key, out collection) && collection.Contains(value));
         }
 
         /// <summary>
@@ -731,7 +754,7 @@ namespace RestSharp.Portable
         /// <returns><c>true</c> if the <see cref="MultiValueDictionary{TKey,TValue}"/> contains the <paramref name="value"/>; otherwise <c>false</c></returns>      
         public bool ContainsValue(TValue value)
         {
-            foreach (InnerCollectionView sublist in dictionary.Values)
+            foreach (InnerCollectionView sublist in _dictionary.Values)
                 if (sublist.Contains(value))
                     return true;
             return false;
@@ -743,8 +766,8 @@ namespace RestSharp.Portable
         /// </summary>
         public void Clear()
         {
-            dictionary.Clear();
-            version++;
+            _dictionary.Clear();
+            _version++;
         }
 
         #endregion
@@ -765,11 +788,11 @@ namespace RestSharp.Portable
         public bool ContainsKey(TKey key)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             // Since modification to the MultiValueDictionary is only allowed through its own API, we
             // can ensure that if a collection is in the internal dictionary then it must have at least one
             // associated TValue, or else it would have been removed whenever its final TValue was removed.
-            return dictionary.ContainsKey(key);
+            return _dictionary.ContainsKey(key);
         }
 
         /// <summary>
@@ -781,13 +804,7 @@ namespace RestSharp.Portable
         /// in this <see cref="MultiValueDictionary{TKey,TValue}"/> that has one or more associated 
         /// <typeparamref name="TValue"/>.
         /// </value>
-        public IEnumerable<TKey> Keys
-        {
-            get
-            {
-                return dictionary.Keys;
-            }
-        }
+        public IEnumerable<TKey> Keys => _dictionary.Keys;
 
         /// <summary>
         /// Attempts to get the <typeparamref name="TValue"/> associated with the given
@@ -806,10 +823,10 @@ namespace RestSharp.Portable
         public bool TryGetValue(TKey key, out IReadOnlyCollection<TValue> value)
         {
             if (key == null)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             InnerCollectionView collection;
-            var success = dictionary.TryGetValue(key, out collection);
+            var success = _dictionary.TryGetValue(key, out collection);
             value = collection;
             return success;
         }
@@ -821,13 +838,7 @@ namespace RestSharp.Portable
         /// </summary>
         /// <value>An IEnumerable of each <see cref="IReadOnlyCollection{TValue}"/> in this 
         /// <see cref="MultiValueDictionary{TKey,TValue}"/></value>
-        public IEnumerable<IReadOnlyCollection<TValue>> Values
-        {
-            get
-            {
-                return dictionary.Values;
-            }
-        }
+        public IEnumerable<IReadOnlyCollection<TValue>> Values => _dictionary.Values;
 
         /// <summary>
         /// Get every <typeparamref name="TValue"/> associated with the given <typeparamref name="TKey"/>. If 
@@ -851,10 +862,10 @@ namespace RestSharp.Portable
             get
             {
                 if (key == null)
-                    throw new ArgumentNullException("key");
+                    throw new ArgumentNullException(nameof(key));
 
                 InnerCollectionView collection;
-                if (dictionary.TryGetValue(key, out collection))
+                if (_dictionary.TryGetValue(key, out collection))
                     return collection;
                 else
                     throw new KeyNotFoundException();
@@ -866,13 +877,7 @@ namespace RestSharp.Portable
         /// in this <see cref="MultiValueDictionary{TKey,TValue}"/>.
         /// </summary>
         /// <value>The number of <typeparamref name="TKey"/>s in this <see cref="MultiValueDictionary{TKey,TValue}"/>.</value>
-        public int Count
-        {
-            get
-            {
-                return dictionary.Count;
-            }
-        }
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// Get an Enumerator over the <typeparamref name="TKey"/>-<see cref="IReadOnlyCollection{TValue}"/>
@@ -894,18 +899,18 @@ namespace RestSharp.Portable
 
         /// <summary>
         /// The Enumerator class for a <see cref="MultiValueDictionary{TKey, TValue}"/>
-        /// that iterates over <typeparamref name="TKey"/>-<see cref="IReadOnlyCollection{TValue}"/>
+        /// that iterates over <code>TKey</code>-<see cref="IReadOnlyCollection{TValue}"/>
         /// pairs.
         /// </summary>
         private class Enumerator :
             IEnumerator<KeyValuePair<TKey, IReadOnlyCollection<TValue>>>
         {
-            private MultiValueDictionary<TKey, TValue> multiValueDictionary;
-            private int version;
-            private KeyValuePair<TKey, IReadOnlyCollection<TValue>> current;
-            private Dictionary<TKey, InnerCollectionView>.Enumerator enumerator;
+            private readonly MultiValueDictionary<TKey, TValue> _multiValueDictionary;
+            private readonly int _version;
+            private KeyValuePair<TKey, IReadOnlyCollection<TValue>> _current;
+            private Dictionary<TKey, InnerCollectionView>.Enumerator _enumerator;
             private enum EnumerationState { BeforeFirst, During, AfterLast };
-            private EnumerationState state;
+            private EnumerationState _state;
 
             /// <summary>
             /// Constructor for the enumerator
@@ -913,30 +918,27 @@ namespace RestSharp.Portable
             /// <param name="multiValueDictionary">A MultiValueDictionary to iterate over</param>
             internal Enumerator(MultiValueDictionary<TKey, TValue> multiValueDictionary)
             {
-                this.multiValueDictionary = multiValueDictionary;
-                this.version = multiValueDictionary.version;
-                this.current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
-                this.enumerator = multiValueDictionary.dictionary.GetEnumerator();
-                this.state = EnumerationState.BeforeFirst; ;
+                _multiValueDictionary = multiValueDictionary;
+                _version = multiValueDictionary._version;
+                _current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
+                _enumerator = multiValueDictionary._dictionary.GetEnumerator();
+                _state = EnumerationState.BeforeFirst;
             }
 
-            public KeyValuePair<TKey, IReadOnlyCollection<TValue>> Current
-            {
-                get { return current; }
-            }
+            public KeyValuePair<TKey, IReadOnlyCollection<TValue>> Current => _current;
 
             object IEnumerator.Current
             {
                 get
                 {
-                    switch (state)
+                    switch (_state)
                     {
                         case EnumerationState.BeforeFirst:
                             throw new InvalidOperationException("Enumeration has not started. Call MoveNext.");
                         case EnumerationState.AfterLast:
                             throw new InvalidOperationException("Enumeration already finished.");
                         default:
-                            return current;
+                            return _current;
                     }
                 }
             }
@@ -950,20 +952,20 @@ namespace RestSharp.Portable
             /// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
             public bool MoveNext()
             {
-                if (version != multiValueDictionary.version)
+                if (_version != _multiValueDictionary._version)
                 {
                     throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
                 }
-                else if (enumerator.MoveNext())
+                else if (_enumerator.MoveNext())
                 {
-                    current = new KeyValuePair<TKey, IReadOnlyCollection<TValue>>(enumerator.Current.Key, (IReadOnlyCollection<TValue>)enumerator.Current.Value);
-                    state = EnumerationState.During;
+                    _current = new KeyValuePair<TKey, IReadOnlyCollection<TValue>>(_enumerator.Current.Key, _enumerator.Current.Value);
+                    _state = EnumerationState.During;
                     return true;
                 }
                 else
                 {
-                    current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
-                    state = EnumerationState.AfterLast;
+                    _current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
+                    _state = EnumerationState.AfterLast;
                     return false;
                 }
             }
@@ -974,12 +976,12 @@ namespace RestSharp.Portable
             /// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
             public void Reset()
             {
-                if (version != multiValueDictionary.version)
+                if (_version != _multiValueDictionary._version)
                     throw new InvalidOperationException("Collection was modified; enumeration operation may not execute.");
-                enumerator.Dispose();
-                enumerator = multiValueDictionary.dictionary.GetEnumerator();
-                current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
-                state = EnumerationState.BeforeFirst;
+                _enumerator.Dispose();
+                _enumerator = _multiValueDictionary._dictionary.GetEnumerator();
+                _current = default(KeyValuePair<TKey, IReadOnlyCollection<TValue>>);
+                _state = EnumerationState.BeforeFirst;
             }
 
             /// <summary>
@@ -987,7 +989,7 @@ namespace RestSharp.Portable
             /// </summary>
             public void Dispose()
             {
-                enumerator.Dispose();
+                _enumerator.Dispose();
             }
         }
 
@@ -998,28 +1000,26 @@ namespace RestSharp.Portable
             ICollection<TValue>,
             IReadOnlyCollection<TValue>
         {
-            private TKey key;
-            private ICollection<TValue> collection;
+            private readonly ICollection<TValue> _collection;
 
             #region Private Concrete API
             /*======================================================================
             ** Private Concrete API
             ======================================================================*/
 
-            public InnerCollectionView(TKey key, ICollection<TValue> collection)
+            public InnerCollectionView(ICollection<TValue> collection)
             {
-                this.key = key;
-                this.collection = collection;
+                _collection = collection;
             }
 
             public void AddValue(TValue item)
             {
-                collection.Add(item);
+                _collection.Add(item);
             }
 
             public bool RemoveValue(TValue item)
             {
-                return collection.Remove(item);
+                return _collection.Remove(item);
             }
 
             #endregion
@@ -1031,7 +1031,7 @@ namespace RestSharp.Portable
 
             public bool Contains(TValue item)
             {
-                return collection.Contains(item);
+                return _collection.Contains(item);
             }
 
             public void CopyTo(TValue[] array, int arrayIndex)
@@ -1042,41 +1042,24 @@ namespace RestSharp.Portable
                     throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Non-negative number required.");
                 if (arrayIndex > array.Length)
                     throw new ArgumentOutOfRangeException(nameof(arrayIndex), "Index was out of range. Must be non-negative and less than the size of the collection.");
-                if (array.Length - arrayIndex < collection.Count)
+                if (array.Length - arrayIndex < _collection.Count)
                     throw new ArgumentException("Destination array is not long enough to copy all the items in the collection. Check array index and length.", nameof(arrayIndex));
 
-                collection.CopyTo(array, arrayIndex);
+                _collection.CopyTo(array, arrayIndex);
             }
 
-            public int Count
-            {
-                get
-                {
-                    return collection.Count;
-                }
-            }
+            public int Count => _collection.Count;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            public bool IsReadOnly => true;
 
             public IEnumerator<TValue> GetEnumerator()
             {
-                return collection.GetEnumerator();
+                return _collection.GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.GetEnumerator();
-            }
-
-            public TKey Key
-            {
-                get { return key; }
+                return GetEnumerator();
             }
 
             #endregion
@@ -1106,21 +1089,21 @@ namespace RestSharp.Portable
     }
 
 #if NET40 || PROFILE328
-    internal partial interface IReadOnlyCollection<out T> : IEnumerable<T>, IEnumerable
+    internal interface IReadOnlyCollection<out T> : IEnumerable<T>
     {
         int Count { get; }
     }
 
-    internal partial interface IReadOnlyDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>, IEnumerable
+    internal interface IReadOnlyDictionary<TKey, TValue> : IReadOnlyCollection<KeyValuePair<TKey, TValue>>
     {
         TValue this[TKey key] { get; }
-        System.Collections.Generic.IEnumerable<TKey> Keys { get; }
-        System.Collections.Generic.IEnumerable<TValue> Values { get; }
+        IEnumerable<TKey> Keys { get; }
+        IEnumerable<TValue> Values { get; }
         bool ContainsKey(TKey key);
         bool TryGetValue(TKey key, out TValue value);
     }
 
-    internal partial interface IReadOnlyList<out T> : IEnumerable<T>, IReadOnlyCollection<T>, IEnumerable
+    internal interface IReadOnlyList<out T> : IReadOnlyCollection<T>
     {
         T this[int index] { get; }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using JetBrains.Annotations;
@@ -11,8 +10,6 @@ namespace RestSharp.Portable
     /// </summary>
     public class RestRequest : IRestRequest
     {
-        private readonly IParameterCollection _parameters = new ParameterCollection();
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RestRequest" /> class.
         /// </summary>
@@ -86,7 +83,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the REST request parameters
         /// </summary>
-        public IParameterCollection Parameters => _parameters;
+        public IParameterCollection Parameters { get; } = new ParameterCollection();
 
         /// <summary>
         /// Gets or sets the serializer that should serialize the body

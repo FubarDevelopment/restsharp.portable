@@ -30,8 +30,6 @@ namespace RestSharp.Portable
 
         private readonly IList<string> _acceptEncodings = new List<string>();
 
-        private readonly IParameterCollection _defaultParameters = new ParameterCollection();
-
         private readonly Lazy<IHttpClient> _httpClient;
 
         private bool _disposedValue; // For the detection of multiple calls
@@ -161,7 +159,7 @@ namespace RestSharp.Portable
         /// <summary>
         /// Gets the collection of the default parameters for all requests
         /// </summary>
-        public IParameterCollection DefaultParameters => _defaultParameters;
+        public IParameterCollection DefaultParameters { get; } = new ParameterCollection();
 
         /// <summary>
         /// Gets or sets the credentials used for the request (e.g. NTLM authentication)
@@ -430,9 +428,9 @@ namespace RestSharp.Portable
                 }
                 finally
                 {
-                    if (failed && message != null)
+                    if (failed)
                     {
-                        message.Dispose();
+                        message?.Dispose();
                     }
                 }
             }

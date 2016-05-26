@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
-using JetBrains.Annotations;
 
 namespace RestSharp.Portable
 {
@@ -11,7 +8,7 @@ namespace RestSharp.Portable
     {
         private readonly MultiValueDictionary<ParameterKey, ParameterEntry> _dictionary;
 
-        private ulong _order = 0;
+        private ulong _order;
 
         public ParameterCollection()
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RestSharp.Portable
+﻿namespace RestSharp.Portable
 {
     /// <summary>
     /// Deserialize for a content type
