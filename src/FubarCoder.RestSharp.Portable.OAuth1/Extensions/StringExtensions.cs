@@ -25,7 +25,8 @@ namespace RestSharp.Portable.OAuth1.Extensions
         public static IDictionary<string, string> ParseQueryString(this string query)
         {
             // [DC]: This method does not URL decode, and cannot handle decoded input
-            if (query.StartsWith("?")) query = query.Substring(1);
+            if (query.StartsWith("?"))
+                query = query.Substring(1);
             if (query.Equals(string.Empty))
             {
                 return new Dictionary<string, string>();
@@ -34,8 +35,8 @@ namespace RestSharp.Portable.OAuth1.Extensions
             var parts = query.Split('&');
             return (from part in parts
                 let equalIndex = part.IndexOf('=')
-                let name = (equalIndex == -1 ? part : part.Substring(0, equalIndex))
-                let value = (equalIndex == -1 ? string.Empty : part.Substring(equalIndex + 1))
+                let name = equalIndex == -1 ? part : part.Substring(0, equalIndex)
+                let value = equalIndex == -1 ? string.Empty : part.Substring(equalIndex + 1)
                 select new KeyValuePair<string, string>(name, value))
                 .ToDictionary(x => x.Key, x => x.Value);
         }

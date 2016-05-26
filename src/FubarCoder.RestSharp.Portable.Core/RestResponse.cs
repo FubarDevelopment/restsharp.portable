@@ -64,13 +64,13 @@ namespace RestSharp.Portable
         /// </summary>
         public string StatusDescription { get; private set; }
 
+        /// <inheritdoc />
+        public string Content => _content.Value;
+
         /// <summary>
         /// Gets the REST client that created this response
         /// </summary>
         protected IRestClient Client { get; }
-
-        /// <inheritdoc />
-        public string Content => _content.Value;
 
         /// <summary>
         /// Create a <see cref="IRestResponse"/> from a <see cref="IRestClient"/>, <see cref="IRestRequest"/> and a <see cref="IHttpResponseMessage"/>.

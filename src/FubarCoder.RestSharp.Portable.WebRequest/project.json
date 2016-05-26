@@ -92,12 +92,19 @@
       }
     },
     "netstandard1.1": {
+      "buildOptions": {
+        "additionalArguments": [ "/ruleset:../../ReleaseRules.ruleset", "/additionalfile:../../stylecop.json" ]
+      },
       "imports": [ "dotnet" ],
       "dependencies": {
         "System.Net.Requests": "4.0.11-rc2-*",
         "FubarCoder.RestSharp.Portable.Encodings": {
           "target": "project",
           "version": ""
+        },
+        "StyleCop.Analyzers": {
+          "type": "build",
+          "version": "1.0.0"
         }
       }
     },

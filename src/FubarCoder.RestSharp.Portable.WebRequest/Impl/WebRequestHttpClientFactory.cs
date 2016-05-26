@@ -137,7 +137,7 @@ namespace RestSharp.Portable.WebRequest.Impl
             var url = client.BuildUri(null, false).MakeRelativeUri(fullUrl);
             return url;
         }
-        
+
         /// <summary>
         /// Returns the HTTP method for the request message.
         /// </summary>

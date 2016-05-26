@@ -117,11 +117,18 @@
       }
     },
     "netstandard1.3": {
+      "buildOptions": {
+        "additionalArguments": [ "/ruleset:../../ReleaseRules.ruleset", "/additionalfile:../../stylecop.json" ]
+      },
       "imports": [ "dotnet" ],
       "dependencies": {
         "NETStandard.Library": "1.5.0-rc2-*",
         "System.Runtime.Serialization.Xml": "4.1.1-rc2-*",
-        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*"
+        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*",
+        "StyleCop.Analyzers": {
+          "type": "build",
+          "version": "1.0.0"
+        }
       }
     },
     "net40": {

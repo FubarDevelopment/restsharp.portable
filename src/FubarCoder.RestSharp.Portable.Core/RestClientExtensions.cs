@@ -73,7 +73,7 @@ namespace RestSharp.Portable
 
             return client;
         }
-        
+
         /// <summary>
         /// Build the full URL for a request
         /// </summary>

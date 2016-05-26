@@ -49,12 +49,7 @@ namespace RestSharp.Portable.OAuth1
         /// <summary>
         /// Gets or sets the random number generator (can be changed for tests)
         /// </summary>
-        public static IRandom DefaultRandomNumberGenerator { get; internal set; }
-
-        static OAuthTools()
-        {
-            DefaultRandomNumberGenerator = new DefaultRandom();
-        }
+        public static IRandom DefaultRandomNumberGenerator { get; internal set; } = new DefaultRandom();
 
         /// <summary>
         /// Generates a random 16-byte lowercase alphanumeric string.
@@ -63,7 +58,7 @@ namespace RestSharp.Portable.OAuth1
         /// <returns></returns>
         public static string GetNonce([NotNull] IRandom random)
         {
-            const string chars = (_lower + _digit);
+            const string chars = _lower + _digit;
             var nonce = random.Next(0, chars.Length, 16).Select(n => chars[n]).ToArray();
             return new string(nonce);
         }
@@ -112,12 +107,14 @@ namespace RestSharp.Portable.OAuth1
             // If it does, the escaping we do that follows it will be a no-op since the
             // characters we search for to replace can't possibly exist in the string.
             var escaped = new StringBuilder(UrlUtility.Escape(value));
+
             // Upgrade the escaping to RFC 3986, if necessary.
             for (int i = 0; i < _uriRfc3986CharsToEscape.Length; i++)
             {
                 string t = _uriRfc3986CharsToEscape[i];
                 escaped.Replace(t, _uriRfc3968EscapedHex[i]);
             }
+
             // Return the fully-RFC3986-escaped string.
             return escaped.ToString();
         }

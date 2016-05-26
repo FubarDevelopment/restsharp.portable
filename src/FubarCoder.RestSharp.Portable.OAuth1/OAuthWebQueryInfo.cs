@@ -16,7 +16,7 @@
 
 namespace RestSharp.Portable.OAuth1
 {
-    class OAuthWebQueryInfo
+    internal class OAuthWebQueryInfo
     {
         public virtual string ConsumerKey { get; set; }
         public virtual string Token { get; set; }

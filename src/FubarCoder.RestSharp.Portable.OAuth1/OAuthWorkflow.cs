@@ -31,7 +31,7 @@ namespace RestSharp.Portable.OAuth1
     internal class OAuthWorkflow
     {
         [NotNull]
-        public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; }
+        public OAuthCreateTimestampDelegate CreateTimestampFunc { get; set; } = OAuthTools.GetTimestamp;
         public string Version { get; set; }
         public string ConsumerKey { get; set; }
         public string ConsumerSecret { get; set; }
@@ -47,24 +47,22 @@ namespace RestSharp.Portable.OAuth1
         public IRandom RandomNumberGenerator { get; set; }
         public string ClientUsername { get; set; }
         public string ClientPassword { get; set; }
+
         /// <summary>
         /// The URL to query the request token (<a href="http://oauth.net/core/1.0#request_urls"/>
         /// </summary>
         public string RequestTokenUrl { get; set; }
+
         /// <a href="http://oauth.net/core/1.0#request_urls"/>
         /// <summary>
         /// The URL to query the access token (<a href="http://oauth.net/core/1.0#request_urls"/>
         /// </summary>
         public string AccessTokenUrl { get; set; }
+
         /// <summary>
         /// The URL where the user has to authorize the app
         /// </summary>
         public string AuthorizationUrl { get; set; }
-
-        public OAuthWorkflow()
-        {
-            CreateTimestampFunc = OAuthTools.GetTimestamp;
-        }
 
         /// <summary>
         /// Generates a <see cref="OAuthWebQueryInfo"/> instance to pass to an
@@ -110,7 +108,7 @@ namespace RestSharp.Portable.OAuth1
                 Timestamp = timestamp,
                 Nonce = nonce,
                 Version = Version ?? "1.0",
-                Callback = OAuthTools.UrlEncodeRelaxed(CallbackUrl ?? ""),
+                Callback = OAuthTools.UrlEncodeRelaxed(CallbackUrl ?? string.Empty),
                 TokenSecret = TokenSecret,
                 ConsumerSecret = ConsumerSecret
             };
@@ -217,6 +215,7 @@ namespace RestSharp.Portable.OAuth1
             {
                 parameters = new WebParameterCollection();
             }
+
             // Include url parameters in query pool
             var uri = new Uri(url);
             var urlParameters = uri.Query.ParseQueryString();

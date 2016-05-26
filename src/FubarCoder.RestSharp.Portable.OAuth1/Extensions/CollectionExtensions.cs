@@ -43,7 +43,8 @@ namespace RestSharp.Portable.OAuth1.Extensions
         {
             return dictionary.ContainsKey(key) ? dictionary[key] : default(TValue);
         }
-        public static IEnumerable<T> ToEnumerable<T>(this object[] items) where T : class
+        public static IEnumerable<T> ToEnumerable<T>(this object[] items)
+            where T : class
         {
             return items.Select(item => item as T);
         }

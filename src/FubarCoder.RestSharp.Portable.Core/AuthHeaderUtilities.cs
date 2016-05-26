@@ -194,7 +194,8 @@ namespace RestSharp.Portable
         /// <param name="response">The response to get the authentication header from</param>
         /// <param name="header">The header to query (WWW or proxy)</param>
         /// <returns>All authentication header information items</returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<AuthHeaderInfo> GetAuthenticationHeaderInfo([NotNull] this IRestResponse response, AuthHeader header)
         {
             var headerName = header.ToAuthenticationHeaderName();
@@ -226,7 +227,8 @@ namespace RestSharp.Portable
         /// <param name="response">The response to get the authentication header from</param>
         /// <param name="header">The header to query (WWW or proxy)</param>
         /// <returns>All authentication header information items</returns>
-        [NotNull, ItemNotNull]
+        [NotNull]
+        [ItemNotNull]
         public static IEnumerable<AuthHeaderInfo> GetAuthenticationHeaderInfo([NotNull] this IHttpResponseMessage response, AuthHeader header)
         {
             var headerName = header.ToAuthenticationHeaderName();

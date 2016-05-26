@@ -19,7 +19,7 @@ namespace RestSharp.Portable.WebRequest
 #if NETSTANDARD1_1
             EncodingHandlers.Add("gzip", new Encodings.GzipEncoding());
             EncodingHandlers.Add("deflate", new Encodings.GzipEncoding());
-#endif            
+#endif
         }
 
         /// <summary>
