@@ -3,7 +3,7 @@
   "version": "4.0.0-beta-*",
   "title": "RestSharp.Portable HttpClient engine",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
-  "description": "Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!\n\nSupported Platforms:\n- .NET Standard 1.1\n- .NET Framework 4",
+  "description": "Some kind of a RestSharp port to PCL. This is not related to the RestSharp project at all!\n\nSupported Platforms:\n- .NET Standard 1.1\n- .NET Framework 4\n- Silverlight 5\n- Portable Class Libraries (Profiles 259 and 328)",
   "copyright": "Copyright © RestSharp.Portable project 2013-2016",
   "configurations": {
     "Debug": {
@@ -55,7 +55,6 @@
     ".NETPortable,Version=v4.5,Profile=Profile259": {
       "imports": [ "portable-net40+sl5+win8+wp8+wpa81" ],
       "buildOptions": {
-        "compile": [ "../../GlobalAssemblyInfo.cs" ],
         "define": [ "PROFILE259", "NOT_CLS_COMPLIANT", "NO_PROXY" ]
       },
       "frameworkAssemblies": {
@@ -72,7 +71,6 @@
     },
     ".NETPortable,Version=v4.0,Profile=Profile328": {
       "buildOptions": {
-        "compile": [ "../../GlobalAssemblyInfo.cs" ],
         "define": [ "PROFILE328", "NOT_CLS_COMPLIANT", "NO_PROXY" ]
       },
       "frameworkAssemblies": {
@@ -99,6 +97,19 @@
     "net45": {
       "frameworkAssemblies": {
         "System.Net.Http": ""
+      }
+    },
+    "sl50": {
+      "buildOptions": {
+        "define": [ "NOT_CLS_COMPLIANT", "NO_PROXY" ]
+      },
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" }
+      },
+      "dependencies": {
+        "Microsoft.Net.Http": "2.2.29"
       }
     }
   }

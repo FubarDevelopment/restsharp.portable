@@ -1,12 +1,11 @@
 using System;
-#if !PROFILE328
-using System.Linq;
-using System.Xml.Linq;
-#endif
+using System.Threading.Tasks;
+
 using RestSharp.Portable.OAuth2.Configuration;
 using RestSharp.Portable.OAuth2.Infrastructure;
 using RestSharp.Portable.OAuth2.Models;
-using System.Threading.Tasks;
+
+using Newtonsoft.Json;
 
 namespace RestSharp.Portable.OAuth2.Client
 {
@@ -65,7 +64,7 @@ namespace RestSharp.Portable.OAuth2.Client
                 return new Endpoint
                 {
                     BaseUri  = "https://api.linkedin.com",
-                    Resource = "/v1/people/~:(id,email-address,first-name,last-name,picture-url)"
+                    Resource = "/v1/people/~:(id,email-address,first-name,last-name,picture-url)?format=json"
                 };
             }
         }
@@ -100,14 +99,12 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-#if PROFILE328
-            throw new NotSupportedException("You're currently using/delivering the PCL version of the assembly that doesn't support all features. Add the NuGet package FubarCoder.RestSharp.Portable.OAuth2 to your application.");
-#else
-            var document  = XDocument.Parse(content);
-            var avatarUri = document.Element("person").Elements("picture-url").Select(x => x.Value).SingleOrDefault();
+            var person = JsonConvert.DeserializeObject<Person>(response.Content);
+
+            var avatarUri = person.PictureUrl;
             var avatarSizeTemplate = "{0}_{0}";
             if (string.IsNullOrEmpty(avatarUri))
             {
@@ -118,10 +115,10 @@ namespace RestSharp.Portable.OAuth2.Client
 
             return new UserInfo
             {
-                Id        = document.Element("person").Element("id").Value,
-                Email     = document.Element("person").Elements("email-address").Select(x => x.Value).SingleOrDefault(),
-                FirstName = document.Element("person").Element("first-name").Value,
-                LastName = document.Element("person").Element("last-name").Value,
+                Id = person.Id,
+                Email = person.Email,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
                 AvatarUri =
                     {
                         Small  = avatarUri.Replace(avatarDefaultSize, string.Format(avatarSizeTemplate, AvatarInfo.SmallSize)),
@@ -129,7 +126,6 @@ namespace RestSharp.Portable.OAuth2.Client
                         Large  = avatarUri.Replace(avatarDefaultSize, string.Format(avatarSizeTemplate, AvatarInfo.LargeSize))
                     }
             };
-#endif
         }
 
 
@@ -139,6 +135,24 @@ namespace RestSharp.Portable.OAuth2.Client
         public override string Name
         {
             get { return "LinkedIn"; }
+        }
+
+        private class Person
+        {
+            [JsonProperty("id")]
+            public string Id { get; set; }
+
+            [JsonProperty("emailAddress")]
+            public string Email { get; set; }
+
+            [JsonProperty("firstName")]
+            public string FirstName { get; set; }
+
+            [JsonProperty("lastName")]
+            public string LastName { get; set; }
+
+            [JsonProperty("pictureUrl")]
+            public string PictureUrl { get; set; }
         }
     }
 }

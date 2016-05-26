@@ -1088,7 +1088,7 @@ namespace RestSharp.Portable
         }
     }
 
-#if NET40 || PROFILE328
+#if NET40ALIKE
     internal interface IReadOnlyCollection<out T> : IEnumerable<T>
     {
         int Count { get; }

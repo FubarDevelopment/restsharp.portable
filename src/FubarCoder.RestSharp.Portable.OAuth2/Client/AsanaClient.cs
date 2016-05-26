@@ -85,33 +85,31 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">
-        /// The content which is received from third-party service.
-        /// </param>
+        /// <param name="response">The response which is received from the provider.</param>
         /// <returns>
         /// </returns>
-        protected override UserInfo ParseUserInfo(string content)
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(content);
+            var info = JObject.Parse(response.Content);
             JToken dataExists;
-            if (!response.TryGetValue("data", out dataExists))
+            if (!info.TryGetValue("data", out dataExists))
                 return new UserInfo();
 
             // const string avatarUriTemplate = "{0}?type={1}";
-            var avatarSmallUri = response["data"]["photo"]["image_36x36"].Value<string>();
-            var avatarNormalUri = response["data"]["photo"]["image_60x60"].Value<string>();
-            var avatarLargeUri = response["data"]["photo"]["image_128x128"].Value<string>();
-            var splitName = new List<string>(response["data"]["name"].Value<string>().Split(' '));
+            var avatarSmallUri = info["data"]["photo"]["image_36x36"].Value<string>();
+            var avatarNormalUri = info["data"]["photo"]["image_60x60"].Value<string>();
+            var avatarLargeUri = info["data"]["photo"]["image_128x128"].Value<string>();
+            var splitName = new List<string>(info["data"]["name"].Value<string>().Split(' '));
             var firstName = splitName.FirstOrDefault();
             splitName.RemoveAt(0);
             var lastName = splitName.Join(" ");
 
             return new UserInfo
             {
-                Id = response["data"]["id"].Value<string>(), 
+                Id = info["data"]["id"].Value<string>(), 
                 FirstName = firstName, 
                 LastName = lastName, 
-                Email = response["data"]["email"].SafeGet(x => x.Value<string>()), 
+                Email = info["data"]["email"].SafeGet(x => x.Value<string>()), 
                 AvatarUri =
                 {
                     Small = !string.IsNullOrWhiteSpace(avatarSmallUri) ? avatarSmallUri : string.Empty, 

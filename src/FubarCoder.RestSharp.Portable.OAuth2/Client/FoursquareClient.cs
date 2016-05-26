@@ -81,21 +81,21 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(content);
-            var prefix = response["response"]["user"]["photo"]["prefix"].Value<string>();
-            var suffix = response["response"]["user"]["photo"]["suffix"].Value<string>();
+            var info = JObject.Parse(response.Content);
+            var prefix = info["response"]["user"]["photo"]["prefix"].Value<string>();
+            var suffix = info["response"]["user"]["photo"]["suffix"].Value<string>();
             const string avatarUriTemplate = "{0}{1}{2}";
             const string avatarSizeTemplate = "{0}x{0}";
             return new UserInfo
             {
 
-                Id = response["response"]["user"]["id"].Value<string>(),
-                FirstName = response["response"]["user"]["firstName"].Value<string>(),
-                LastName = response["response"]["user"]["lastName"].Value<string>(),
-                Email = response["response"]["user"]["contact"]["email"].SafeGet(x => x.Value<string>()),                
+                Id = info["response"]["user"]["id"].Value<string>(),
+                FirstName = info["response"]["user"]["firstName"].Value<string>(),
+                LastName = info["response"]["user"]["lastName"].Value<string>(),
+                Email = info["response"]["user"]["contact"]["email"].SafeGet(x => x.Value<string>()),                
                 AvatarUri =
                 {
                     // Defined photo sizes https://developer.foursquare.com/docs/responses/photo

@@ -77,22 +77,22 @@ namespace RestSharp.Portable.OAuth2.Client
             // Instagram returns userinfo on access_token request
             // Source document 
             // http://instagram.com/developer/authentication/
-            _accessTokenResponseContent = args.Response.GetContent();
+            _accessTokenResponseContent = args.Response.Content;
         }
-        
+
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(_accessTokenResponseContent);
-            var names = response["user"]["full_name"].Value<string>().Split(' ');
-            var avatarUri = response["user"]["profile_picture"].Value<string>();
+            var info = JObject.Parse(_accessTokenResponseContent);
+            var names = info["user"]["full_name"].Value<string>().Split(' ');
+            var avatarUri = info["user"]["profile_picture"].Value<string>();
             return new UserInfo
             {
-                Id = response["user"]["id"].Value<string>(),
-                FirstName = names.Any() ? names.First() : response["user"]["username"].Value<string>(),
+                Id = info["user"]["id"].Value<string>(),
+                FirstName = names.Any() ? names.First() : info["user"]["username"].Value<string>(),
                 LastName = names.Count() > 1 ? names.Last() : string.Empty,
                 AvatarUri =
                     {

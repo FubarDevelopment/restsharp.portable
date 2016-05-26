@@ -99,7 +99,7 @@ namespace RestSharp.Portable
             {
                 Debug.Assert(type != null, "type != null");
 
-#if NET40 || PROFILE328
+#if NET40ALIKE
                 var typeInfo = type;
                 var props = typeInfo.GetProperties();
 #else
@@ -143,7 +143,7 @@ namespace RestSharp.Portable
                         if (propType.IsArray)
                         {
                             var elementType = propType.GetElementType();
-#if NET40 || PROFILE328
+#if NET40ALIKE
                             var elementTypeInfo = elementType;
 #else
                             var elementTypeInfo = System.Reflection.IntrospectionExtensions.GetTypeInfo(elementType);

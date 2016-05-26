@@ -100,17 +100,17 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JArray.Parse(content);
-            var avatarUri = response[0]["pic"].Value<string>();
+            var info = JArray.Parse(response.Content);
+            var avatarUri = info[0]["pic"].Value<string>();
             return new UserInfo
             {
-                Id = response[0]["uid"].Value<string>(),
-                FirstName = response[0]["first_name"].Value<string>(),
-                LastName = response[0]["last_name"].Value<string>(),
-                Email = response[0]["email"].SafeGet(x => x.Value<string>()),
+                Id = info[0]["uid"].Value<string>(),
+                FirstName = info[0]["first_name"].Value<string>(),
+                LastName = info[0]["last_name"].Value<string>(),
+                Email = info[0]["email"].SafeGet(x => x.Value<string>()),
                 AvatarUri =
                     {
                         Small = null,

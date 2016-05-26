@@ -83,7 +83,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override void AfterGetAccessToken(BeforeAfterRequestArgs args)
         {
-            var instance = JObject.Parse(args.Response.GetContent());
+            var instance = JObject.Parse(args.Response.Content);
             _userId = instance["user_id"].Value<string>();
             var email = instance["email"];
             if (email != null)
@@ -103,17 +103,17 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(content)["response"][0];
-            var avatarUri = response["photo"].Value<string>();
+            var info = JObject.Parse(response.Content)["response"][0];
+            var avatarUri = info["photo"].Value<string>();
             return new UserInfo
             {
                 Email = _email,
-                FirstName = response["first_name"].Value<string>(),
-                LastName = response["last_name"].Value<string>(),
-                Id = response["uid"].Value<string>(),
+                FirstName = info["first_name"].Value<string>(),
+                LastName = info["last_name"].Value<string>(),
+                Id = info["uid"].Value<string>(),
                 AvatarUri =
                     {
                         Small = null,

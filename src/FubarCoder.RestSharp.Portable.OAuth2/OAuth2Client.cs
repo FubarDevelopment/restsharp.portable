@@ -269,9 +269,9 @@ namespace RestSharp.Portable.OAuth2
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content received from provider.
         /// </summary>
-        /// <param name="content">The content which is received from provider.</param>
+        /// <param name="response">The response which is received from the provider.</param>
         /// <returns>The found user information</returns>
-        protected abstract UserInfo ParseUserInfo(string content);
+        protected abstract UserInfo ParseUserInfo(IRestResponse response);
 
         /// <summary>
         /// Called just before building the request URI when everything is ready.
@@ -358,7 +358,7 @@ namespace RestSharp.Portable.OAuth2
 
             var response = await client.ExecuteAndVerify(request);
 
-            var result = ParseUserInfo(response.GetContent());
+            var result = ParseUserInfo(response);
             result.ProviderName = Name;
 
             return result;
@@ -396,7 +396,7 @@ namespace RestSharp.Portable.OAuth2
 
             var response = await client.ExecuteAndVerify(request);
 
-            var content = response.GetContent();
+            var content = response.Content;
             AccessToken = ParseAccessTokenResponse(content);
 
             if (GrantType != _grantTypeRefreshTokenKey)

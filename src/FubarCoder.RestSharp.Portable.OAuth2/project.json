@@ -3,7 +3,7 @@
   "version": "4.0.0-beta-*",
   "title": "RestSharp.Portable OAuth 2.0 authenticator",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
-  "description": "This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4",
+  "description": "This library contains the OAuth 2.0 authenticators and clients for RestSharp.Portable, which is a port of the OAuth 2.0 authenticators from the original RestSharp project. The OAuth 2.0 clients are a port from the OAuth2 project made by Constantin Titarenko and others.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4\n- Silverlight 5\n- Portable Class Libraries (Profiles 259 and 328)",
   "copyright": "Copyright © RestSharp.Portable project 2013-2016",
   "configurations": {
     "Debug": {
@@ -56,20 +56,17 @@
   "frameworks": {
     ".NETPortable,Version=v4.0,Profile=Profile328": {
       "buildOptions": {
-        "define": [ "PROFILE328", "USE_TASKEX" ]
+        "define": [ "PROFILE328", "USE_TASKEX", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
         "mscorlib": "",
-        "System": "",
-        "System.Xml": ""
+        "System": ""
       }
     },
     ".NETPortable,Version=v4.5,Profile=Profile259": {
       "frameworkAssemblies": {
         "mscorlib": "",
-        "System.Runtime": "",
-        "System.Xml": "",
-        "System.Xml.Linq": ""
+        "System.Runtime": ""
       }
     },
     "netstandard1.0": {
@@ -80,7 +77,7 @@
     },
     "net40": {
       "buildOptions": {
-        "define": [ "USE_TASKEX" ]
+        "define": [ "USE_TASKEX", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
         "System.Xml": "",
@@ -88,9 +85,14 @@
       }
     },
     "net45": {
+    },
+    "sl5": {
+      "buildOptions": {
+        "define": [ "USE_TASKEX", "NET40ALIKE" ]
+      },
       "frameworkAssemblies": {
-        "System.Xml": "",
-        "System.Xml.Linq": ""
+        "mscorlib": "",
+        "System": ""
       }
     }
   }

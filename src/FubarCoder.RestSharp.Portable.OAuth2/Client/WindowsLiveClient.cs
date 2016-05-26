@@ -78,22 +78,22 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">The content which is received from third-party service.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(content);
+            var info = JObject.Parse(response.Content);
             const string avatarUriTemplate = @"https://cid-{0}.users.storage.live.com/users/0x{0}/myprofile/expressionprofile/profilephoto:Win8Static,{1},UserTileStatic/MeControlXXLUserTile?ck=2&ex=24";
             return new UserInfo
             {
-                Id = response["id"].Value<string>(),
-                FirstName = response["first_name"].Value<string>(),
-                LastName = response["last_name"].Value<string>(),
-                Email = response["emails"]["preferred"].SafeGet(x => x.Value<string>()),
+                Id = info["id"].Value<string>(),
+                FirstName = info["first_name"].Value<string>(),
+                LastName = info["last_name"].Value<string>(),
+                Email = info["emails"]["preferred"].SafeGet(x => x.Value<string>()),
                 AvatarUri =
                     {
-                        Small = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileSmall"),
-                        Normal = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileSmall"),
-                        Large = string.Format(avatarUriTemplate, response["id"].Value<string>(), "UserTileLarge")
+                        Small = string.Format(avatarUriTemplate, info["id"].Value<string>(), "UserTileSmall"),
+                        Normal = string.Format(avatarUriTemplate, info["id"].Value<string>(), "UserTileSmall"),
+                        Large = string.Format(avatarUriTemplate, info["id"].Value<string>(), "UserTileLarge")
                     }
             };
         }

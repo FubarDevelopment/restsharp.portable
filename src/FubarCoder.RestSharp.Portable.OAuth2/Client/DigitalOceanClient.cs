@@ -53,7 +53,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override void AfterGetAccessToken(BeforeAfterRequestArgs args)
         {
-             _accessUserInfo = args.Response.GetContent();
+             _accessUserInfo = args.Response.Content;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override Task<UserInfo> GetUserInfo()
         {
-            var result = ParseUserInfo(_accessUserInfo);
+            var result = ParseUserInfo(null);
 
 #if USE_TASKEX
             return TaskEx.FromResult(result);
@@ -100,16 +100,16 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content received from provider.
         /// </summary>
-        /// <param name="content">The content which is received from provider.</param>
-        protected override UserInfo ParseUserInfo(string content)
+        /// <param name="response">The response which is received from the provider.</param>
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var response = JObject.Parse(content);
+            var info = JObject.Parse(_accessUserInfo);
             return new UserInfo
             {
-                Id = response["uid"].Value<string>(),
-                FirstName = response["info"]["name"].Value<string>(),
+                Id = info["uid"].Value<string>(),
+                FirstName = info["info"]["name"].Value<string>(),
                 LastName = "",
-                Email = response["info"]["email"].SafeGet(x => x.Value<string>())
+                Email = info["info"]["email"].SafeGet(x => x.Value<string>())
             };
         }
     }

@@ -177,7 +177,7 @@ namespace RestSharp.Portable.OAuth2
                     Response = response,
                 });
 
-            var collection = response.GetContent().ParseQueryString();
+            var collection = response.Content.ParseQueryString();
 
             AccessToken = collection.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
             AccessTokenSecret = collection.GetOrThrowUnexpectedResponse(_oAuthTokenSecretKey);
@@ -219,7 +219,7 @@ namespace RestSharp.Portable.OAuth2
 
             var request = _factory.CreateRequest(AccessTokenServiceEndpoint, Method.POST);
 
-            var content = (await client.ExecuteAndVerify(request)).GetContent();
+            var content = (await client.ExecuteAndVerify(request)).Content;
             var collection = content.ParseQueryString();
 
             AccessToken = collection.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
@@ -249,7 +249,7 @@ namespace RestSharp.Portable.OAuth2
                     Configuration = Configuration
                 });
 
-            return (await client.ExecuteAndVerify(request)).GetContent();
+            return (await client.ExecuteAndVerify(request)).Content;
         }
     }
 }

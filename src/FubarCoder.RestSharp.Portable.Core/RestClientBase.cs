@@ -458,7 +458,7 @@ namespace RestSharp.Portable
 
         private static string GetDefaultVersion()
         {
-#if NET40 || PROFILE328
+#if NET40ALIKE
             var assembly = typeof(RestClientBase).Assembly;
             var version = assembly.GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false).Cast<AssemblyFileVersionAttribute>().Single();
 #else

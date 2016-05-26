@@ -109,7 +109,7 @@ namespace RestSharp.Portable.OAuth2.Client
             });
 
             var response = await client.ExecuteAndVerify(request);
-            var userEmails = ParseEmailAddresses(response.GetContent());
+            var userEmails = ParseEmailAddresses(response.Content);
             userInfo.Email = userEmails.First(u => u.IsPrimary).Email;
             return userInfo;
         }
@@ -127,11 +127,11 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> using content received from provider.
         /// </summary>
-        /// <param name="content">The content which is received from provider.</param>
+        /// <param name="response">The response which is received from the provider.</param>
         /// <returns>The found user information</returns>
-        protected override UserInfo ParseUserInfo(string content)
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var cnt = JObject.Parse(content);
+            var cnt = JObject.Parse(response.Content);
             var names = cnt["name"].Value<string>().Split(' ').ToList();
             const string avatarUriTemplate = "{0}&s={1}";
             var avatarUri = cnt["avatar_url"].Value<string>();

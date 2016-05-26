@@ -32,7 +32,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task for this asynchronous operation</returns>
         public static async Task WriteTo(IHttpHeaders headers, Stream stream)
         {
-#if NET40 || PROFILE328
+#if NET40ALIKE
             var writer = new StreamWriter(new NonDisposableStream(stream), Encoding.UTF8, 128);
 #else
             var writer = new StreamWriter(stream, Encoding.UTF8, 128, true);

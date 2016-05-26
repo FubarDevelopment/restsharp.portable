@@ -3,7 +3,7 @@
   "version": "4.0.0-beta-*",
   "title": "RestSharp.Portable core library",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
-  "description": "This is the core RestSharp.Portable library which contains mostly interfaces to allow dependent libraries to use as few dependencies as possible.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4",
+  "description": "This is the core RestSharp.Portable library which contains mostly interfaces to allow dependent libraries to use as few dependencies as possible.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4\n- Silverlight 5\n- Portable Class Libraries (Profiles 259 and 328)",
   "copyright": "Copyright © RestSharp.Portable project 2013-2016",
   "configurations": {
     "Debug": {
@@ -55,7 +55,7 @@
           "../../shared/RestSharp.Portable.Crypto/*.cs",
           "../../shared/System.Collections.Specialized/*.cs"
         ],
-        "define": [ "USE_TASKEX", "CUSTOM_CRYPTO", "PROFILE328", "NO_PROXY" ]
+        "define": [ "USE_TASKEX", "CUSTOM_CRYPTO", "PROFILE328", "NO_PROXY", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
         "mscorlib": { "type": "build" },
@@ -66,7 +66,7 @@
         "System.Xml": { "type": "build" }
       },
       "dependencies": {
-        "Microsoft.Bcl.Async": "1.0.*"
+        "Microsoft.Bcl.Async": "1.0.168"
       }
     },
     ".NETPortable,Version=v4.5,Profile=Profile259": {
@@ -127,20 +127,41 @@
     "net40": {
       "buildOptions": {
         "compile": [ "../../GlobalAssemblyInfo.cs" ],
-        "define": [ "USE_TASKEX" ]
+        "define": [ "USE_TASKEX", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
         "System.Runtime.Serialization": "",
         "System.Xml": ""
       },
       "dependencies": {
-        "Microsoft.Bcl.Async": "1.0.*"
+        "Microsoft.Bcl.Async": "1.0.168"
       }
     },
     "net45": {
       "frameworkAssemblies": {
         "System.Runtime.Serialization": "",
         "System.Xml": ""
+      }
+    },
+    "sl5": {
+      "buildOptions": {
+        "compile": [
+          "../../GlobalAssemblyInfo.cs",
+          "../../shared/RestSharp.Portable.Crypto/*.cs",
+          "../../shared/System.Collections.Specialized/*.cs"
+        ],
+        "define": [ "USE_TASKEX", "CUSTOM_CRYPTO", "NO_PROXY", "NET40ALIKE" ]
+      },
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Runtime.Serialization": { "type": "build" },
+        "System.Xml": { "type": "build" }
+      },
+      "dependencies": {
+        "Microsoft.Bcl.Async": "1.0.168"
       }
     }
   }

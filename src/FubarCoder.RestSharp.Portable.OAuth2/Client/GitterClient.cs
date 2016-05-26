@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -102,7 +103,7 @@ namespace RestSharp.Portable.OAuth2.Client
 
             var response = await client.ExecuteAndVerify(request);
 
-            var result = ParseUserInfo(response.GetContent());
+            var result = ParseUserInfo(response);
             result.ProviderName = Name;
 
             return result;
@@ -111,15 +112,15 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
-        /// <param name="content">
-        /// The content which is received from third-party service.
+        /// <param name="response">
+        /// The response which is received from third-party service.
         /// </param>
         /// <returns>
         /// Returns some standard user information.
         /// </returns>
-        protected override UserInfo ParseUserInfo(string content)
+        protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var data = JsonConvert.DeserializeObject<List<GitterUser>>(content).Single();
+            var data = JsonConvert.DeserializeObject<List<GitterUser>>(response.Content).Single();
             return new UserInfo
                 {
                     Id = data.Id,
