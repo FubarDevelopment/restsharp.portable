@@ -25,14 +25,17 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// Request token
         /// </summary>
         RequestToken,
+
         /// <summary>
         /// Access token
         /// </summary>
         AccessToken,
+
         /// <summary>
         /// Access to a protected resource
         /// </summary>
         ProtectedResource,
+
         /// <summary>
         /// Client authentication
         /// </summary>

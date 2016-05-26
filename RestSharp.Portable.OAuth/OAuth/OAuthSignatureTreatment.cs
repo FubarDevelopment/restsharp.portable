@@ -25,6 +25,7 @@ namespace RestSharp.Portable.Authenticators.OAuth
         /// Escaped OAuth signature
         /// </summary>
         Escaped,
+
         /// <summary>
         /// Unescaped OAuth signature
         /// </summary>

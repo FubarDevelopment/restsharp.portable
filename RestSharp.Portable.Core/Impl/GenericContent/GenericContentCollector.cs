@@ -100,7 +100,6 @@ namespace RestSharp.Portable.Content
             return content;
         }
 
-
         /// <summary>
         /// Gets the basic content (without files) for a request
         /// </summary>

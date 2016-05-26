@@ -32,7 +32,7 @@ namespace RestSharp.Portable.Authenticators.OAuth.Extensions
         }
         public static long ToUnixTime(this DateTime dateTime)
         {
-            var timeSpan = (dateTime - new DateTime(1970, 1, 1));
+            var timeSpan = dateTime - new DateTime(1970, 1, 1);
             var timestamp = (long)timeSpan.TotalSeconds;
             return timestamp;
         }
