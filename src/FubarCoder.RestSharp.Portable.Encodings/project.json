@@ -1,6 +1,6 @@
 {
   "name": "FubarCoder.RestSharp.Portable.Encodings",
-  "version": "4.0.0-beta-*",
+  "version": "4.0.0-*",
   "title": "RestSharp.Portable Encodings",
   "authors": [ "Mark Junker", "Fubar Development Junker" ],
   "description": "This library contains the GZIP and Deflate content encoding handlers.\n\nSupported Platforms:\n- .NET Standard 1.0\n- .NET Framework 4\n- Silverlight 5\n- Portable Class Libraries (Profile 328)",
