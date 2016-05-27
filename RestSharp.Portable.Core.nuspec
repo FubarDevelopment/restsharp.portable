@@ -22,7 +22,8 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries</description>
         <summary>Core RestSharp.Portable library</summary>
-        <releaseNotes>- Fix for issue #55</releaseNotes>
+        <releaseNotes>- Support multiple parameters with same name (fixes issue #71)
+- Fix for issue #69</releaseNotes>
         <copyright>Copyright © RestSharp.Portable project 2013-2016</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable core</tags>

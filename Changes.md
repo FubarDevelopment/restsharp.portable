@@ -1,28 +1,17 @@
 ﻿# Changes #
 
-## 4.0.0
+## 3.3.0
 
-### New features
+This is a backport of changes from the 4.0 branch.
 
-* Support for `netstandard1.0` and above
-* Support for `HMAC-SHA256`
+### Possible breaking changes
 
-### Breaking changes
-
-* OAuth 1.0 Package renamed to FubarCoder.RestSharp.Portable.OAuth1
-* The `AddHandler`, `RemoveHandler`, `ClearHandlers` replaced by `ContentHandlers` dictionary
-* The `AddEncoding`, `RemoveEncoding`, `ClearEncodings` replaced by `EncodingHandlers` dictionary
-* `IRequestProxy` removed. We're now using `IWebProxy`. The `Proxy` property doesn't exist any more on unsupported platforms
-* The same parameter is allowed multiple times. You can use the `AddOrUpdate*` functions when you only want to have one parameter with the same name
-* `GetOrPost` and `QueryString` parameters are different - even when issuing a GET request
-
-### Probably breaking Changes
-
-* `GetOrPost` parameters are sent as `x-www-form-urlencoded` when the request method is **not** `GET`
+* Fix for [issue #71](https://github.com/FubarDevelopment/restsharp.portable/issues/71): Support to send multiple parameters with the same name. You can use `AddOrUpdate` when every named parameter must occur only once. There is no `ParameterComparer` any more. The `Parameters` and `DefaultParameters` properties are now a `IPropertyCollection` which is derived from `ICollection<Parameter>`, and **not** an `IList<Parameter>` any more!
+* Fix for [issue #69](https://github.com/FubarDevelopment/restsharp.portable/issues/69): `GetOrPost` parameters are sent as `x-www-form-urlencoded` when the request method is **not** `GET`.
 
 ## 3.2.0 ##
 
-* New `Content` property for `IRestResponse`
+* Fix for [issue #63](https://github.com/FubarDevelopment/restsharp.portable/issues/63): New `Content` property for `IRestResponse`
 * Updated Android targets to 4.0.3 (due to 2.3.3 SDK not being installable)
 
 ## 3.1.3 ##

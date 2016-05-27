@@ -22,7 +22,7 @@ Supported Platforms:
 - Xamarin iOS / MonoTouch
 - Portable Class Libraries (.NET 4.0.3+)</description>
         <summary>OAuth 2.0 authenticators and clients</summary>
-      <releaseNotes>- Using the new core library</releaseNotes>
+      <releaseNotes>Release for latest RestSharp.Portable.Core</releaseNotes>
       <copyright>Copyright © Constantin Titarenko, RestSharp.Portable project and others</copyright>
         <language>en-US</language>
         <tags>PCL RestSharp portable OAuth 2.0 OAuth2</tags>
