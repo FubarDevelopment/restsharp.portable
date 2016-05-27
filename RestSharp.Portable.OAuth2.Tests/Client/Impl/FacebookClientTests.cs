@@ -107,7 +107,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             // assert
             requestFactory.CreateRequest(null)
                 .Parameters.Received(1)
-                .Add(Arg.Is<Parameter>(x => x.Name == "fields" && (string)x.Value == "id,first_name,last_name,email,picture"));
+                .AddOrUpdate(Arg.Is<Parameter>(x => x.Name == "fields" && (string)x.Value == "id,first_name,last_name,email,picture"));
         }
 
         class FacebookClientDescendant : FacebookClient

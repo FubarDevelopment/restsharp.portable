@@ -60,16 +60,11 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void Should_ReturnCorrectUserInfoServiceEndpoint()
         {
-            // act
-            descendant.GetUserInfoServiceEndpoint();
-
-            // assert
-            Assert.Fail();
+            Assert.Catch<NotImplementedException>(() => descendant.GetUserInfoServiceEndpoint());
         }
-        
+
         [Test]
         public void Should_ParseAllFieldsOfUserInfo_WhenCorrectContentIsPassed()
         {

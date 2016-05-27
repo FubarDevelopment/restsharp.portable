@@ -126,7 +126,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             }.ToLookup(y => y.Key, y => y.Value));
 
             // assert
-            restRequest.Parameters.Received().Add(Arg.Is<Parameter>(x => x.Name == "fields" && (string)x.Value == "uid,first_name,last_name,photo"));
+            restRequest.Parameters.Received().AddOrUpdate(Arg.Is<Parameter>(x => x.Name == "fields" && (string)x.Value == "uid,first_name,last_name,photo"));
         }
 
         private class VkClientDescendant : VkClient

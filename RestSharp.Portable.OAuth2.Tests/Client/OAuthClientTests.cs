@@ -122,7 +122,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             factory.Received().CreateRequest("/LoginServiceEndpoint");
             
             restClient.Received().BaseUrl = new Uri("https://LoginServiceEndpoint");
-            restRequest.Parameters.Received().Add(Arg.Is<Parameter>(x => x.Name == "oauth_token" && (string)x.Value == "token5"));
+            restRequest.Parameters.Received().AddOrUpdate(Arg.Is<Parameter>(x => x.Name == "oauth_token" && (string)x.Value == "token5"));
         }
 
         [Test]
