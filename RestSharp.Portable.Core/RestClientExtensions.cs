@@ -225,6 +225,7 @@ namespace RestSharp.Portable
             return new RequestParameters(client, request);
         }
 
+        /// <summary>
         /// Returns the HTTP method GET or POST - depending on the parameters
         /// </summary>
         /// <param name="client">The REST client that will execute the request</param>

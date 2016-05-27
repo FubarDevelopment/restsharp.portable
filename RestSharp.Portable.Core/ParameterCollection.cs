@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// Implements the <see cref="IParameterCollection"/> interface
+    /// </summary>
     internal class ParameterCollection : IParameterCollection
     {
-        private readonly MultiValueDictionary<ParameterKey, ParameterEntry> _dictionary;
+        private readonly MultiValueDictionary<ParameterKey, ParameterEntry> _dictionary = new MultiValueDictionary<ParameterKey, ParameterEntry>(new ParameterKeyComparer());
 
         private ulong _order = 0;
 
-        public ParameterCollection()
-        {
-            _dictionary = new MultiValueDictionary<ParameterKey, ParameterEntry>(new ParameterKeyComparer());
-        }
-
+        /// <inheritdoc/>
         public int Count => _dictionary.Count;
 
+        /// <inheritdoc/>
         public bool IsReadOnly => false;
 
+        /// <inheritdoc/>
         public IList<Parameter> Find(ParameterType type, string name)
         {
             var key = new ParameterKey(type, name);
@@ -33,11 +31,13 @@ namespace RestSharp.Portable
             return result;
         }
 
+        /// <inheritdoc/>
         public void Add(Parameter item)
         {
             _dictionary.Add(new ParameterKey(item), new ParameterEntry(_order++, item));
         }
 
+        /// <inheritdoc/>
         public void AddOrUpdate(Parameter parameter)
         {
             ulong order;
@@ -55,16 +55,19 @@ namespace RestSharp.Portable
             _dictionary.Add(key, new ParameterEntry(order, parameter));
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             _dictionary.Clear();
         }
 
+        /// <inheritdoc/>
         public bool Contains(Parameter item)
         {
             return _dictionary.ContainsKey(new ParameterKey(item));
         }
 
+        /// <inheritdoc/>
         public void CopyTo(Parameter[] array, int arrayIndex)
         {
             foreach (var dictItem in _dictionary)
@@ -76,6 +79,7 @@ namespace RestSharp.Portable
             }
         }
 
+        /// <inheritdoc/>
         public IEnumerator<Parameter> GetEnumerator()
         {
             foreach (var dictItem in _dictionary.OrderBy(x => x.Value.First().Order))
@@ -87,6 +91,7 @@ namespace RestSharp.Portable
             }
         }
 
+        /// <inheritdoc/>
         public bool Remove(Parameter item)
         {
             var key = new ParameterKey(item);
@@ -99,12 +104,14 @@ namespace RestSharp.Portable
             return _dictionary.Remove(key, entry);
         }
 
+        /// <inheritdoc/>
         public bool Remove(ParameterType type, string name)
         {
             var key = new ParameterKey(type, name);
             return _dictionary.Remove(key);
         }
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -131,7 +131,7 @@ namespace RestSharp.Portable.Crypto
         }
 
         /// <summary>
-        /// Returns the hash as an array of bytes.
+        /// Gets the hash as an array of bytes.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations", Justification = "Matching .NET behavior by throwing here.")]
         [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes", Justification = "Matching .NET behavior by throwing NullReferenceException.")]
