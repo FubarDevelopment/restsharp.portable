@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\NonDisposableStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericContent\StringContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Impl\GenericHttpHeaders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IParameterCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRequestProxy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRestRequest.cs" />
@@ -47,12 +48,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)IRestResponse{T}.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Method.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MultiValueDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Parameter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ParameterComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterKeyComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ParameterType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PostParametersContent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PropertyFilterMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RequestParameters.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestClientExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestRequest.cs" />

@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PCL;USE_BOUNCYCASTLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PCL;USE_BOUNCYCASTLE;USE_TASKEX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\RestSharp.Portable.OAuth.XML</DocumentationFile>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;PCL;USE_BOUNCYCASTLE</DefineConstants>
+    <DefineConstants>TRACE;PCL;USE_BOUNCYCASTLE;USE_TASKEX</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\RestSharp.Portable.OAuth.XML</DocumentationFile>

@@ -27,9 +27,9 @@ namespace RestSharp.Portable
 
         private readonly IParameterCollection _defaultParameters = new ParameterCollection();
 
-        private readonly Lazy<IHttpClient> _httpClient;
-
         private bool _disposedValue; // For the detection of multiple calls
+
+        private IHttpClient _httpClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestClientBase" /> class.
@@ -37,8 +37,6 @@ namespace RestSharp.Portable
         /// <param name="httpClientFactory">The HTTP client factory to use</param>
         protected RestClientBase(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = new Lazy<IHttpClient>(() => httpClientFactory.CreateClient(this));
-
             HttpClientFactory = httpClientFactory;
 
             var jsonDeserializer = new JsonDeserializer();
@@ -444,8 +442,15 @@ namespace RestSharp.Portable
                     await Authenticator.PreAuthenticate(this, request, Credentials);
                 }
 
+                // Lazy initialization of the HTTP client
+                if (_httpClient == null)
+                {
+                    _httpClient = HttpClientFactory.CreateClient(this, request);
+                }
+
                 var requestParameters = this.MergeParameters(request);
                 bool failed = true;
+                var httpClient = _httpClient;
                 var message = HttpClientFactory.CreateRequestMessage(this, request, requestParameters.OtherParameters);
                 try
                 {
@@ -455,22 +460,22 @@ namespace RestSharp.Portable
                         message.Content = bodyData;
                     }
 
-                    ModifyRequestBeforeAuthentication(_httpClient, message);
+                    ModifyRequestBeforeAuthentication(httpClient, message);
 
-                    if (Authenticator != null && Authenticator.CanPreAuthenticate(_httpClient, message, Credentials))
+                    if (Authenticator != null && Authenticator.CanPreAuthenticate(httpClient, message, Credentials))
                     {
-                        await Authenticator.PreAuthenticate(_httpClient, message, Credentials);
+                        await Authenticator.PreAuthenticate(httpClient, message, Credentials);
                     }
 
-                    var response = await _httpClient.SendAsync(message, ct);
+                    var response = await httpClient.SendAsync(message, ct);
 
                     try
                     {
                         if (!response.IsSuccessStatusCode)
                         {
-                            if (Authenticator != null && Authenticator.CanHandleChallenge(_httpClient, message, Credentials, response))
+                            if (Authenticator != null && Authenticator.CanHandleChallenge(httpClient, message, Credentials, response))
                             {
-                                await Authenticator.HandleChallenge(_httpClient, message, Credentials, response);
+                                await Authenticator.HandleChallenge(httpClient, message, Credentials, response);
                                 continue;
                             }
 
@@ -552,9 +557,6 @@ namespace RestSharp.Portable
                 var accepts = string.Join(", ", _acceptEncodings);
                 this.AddDefaultParameter("Accept-Encoding", accepts, ParameterType.HttpHeader);
             }
-        }
-
-        /// <summary>
         }
     }
 }

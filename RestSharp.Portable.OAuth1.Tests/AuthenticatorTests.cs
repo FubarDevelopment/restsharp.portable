@@ -183,12 +183,8 @@ namespace RestSharp.Portable.OAuth1.Tests
                 throw new NotImplementedException();
             }
 
-            /// <summary>
-            /// Gets the content for a request.
-            /// </summary>
-            /// <param name="request">The <see cref="IRestRequest"/> to get the content for.</param>
-            /// <returns>The <see cref="IHttpContent"/> for the <paramref name="request"/></returns>
-            protected override IHttpContent GetContent(IRestRequest request)
+            /// <inheritdoc/>
+            protected override IHttpContent GetContent(IRestRequest request, RequestParameters requestParameters)
             {
                 return null;
             }
