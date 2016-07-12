@@ -97,7 +97,7 @@
       },
       "imports": [ "dotnet" ],
       "dependencies": {
-        "System.Net.Requests": "4.0.11-rc2-*",
+        "System.Net.Requests": "4.0.11",
         "FubarCoder.RestSharp.Portable.Encodings": {
           "target": "project",
           "version": ""

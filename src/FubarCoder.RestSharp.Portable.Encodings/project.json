@@ -20,7 +20,7 @@
   },
   "buildOptions": {
     "keyFile": "../../RestSharp.Portable.snk",
-    "compile": [ "../../GlobalAssemblyInfo.cs" ],
+    "compile": [ "../../GlobalAssemblyInfo.cs" ]
   },
   "packOptions": {
     "summary": "Library that will contain some standard Content-Encoding handlers",
@@ -90,7 +90,7 @@
         "additionalArguments": [ "/ruleset:../../ReleaseRules.ruleset", "/additionalfile:../../stylecop.json" ]
       },
       "dependencies": {
-        "System.IO.Compression": "4.1.0-rc2-*",
+        "System.IO.Compression": "4.1.0",
         "StyleCop.Analyzers": {
           "type": "build",
           "version": "1.0.0"
