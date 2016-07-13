@@ -85,7 +85,7 @@
         "additionalArguments": [ "/ruleset:../../ReleaseRules.ruleset", "/additionalfile:../../stylecop.json" ]
       },
       "dependencies": {
-        "System.Security.Cryptography.Algorithms": "4.1.0-rc2-*",
+        "System.Security.Cryptography.Algorithms": "4.2.0",
         "StyleCop.Analyzers": {
           "type": "build",
           "version": "1.0.0"
