@@ -20,6 +20,15 @@
 
 * `GetOrPost` parameters are sent as `x-www-form-urlencoded` when the request method is **not** `GET`
 
+## 3.3.0
+
+This is a backport of changes from the 4.0 branch.
+
+### Possible breaking changes
+
+* Fix for [issue #71](https://github.com/FubarDevelopment/restsharp.portable/issues/71): Support to send multiple parameters with the same name. You can use `AddOrUpdate` when every named parameter must occur only once. There is no `ParameterComparer` any more. The `Parameters` and `DefaultParameters` properties are now a `IPropertyCollection` which is derived from `ICollection<Parameter>`, and **not** an `IList<Parameter>` any more!
+* Fix for [issue #69](https://github.com/FubarDevelopment/restsharp.portable/issues/69): `GetOrPost` parameters are sent as `x-www-form-urlencoded` when the request method is **not** `GET`.
+
 ## 3.2.0 ##
 
 * New `Content` property for `IRestResponse`
