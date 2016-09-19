@@ -132,5 +132,55 @@ namespace RestSharp.Portable
         /// This function returns NULL if the handler for the given content encoding cannot be found.
         /// </remarks>
         IEncoding GetEncoding(IEnumerable<string> encodingIds);
+
+        /// <summary>
+        /// Add a new content type handler
+        /// </summary>
+        /// <param name="contentType">The Accept header value</param>
+        /// <param name="deserializer">The deserializer to decode the content</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the ContentHandlers property instead")]
+        [SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "AddHandler", Justification = "Required for RestSharp compatibility")]
+        IRestClient AddHandler(string contentType, IDeserializer deserializer);
+
+        /// <summary>
+        /// Remove a previously added content type handler
+        /// </summary>
+        /// <param name="contentType">The Accept header value that identifies the handler</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the ContentHandlers property instead")]
+        [SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "RemoveHandler", Justification = "Required for RestSharp compatibility")]
+        IRestClient RemoveHandler(string contentType);
+
+        /// <summary>
+        /// Remove all previously added content type handlers
+        /// </summary>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the ContentHandlers property instead")]
+        IRestClient ClearHandlers();
+
+        /// <summary>
+        /// Add a new content encoding handler
+        /// </summary>
+        /// <param name="encodingId">The Accept-Encoding header value</param>
+        /// <param name="encoding">The encoding engine to decode the content</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the EncodingHandlers property instead")]
+        IRestClient AddEncoding(string encodingId, IEncoding encoding);
+
+        /// <summary>
+        /// Remove a previously added content encoding handler
+        /// </summary>
+        /// <param name="encodingId">The Accept-Encoding header value that identifies the handler</param>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the EncodingHandlers property instead")]
+        IRestClient RemoveEncoding(string encodingId);
+
+        /// <summary>
+        /// Remove all previously added content encoding handlers
+        /// </summary>
+        /// <returns>The client itself, to allow call chains</returns>
+        [Obsolete("Use the EncodingHandlers property instead")]
+        IRestClient ClearEncodings();
     }
 }
