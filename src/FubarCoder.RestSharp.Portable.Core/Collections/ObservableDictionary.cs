@@ -7,9 +7,14 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
-namespace RestSharp.Portable
+namespace RestSharp.Portable.Collections
 {
-    internal sealed class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
+#if PROFILE328 || SL50
+    internal
+#else
+    public
+#endif
+    sealed class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private const string CountString = "Count";
         private const string IndexerName = "Item[]";

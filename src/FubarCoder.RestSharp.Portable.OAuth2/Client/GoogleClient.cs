@@ -85,15 +85,23 @@ namespace RestSharp.Portable.OAuth2.Client
         {
             get { return "Google"; }
         }
-
-
+        
         /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
         /// <param name="response">The response which is received from the provider.</param>
         protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var info = JObject.Parse(response.Content);
+            return ParseUserInfo(response.Content);
+        }
+
+        /// <summary>
+        /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
+        /// </summary>
+        /// <param name="content">The response which is received from the provider.</param>
+        protected virtual UserInfo ParseUserInfo(string content)
+        {
+            var info = JObject.Parse(content);
             var avatarUri = info["picture"].SafeGet(x => x.Value<string>());
             const string avatarUriTemplate = "{0}?sz={1}";
             return new UserInfo

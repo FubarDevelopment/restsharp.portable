@@ -88,7 +88,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override Task<UserInfo> GetUserInfo()
         {
-            var result = ParseUserInfo(null);
+            var result = ParseUserInfo(_accessUserInfo);
 
 #if USE_TASKEX
             return TaskEx.FromResult(result);
@@ -103,7 +103,16 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <param name="response">The response which is received from the provider.</param>
         protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var info = JObject.Parse(_accessUserInfo);
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Should return parsed <see cref="UserInfo"/> using content received from provider.
+        /// </summary>
+        /// <param name="content">The response which is received from the provider.</param>
+        protected virtual UserInfo ParseUserInfo(string content)
+        {
+            var info = JObject.Parse(content);
             return new UserInfo
             {
                 Id = info["uid"].Value<string>(),

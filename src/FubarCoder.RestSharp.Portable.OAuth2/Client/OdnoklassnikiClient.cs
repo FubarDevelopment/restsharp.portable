@@ -108,21 +108,31 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <param name="response">The response which is received from the provider.</param>
         protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var info = JObject.Parse(response.Content);
+            return ParseUserInfo(response.Content);
+        }
+
+        /// <summary>
+        /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
+        /// </summary>
+        /// <param name="content">The response which is received from the provider.</param>
+        protected virtual UserInfo ParseUserInfo(string content)
+        {
+            var info = JObject.Parse(content);
             var avatarUri = info["pic_1"].Value<string>();
             return new UserInfo
             {
                 Id = info["uid"].Value<string>(),
                 FirstName = info["first_name"].Value<string>(),
-                LastName = info["last_name"].Value<string>(),                
+                LastName = info["last_name"].Value<string>(),
                 AvatarUri =
                     {
                         Small = null,
                         Normal = avatarUri,
                         Large = avatarUri.Replace("&photoType=4", "&photoType=6")
-                    }                
+                    }
             };
         }
+
         /// <summary>
         /// Friendly name of provider (OAuth2 service).
         /// </summary>

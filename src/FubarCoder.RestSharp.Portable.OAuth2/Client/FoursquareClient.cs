@@ -84,7 +84,16 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <param name="response">The response which is received from the provider.</param>
         protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var info = JObject.Parse(response.Content);
+            return ParseUserInfo(response.Content);
+        }
+
+        /// <summary>
+        /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
+        /// </summary>
+        /// <param name="content">The response which is received from the provider.</param>
+        protected virtual UserInfo ParseUserInfo(string content)
+        {
+            var info = JObject.Parse(content);
             var prefix = info["response"]["user"]["photo"]["prefix"].Value<string>();
             var suffix = info["response"]["user"]["photo"]["suffix"].Value<string>();
             const string avatarUriTemplate = "{0}{1}{2}";
@@ -95,7 +104,7 @@ namespace RestSharp.Portable.OAuth2.Client
                 Id = info["response"]["user"]["id"].Value<string>(),
                 FirstName = info["response"]["user"]["firstName"].Value<string>(),
                 LastName = info["response"]["user"]["lastName"].Value<string>(),
-                Email = info["response"]["user"]["contact"]["email"].SafeGet(x => x.Value<string>()),                
+                Email = info["response"]["user"]["contact"]["email"].SafeGet(x => x.Value<string>()),
                 AvatarUri =
                 {
                     // Defined photo sizes https://developer.foursquare.com/docs/responses/photo

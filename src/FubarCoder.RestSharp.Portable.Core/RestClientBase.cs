@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
+using RestSharp.Portable.Collections;
 using RestSharp.Portable.Deserializers;
 
 namespace RestSharp.Portable

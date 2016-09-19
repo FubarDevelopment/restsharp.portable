@@ -1,0 +1,50 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "userSecretsId": "restsharp.portable.oauth2.tests",
+
+  "buildOptions": {
+    "keyFile": "../../RestSharp.Portable.snk",
+    "copyToOutput": [
+      "settings.json"
+    ]
+  },
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "nunit": "3.4.1-*",
+    "FluentAssertions": "4.14.0",
+    "NSubstitute": "1.10.0",
+    "NBuilder": "3.0.1.1",
+    "dotnet-test-nunit": {
+      "version": "3.4.0-beta-2",
+      "target": "package"
+    },
+    "FubarCoder.RestSharp.Portable.OAuth2": {
+      "target": "project"
+    },
+    "FubarCoder.RestSharp.Portable.HttpClient": {
+      "target": "project"
+    },
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0"
+  },
+
+  "frameworks": {
+    "net462": {
+      "frameworkAssemblies": {
+        "System.Net": ""
+      }
+    }
+  },
+
+  "testRunner": "nunit",
+
+  "tools": {
+    "Microsoft.Extensions.SecretManager.Tools": {
+      "version": "1.0.0-*",
+      "imports": [ "dnxcore50" ]
+    }
+  }
+}

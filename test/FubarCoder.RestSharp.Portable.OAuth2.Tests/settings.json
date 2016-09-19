@@ -1,0 +1,18 @@
+﻿{
+  "oauth2": {
+    "services": {
+      "SomeClient": {
+        "clientId": "SomeClientId",
+        "clientSecret": "SomeClientSecret",
+        "scope": "SomeScope",
+        "redirectUri": "https://some-redirect-uri.net"
+      },
+      "SomeAnotherClient": {
+        "clientId": "SomeAnotherClientId",
+        "clientSecret": "SomeAnotherClientSecret",
+        "scope": "SomeAnotherScope",
+        "redirectUri": "https://some-another-redirect-uri.net"
+      }
+    }
+  }
+}

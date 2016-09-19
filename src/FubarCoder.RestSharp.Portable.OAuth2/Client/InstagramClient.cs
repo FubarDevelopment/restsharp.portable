@@ -1,5 +1,9 @@
+using System;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Newtonsoft.Json.Linq;
+
 using RestSharp.Portable.OAuth2.Configuration;
 using RestSharp.Portable.OAuth2.Infrastructure;
 using RestSharp.Portable.OAuth2.Models;
@@ -81,12 +85,35 @@ namespace RestSharp.Portable.OAuth2.Client
         }
 
         /// <summary>
+        /// Obtains user information using provider API.
+        /// </summary>
+        protected override Task<UserInfo> GetUserInfo()
+        {
+            var result = ParseUserInfo(_accessTokenResponseContent);
+
+#if USE_TASKEX
+            return TaskEx.FromResult(result);
+#else
+            return Task.FromResult(result);
+#endif
+        }
+
+        /// <summary>
         /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
         /// </summary>
         /// <param name="response">The response which is received from the provider.</param>
         protected override UserInfo ParseUserInfo(IRestResponse response)
         {
-            var info = JObject.Parse(_accessTokenResponseContent);
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Should return parsed <see cref="UserInfo"/> from content received from third-party service.
+        /// </summary>
+        /// <param name="content">The response which is received from the provider.</param>
+        protected virtual UserInfo ParseUserInfo(string content)
+        {
+            var info = JObject.Parse(content);
             var names = info["user"]["full_name"].Value<string>().Split(' ');
             var avatarUri = info["user"]["profile_picture"].Value<string>();
             return new UserInfo
