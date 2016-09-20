@@ -88,13 +88,13 @@ using (var client = new RestClient(new Uri("https://www.bitstamp.net/api/")))
 
 # Contributors
 
-* (Henk Mollema)[https://github.com/henkmollema]
-* (James Humphries)[https://github.com/Yantrio]
-* (Jonathan Channon)[https://github.com/jchannon]
-* (Eugene Berdnikov)[https://github.com/evnik]
-* (Henning Moe)[https://github.com/GeirGrusom]
-* (P2SH)(https://github.com/P2SH)
-* (Ingvar Stepanyan)[https://github.com/RReverser]
+* [Henk Mollema](https://github.com/henkmollema)
+* [James Humphries](https://github.com/Yantrio)
+* [Jonathan Channon](https://github.com/jchannon)
+* [Eugene Berdnikov](https://github.com/evnik)
+* [Henning Moe](https://github.com/GeirGrusom)
+* [P2SH](https://github.com/P2SH)
+* [Ingvar Stepanyan](https://github.com/RReverser)
 
 # Community Support
 
