@@ -1,10 +1,10 @@
-﻿# Portable RestSharp #
+﻿# Portable RestSharp
 
 [![Build status](https://build.fubar-dev.de/app/rest/builds/buildType:%28id:RestSharpPortable_40Preview%29/statusIcon)](https://build.fubar-dev.com/project.html?projectId=RestSharpPortable)
 
 [![Join the chat at https://gitter.im/FubarDevelopment/restsharp.portable](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FubarDevelopment/restsharp.portable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This is some kind of a RestSharp port to PCL.
+This is some kind of a RestSharp port as PCL and for .NET Core.
 
 # License
 
@@ -49,6 +49,7 @@ Disadvantage:
 
 # Supported platforms
 
+* .NET Core
 * .NET Framework 4
 * .NET for Windows Store apps
 * .NET Native
@@ -85,10 +86,20 @@ using (var client = new RestClient(new Uri("https://www.bitstamp.net/api/")))
 }
 ```
 
-# Community Support #
+# Contributors
+
+* (Henk Mollema)[https://github.com/henkmollema]
+* (James Humphries)[https://github.com/Yantrio]
+* (Jonathan Channon)[https://github.com/jchannon]
+* (Eugene Berdnikov)[https://github.com/evnik]
+* (Henning Moe)[https://github.com/GeirGrusom]
+* (P2SH)(https://github.com/P2SH)
+* (Ingvar Stepanyan)[https://github.com/RReverser]
+
+# Community Support
 
 The support for community projects can be found in my [subreddit /r/FubarDev](http://www.reddit.com/r/FubarDev/).
 
-# Professional Support #
+# Professional Support
 
 You can get professional support here: [Fubar Development Junker](https://www.fubar-dev.de)
