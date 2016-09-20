@@ -121,7 +121,8 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public void ShouldNot_ThrowException_When_ParametersForGetUserInfoContainEmptyError(string error)
         {
             // arrange
-            restResponse.RawBytes.Returns(_encoding.GetBytes("access_token=token"));
+            restResponse.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
+            restResponse.Content.Returns("access_token=token");
 
             // act & assert
             descendant
@@ -137,7 +138,8 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public async Task Should_IssueCorrectRequestForAccessToken_When_GetUserInfoIsCalled()
         {
             // arrange
-            restResponse.RawBytes.Returns(_encoding.GetBytes("access_token=token"));
+            restResponse.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
+            restResponse.Content.Returns("access_token=token");
 
             // act
             await descendant.GetUserInfo(new Dictionary<string, string> { { "code", "code" } }.ToLookup(y => y.Key, y => y.Value));
@@ -160,6 +162,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         {
             // arrange
             restResponse.RawBytes.Returns(_encoding.GetBytes(response));
+            restResponse.Content.Returns(response);
 
             // act
             await descendant.GetUserInfo(new Dictionary<string, string> { { "code", "code" } }.ToLookup(y => y.Key, y => y.Value));

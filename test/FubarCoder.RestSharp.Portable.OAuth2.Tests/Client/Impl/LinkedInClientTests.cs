@@ -13,13 +13,12 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
     [TestFixture]
     public class LinkedInClientTests
     {
-        private const string Content = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
-                                        "<person>" +
-                                        "  <id>id</id>" +
-                                        "  <first-name>firstname</first-name>" +
-                                        "  <last-name>lastname</last-name>" +
-                                        "  <picture-url>pictureurl</picture-url>" +
-                                        "</person>";
+        private const string Content = "{" +
+                                        " \"id\": \"id\"," +
+                                        " \"firstName\": \"firstname\"," +
+                                        " \"lastName\": \"lastname\"," +
+                                        " \"pictureUrl\": \"pictureurl\"" +
+                                        "}";
 
         private LinkedInClientDescendant descendant;
 
@@ -63,7 +62,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
 
             // assert
             endpoint.BaseUri.Should().Be("https://api.linkedin.com");
-            endpoint.Resource.Should().Be("/v1/people/~:(id,email-address,first-name,last-name,picture-url)");
+            endpoint.Resource.Should().Be("/v1/people/~:(id,email-address,first-name,last-name,picture-url)?format=json");
         }
 
         [Test]

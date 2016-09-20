@@ -77,7 +77,9 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         [Test]
         public async Task Should_ThrowUnexpectedResponse_When_OAuthSecretIsEmpty()
         {
-            (await factory.CreateClient().Execute(factory.CreateRequest(null))).RawBytes.Returns(_encoding.GetBytes("oauth_token=token"));
+            var response = await factory.CreateClient().Execute(factory.CreateRequest(null));
+            response.RawBytes.Returns(_encoding.GetBytes("oauth_token=token"));
+            response.Content.Returns("oauth_token=token");
             descendant
                 .Awaiting(x => x.GetLoginLinkUri())
                 .ShouldThrow<UnexpectedResponseException>()
@@ -90,7 +92,9 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             // arrange
             var restClient = factory.CreateClient();
             var restRequest = factory.CreateRequest(null);
-            (await restClient.Execute(restRequest)).RawBytes.Returns(_encoding.GetBytes("oauth_token=token&oauth_token_secret=secret"));
+            var response = await restClient.Execute(restRequest);
+            response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
+            response.Content.Returns("oauth_token=token&oauth_token_secret=secret");
 
             // act
             await descendant.GetLoginLinkUri();
@@ -113,8 +117,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             var restClient = factory.CreateClient();
             var restRequest = factory.CreateRequest(null);
             var response = await restClient.Execute(restRequest);
-            response.RawBytes.Returns(
-                        _encoding.GetBytes("any content to pass response verification"));
+            response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns("oauth_token=token5&oauth_token_secret=secret");
 
             // act
@@ -136,8 +139,10 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             // arrange
             var restClient = factory.CreateClient();
             var restRequest = factory.CreateRequest(null);
-            (await restClient.Execute(restRequest)).RawBytes.Returns(_encoding.GetBytes("oauth_token=token&oauth_token_secret=secret"));
-            
+            var response = await restClient.Execute(restRequest);
+            response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
+            response.Content.Returns("oauth_token=token5&oauth_token_secret=secret");
+
             // act
             await descendant.GetUserInfo(new Dictionary<string, string>
             {
@@ -162,10 +167,9 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
             // arrange
             var restClient = factory.CreateClient();
             var restRequest = factory.CreateRequest(null);
-            (await restClient.Execute(restRequest)).RawBytes.Returns(
-                _encoding.GetBytes("something to pass response verification"), 
-                _encoding.GetBytes("oauth_token=token&oauth_token_secret=secret"), 
-                _encoding.GetBytes("abba"));
+            var response = await restClient.Execute(restRequest);
+            response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
+            response.Content.Returns("oauth_token=token&oauth_token_secret=secret", "abba");
 
             // act
             var info = await descendant.GetUserInfo(new Dictionary<string, string>
