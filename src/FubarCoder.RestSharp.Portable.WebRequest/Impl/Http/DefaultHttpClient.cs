@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET40 || NET45
 using System.Globalization;
+#endif
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -203,12 +205,12 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                         };
                 }
 
-                return new DefaultHttpResponseMessage(request, httpWebResponse);
+                return new DefaultHttpResponseMessage(request, httpWebResponse, CookieContainer);
             }
             catch (WebException ex)
             {
                 var httpWebResponse = (HttpWebResponse)ex.Response;
-                return new DefaultHttpResponseMessage(request, httpWebResponse, ex);
+                return new DefaultHttpResponseMessage(request, httpWebResponse, null, ex);
             }
             catch (OperationCanceledException)
             {

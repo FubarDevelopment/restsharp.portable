@@ -223,5 +223,31 @@ namespace RestSharp.Portable.Tests
                 Assert.Null(resp.Data);
             }
         }
+
+        [Theory(DisplayName = "Issue 85")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue85(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+                CookieContainer = new CookieContainer(),
+            })
+            {
+                var req = new RestRequest("cookies/set", Method.GET);
+                req.AddQueryParameter("n1", "v1");
+                var resp = await client.Execute<HttpBinResponse>(req);
+                Assert.NotNull(resp.Data.Cookies);
+                Assert.Equal(1, resp.Data.Cookies.Count);
+                Assert.Equal("v1", resp.Data.Cookies["n1"]);
+
+                Assert.NotNull(resp.Cookies);
+                Assert.Equal(1, resp.Cookies.Count);
+                Assert.NotNull(resp.Cookies["n1"]);
+                Assert.Equal("v1", resp.Cookies["n1"].Value);
+            }
+        }
     }
 }

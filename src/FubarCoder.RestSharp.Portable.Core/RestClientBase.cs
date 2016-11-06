@@ -42,7 +42,7 @@ namespace RestSharp.Portable
         {
             HttpClientFactory = httpClientFactory;
 
-            _httpClient = new Lazy<IHttpClient>(() => this.HttpClientFactory.CreateClient(this));
+            _httpClient = new Lazy<IHttpClient>(() => HttpClientFactory.CreateClient(this));
 
             // register default handlers
             var jsonDeserializer = new JsonDeserializer();

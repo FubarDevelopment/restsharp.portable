@@ -44,6 +44,9 @@ namespace RestSharp.Portable
         /// </summary>
         public string ContentType { get; private set; }
 
+        /// <inheritdoc/>
+        public CookieCollection Cookies { get; private set; }
+
         /// <summary>
         /// Gets the response headers (without content headers)
         /// </summary>
@@ -117,6 +120,8 @@ namespace RestSharp.Portable
 
             var requestUri = Client.BuildUri(Request, false);
             ResponseUri = new Uri(requestUri, response.Headers.GetValue("Location", requestUri.ToString()));
+
+            Cookies = response.Cookies?.GetCookies(ResponseUri);
 
             var content = response.Content;
 
