@@ -118,6 +118,33 @@
       "dependencies": {
         "Microsoft.Net.Http": "2.2.29"
       }
+    },
+    "MonoAndroid10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Net.Http": ""
+      }
+    },
+    "MonoTouch10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Net.Http": ""
+      }
+    },
+    "Xamarin.iOS10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Net.Http": ""
+      }
     }
   }
 }

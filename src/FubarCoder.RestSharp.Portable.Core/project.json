@@ -170,6 +170,36 @@
       "dependencies": {
         "Microsoft.Bcl.Async": "1.0.168"
       }
+    },
+    "MonoAndroid10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Runtime.Serialization": "",
+        "System.Xml": ""
+      }
+    },
+    "MonoTouch10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Runtime.Serialization": "",
+        "System.Xml": ""
+      }
+    },
+    "Xamarin.iOS10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" },
+        "System.Runtime.Serialization": "",
+        "System.Xml": ""
+      }
     }
   }
 }

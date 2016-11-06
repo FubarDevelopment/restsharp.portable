@@ -59,14 +59,14 @@
         "define": [ "PROFILE328", "USE_TASKEX", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
-        "mscorlib": "",
-        "System": ""
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" }
       }
     },
     ".NETPortable,Version=v4.5,Profile=Profile259": {
       "frameworkAssemblies": {
-        "mscorlib": "",
-        "System.Runtime": ""
+        "mscorlib": { "type": "build" },
+        "System.Runtime": { "type": "build" }
       }
     },
     "netstandard1.0": {
@@ -91,8 +91,32 @@
         "define": [ "USE_TASKEX", "NET40ALIKE" ]
       },
       "frameworkAssemblies": {
-        "mscorlib": "",
-        "System": ""
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" }
+      }
+    },
+    "MonoAndroid10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
+      }
+    },
+    "MonoTouch10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
+      }
+    },
+    "Xamarin.iOS10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
       }
     }
   }

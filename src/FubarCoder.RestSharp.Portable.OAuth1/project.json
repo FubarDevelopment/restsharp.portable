@@ -106,6 +106,30 @@
       "dependencies": {
         "Portable.BouncyCastle": "1.8.1"
       }
+    },
+    "MonoAndroid10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
+      }
+    },
+    "MonoTouch10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
+      }
+    },
+    "Xamarin.iOS10": {
+      "frameworkAssemblies": {
+        "mscorlib": { "type": "build" },
+        "System": { "type": "build" },
+        "System.Core": { "type": "build" },
+        "System.Net": { "type": "build" }
+      }
     }
   }
 }
