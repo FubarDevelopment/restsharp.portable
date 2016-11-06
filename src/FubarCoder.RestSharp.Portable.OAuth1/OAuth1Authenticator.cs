@@ -373,12 +373,12 @@ namespace RestSharp.Portable.OAuth1
                                || (request.ContentCollectionMode == ContentCollectionMode.MultiPartForFileParameters
                                    && (client.DefaultParameters.GetFileParameters().Any() || request.Parameters.GetFileParameters().Any()));
 
-            var requestParameters = client.MergeParameters(request).OtherParameters.AsEnumerable();
+            var requestParameters = client.MergeParameters(request).OtherParameters;
             var effectiveMethod = client.GetEffectiveHttpMethod(request);
             if (effectiveMethod == Method.GET)
             {
-                requestParameters = requestParameters.Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
-                foreach (var p in requestParameters)
+                var filteredParams = requestParameters.Where(x => x.Type == ParameterType.GetOrPost || x.Type == ParameterType.QueryString);
+                foreach (var p in filteredParams)
                 {
                     parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Query));
                 }
@@ -397,7 +397,7 @@ namespace RestSharp.Portable.OAuth1
             else
             {
                 // if we are sending a multipart request, only the "oauth_" parameters should be included in the signature
-                foreach (var p in requestParameters.Where(p => p.Name.StartsWith("oauth_", StringComparison.Ordinal)))
+                foreach (var p in requestParameters.Where(p => p.Name != null && p.Name.StartsWith("oauth_", StringComparison.Ordinal)))
                 {
                     parameters.Add(new WebParameter(p.Name, p.Value.ToString(), WebParameterType.Internal));
                 }
