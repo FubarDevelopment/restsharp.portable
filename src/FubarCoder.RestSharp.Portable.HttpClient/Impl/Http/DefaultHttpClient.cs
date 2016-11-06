@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +15,17 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
     {
         private readonly DefaultHttpHeaders _defaultHeaders;
 
+        [CanBeNull]
+        private readonly CookieContainer _cookies;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultHttpClient"/> class.
         /// </summary>
         /// <param name="client">The <see cref="HttpClient"/> to wrap.</param>
-        public DefaultHttpClient([NotNull] System.Net.Http.HttpClient client)
+        /// <param name="cookies">A container of cookies</param>
+        public DefaultHttpClient([NotNull] System.Net.Http.HttpClient client, [CanBeNull] CookieContainer cookies)
         {
+            _cookies = cookies;
             Client = client;
             _defaultHeaders = new DefaultHttpHeaders(client.DefaultRequestHeaders);
         }
@@ -62,7 +68,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         {
             var requestMessage = request.AsHttpRequestMessage();
             var response = await Client.SendAsync(requestMessage, cancellationToken);
-            return new DefaultHttpResponseMessage(requestMessage, response);
+            return new DefaultHttpResponseMessage(requestMessage, response, _cookies);
         }
 
         /// <summary>

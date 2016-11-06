@@ -21,8 +21,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         /// <param name="requestMessage">The request message for this response</param>
         /// <param name="responseMessage">The response message to wrap</param>
+        /// <param name="cookies">Container of cookies to query the cookies from</param>
         /// <param name="exception">The exception that occurred during the request</param>
-        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [CanBeNull] HttpWebResponse responseMessage, [CanBeNull] WebException exception = null)
+        public DefaultHttpResponseMessage([NotNull] IHttpRequestMessage requestMessage, [CanBeNull] HttpWebResponse responseMessage, [CanBeNull] CookieContainer cookies, [CanBeNull] WebException exception = null)
         {
             ResponseMessage = responseMessage;
             _exception = exception;
@@ -50,6 +51,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 
             Content = new HttpWebResponseContent(contentHeaders, responseMessage);
             Headers = responseHeaders;
+            Cookies = cookies;
         }
 
         /// <summary>
@@ -57,6 +59,9 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// </summary>
         [CanBeNull]
         public HttpWebResponse ResponseMessage { get; }
+
+        /// <inheritdoc/>
+        public CookieContainer Cookies { get; }
 
         /// <summary>
         /// Gets the HTTP headers returned by the response

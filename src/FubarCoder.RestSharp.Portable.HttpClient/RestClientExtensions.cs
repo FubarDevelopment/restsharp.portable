@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -157,7 +157,10 @@ namespace RestSharp.Portable.HttpClient
                 else if (parameter.Type == ParameterType.RequestBody)
                 {
                     var data = request.GetBodyContent(parameter);
-                    multipartContent.Add(data, parameter.Name);
+                    var parameterName = parameter.Name ?? data.Headers.ContentType.MediaType;
+                    if (string.IsNullOrEmpty(parameterName))
+                        throw new InvalidOperationException("You must specify a name for a body parameter.");
+                    multipartContent.Add(data, parameterName);
                 }
             }
 

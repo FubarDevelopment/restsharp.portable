@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace RestSharp.Portable
 {
@@ -40,17 +41,25 @@ namespace RestSharp.Portable
         /// <param name="response">
         /// Response that will be used to initialize this response.
         /// </param>
+        /// <param name="ct">The cancellation token</param>
         /// <returns>
         /// Task, because this function runs asynchronously
         /// </returns>
         /// <remarks>
         /// This override also deserializes the response
         /// </remarks>
-        protected override async Task LoadResponse(IHttpResponseMessage response)
+        protected override async Task LoadResponse(IHttpResponseMessage response, CancellationToken ct)
         {
-            await base.LoadResponse(response);
-            var handler = Client.GetHandler(ContentType);
-            Data = (handler != null) ? handler.Deserialize<T>(this) : default(T);
+            await base.LoadResponse(response, ct);
+            if (RawBytes != null)
+            {
+                var handler = Client.GetHandler(ContentType);
+                Data = (handler != null) ? handler.Deserialize<T>(this) : default(T);
+            }
+            else
+            {
+                Data = default(T);
+            }
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 using JetBrains.Annotations;
 
@@ -94,5 +97,10 @@ namespace RestSharp.Portable
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         public ContentCollectionMode ContentCollectionMode { get; set; }
+
+        /// <summary>
+        /// Gets os sets the method to use to write the response instead of reading into RawBytes
+        /// </summary>
+        public Func<Stream, CancellationToken, Task> ResponseWriterAsync { get; set; }
     }
 }

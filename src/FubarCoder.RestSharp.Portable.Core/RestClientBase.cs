@@ -43,7 +43,7 @@ namespace RestSharp.Portable
         {
             HttpClientFactory = httpClientFactory;
 
-            _httpClient = new Lazy<IHttpClient>(() => this.HttpClientFactory.CreateClient(this));
+            _httpClient = new Lazy<IHttpClient>(() => HttpClientFactory.CreateClient(this));
 
             // register default handlers
             var jsonDeserializer = new JsonDeserializer();
@@ -193,12 +193,9 @@ namespace RestSharp.Portable
         /// </summary>
         /// <param name="request">Request to execute</param>
         /// <returns>Response returned</returns>
-        public virtual async Task<IRestResponse> Execute(IRestRequest request)
+        public virtual Task<IRestResponse> Execute(IRestRequest request)
         {
-            using (var response = await ExecuteRequest(request, CancellationToken.None))
-            {
-                return await RestResponse.CreateResponse(this, request, response);
-            }
+            return Execute(request, CancellationToken.None);
         }
 
         /// <summary>
@@ -207,12 +204,9 @@ namespace RestSharp.Portable
         /// <typeparam name="T">The type to deserialize to</typeparam>
         /// <param name="request">Request to execute</param>
         /// <returns>Response returned, with a deserialized object</returns>
-        public virtual async Task<IRestResponse<T>> Execute<T>(IRestRequest request)
+        public virtual Task<IRestResponse<T>> Execute<T>(IRestRequest request)
         {
-            using (var response = await ExecuteRequest(request, CancellationToken.None))
-            {
-                return await RestResponse.CreateResponse<T>(this, request, response);
-            }
+            return Execute<T>(request, CancellationToken.None);
         }
 
         /// <summary>
@@ -225,7 +219,7 @@ namespace RestSharp.Portable
         {
             using (var response = await ExecuteRequest(request, ct))
             {
-                return await RestResponse.CreateResponse(this, request, response);
+                return await RestResponse.CreateResponse(this, request, response, ct);
             }
         }
 
@@ -240,7 +234,7 @@ namespace RestSharp.Portable
         {
             using (var response = await ExecuteRequest(request, ct))
             {
-                return await RestResponse.CreateResponse<T>(this, request, response);
+                return await RestResponse.CreateResponse<T>(this, request, response, ct);
             }
         }
 
@@ -445,67 +439,55 @@ namespace RestSharp.Portable
                 bool failed = true;
                 var httpClient = _httpClient.Value;
                 var message = HttpClientFactory.CreateRequestMessage(this, request, requestParameters.OtherParameters);
+                var bodyData = GetContent(request, requestParameters);
+                if (bodyData != null)
+                {
+                    message.Content = bodyData;
+                }
+
+                ModifyRequestBeforeAuthentication(httpClient, message);
+
+                if (Authenticator != null && Authenticator.CanPreAuthenticate(httpClient, message, Credentials))
+                {
+                    await Authenticator.PreAuthenticate(httpClient, message, Credentials);
+                }
+
+                var response = await httpClient.SendAsync(message, ct);
+
                 try
                 {
-                    var bodyData = GetContent(request, requestParameters);
-                    if (bodyData != null)
+                    if (!response.IsSuccessStatusCode)
                     {
-                        message.Content = bodyData;
-                    }
-
-                    ModifyRequestBeforeAuthentication(httpClient, message);
-
-                    if (Authenticator != null && Authenticator.CanPreAuthenticate(httpClient, message, Credentials))
-                    {
-                        await Authenticator.PreAuthenticate(httpClient, message, Credentials);
-                    }
-
-                    var response = await httpClient.SendAsync(message, ct);
-
-                    try
-                    {
-                        if (!response.IsSuccessStatusCode)
+                        if (Authenticator != null && Authenticator.CanHandleChallenge(httpClient, message, Credentials, response))
                         {
-                            if (Authenticator != null && Authenticator.CanHandleChallenge(httpClient, message, Credentials, response))
-                            {
-                                await Authenticator.HandleChallenge(httpClient, message, Credentials, response);
-                                continue;
-                            }
-
-                            if (!IgnoreResponseStatusCode)
-                            {
-                                response.EnsureSuccessStatusCode();
-                            }
+                            await Authenticator.HandleChallenge(httpClient, message, Credentials, response);
+                            continue;
                         }
 
-                        failed = false;
-                    }
-                    finally
-                    {
-                        if (failed)
+                        if (!IgnoreResponseStatusCode)
                         {
-                            if (response != null)
-                            {
-                                response.Dispose();
-                            }
-                            else
-                            {
-                                message.Dispose();
-                            }
-
-                            message = null;
+                            response.EnsureSuccessStatusCode();
                         }
                     }
 
-                    return response;
+                    failed = false;
                 }
                 finally
                 {
                     if (failed)
                     {
-                        message?.Dispose();
+                        if (response != null)
+                        {
+                            response.Dispose();
+                        }
+                        else
+                        {
+                            message.Dispose();
+                        }
                     }
                 }
+
+                return response;
             }
         }
 

@@ -15,7 +15,8 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// </summary>
         /// <param name="requestMessage">The request message</param>
         /// <param name="responseMessage">The response message to wrap</param>
-        public DefaultHttpResponseMessage([NotNull] HttpRequestMessage requestMessage, [CanBeNull] HttpResponseMessage responseMessage)
+        /// <param name="cookies">Container of cookies to query the cookies from</param>
+        public DefaultHttpResponseMessage([NotNull] HttpRequestMessage requestMessage, [CanBeNull] HttpResponseMessage responseMessage, [CanBeNull] CookieContainer cookies)
         {
             ResponseMessage = responseMessage;
             RequestMessage = new DefaultHttpRequestMessage(requestMessage);
@@ -30,6 +31,8 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
                 Content = null;
                 Headers = new Portable.Impl.GenericHttpHeaders();
             }
+
+            Cookies = cookies;
         }
 
         /// <summary>
@@ -37,6 +40,9 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         /// </summary>
         [CanBeNull]
         public HttpResponseMessage ResponseMessage { get; }
+
+        /// <inheritdoc/>
+        public CookieContainer Cookies { get; }
 
         /// <summary>
         /// Gets the HTTP headers returned by the response

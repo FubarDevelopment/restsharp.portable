@@ -11,6 +11,12 @@ namespace RestSharp.Portable
     public interface IHttpResponseMessage : IDisposable
     {
         /// <summary>
+        /// Gets the cookie container to query the cookies from
+        /// </summary>
+        [CanBeNull]
+        CookieContainer Cookies { get; }
+
+        /// <summary>
         /// Gets the HTTP headers returned by the response
         /// </summary>
         IHttpHeaders Headers { get; }

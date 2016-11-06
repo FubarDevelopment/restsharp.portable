@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.HttpClient;
@@ -122,7 +123,7 @@ namespace RestSharp.Portable.Tests
         [Fact]
         public void TestCombineRequestUrl()
         {
-            using (var client = new RestSharp.Portable.WebRequest.RestClient("https://www.itsg-trust.de/ostc/")
+            using (var client = new WebRequest.RestClient("https://www.itsg-trust.de/ostc/")
             {
                 HttpClientFactory = CreateClientFactory(typeof(WebRequestHttpClientFactory), false),
             })
@@ -130,6 +131,32 @@ namespace RestSharp.Portable.Tests
                 var request = new RestRequest(new Uri("http://www.itsg.de/tc_keys_arbeitgeberverfahren.ITSG"));
                 var targetUri = client.BuildUri(request);
                 Assert.Equal(new Uri("http://www.itsg.de/tc_keys_arbeitgeberverfahren.ITSG"), targetUri);
+            }
+        }
+
+        [Theory(DisplayName = "Simplify Sending Text Body")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue84(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("put", Method.PUT);
+                req.AddParameter(new Parameter()
+                {
+                    Type = ParameterType.RequestBody,
+                    Value = "asdf+%&",
+                    // This encoding setting triggers sending the body as text/plain
+                    Encoding = Encoding.UTF8
+                });
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.NotNull(resp.Data);
+                Assert.NotNull(resp.Data.Data);
+                Assert.Equal("asdf+%&", resp.Data.Data);
             }
         }
     }

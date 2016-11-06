@@ -60,7 +60,7 @@ namespace RestSharp.Portable.HttpClient.Impl
                 httpClient.Timeout = timeout.Value;
             }
 
-            return new DefaultHttpClient(httpClient);
+            return new DefaultHttpClient(httpClient, client.CookieContainer);
         }
 
         /// <summary>

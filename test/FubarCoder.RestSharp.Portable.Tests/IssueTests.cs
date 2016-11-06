@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
@@ -221,6 +224,150 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("get", Method.GET);
                 var resp = await client.Execute<HttpBinResponse>(req);
                 Assert.Null(resp.Data);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 85")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue85(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+                CookieContainer = new CookieContainer(),
+            })
+            {
+                var req = new RestRequest("cookies/set", Method.GET);
+                req.AddQueryParameter("n1", "v1");
+                var resp = await client.Execute<HttpBinResponse>(req);
+                Assert.NotNull(resp.Data.Cookies);
+                Assert.Equal(1, resp.Data.Cookies.Count);
+                Assert.Equal("v1", resp.Data.Cookies["n1"]);
+
+                Assert.NotNull(resp.Cookies);
+                Assert.Equal(1, resp.Cookies.Count);
+                Assert.NotNull(resp.Cookies["n1"]);
+                Assert.Equal("v1", resp.Cookies["n1"].Value);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 73")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue73(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("get", Method.GET);
+                req.AddQueryParameter("x", "+%");
+                var resp = await client.Execute<HttpBinResponse>(req);
+                Assert.NotNull(resp.Data.Args);
+                Assert.Equal(1, resp.Data.Args.Count);
+                Assert.Equal("+%", resp.Data.Args["x"]);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 76")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue76(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var output = new MemoryStream();
+                var req = new RestRequest("stream-bytes/8000", Method.GET)
+                {
+                    ResponseWriterAsync = (stream, ct) => stream.CopyToAsync(output, 4000, ct)
+                };
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.Null(resp.RawBytes);
+                Assert.Null(resp.Data);
+                Assert.Equal(8000, output.Length);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 89 (Named Body Parameter)")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue89WithNamedBodyParameter(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
+                req.AddBody("body", "body", Encoding.UTF8);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.NotNull(resp.Data?.Form);
+                Assert.Equal(1, resp.Data.Form.Count);
+                Assert.Equal("body", resp.Data.Form["body"]);
+
+                Assert.NotNull(resp.Data.Files);
+                Assert.Equal(1, resp.Data.Files.Count);
+                Assert.Equal("asd", resp.Data.Files["file1"]);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 89 (Named Body Parameter)")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue89WithUnnamedBodyParameter(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
+                req.AddBody("body", Encoding.UTF8);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.NotNull(resp.Data?.Form);
+                Assert.Equal(1, resp.Data.Form.Count);
+                Assert.Equal("body", resp.Data.Form["text/plain"]);
+
+                Assert.NotNull(resp.Data.Files);
+                Assert.Equal(1, resp.Data.Files.Count);
+                Assert.Equal("asd", resp.Data.Files["file1"]);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 89 (Query Parameter)")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue89WithQueryParameter(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
+                req.AddParameter("param1", "value1");
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.NotNull(resp.Data?.Form);
+                Assert.Equal(1, resp.Data.Form.Count);
+                Assert.Equal("value1", resp.Data.Form["param1"]);
+
+                Assert.NotNull(resp.Data.Files);
+                Assert.Equal(1, resp.Data.Files.Count);
+                Assert.Equal("asd", resp.Data.Files["file1"]);
             }
         }
     }

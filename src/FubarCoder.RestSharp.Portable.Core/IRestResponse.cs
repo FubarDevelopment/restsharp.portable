@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 
+using JetBrains.Annotations;
+
 namespace RestSharp.Portable
 {
     /// <summary>
@@ -28,6 +30,12 @@ namespace RestSharp.Portable
         /// Gets the content type of the raw data
         /// </summary>
         string ContentType { get; }
+
+        /// <summary>
+        /// Gets the collection of cookies
+        /// </summary>
+        [CanBeNull]
+        CookieCollection Cookies { get; }
 
         /// <summary>
         /// Gets the response headers (without content headers)
