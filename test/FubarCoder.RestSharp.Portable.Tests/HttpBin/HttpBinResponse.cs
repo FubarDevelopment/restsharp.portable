@@ -8,6 +8,8 @@ namespace RestSharp.Portable.Tests.HttpBin
 
         public Dictionary<string, string> Form { get; set; }
 
+        public Dictionary<string, string> Files { get; set; }
+
         public Dictionary<string, string> Headers { get; set; }
 
         public Dictionary<string, string> Cookies { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 
 using JetBrains.Annotations;
@@ -12,6 +13,8 @@ namespace RestSharp.Portable.Content
     /// </summary>
     public static class GenericContentCollector
     {
+        private static readonly char[] _semicolon = { ';' };
+
         /// <summary>
         /// Gets the content for a request
         /// </summary>
@@ -206,7 +209,14 @@ namespace RestSharp.Portable.Content
                 else if (parameter.Type == ParameterType.RequestBody)
                 {
                     var data = request.GetBodyContent(parameter);
-                    multipartContent.Add(data, parameter.Name);
+                    var parameterName = parameter.Name ?? data.Headers.GetValue("Content-Type");
+                    parameterName = (parameterName ?? string.Empty)
+                        .Split(_semicolon, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(x => x.Trim())
+                        .FirstOrDefault(x => !string.IsNullOrEmpty(x));
+                    if (string.IsNullOrEmpty(parameterName))
+                        throw new InvalidOperationException("You must specify a name for a body parameter.");
+                    multipartContent.Add(data, parameterName);
                 }
             }
 

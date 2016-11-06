@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 using RestSharp.Portable.Serializers;
 
@@ -66,6 +67,56 @@ namespace RestSharp.Portable
             var serializer = request.Serializer;
             var data = serializer.Serialize(obj);
             return request.AddParameter(new Parameter { Value = data, Type = ParameterType.RequestBody, ContentType = serializer.ContentType });
+        }
+
+        /// <summary>
+        /// Named body to add to the parameters using the <see cref="RestSharp.Portable.IRestRequest.Serializer" />
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">The body parameter name (required for multipart form requests)</param>
+        /// <param name="obj">Object to serialize to the request body</param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddBody(this IRestRequest request, string name, object obj)
+        {
+            return request.AddParameter(new Parameter { Value = obj, Type = ParameterType.RequestBody, Name = name });
+        }
+
+        /// <summary>
+        /// Named body to add to the parameters as plain text.
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="name">The body parameter name (required for multipart form requests)</param>
+        /// <param name="text">Text to send in the request body</param>
+        /// <param name="encoding">Encoding for the <paramref name="text"/></param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddBody(this IRestRequest request, string name, string text, Encoding encoding)
+        {
+            return request.AddParameter(new Parameter
+            {
+                Value = text,
+                Type = ParameterType.RequestBody,
+                ContentType = "text/plain",
+                Name = name,
+                Encoding = encoding
+            });
+        }
+
+        /// <summary>
+        /// Unnamed body to add to the parameters as plain text.
+        /// </summary>
+        /// <param name="request">The REST request to add this parameter to</param>
+        /// <param name="text">Text to send in the request body</param>
+        /// <param name="encoding">Encoding for the <paramref name="text"/></param>
+        /// <returns>The request object to allow call chains</returns>
+        public static IRestRequest AddBody(this IRestRequest request, string text, Encoding encoding)
+        {
+            return request.AddParameter(new Parameter
+            {
+                Value = text,
+                Type = ParameterType.RequestBody,
+                ContentType = "text/plain",
+                Encoding = encoding
+            });
         }
 
         /// <summary>
