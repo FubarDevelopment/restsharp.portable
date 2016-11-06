@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 using RestSharp.Portable.Authenticators;
@@ -267,6 +269,29 @@ namespace RestSharp.Portable.Tests
                 Assert.NotNull(resp.Data.Args);
                 Assert.Equal(1, resp.Data.Args.Count);
                 Assert.Equal("+%", resp.Data.Args["x"]);
+            }
+        }
+
+        [Theory(DisplayName = "Issue 76")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue76(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var output = new MemoryStream();
+                var req = new RestRequest("stream-bytes/8000", Method.GET)
+                {
+                    ResponseWriterAsync = (stream, ct) => stream.CopyToAsync(output, 4000, ct)
+                };
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                Assert.Null(resp.RawBytes);
+                Assert.Null(resp.Data);
+                Assert.Equal(8000, output.Length);
             }
         }
     }

@@ -1,4 +1,9 @@
-﻿namespace RestSharp.Portable
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace RestSharp.Portable
 {
     /// <summary>
     /// Defines a REST request
@@ -29,5 +34,10 @@
         /// Gets or sets the content collection mode which controls if we use basic content or multi part content by default.
         /// </summary>
         ContentCollectionMode ContentCollectionMode { get; set; }
+
+        /// <summary>
+        /// Gets os sets the method to use to write the response instead of reading into RawBytes
+        /// </summary>
+        Func<Stream, CancellationToken, Task> ResponseWriterAsync { get; set; }
     }
 }

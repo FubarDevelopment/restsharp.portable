@@ -14,9 +14,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// </summary>
     internal class HttpWebResponseContent : IHttpContent
     {
+        private delegate Task BufferWriteAsyncDelegate(byte[] buffer, int length);
+
         private readonly HttpWebResponse _response;
 
         private readonly List<byte[]> _buffers = new List<byte[]>();
+
+        private bool? _storedIntoBuffer;
 
         private bool _isDisposed;
 
@@ -60,10 +64,25 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <returns>The task that copies the data to the stream</returns>
         public async Task CopyToAsync(Stream stream)
         {
-            LoadIntoBuffer(null, 4000);
-            foreach (var buffer in _buffers)
+            if (_storedIntoBuffer == null)
             {
-                await stream.WriteAsync(buffer, 0, buffer.Length);
+                _storedIntoBuffer = false;
+                await LoadData(null, 4000, (data, length) =>
+                {
+                    _bufferSize += length;
+                    return stream.WriteAsync(data, 0, length);
+                });
+            }
+            else if (_storedIntoBuffer.Value)
+            {
+                foreach (var buffer in _buffers)
+                {
+                    await stream.WriteAsync(buffer, 0, buffer.Length);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
             }
         }
 
@@ -74,30 +93,39 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <returns>The task that loads the data into an internal buffer</returns>
         public Task LoadIntoBufferAsync(long maxBufferSize)
         {
-            LoadIntoBuffer(maxBufferSize, 4000);
-#if USE_TASKEX
-            return TaskEx.FromResult(0);
-#else
-            return Task.FromResult(0);
-#endif
+            if (!_storedIntoBuffer.GetValueOrDefault(true))
+                throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
+            _storedIntoBuffer = true;
+            return LoadData(maxBufferSize, 4000, StoreIntoBuffer);
         }
 
         /// <summary>
         /// Returns the data as a stream
         /// </summary>
         /// <returns>The task that returns the stream</returns>
-        public async Task<Stream> ReadAsStreamAsync()
+        public Task<Stream> ReadAsStreamAsync()
         {
-            return new MemoryStream(await ReadAsByteArrayAsync());
+            if (_storedIntoBuffer != null)
+                throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
+            _storedIntoBuffer = false;
+#if USE_TASKEX
+            return TaskEx.FromResult(_response.GetResponseStream());
+#else
+            return Task.FromResult(_response.GetResponseStream());
+#endif
         }
 
         /// <summary>
         /// Returns the data as byte array
         /// </summary>
         /// <returns>The task that returns the data as byte array</returns>
-        public Task<byte[]> ReadAsByteArrayAsync()
+        public async Task<byte[]> ReadAsByteArrayAsync()
         {
-            LoadIntoBuffer(null, 4000);
+            if (!_storedIntoBuffer.GetValueOrDefault(true))
+                throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
+
+            _storedIntoBuffer = true;
+            await LoadData(null, 4000, StoreIntoBuffer);
 
             var result = new byte[_bufferSize];
             var offset = 0;
@@ -107,11 +135,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 offset += buffer.Length;
             }
 
-#if USE_TASKEX
-            return TaskEx.FromResult(result);
-#else
-            return Task.FromResult(result);
-#endif
+            return result;
         }
 
         /// <summary>
@@ -120,7 +144,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// <returns>The task that returns the data as string</returns>
         public async Task<string> ReadAsStringAsync()
         {
-            return await new StreamReader(new MemoryStream(await ReadAsByteArrayAsync()), true).ReadToEndAsync();
+            if (_storedIntoBuffer != null)
+                throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
+            _storedIntoBuffer = false;
+            var responseStream = _response?.GetResponseStream();
+            if (responseStream == null)
+                return null;
+            return await new StreamReader(responseStream).ReadToEndAsync();
         }
 
         /// <summary>
@@ -135,14 +165,11 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             if (_contentLength != null)
             {
                 length = _contentLength.Value;
-            }
-            else
-            {
-                LoadIntoBuffer(null, 4000);
-                length = _bufferSize;
+                return true;
             }
 
-            return true;
+            length = 0;
+            return false;
         }
 
         /// <summary>
@@ -175,7 +202,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
 #endif
         }
 
-        private void LoadIntoBuffer(long? size, int readBlockSize)
+        private async Task LoadData(long? size, int readBlockSize, BufferWriteAsyncDelegate writeFunc)
         {
             if (_endOfStreamReached)
             {
@@ -202,24 +229,18 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 return;
             }
 
+            var buffer = new byte[readBlockSize];
             while (!_endOfStreamReached && (size == null || _bufferSize < size))
             {
                 var blockSize = size == null ? readBlockSize : (int)Math.Min(readBlockSize, size.Value - _bufferSize);
-                var buffer = new byte[blockSize];
-                var readSize = _responseStream.Read(buffer, 0, blockSize);
+                var readSize = await _responseStream.ReadAsync(buffer, 0, blockSize);
                 if (readSize == 0)
                 {
                     _endOfStreamReached = true;
                 }
-                else if (readSize < blockSize)
-                {
-                    var temp = new byte[readSize];
-                    Array.Copy(buffer, temp, readSize);
-                    _buffers.Add(temp);
-                }
                 else
                 {
-                    _buffers.Add(buffer);
+                    await writeFunc(buffer, readSize);
                 }
 
                 _bufferSize += readSize;
@@ -230,6 +251,19 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 _responseStream.Dispose();
                 _responseStream = null;
             }
+        }
+
+        private Task StoreIntoBuffer(byte[] buffer, int length)
+        {
+            var temp = new byte[length];
+            Array.Copy(buffer, temp, length);
+            _buffers.Add(temp);
+            _storedIntoBuffer = true;
+#if USE_TASKEX
+            return TaskEx.FromResult(0);
+#else
+            return Task.FromResult(0);
+#endif
         }
     }
 }

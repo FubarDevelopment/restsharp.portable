@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestSharp.Portable
@@ -81,11 +81,12 @@ namespace RestSharp.Portable
         /// <param name="client">The <see cref="IRestClient"/> used to create a <see cref="IRestResponse"/></param>
         /// <param name="request">The <see cref="IRestRequest"/> used to create a <see cref="IRestResponse"/></param>
         /// <param name="responseMessage">The <see cref="IHttpResponseMessage"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="ct">The cancellation token</param>
         /// <returns>The new <see cref="IRestResponse"/></returns>
-        public static async Task<IRestResponse> CreateResponse(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage)
+        public static async Task<IRestResponse> CreateResponse(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage, CancellationToken ct)
         {
             var response = new RestResponse(client, request);
-            await response.LoadResponse(responseMessage);
+            await response.LoadResponse(responseMessage, ct);
             return response;
         }
 
@@ -96,11 +97,12 @@ namespace RestSharp.Portable
         /// <param name="client">The <see cref="IRestClient"/> used to create a <see cref="IRestResponse"/></param>
         /// <param name="request">The <see cref="IRestRequest"/> used to create a <see cref="IRestResponse"/></param>
         /// <param name="responseMessage">The <see cref="IHttpResponseMessage"/> used to create a <see cref="IRestResponse"/></param>
+        /// <param name="ct">The cancellation token</param>
         /// <returns>The new <see cref="IRestResponse"/></returns>
-        public static async Task<IRestResponse<T>> CreateResponse<T>(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage)
+        public static async Task<IRestResponse<T>> CreateResponse<T>(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage, CancellationToken ct)
         {
             var response = new RestResponse<T>(client, request);
-            await response.LoadResponse(responseMessage);
+            await response.LoadResponse(responseMessage, ct);
             return response;
         }
 
@@ -109,8 +111,9 @@ namespace RestSharp.Portable
         /// a HttpResponseMessage
         /// </summary>
         /// <param name="response">Response that will be used to initialize this response.</param>
+        /// <param name="ct">The cancellation token</param>
         /// <returns>Task, because this function runs asynchronously</returns>
-        protected virtual async Task LoadResponse(IHttpResponseMessage response)
+        protected virtual async Task LoadResponse(IHttpResponseMessage response, CancellationToken ct)
         {
             Headers = response.Headers;
 
@@ -147,19 +150,31 @@ namespace RestSharp.Portable
                     ContentType = contentType.Trim();
                 }
 
-                var data = await content.ReadAsByteArrayAsync();
-
-                IEnumerable<string> contentEncodings;
-                if (content.Headers.TryGetValues("Content-Encoding", out contentEncodings))
+                var responseWriter = Request.ResponseWriterAsync;
+                if (responseWriter != null)
                 {
-                    var encoding = Client.GetEncoding(contentEncodings);
-                    if (encoding != null)
+                    if (response.Content != null)
                     {
-                        data = encoding.Decode(data);
+                        var responseStream = await response.Content.ReadAsStreamAsync();
+                        if (responseStream != null)
+                        {
+                            var encoding = response.Content.GetEncoding(Client);
+                            if (encoding != null)
+                                responseStream = encoding.DecodeStream(responseStream);
+                            await responseWriter(responseStream, ct);
+                        }
                     }
                 }
+                else
+                {
+                    var data = await content.ReadAsByteArrayAsync();
 
-                RawBytes = data;
+                    var encoding = content.GetEncoding(Client);
+                    if (encoding != null)
+                        data = encoding.Decode(data);
+
+                    RawBytes = data;
+                }
             }
         }
     }

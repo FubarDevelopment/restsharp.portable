@@ -27,5 +27,15 @@ namespace RestSharp.Portable.Encodings
             return output.ToArray();
 #endif
         }
+
+        /// <inheritdoc/>
+        public Stream DecodeStream(Stream data)
+        {
+#if NETSTANDARD1_0 || PROFILE328
+            return new Zlib.Portable.DeflateStream(data, Zlib.Portable.CompressionMode.Decompress);
+#else
+            return new DeflateStream(data, CompressionMode.Decompress);
+#endif
+        }
     }
 }
