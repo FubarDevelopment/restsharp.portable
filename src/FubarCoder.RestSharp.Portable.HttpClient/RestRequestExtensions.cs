@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace RestSharp.Portable.HttpClient
 {
@@ -36,8 +37,19 @@ namespace RestSharp.Portable.HttpClient
             }
             else
             {
-                buffer = request.Serializer.Serialize(body.Value);
-                contentType = MediaTypeHeaderValue.Parse(request.Serializer.ContentType);
+                var s = body.Value as string;
+                if (s != null && (body.Encoding != null || request.Serializer == null))
+                {
+                    var encoding = body.Encoding ?? Encoding.UTF8;
+                    contentType = MediaTypeHeaderValue.Parse(body.ContentType ?? "text/plain");
+                    contentType.CharSet = encoding.WebName;
+                    buffer = encoding.GetBytes(s);
+                }
+                else
+                {
+                    buffer = request.Serializer.Serialize(body.Value);
+                    contentType = MediaTypeHeaderValue.Parse(request.Serializer.ContentType);
+                }
             }
 
             var content = new ByteArrayContent(buffer);

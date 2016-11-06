@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text;
 
 using JetBrains.Annotations;
 
@@ -89,8 +90,27 @@ namespace RestSharp.Portable.Content
             }
             else
             {
-                buffer = request.Serializer.Serialize(body.Value);
-                contentType = request.Serializer.ContentType;
+                var s = body.Value as string;
+                if (s != null && (body.Encoding != null || request.Serializer == null))
+                {
+                    var encoding = body.Encoding ?? Encoding.UTF8;
+                    if (body.ContentType != null)
+                    {
+                        contentType = body.ContentType;
+                        if (!contentType.Contains("charset="))
+                            contentType += $";charset={encoding.WebName}";
+                    }
+                    else
+                    {
+                        contentType = $"text/plain;charset={encoding.WebName}";
+                    }
+                    buffer = encoding.GetBytes(s);
+                }
+                else
+                {
+                    buffer = request.Serializer.Serialize(body.Value);
+                    contentType = request.Serializer.ContentType;
+                }
             }
 
             var content = new ByteArrayContent(buffer);
