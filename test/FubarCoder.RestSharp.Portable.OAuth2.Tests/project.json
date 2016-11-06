@@ -32,7 +32,7 @@
   },
 
   "frameworks": {
-    "net462": {
+    "net461": {
       "frameworkAssemblies": {
         "System.Net": ""
       }
