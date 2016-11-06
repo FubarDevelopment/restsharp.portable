@@ -249,5 +249,25 @@ namespace RestSharp.Portable.Tests
                 Assert.Equal("v1", resp.Cookies["n1"].Value);
             }
         }
+
+        [Theory(DisplayName = "Issue 73")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue73(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("get", Method.GET);
+                req.AddQueryParameter("x", "+%");
+                var resp = await client.Execute<HttpBinResponse>(req);
+                Assert.NotNull(resp.Data.Args);
+                Assert.Equal(1, resp.Data.Args.Count);
+                Assert.Equal("+%", resp.Data.Args["x"]);
+            }
+        }
     }
 }
