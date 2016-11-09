@@ -99,7 +99,7 @@ namespace RestSharp.Portable
         public ContentCollectionMode ContentCollectionMode { get; set; }
 
         /// <summary>
-        /// Gets os sets the method to use to write the response instead of reading into RawBytes
+        /// Gets or sets the method to use to write the response instead of reading into RawBytes
         /// </summary>
         public Func<Stream, CancellationToken, Task> ResponseWriterAsync { get; set; }
     }
