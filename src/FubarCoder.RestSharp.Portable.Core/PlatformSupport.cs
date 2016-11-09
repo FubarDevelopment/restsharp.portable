@@ -2,6 +2,9 @@
 
 namespace RestSharp.Portable
 {
+    /// <summary>
+    /// Some platform specific implementations
+    /// </summary>
     internal static class PlatformSupport
     {
 #if PROFILE328 || PROFILE259

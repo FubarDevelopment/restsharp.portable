@@ -11,6 +11,7 @@ namespace RestSharp.Portable
         private readonly StringComparer _defaultComparer = StringComparer.Ordinal;
         private readonly StringComparer _httpHeaderComparer = StringComparer.OrdinalIgnoreCase;
 
+        /// <inheritdoc/>
         public int Compare(ParameterKey x, ParameterKey y)
         {
             if (ReferenceEquals(x, y))
@@ -25,11 +26,13 @@ namespace RestSharp.Portable
             return diff;
         }
 
+        /// <inheritdoc/>
         public bool Equals(ParameterKey x, ParameterKey y)
         {
             return Compare(x, y) == 0;
         }
 
+        /// <inheritdoc/>
         public int GetHashCode(ParameterKey obj)
         {
             var comparer = obj.Type == ParameterType.HttpHeader ? _httpHeaderComparer : _defaultComparer;

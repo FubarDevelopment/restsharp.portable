@@ -10,6 +10,11 @@ namespace RestSharp.Portable
     /// </summary>
     public sealed class RequestParameters
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestParameters"/> class.
+        /// </summary>
+        /// <param name="client">The <see cref="IRestClient"/> for the default parameters</param>
+        /// <param name="request">The <see cref="IRestRequest"/> for the request specific parameters</param>
         internal RequestParameters([CanBeNull] IRestClient client, [CanBeNull] IRestRequest request)
         {
             var parameters = GetParameters(client, request);

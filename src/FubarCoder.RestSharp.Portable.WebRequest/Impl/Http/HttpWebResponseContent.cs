@@ -14,8 +14,6 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
     /// </summary>
     internal class HttpWebResponseContent : IHttpContent
     {
-        private delegate Task BufferWriteAsyncDelegate(byte[] buffer, int length);
-
         private readonly HttpWebResponse _response;
 
         private readonly List<byte[]> _buffers = new List<byte[]>();
@@ -51,6 +49,8 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 }
             }
         }
+
+        private delegate Task BufferWriteAsyncDelegate(byte[] buffer, int length);
 
         /// <summary>
         /// Gets the HTTP headers for the content.

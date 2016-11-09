@@ -20,12 +20,12 @@ namespace RestSharp.Portable
         private static readonly Lazy<byte[]> s_unreserved = new Lazy<byte[]>(() => AlphaNum.Union(s_mark).ToArray());
 
         /// <summary>
-        /// Get all bytes that represent alpha numeric characters
+        /// Gets all bytes that represent alpha numeric characters
         /// </summary>
         internal static byte[] AlphaNum => s_alphanum.Value;
 
         /// <summary>
-        /// Get all bytes that repesent both alpha numeric and unreserved characters
+        /// Gets all bytes that repesent both alpha numeric and unreserved characters
         /// </summary>
         internal static byte[] Unreserved => s_unreserved.Value;
 
