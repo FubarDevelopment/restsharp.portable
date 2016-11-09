@@ -14,7 +14,8 @@
     "Release": {
       "buildOptions": {
         "debugType": "none",
-        "xmlDoc": true
+        "xmlDoc": true,
+        "optimize": true
       }
     }
   },
