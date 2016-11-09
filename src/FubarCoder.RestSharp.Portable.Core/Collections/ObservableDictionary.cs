@@ -9,6 +9,11 @@ using System.Linq;
 
 namespace RestSharp.Portable.Collections
 {
+    /// <summary>
+    /// Custom implementation of an observable dictionary, because some platforms don't provide one (SL5, PCL Profile 328)
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
 #if PROFILE328 || SL50
     internal
 #else
@@ -24,32 +29,56 @@ namespace RestSharp.Portable.Collections
         private readonly IDictionary<TKey, TValue> _dictionary;
 
         #region Constructors
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
         public ObservableDictionary()
         {
             _dictionary = new Dictionary<TKey, TValue>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="dictionary">A dictionary containing initial values</param>
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
         {
             _dictionary = new Dictionary<TKey, TValue>(dictionary);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="comparer">A custom key comparer</param>
         public ObservableDictionary(IEqualityComparer<TKey> comparer)
         {
             _dictionary = new Dictionary<TKey, TValue>(comparer);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="capacity">The initial capacity of the dictionary</param>
         public ObservableDictionary(int capacity)
         {
             _dictionary = new Dictionary<TKey, TValue>(capacity);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="dictionary">A dictionary containing initial values</param>
+        /// <param name="comparer">A custom key comparer</param>
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
         {
             _dictionary = new Dictionary<TKey, TValue>(dictionary, comparer);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="capacity">The initial capacity of the dictionary</param>
+        /// <param name="comparer">A custom key comparer</param>
         public ObservableDictionary(int capacity, IEqualityComparer<TKey> comparer)
         {
             _dictionary = new Dictionary<TKey, TValue>(capacity, comparer);
@@ -59,18 +88,22 @@ namespace RestSharp.Portable.Collections
 
         #region IDictionary<TKey,TValue> Members
 
+        /// <inheritdoc/>
         public void Add(TKey key, TValue value)
         {
             Insert(key, value, true);
         }
 
+        /// <inheritdoc/>
         public bool ContainsKey(TKey key)
         {
             return _dictionary.ContainsKey(key);
         }
 
+        /// <inheritdoc/>
         public ICollection<TKey> Keys => _dictionary.Keys;
 
+        /// <inheritdoc/>
         public bool Remove(TKey key)
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
@@ -84,13 +117,16 @@ namespace RestSharp.Portable.Collections
             return removed;
         }
 
+        /// <inheritdoc/>
         public bool TryGetValue(TKey key, out TValue value)
         {
             return _dictionary.TryGetValue(key, out value);
         }
 
+        /// <inheritdoc/>
         public ICollection<TValue> Values => _dictionary.Values;
 
+        /// <inheritdoc/>
         public TValue this[TKey key]
         {
             get { return _dictionary[key]; }
@@ -101,11 +137,13 @@ namespace RestSharp.Portable.Collections
 
         #region ICollection<KeyValuePair<TKey,TValue>> Members
 
+        /// <inheritdoc/>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
             Insert(item.Key, item.Value, true);
         }
 
+        /// <inheritdoc/>
         public void Clear()
         {
             if (_dictionary.Count > 0)
@@ -115,20 +153,25 @@ namespace RestSharp.Portable.Collections
             }
         }
 
+        /// <inheritdoc/>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
             return _dictionary.Contains(item);
         }
 
+        /// <inheritdoc/>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             _dictionary.CopyTo(array, arrayIndex);
         }
 
+        /// <inheritdoc/>
         public int Count => _dictionary.Count;
 
+        /// <inheritdoc/>
         public bool IsReadOnly => _dictionary.IsReadOnly;
 
+        /// <inheritdoc/>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
             return Remove(item.Key);
@@ -138,6 +181,7 @@ namespace RestSharp.Portable.Collections
 
         #region IEnumerable<KeyValuePair<TKey,TValue>> Members
 
+        /// <inheritdoc/>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             return _dictionary.GetEnumerator();
@@ -147,6 +191,7 @@ namespace RestSharp.Portable.Collections
 
         #region IEnumerable Members
 
+        /// <inheritdoc/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)_dictionary).GetEnumerator();
@@ -156,16 +201,22 @@ namespace RestSharp.Portable.Collections
 
         #region INotifyCollectionChanged Members
 
+        /// <inheritdoc/>
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         #endregion
 
         #region INotifyPropertyChanged Members
 
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
+        /// <summary>
+        /// Adds multiple keys/values at once
+        /// </summary>
+        /// <param name="items">The keys/values to add</param>
         public void AddRange(IDictionary<TKey, TValue> items)
         {
             if (items == null)
