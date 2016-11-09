@@ -1,5 +1,17 @@
 ﻿# Changes
 
+## 4.0.7
+
+* Fix for [issue #90](https://github.com/FubarDevelopment/restsharp.portable/issues/90): Build was not optimized and therefore detected as `DEBUG` build when publishing with a UWP app
+
+## 4.0.6
+
+* Fix for [issue #89](https://github.com/FubarDevelopment/restsharp.portable/issues/89): The content type is now used as body name when none was specified
+* Fix for [issue #88](https://github.com/FubarDevelopment/restsharp.portable/issues/88): Build especially for the Xamarin platforms
+* Fix for [issue #85](https://github.com/FubarDevelopment/restsharp.portable/issues/85): You can now get cookies from a `IRestResponse`
+* Fix for [issue #84](https://github.com/FubarDevelopment/restsharp.portable/issues/84): OAuth1 authenticator ignores parameters without name
+* Fix for [issue #76](https://github.com/FubarDevelopment/restsharp.portable/issues/76): Support for streamed results is finally there
+
 ## 4.0.0
 
 ### New features
