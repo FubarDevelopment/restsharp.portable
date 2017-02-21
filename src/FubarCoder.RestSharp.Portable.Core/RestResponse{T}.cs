@@ -50,7 +50,7 @@ namespace RestSharp.Portable
         /// </remarks>
         protected override async Task LoadResponse(IHttpResponseMessage response, CancellationToken ct)
         {
-            await base.LoadResponse(response, ct);
+            await base.LoadResponse(response, ct).ConfigureAwait(false);
             if (RawBytes != null)
             {
                 var handler = Client.GetHandler(ContentType);

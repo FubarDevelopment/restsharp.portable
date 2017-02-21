@@ -45,11 +45,11 @@ namespace RestSharp.Portable.Content
                 {
                     foreach (var header in headers)
                     {
-                        await writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}");
+                        await writer.WriteLineAsync($"{header.Key}: {string.Join(", ", header.Value)}").ConfigureAwait(false);
                     }
                 }
 
-                await writer.WriteLineAsync();
+                await writer.WriteLineAsync().ConfigureAwait(false);
             }
             finally
             {
@@ -83,9 +83,9 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="stream">The stream to copy to</param>
         /// <returns>The task that copies the data to the stream</returns>
-        public async Task CopyToAsync(Stream stream)
+        public Task CopyToAsync(Stream stream)
         {
-            await WriteTo(stream);
+            return WriteTo(stream);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace RestSharp.Portable.Content
         public async Task<Stream> ReadAsStreamAsync()
         {
             var stream = new MemoryStream();
-            await WriteTo(stream);
+            await WriteTo(stream).ConfigureAwait(false);
             return stream;
         }
 
@@ -120,7 +120,7 @@ namespace RestSharp.Portable.Content
         public async Task<byte[]> ReadAsByteArrayAsync()
         {
             var stream = new MemoryStream();
-            await WriteTo(stream);
+            await WriteTo(stream).ConfigureAwait(false);
             return stream.ToArray();
         }
 
@@ -130,7 +130,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as string</returns>
         public async Task<string> ReadAsStringAsync()
         {
-            var buffer = await ReadAsByteArrayAsync();
+            var buffer = await ReadAsByteArrayAsync().ConfigureAwait(false);
             return Encoding.UTF8.GetString(buffer, 0, buffer.Length);
         }
 
@@ -147,9 +147,9 @@ namespace RestSharp.Portable.Content
             return true;
         }
 
-        private async Task WriteTo(Stream stream)
+        private Task WriteTo(Stream stream)
         {
-            await WriteTo(Headers, stream);
+            return WriteTo(Headers, stream);
         }
     }
 }

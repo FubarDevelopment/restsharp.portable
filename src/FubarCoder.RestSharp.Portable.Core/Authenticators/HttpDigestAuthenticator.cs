@@ -136,7 +136,7 @@ namespace RestSharp.Portable.Authenticators
                 throw new InvalidOperationException();
             }
 
-            var digestHeader = await GetDigestHeader(client, request, _authCredential);
+            var digestHeader = await GetDigestHeader(client, request, _authCredential).ConfigureAwait(false);
             var authHeaderValue = $"{AuthenticationMethod} {digestHeader}";
             request.SetAuthorizationHeader(_authHeader, authHeaderValue);
         }
@@ -310,8 +310,8 @@ namespace RestSharp.Portable.Authenticators
                         }
                         else
                         {
-                            await request.Content.LoadIntoBufferAsync();
-                            entityBody = await request.Content.ReadAsByteArrayAsync();
+                            await request.Content.LoadIntoBufferAsync().ConfigureAwait(false);
+                            entityBody = await request.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                         }
 
                         ha2 = CalculateMd5Hash(entityBody);

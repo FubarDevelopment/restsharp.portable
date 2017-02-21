@@ -86,7 +86,7 @@ namespace RestSharp.Portable
         public static async Task<IRestResponse> CreateResponse(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage, CancellationToken ct)
         {
             var response = new RestResponse(client, request);
-            await response.LoadResponse(responseMessage, ct);
+            await response.LoadResponse(responseMessage, ct).ConfigureAwait(false);
             return response;
         }
 
@@ -102,7 +102,7 @@ namespace RestSharp.Portable
         public static async Task<IRestResponse<T>> CreateResponse<T>(IRestClient client, IRestRequest request, IHttpResponseMessage responseMessage, CancellationToken ct)
         {
             var response = new RestResponse<T>(client, request);
-            await response.LoadResponse(responseMessage, ct);
+            await response.LoadResponse(responseMessage, ct).ConfigureAwait(false);
             return response;
         }
 
@@ -155,19 +155,19 @@ namespace RestSharp.Portable
                 {
                     if (response.Content != null)
                     {
-                        var responseStream = await response.Content.ReadAsStreamAsync();
+                        var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                         if (responseStream != null)
                         {
                             var encoding = response.Content.GetEncoding(Client);
                             if (encoding != null)
                                 responseStream = encoding.DecodeStream(responseStream);
-                            await responseWriter(responseStream, ct);
+                            await responseWriter(responseStream, ct).ConfigureAwait(false);
                         }
                     }
                 }
                 else
                 {
-                    var data = await content.ReadAsByteArrayAsync();
+                    var data = await content.ReadAsByteArrayAsync().ConfigureAwait(false);
 
                     var encoding = content.GetEncoding(Client);
                     if (encoding != null)

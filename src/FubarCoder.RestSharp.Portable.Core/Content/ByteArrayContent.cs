@@ -50,9 +50,9 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="stream">The stream to copy to</param>
         /// <returns>The task that copies the data to the stream</returns>
-        public async Task CopyToAsync(Stream stream)
+        public Task CopyToAsync(Stream stream)
         {
-            await stream.WriteAsync(_data, 0, _data.Length);
+            return stream.WriteAsync(_data, 0, _data.Length);
         }
 
         /// <summary>

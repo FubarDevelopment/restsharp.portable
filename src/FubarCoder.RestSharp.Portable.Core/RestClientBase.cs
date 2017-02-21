@@ -217,9 +217,9 @@ namespace RestSharp.Portable
         /// <returns>Response returned</returns>
         public virtual async Task<IRestResponse> Execute(IRestRequest request, CancellationToken ct)
         {
-            using (var response = await ExecuteRequest(request, ct))
+            using (var response = await ExecuteRequest(request, ct).ConfigureAwait(false))
             {
-                return await RestResponse.CreateResponse(this, request, response, ct);
+                return await RestResponse.CreateResponse(this, request, response, ct).ConfigureAwait(false);
             }
         }
 
@@ -232,9 +232,9 @@ namespace RestSharp.Portable
         /// <returns>Response returned, with a deserialized object</returns>
         public virtual async Task<IRestResponse<T>> Execute<T>(IRestRequest request, CancellationToken ct)
         {
-            using (var response = await ExecuteRequest(request, ct))
+            using (var response = await ExecuteRequest(request, ct).ConfigureAwait(false))
             {
-                return await RestResponse.CreateResponse<T>(this, request, response, ct);
+                return await RestResponse.CreateResponse<T>(this, request, response, ct).ConfigureAwait(false);
             }
         }
 
@@ -432,7 +432,7 @@ namespace RestSharp.Portable
             {
                 if (Authenticator != null && Authenticator.CanPreAuthenticate(this, request, Credentials))
                 {
-                    await Authenticator.PreAuthenticate(this, request, Credentials);
+                    await Authenticator.PreAuthenticate(this, request, Credentials).ConfigureAwait(false);
                 }
 
                 var requestParameters = this.MergeParameters(request);
@@ -449,10 +449,10 @@ namespace RestSharp.Portable
 
                 if (Authenticator != null && Authenticator.CanPreAuthenticate(httpClient, message, Credentials))
                 {
-                    await Authenticator.PreAuthenticate(httpClient, message, Credentials);
+                    await Authenticator.PreAuthenticate(httpClient, message, Credentials).ConfigureAwait(false);
                 }
 
-                var response = await httpClient.SendAsync(message, ct);
+                var response = await httpClient.SendAsync(message, ct).ConfigureAwait(false);
 
                 try
                 {
@@ -460,7 +460,7 @@ namespace RestSharp.Portable
                     {
                         if (Authenticator != null && Authenticator.CanHandleChallenge(httpClient, message, Credentials, response))
                         {
-                            await Authenticator.HandleChallenge(httpClient, message, Credentials, response);
+                            await Authenticator.HandleChallenge(httpClient, message, Credentials, response).ConfigureAwait(false);
                             continue;
                         }
 

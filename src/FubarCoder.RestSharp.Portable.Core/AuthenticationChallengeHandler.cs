@@ -96,7 +96,7 @@ namespace RestSharp.Portable
         {
             foreach (var authenticator in _authenticators.Values.Select(x => x.Authenticator).Where(x => x.CanPreAuthenticate(client, request, credentials)))
             {
-                await authenticator.PreAuthenticate(client, request, credentials);
+                await authenticator.PreAuthenticate(client, request, credentials).ConfigureAwait(false);
             }
         }
 
@@ -111,7 +111,7 @@ namespace RestSharp.Portable
         {
             foreach (var authenticator in _authenticators.Values.Select(x => x.Authenticator).Where(x => x.CanPreAuthenticate(client, request, credentials)))
             {
-                await authenticator.PreAuthenticate(client, request, credentials);
+                await authenticator.PreAuthenticate(client, request, credentials).ConfigureAwait(false);
             }
         }
 
@@ -143,7 +143,7 @@ namespace RestSharp.Portable
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public async Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
+        public Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             var authenticator = response
                 .GetAuthenticationHeaderInfo(Header)
@@ -153,7 +153,7 @@ namespace RestSharp.Portable
                 .OrderByDescending(x => x.Security)
                 .Select(x => x.Authenticator)
                 .First();
-            await authenticator.HandleChallenge(client, request, credentials, response);
+            return authenticator.HandleChallenge(client, request, credentials, response);
         }
 
         private class AuthenticatorInfo

@@ -86,16 +86,14 @@ namespace RestSharp.Portable.Content
         /// </summary>
         /// <param name="stream">The stream to copy to</param>
         /// <returns>The task that copies the data to the stream</returns>
-        public async Task CopyToAsync(Stream stream)
+        public Task CopyToAsync(Stream stream)
         {
             if (_buffer != null)
             {
-                await stream.WriteAsync(_buffer, 0, _buffer.Length);
+                return stream.WriteAsync(_buffer, 0, _buffer.Length);
             }
-            else
-            {
-                await WriteTo(stream, false);
-            }
+
+            return WriteTo(stream, false);
         }
 
         /// <summary>
@@ -106,7 +104,7 @@ namespace RestSharp.Portable.Content
         public async Task LoadIntoBufferAsync(long maxBufferSize)
         {
             var temp = new MemoryStream();
-            await WriteTo(temp, false);
+            await WriteTo(temp, false).ConfigureAwait(false);
             _buffer = temp.ToArray();
         }
 
@@ -122,7 +120,7 @@ namespace RestSharp.Portable.Content
             }
 
             var temp = new MemoryStream();
-            await WriteTo(temp, false);
+            await WriteTo(temp, false).ConfigureAwait(false);
             return temp;
         }
 
@@ -138,7 +136,7 @@ namespace RestSharp.Portable.Content
             }
 
             var temp = new MemoryStream();
-            await WriteTo(temp, false);
+            await WriteTo(temp, false).ConfigureAwait(false);
             return temp.ToArray();
         }
 
@@ -148,7 +146,7 @@ namespace RestSharp.Portable.Content
         /// <returns>The task that returns the data as string</returns>
         public async Task<string> ReadAsStringAsync()
         {
-            var data = await ReadAsByteArrayAsync();
+            var data = await ReadAsByteArrayAsync().ConfigureAwait(false);
             return Encoding.UTF8.GetString(data, 0, data.Length);
         }
 
@@ -220,7 +218,7 @@ namespace RestSharp.Portable.Content
         {
             if (withHeaders)
             {
-                await HttpHeaderContent.WriteTo(Headers, stream);
+                await HttpHeaderContent.WriteTo(Headers, stream).ConfigureAwait(false);
             }
 
             var boundaryStart = Encoding.UTF8.GetBytes($"--{Boundary}\r\n");
@@ -228,15 +226,15 @@ namespace RestSharp.Portable.Content
             var lineBreak = Encoding.UTF8.GetBytes("\r\n");
             foreach (var content in _contents)
             {
-                await stream.WriteAsync(boundaryStart, 0, boundaryStart.Length);
-                await HttpHeaderContent.WriteTo(content.Headers, stream);
-                await content.CopyToAsync(stream);
+                await stream.WriteAsync(boundaryStart, 0, boundaryStart.Length).ConfigureAwait(false);
+                await HttpHeaderContent.WriteTo(content.Headers, stream).ConfigureAwait(false);
+                await content.CopyToAsync(stream).ConfigureAwait(false);
 
                 // ensure line break
-                await stream.WriteAsync(lineBreak, 0, lineBreak.Length);
+                await stream.WriteAsync(lineBreak, 0, lineBreak.Length).ConfigureAwait(false);
             }
 
-            await stream.WriteAsync(boundaryEnd, 0, boundaryEnd.Length);
+            await stream.WriteAsync(boundaryEnd, 0, boundaryEnd.Length).ConfigureAwait(false);
         }
     }
 }
