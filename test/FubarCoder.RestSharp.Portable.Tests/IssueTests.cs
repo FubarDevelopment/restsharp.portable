@@ -370,5 +370,25 @@ namespace RestSharp.Portable.Tests
                 Assert.Equal("asd", resp.Data.Files["file1"]);
             }
         }
+
+        [Theory(DisplayName = "Issue 94 (Binary Body Parameter)")]
+        [InlineData(typeof(DefaultHttpClientFactory))]
+        [InlineData(typeof(WebRequestHttpClientFactory))]
+        public async Task TestIssue94WithBinaryBodyParameter(Type factoryType)
+        {
+            using (var client = new RestClient("http://httpbin.org/")
+            {
+                HttpClientFactory = CreateClientFactory(factoryType, false),
+                IgnoreResponseStatusCode = true,
+            })
+            {
+                var req = new RestRequest("post", Method.POST);
+                var bodyData = Encoding.UTF8.GetBytes("asd");
+                req.AddParameter(null, bodyData, ParameterType.RequestBody);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
+                Assert.NotNull(resp.Data?.Data);
+                Assert.Equal("asd", resp.Data.Data);
+            }
+        }
     }
 }
