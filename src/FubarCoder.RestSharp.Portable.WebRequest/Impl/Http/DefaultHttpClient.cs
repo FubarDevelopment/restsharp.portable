@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if NET40 || NET45
+#if NET40 || NET45 || MONOANDROID10 || MONOTOUCH10 || XAMARINIOS10
 using System.Globalization;
 #endif
 using System.IO;
@@ -25,7 +25,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             {
                 ["content-type"] = (wr, value) => wr.ContentType = value,
                 ["accept"] = (wr, value) => wr.Accept = value,
-#if NET40 || NET45
+#if NET40 || NET45 || MONOANDROID10 || MONOTOUCH10 || XAMARINIOS10
                 ["content-length"] = (wr, value) => wr.ContentLength = Convert.ToInt64(value, 10),
                 ["user-agent"] = (wr, value) => wr.UserAgent = value,
                 ["date"] = (wr, value) => wr.Date = DateTime.ParseExact(value, "R", CultureInfo.InvariantCulture),

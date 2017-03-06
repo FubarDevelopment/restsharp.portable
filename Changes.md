@@ -1,5 +1,9 @@
 ﻿# Changes
 
+## 4.0.8
+
+* Fix for [issue #95](https://github.com/FubarDevelopment/restsharp.portable/issues/95): The Xamarin platform supports all those additonal `HttpWebRequest` properties
+
 ## 4.0.7
 
 * Fix for [issue #90](https://github.com/FubarDevelopment/restsharp.portable/issues/90): Build was not optimized and therefore detected as `DEBUG` build when publishing with a UWP app
