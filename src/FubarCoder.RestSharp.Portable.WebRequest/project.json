@@ -29,7 +29,7 @@
     "licenseUrl": "http://choosealicense.com/licenses/bsd-2-clause/",
     "projectUrl": "https://github.com/FubarDevelopment/restsharp.portable",
     "tags": [ "PCL", "RestSharp", "portable", "WebRequest", "HttpWebRequest" ],
-    "releaseNotes": "- Using the new core library",
+    "releaseNotes": "- Using the new core library\n- Treat Xamarin platform the same way as the .NET Framework for HttpWebRequest properties like ContentLength (issue 95)",
     "repository": {
       "type": "git",
       "url": "https://github.com/FubarDevelopment/restsharp.portable"
