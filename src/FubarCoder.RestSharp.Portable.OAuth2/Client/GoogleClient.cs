@@ -28,7 +28,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// </summary>
         protected override async Task BeforeGetLoginLinkUri(BeforeAfterRequestArgs args)
         {
-            await base.BeforeGetLoginLinkUri(args);
+            await base.BeforeGetLoginLinkUri(args).ConfigureAwait(false);
             // This allows us to get a refresh token
             args.Request.AddOrUpdateParameter("access_type", "offline");
         }

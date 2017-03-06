@@ -1,74 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Collections.Specialized;
 using System.Net;
+using System.Threading.Tasks;
+
 using FizzWare.NBuilder;
+
+using FluentAssertions;
+
 using NSubstitute;
 using NUnit.Framework;
-using RestSharp.Portable.OAuth2;
-using RestSharp.Portable.OAuth2.Client;
+
+using RestSharp.Portable.OAuth1;
 using RestSharp.Portable.OAuth2.Configuration;
 using RestSharp.Portable.OAuth2.Infrastructure;
 using RestSharp.Portable.OAuth2.Models;
-using RestSharp.Portable;
-using FluentAssertions;
-using RestSharp.Portable.Authenticators;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-
-using RestSharp.Portable.OAuth1;
 
 namespace RestSharp.Portable.OAuth2.Tests.Client
 {
     [TestFixture]
     public class OAuthClientTests
     {
-        private IRequestFactory factory;
-        private OAuthClientDescendant descendant;
+        private IRequestFactory _factory;
+        private OAuthClientDescendant _descendant;
 
-        private static System.Text.Encoding _encoding = System.Text.Encoding.UTF8;
+        private static readonly System.Text.Encoding _encoding = System.Text.Encoding.UTF8;
 
         [SetUp]
         public void SetUp()
         {
-            factory = Substitute.For<IRequestFactory>();
+            _factory = Substitute.For<IRequestFactory>();
             var client = Substitute.For<IRestClient>();
             var request = Substitute.For<IRestRequest>();
             var response = Substitute.For<IRestResponse>();
-            factory.CreateClient().Returns(client);
-            factory.CreateRequest(Arg.Any<string>()).ReturnsForAnyArgs(request);
+            _factory.CreateClient().Returns(client);
+            _factory.CreateRequest(Arg.Any<string>()).ReturnsForAnyArgs(request);
             client.Execute(request).Returns(Task.FromResult(response));
             response.StatusCode.Returns(HttpStatusCode.OK);
-            descendant = new OAuthClientDescendant(
-                factory, Substitute.For<IClientConfiguration>());
+            _descendant = new OAuthClientDescendant(
+                _factory, Substitute.For<IClientConfiguration>());
         }
 
         [Test]
         public void Should_ThrowNotSupported_When_UserWantsToTransmitState()
         {
-            descendant.Awaiting(x => x.GetLoginLinkUri("any state")).ShouldThrow<NotSupportedException>();
+            _descendant.Awaiting(x => x.GetLoginLinkUri("any state")).ShouldThrow<NotSupportedException>();
         }
 
         [Test]
         public async Task Should_ThrowUnexpectedResponse_When_StatusIsNotOk()
         {
-            (await factory.CreateClient().Execute(factory.CreateRequest(null))).StatusCode.Returns(HttpStatusCode.InternalServerError);
-            descendant.Awaiting(x => x.GetLoginLinkUri()).ShouldThrow<UnexpectedResponseException>();
+            (await _factory.CreateClient().Execute(_factory.CreateRequest(null)).ConfigureAwait(false)).StatusCode.Returns(HttpStatusCode.InternalServerError);
+            _descendant.Awaiting(x => x.GetLoginLinkUri()).ShouldThrow<UnexpectedResponseException>();
         }
 
         [Test]
         public async Task Should_ThrowUnexpectedResponse_When_ContentIsEmpty()
         {
-            (await factory.CreateClient().Execute(factory.CreateRequest(null))).RawBytes.Returns(_encoding.GetBytes(""));
-            descendant.Awaiting(x => x.GetLoginLinkUri()).ShouldThrow<UnexpectedResponseException>();
+            (await _factory.CreateClient().Execute(_factory.CreateRequest(null)).ConfigureAwait(false)).RawBytes.Returns(_encoding.GetBytes(""));
+            _descendant.Awaiting(x => x.GetLoginLinkUri()).ShouldThrow<UnexpectedResponseException>();
         }
 
         [Test]
         public async Task Should_ThrowUnexpectedResponse_When_OAuthTokenIsEmpty()
         {
-            (await factory.CreateClient().Execute(factory.CreateRequest(null))).RawBytes.Returns(_encoding.GetBytes("something=something_other"));
-            descendant
+            (await _factory.CreateClient().Execute(_factory.CreateRequest(null)).ConfigureAwait(false)).RawBytes.Returns(_encoding.GetBytes("something=something_other"));
+            _descendant
                 .Awaiting(x => x.GetLoginLinkUri())
                 .ShouldThrow<UnexpectedResponseException>()
                 .And.FieldName.Should().Be("oauth_token");
@@ -77,10 +74,10 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         [Test]
         public async Task Should_ThrowUnexpectedResponse_When_OAuthSecretIsEmpty()
         {
-            var response = await factory.CreateClient().Execute(factory.CreateRequest(null));
+            var response = await _factory.CreateClient().Execute(_factory.CreateRequest(null)).ConfigureAwait(false);
             response.RawBytes.Returns(_encoding.GetBytes("oauth_token=token"));
             response.Content.Returns("oauth_token=token");
-            descendant
+            _descendant
                 .Awaiting(x => x.GetLoginLinkUri())
                 .ShouldThrow<UnexpectedResponseException>()
                 .And.FieldName.Should().Be("oauth_token_secret");
@@ -90,18 +87,18 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public async Task Should_IssueCorrectRequestForRequestToken_When_GetLoginLinkUriIsCalled()
         {
             // arrange
-            var restClient = factory.CreateClient();
-            var restRequest = factory.CreateRequest(null);
-            var response = await restClient.Execute(restRequest);
+            var restClient = _factory.CreateClient();
+            var restRequest = _factory.CreateRequest(null);
+            var response = await restClient.Execute(restRequest).ConfigureAwait(false);
             response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns("oauth_token=token&oauth_token_secret=secret");
 
             // act
-            await descendant.GetLoginLinkUri();
+            await _descendant.GetLoginLinkUri().ConfigureAwait(false);
 
             // assert
-            factory.Received().CreateClient();
-            factory.Received().CreateRequest("/RequestTokenServiceEndpoint");
+            _factory.Received().CreateClient();
+            _factory.Received().CreateRequest("/RequestTokenServiceEndpoint");
 
             restClient.Received().BaseUrl = new Uri("https://RequestTokenServiceEndpoint");
             restRequest.Received().Method = Method.POST;
@@ -114,20 +111,20 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public async Task Should_ComposeCorrectLoginUri_When_GetLoginLinkIsCalled()
         {
             // arrange
-            var restClient = factory.CreateClient();
-            var restRequest = factory.CreateRequest(null);
-            var response = await restClient.Execute(restRequest);
+            var restClient = _factory.CreateClient();
+            var restRequest = _factory.CreateRequest(null);
+            var response = await restClient.Execute(restRequest).ConfigureAwait(false);
             response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns("oauth_token=token5&oauth_token_secret=secret");
 
             // act
-            var uri = await descendant.GetLoginLinkUri();
+            var uri = await _descendant.GetLoginLinkUri().ConfigureAwait(false);
 
             // assert
             uri.Should().Be("https://loginserviceendpoint/");
 
-            factory.Received().CreateClient();
-            factory.Received().CreateRequest("/LoginServiceEndpoint");
+            _factory.Received().CreateClient();
+            _factory.Received().CreateRequest("/LoginServiceEndpoint");
             
             restClient.Received().BaseUrl = new Uri("https://LoginServiceEndpoint");
             restRequest.Parameters.Received().AddOrUpdate(Arg.Is<Parameter>(x => x.Name == "oauth_token" && (string)x.Value == "token5"));
@@ -137,22 +134,22 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public async Task Should_IssueCorrectRequestForAccessToken_When_GetUserInfoIsCalled()
         {
             // arrange
-            var restClient = factory.CreateClient();
-            var restRequest = factory.CreateRequest(null);
-            var response = await restClient.Execute(restRequest);
+            var restClient = _factory.CreateClient();
+            var restRequest = _factory.CreateRequest(null);
+            var response = await restClient.Execute(restRequest).ConfigureAwait(false);
             response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns("oauth_token=token5&oauth_token_secret=secret");
 
             // act
-            await descendant.GetUserInfo(new Dictionary<string, string>
+            await _descendant.GetUserInfo(new Dictionary<string, string>
             {
                 {"oauth_token", "token1"},
                 {"oauth_verifier", "verifier100"}
-            }.ToLookup(y => y.Key, y => y.Value));
+            }.ToLookup(y => y.Key, y => y.Value)).ConfigureAwait(false);
 
             // assert
-            factory.Received().CreateClient();
-            factory.Received().CreateRequest("/AccessTokenServiceEndpoint");
+            _factory.Received().CreateClient();
+            _factory.Received().CreateRequest("/AccessTokenServiceEndpoint");
 
             restClient.Received().BaseUrl = new Uri("https://AccessTokenServiceEndpoint");
             restRequest.Received().Method = Method.POST;
@@ -165,22 +162,22 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
         public async Task Should_IssueCorrectRequestForUserInfo_When_GetUserInfoIsCalled()
         {
             // arrange
-            var restClient = factory.CreateClient();
-            var restRequest = factory.CreateRequest(null);
-            var response = await restClient.Execute(restRequest);
+            var restClient = _factory.CreateClient();
+            var restRequest = _factory.CreateRequest(null);
+            var response = await restClient.Execute(restRequest).ConfigureAwait(false);
             response.RawBytes.Returns(_encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns("oauth_token=token&oauth_token_secret=secret", "abba");
 
             // act
-            var info = await descendant.GetUserInfo(new Dictionary<string, string>
+            var info = await _descendant.GetUserInfo(new Dictionary<string, string>
             {
                 {"oauth_token", "token1"},
                 {"oauth_verifier", "verifier100"}
-            }.ToLookup(y => y.Key, y => y.Value));
+            }.ToLookup(y => y.Key, y => y.Value)).ConfigureAwait(false);
 
             // assert
-            factory.Received().CreateClient();
-            factory.Received().CreateRequest("/UserInfoServiceEndpoint");
+            _factory.Received().CreateClient();
+            _factory.Received().CreateRequest("/UserInfoServiceEndpoint");
 
             restClient.Received().BaseUrl = new Uri("https://UserInfoServiceEndpoint");
 
@@ -245,10 +242,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client
                 }
             }
 
-            public override string Name
-            {
-                get { return "OAuthClientTest"; }
-            }
+            public override string Name => "OAuthClientTest";
 
             protected override UserInfo ParseUserInfo(string content)
             {

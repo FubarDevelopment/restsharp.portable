@@ -90,7 +90,7 @@ namespace RestSharp.Portable.OAuth2
                 throw new NotSupportedException("State transmission is not supported by current implementation.");
             }
 
-            await QueryRequestToken();
+            await QueryRequestToken().ConfigureAwait(false);
             return GetLoginRequestUri(state);
         }
 
@@ -104,9 +104,9 @@ namespace RestSharp.Portable.OAuth2
         public async Task<UserInfo> GetUserInfo(ILookup<string, string> parameters)
         {
             AccessToken = parameters.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
-            await QueryAccessToken(parameters.GetOrThrowUnexpectedResponse("oauth_verifier"));
+            await QueryAccessToken(parameters.GetOrThrowUnexpectedResponse("oauth_verifier")).ConfigureAwait(false);
 
-            var result = ParseUserInfo(await QueryUserInfo());
+            var result = ParseUserInfo(await QueryUserInfo().ConfigureAwait(false));
             if (result != null)
                 result.ProviderName = Name;
 
@@ -169,7 +169,7 @@ namespace RestSharp.Portable.OAuth2
                         Configuration = Configuration
                     });
 
-            var response = await client.ExecuteAndVerify(request);
+            var response = await client.ExecuteAndVerify(request).ConfigureAwait(false);
 
             AfterGetAccessToken(
                 new BeforeAfterRequestArgs
@@ -219,7 +219,7 @@ namespace RestSharp.Portable.OAuth2
 
             var request = _factory.CreateRequest(AccessTokenServiceEndpoint, Method.POST);
 
-            var content = (await client.ExecuteAndVerify(request)).Content;
+            var content = (await client.ExecuteAndVerify(request).ConfigureAwait(false)).Content;
             var collection = content.ParseQueryString();
 
             AccessToken = collection.GetOrThrowUnexpectedResponse(_oAuthTokenKey);
@@ -249,7 +249,7 @@ namespace RestSharp.Portable.OAuth2
                     Configuration = Configuration
                 });
 
-            return (await client.ExecuteAndVerify(request)).Content;
+            return (await client.ExecuteAndVerify(request).ConfigureAwait(false)).Content;
         }
     }
 }

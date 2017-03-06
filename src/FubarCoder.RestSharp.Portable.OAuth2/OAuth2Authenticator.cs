@@ -139,11 +139,11 @@ namespace RestSharp.Portable.OAuth2
         /// <param name="credentials">The credentials used for the authentication</param>
         /// <param name="response">Response of the failed request</param>
         /// <returns>Task where the handler for a failed authentication gets executed</returns>
-        public virtual async Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
+        public virtual Task HandleChallenge(IHttpClient client, IHttpRequestMessage request, ICredentials credentials, IHttpResponseMessage response)
         {
             if (!CanHandleChallenge(client, request, credentials, response))
                 throw new InvalidOperationException();
-            await Client.GetCurrentToken(forceUpdate: true);
+            return Client.GetCurrentToken(forceUpdate: true);
         }
     }
 }

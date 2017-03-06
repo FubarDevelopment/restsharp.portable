@@ -30,7 +30,7 @@ namespace RestSharp.Portable.Tests
                     var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1");
 
-                    var response = await client.Execute<HttpBinResponse>(request);
+                    var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                     Assert.NotNull(response.Data);
                     Assert.NotNull(response.Data.Form);
                     Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -41,7 +41,7 @@ namespace RestSharp.Portable.Tests
                     var request = new RestRequest("post", Method.POST);
                     request.AddParameter("param1", "param1+");
 
-                    var response = await client.Execute<HttpBinResponse>(request);
+                    var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                     Assert.NotNull(response.Data);
                     Assert.NotNull(response.Data.Form);
                     Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -64,7 +64,7 @@ namespace RestSharp.Portable.Tests
                 var data = Encoding.UTF8.GetBytes("Hello!");
                 request.AddParameter(string.Empty, data, ParameterType.RequestBody);
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                 Assert.NotNull(response.Data);
                 Assert.Equal("Hello!", response.Data.Data);
             }
@@ -87,7 +87,7 @@ namespace RestSharp.Portable.Tests
                         hello = "world",
                     });
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Args);
                 Assert.Contains("hello", response.Data.Args.Keys);
@@ -153,7 +153,7 @@ namespace RestSharp.Portable.Tests
                     // This encoding setting triggers sending the body as text/plain
                     Encoding = Encoding.UTF8
                 });
-                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Data);
                 Assert.Equal("asdf+%&", resp.Data.Data);

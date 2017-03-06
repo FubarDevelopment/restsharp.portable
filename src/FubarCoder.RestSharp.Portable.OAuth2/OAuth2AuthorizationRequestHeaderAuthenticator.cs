@@ -82,7 +82,7 @@ namespace RestSharp.Portable.OAuth2
         {
             // When the authorization failed or when the Authorization header is missing, we're just adding it (again) with the
             // new AccessToken.
-            var authHeader = $"{_tokenType} {await Client.GetCurrentToken()}";
+            var authHeader = $"{_tokenType} {await Client.GetCurrentToken().ConfigureAwait(false)}";
             request.SetAuthorizationHeader(AuthHeader.Www, authHeader);
         }
 

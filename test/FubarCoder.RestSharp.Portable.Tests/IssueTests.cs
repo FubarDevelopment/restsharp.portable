@@ -32,7 +32,7 @@ namespace RestSharp.Portable.Tests
                 var request = new RestRequest("post", Method.POST);
                 request.AddParameter("param1", tmp);
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -57,7 +57,7 @@ namespace RestSharp.Portable.Tests
                 request.AddParameter("param1", tmp);
                 request.AddParameter("param2", "param2");
 
-                var response = await client.Execute<HttpBinResponse>(request);
+                var response = await client.Execute<HttpBinResponse>(request).ConfigureAwait(false);
                 Assert.NotNull(response.Data);
                 Assert.NotNull(response.Data.Form);
                 Assert.True(response.Data.Form.ContainsKey("param1"));
@@ -132,7 +132,7 @@ namespace RestSharp.Portable.Tests
                 client.Credentials = new NetworkCredential("foo", "bar");
                 var request = new RestRequest("post", Method.GET);
                 request.AddJsonBody("foo");
-                await client.Execute(request);
+                await client.Execute(request).ConfigureAwait(false);
             }
         }
 
@@ -181,7 +181,7 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.ContentCollectionMode = ContentCollectionMode.MultiPart;
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req).ConfigureAwait(false);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));
@@ -202,7 +202,7 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("post", Method.POST);
                 req.AddParameter("a", "value-of-a");
                 req.AddHeader("content-type", "application/x-www-form-urlencoded;charset=utf-8");
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req).ConfigureAwait(false);
                 Assert.NotNull(resp.Data);
                 Assert.NotNull(resp.Data.Form);
                 Assert.True(resp.Data.Form.ContainsKey("a"));
@@ -222,7 +222,7 @@ namespace RestSharp.Portable.Tests
             })
             {
                 var req = new RestRequest("get", Method.GET);
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req).ConfigureAwait(false);
                 Assert.Null(resp.Data);
             }
         }
@@ -241,7 +241,7 @@ namespace RestSharp.Portable.Tests
             {
                 var req = new RestRequest("cookies/set", Method.GET);
                 req.AddQueryParameter("n1", "v1");
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req).ConfigureAwait(false);
                 Assert.NotNull(resp.Data.Cookies);
                 Assert.Equal(1, resp.Data.Cookies.Count);
                 Assert.Equal("v1", resp.Data.Cookies["n1"]);
@@ -266,7 +266,7 @@ namespace RestSharp.Portable.Tests
             {
                 var req = new RestRequest("get", Method.GET);
                 req.AddQueryParameter("x", "+%");
-                var resp = await client.Execute<HttpBinResponse>(req);
+                var resp = await client.Execute<HttpBinResponse>(req).ConfigureAwait(false);
                 Assert.NotNull(resp.Data.Args);
                 Assert.Equal(1, resp.Data.Args.Count);
                 Assert.Equal("+%", resp.Data.Args["x"]);
@@ -289,7 +289,7 @@ namespace RestSharp.Portable.Tests
                 {
                     ResponseWriterAsync = (stream, ct) => stream.CopyToAsync(output, 4000, ct)
                 };
-                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
                 Assert.Null(resp.RawBytes);
                 Assert.Null(resp.Data);
                 Assert.Equal(8000, output.Length);
@@ -310,7 +310,7 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("post", Method.POST);
                 req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
                 req.AddBody("body", "body", Encoding.UTF8);
-                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
                 Assert.NotNull(resp.Data?.Form);
                 Assert.Equal(1, resp.Data.Form.Count);
                 Assert.Equal("body", resp.Data.Form["body"]);
@@ -335,7 +335,7 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("post", Method.POST);
                 req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
                 req.AddBody("body", Encoding.UTF8);
-                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
                 Assert.NotNull(resp.Data?.Form);
                 Assert.Equal(1, resp.Data.Form.Count);
                 Assert.Equal("body", resp.Data.Form["text/plain"]);
@@ -360,7 +360,7 @@ namespace RestSharp.Portable.Tests
                 var req = new RestRequest("post", Method.POST);
                 req.AddFile("file1", Encoding.UTF8.GetBytes("asd"), "filename.txt");
                 req.AddParameter("param1", "value1");
-                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None);
+                var resp = await client.Execute<HttpBinResponse>(req, CancellationToken.None).ConfigureAwait(false);
                 Assert.NotNull(resp.Data?.Form);
                 Assert.Equal(1, resp.Data.Form.Count);
                 Assert.Equal("value1", resp.Data.Form["param1"]);

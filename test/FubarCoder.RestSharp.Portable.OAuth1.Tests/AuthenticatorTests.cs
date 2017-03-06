@@ -30,7 +30,7 @@ namespace RestSharp.Portable.OAuth1.Tests
             var client = new TestRestClient();
             var request = new RestRequest("test", Method.POST);
             request.AddParameter("status", "😈❤️😍🎉😜 😜👯🍻🎈🎤🎮🚀🌉✨");
-            await auth.PreAuthenticate(client, request, null);
+            await auth.PreAuthenticate(client, request, null).ConfigureAwait(false);
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"rXtn0AUYLME80k3dLcizx3wNLxk%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
@@ -45,7 +45,7 @@ namespace RestSharp.Portable.OAuth1.Tests
             var client = new TestRestClient();
             var request = new RestRequest("test", Method.POST);
             request.AddParameter("status", "😈❤️😍🎉😜 😜👯🍻🎈🎤🎮🚀🌉✨", ParameterType.QueryString);
-            await auth.PreAuthenticate(client, request, null);
+            await auth.PreAuthenticate(client, request, null).ConfigureAwait(false);
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"rXtn0AUYLME80k3dLcizx3wNLxk%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
@@ -60,7 +60,7 @@ namespace RestSharp.Portable.OAuth1.Tests
             var client = new TestRestClient();
             var request = new RestRequest("test", Method.POST);
             request.AddParameter("status", ":/#&=", ParameterType.QueryString);
-            await auth.PreAuthenticate(client, request, null);
+            await auth.PreAuthenticate(client, request, null).ConfigureAwait(false);
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"1HnNNm%2BAJgKJPcNCuVINryGTPUI%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
@@ -75,7 +75,7 @@ namespace RestSharp.Portable.OAuth1.Tests
             var client = new TestRestClient();
             var request = new RestRequest("test", Method.POST);
             request.AddParameter("status", "☺", ParameterType.QueryString);
-            await auth.PreAuthenticate(client, request, null);
+            await auth.PreAuthenticate(client, request, null).ConfigureAwait(false);
             var header = request.Parameters.FirstOrDefault(x => x.Name == "Authorization");
             Assert.NotNull(header);
             Assert.Equal("OAuth oauth_consumer_key=\"consumer-key\",oauth_nonce=\"abcdefghijklmnop\",oauth_signature=\"SIDMGnDWsGNw8XKV9WrrdAgynSE%3D\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1446981133\",oauth_token=\"access-token\",oauth_version=\"1.0\"", (string)header.Value);
@@ -122,7 +122,7 @@ namespace RestSharp.Portable.OAuth1.Tests
                 request.AddParameter("type", "text");
                 request.AddParameter("body", text);
 
-                var response = await client.Execute(request);
+                var response = await client.Execute(request).ConfigureAwait(false);
                 Assert.NotNull(response);
             }
         }

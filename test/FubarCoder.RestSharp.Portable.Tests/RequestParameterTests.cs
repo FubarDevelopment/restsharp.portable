@@ -121,7 +121,7 @@ namespace RestSharp.Portable.Tests
                 Assert.Equal("http://localhost/?param1=value1.1", uri);
 
                 var requestParameters = client.MergeParameters(request);
-                var body = await client.GetContent(request, requestParameters).ReadAsStringAsync();
+                var body = await client.GetContent(request, requestParameters).ReadAsStringAsync().ConfigureAwait(false);
                 Assert.Equal("param1=value1&param2=value2", body);
             }
         }

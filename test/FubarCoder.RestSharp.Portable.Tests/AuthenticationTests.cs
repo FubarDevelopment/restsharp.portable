@@ -41,7 +41,7 @@ namespace RestSharp.Portable.Tests
                 var request = new RestRequest("basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request).ConfigureAwait(false);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -67,7 +67,7 @@ namespace RestSharp.Portable.Tests
                 var request = new RestRequest("hidden-basic-auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request).ConfigureAwait(false);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -93,7 +93,7 @@ namespace RestSharp.Portable.Tests
                 var request = new RestRequest("digest-auth/auth/{username}/{password}", Method.GET);
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request).ConfigureAwait(false);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -121,7 +121,7 @@ namespace RestSharp.Portable.Tests
                 request.AddUrlSegment("username", username);
                 request.AddUrlSegment("password", password);
                 ////request.AddOrUpdateParameter("param1", "val1");
-                var response = await client.Execute<AuthenticationResult>(request);
+                var response = await client.Execute<AuthenticationResult>(request).ConfigureAwait(false);
 
                 Assert.True(response.Data.Authenticated);
                 Assert.Equal(username, response.Data.User);
@@ -150,7 +150,7 @@ namespace RestSharp.Portable.Tests
                 signatureProvider = new RsaSha1SignatureProvider(rsa);
             }
 
-            await TestOAuth10(CreateClientFactory(factoryType, false), signatureProvider);
+            await TestOAuth10(CreateClientFactory(factoryType, false), signatureProvider).ConfigureAwait(false);
         }
 
         [Theory]
@@ -158,7 +158,7 @@ namespace RestSharp.Portable.Tests
         [InlineData(typeof(WebRequestHttpClientFactory))]
         public async Task TestOAuth10_HmacSha1(Type factoryType)
         {
-            await TestOAuth10(CreateClientFactory(factoryType, false), new HmacSha1SignatureProvider());
+            await TestOAuth10(CreateClientFactory(factoryType, false), new HmacSha1SignatureProvider()).ConfigureAwait(false);
         }
 
         [Theory]
@@ -166,7 +166,7 @@ namespace RestSharp.Portable.Tests
         [InlineData(typeof(WebRequestHttpClientFactory))]
         public async Task TestOAuth10_PlainText(Type factoryType)
         {
-            await TestOAuth10(CreateClientFactory(factoryType, false), new PlainTextSignatureProvider());
+            await TestOAuth10(CreateClientFactory(factoryType, false), new PlainTextSignatureProvider()).ConfigureAwait(false);
         }
 
         private async Task TestOAuth10(IHttpClientFactory httpClientFactory, ISignatureProvider signatureProvider)
@@ -187,7 +187,7 @@ namespace RestSharp.Portable.Tests
 
                 {
                     var request = new RestRequest("request-token");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request).ConfigureAwait(false);
                     var requestTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', requestTokenResponse);
 
@@ -216,7 +216,7 @@ namespace RestSharp.Portable.Tests
 
                 {
                     var request = new RestRequest("access-token");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request).ConfigureAwait(false);
                     var accessTokenResponse = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', accessTokenResponse);
 
@@ -245,7 +245,7 @@ namespace RestSharp.Portable.Tests
                     var request = new RestRequest("echo", Method.POST);
                     request.AddOrUpdateParameter("one", "1");
                     request.AddOrUpdateParameter("two", "2");
-                    var response = await client.Execute(request);
+                    var response = await client.Execute(request).ConfigureAwait(false);
                     var text = Encoding.UTF8.GetString(response.RawBytes);
                     Assert.DoesNotContain('\n', text);
 

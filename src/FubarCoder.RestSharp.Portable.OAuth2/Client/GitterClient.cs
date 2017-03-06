@@ -101,7 +101,7 @@ namespace RestSharp.Portable.OAuth2.Client
                 Configuration = Configuration
             });
 
-            var response = await client.ExecuteAndVerify(request);
+            var response = await client.ExecuteAndVerify(request).ConfigureAwait(false);
 
             var result = ParseUserInfo(response);
             result.ProviderName = Name;

@@ -67,7 +67,7 @@ namespace RestSharp.Portable.HttpClient.Impl.Http
         public async Task<IHttpResponseMessage> SendAsync(IHttpRequestMessage request, CancellationToken cancellationToken)
         {
             var requestMessage = request.AsHttpRequestMessage();
-            var response = await Client.SendAsync(requestMessage, cancellationToken);
+            var response = await Client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
             return new DefaultHttpResponseMessage(requestMessage, response, _cookies);
         }
 

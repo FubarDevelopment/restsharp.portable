@@ -23,7 +23,7 @@ namespace RestSharp.Portable.OAuth2.Infrastructure
         /// </returns>
         public static async Task<IRestResponse> ExecuteAndVerify(this IRestClient client, IRestRequest request)
         {
-            var response = await client.Execute(request);
+            var response = await client.Execute(request).ConfigureAwait(false);
             if ((response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
                 || response.IsEmpty())
             {

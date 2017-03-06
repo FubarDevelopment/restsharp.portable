@@ -90,7 +90,7 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <returns>The queried user information</returns>
         protected override async Task<UserInfo> GetUserInfo()
         {
-            var userInfo = await base.GetUserInfo();
+            var userInfo = await base.GetUserInfo().ConfigureAwait(false);
             if (userInfo == null)
                 return null;
 
@@ -108,7 +108,7 @@ namespace RestSharp.Portable.OAuth2.Client
                 Configuration = Configuration
             });
 
-            var response = await client.ExecuteAndVerify(request);
+            var response = await client.ExecuteAndVerify(request).ConfigureAwait(false);
             var userEmails = ParseEmailAddresses(response.Content);
             userInfo.Email = userEmails.First(u => u.IsPrimary).Email;
             return userInfo;

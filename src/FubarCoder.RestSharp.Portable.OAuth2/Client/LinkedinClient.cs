@@ -76,9 +76,9 @@ namespace RestSharp.Portable.OAuth2.Client
         /// <param name="state">
         /// Any additional information that will be posted back by service.
         /// </param>
-        public override async Task<string> GetLoginLinkUri(string state = null)
+        public override Task<string> GetLoginLinkUri(string state = null)
         {
-            return await base.GetLoginLinkUri(state ?? Guid.NewGuid().ToString("N"));
+            return base.GetLoginLinkUri(state ?? Guid.NewGuid().ToString("N"));
         }
 
         /// <summary>

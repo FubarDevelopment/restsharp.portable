@@ -164,15 +164,15 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                     var getRequestStreamAsync = Task.Factory.FromAsync(wr.BeginGetRequestStream, wr.EndGetRequestStream, null);
                     var requestStream = await getRequestStreamAsync.HandleCancellation(cancellationToken);
 #else
-                    var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken);
+                    var requestStream = await wr.GetRequestStreamAsync().HandleCancellation(cancellationToken).ConfigureAwait(false);
 #endif
                     using (requestStream)
                     {
                         var temp = new MemoryStream();
-                        await request.Content.CopyToAsync(temp);
+                        await request.Content.CopyToAsync(temp).ConfigureAwait(false);
                         var buffer = temp.ToArray();
-                        await requestStream.WriteAsync(buffer, 0, buffer.Length, cancellationToken);
-                        await requestStream.FlushAsync(cancellationToken);
+                        await requestStream.WriteAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
+                        await requestStream.FlushAsync(cancellationToken).ConfigureAwait(false);
                     }
                 }
                 catch (OperationCanceledException)
@@ -188,7 +188,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 var getResponseAsync = Task.Factory.FromAsync(wr.BeginGetResponse, wr.EndGetResponse, null);
                 var response = await getResponseAsync.HandleCancellation(cancellationToken);
 #else
-                var response = await wr.GetResponseAsync().HandleCancellation(cancellationToken);
+                var response = await wr.GetResponseAsync().HandleCancellation(cancellationToken).ConfigureAwait(false);
 #endif
                 var httpWebResponse = response as HttpWebResponse;
                 if (httpWebResponse == null)

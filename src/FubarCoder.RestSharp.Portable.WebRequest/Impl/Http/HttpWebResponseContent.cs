@@ -71,13 +71,13 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 {
                     _bufferSize += length;
                     return stream.WriteAsync(data, 0, length);
-                });
+                }).ConfigureAwait(false);
             }
             else if (_storedIntoBuffer.Value)
             {
                 foreach (var buffer in _buffers)
                 {
-                    await stream.WriteAsync(buffer, 0, buffer.Length);
+                    await stream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
                 }
             }
             else
@@ -125,7 +125,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
                 throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
 
             _storedIntoBuffer = true;
-            await LoadData(null, 4000, StoreIntoBuffer);
+            await LoadData(null, 4000, StoreIntoBuffer).ConfigureAwait(false);
 
             var result = new byte[_bufferSize];
             var offset = 0;
@@ -142,7 +142,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
         /// Returns the data as string
         /// </summary>
         /// <returns>The task that returns the data as string</returns>
-        public async Task<string> ReadAsStringAsync()
+        public Task<string> ReadAsStringAsync()
         {
             if (_storedIntoBuffer != null)
                 throw new InvalidOperationException("Cannot store data into buffer when a different load operation was executed.");
@@ -150,7 +150,7 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             var responseStream = _response?.GetResponseStream();
             if (responseStream == null)
                 return null;
-            return await new StreamReader(responseStream).ReadToEndAsync();
+            return new StreamReader(responseStream).ReadToEndAsync();
         }
 
         /// <summary>
@@ -233,14 +233,14 @@ namespace RestSharp.Portable.WebRequest.Impl.Http
             while (!_endOfStreamReached && (size == null || _bufferSize < size))
             {
                 var blockSize = size == null ? readBlockSize : (int)Math.Min(readBlockSize, size.Value - _bufferSize);
-                var readSize = await _responseStream.ReadAsync(buffer, 0, blockSize);
+                var readSize = await _responseStream.ReadAsync(buffer, 0, blockSize).ConfigureAwait(false);
                 if (readSize == 0)
                 {
                     _endOfStreamReached = true;
                 }
                 else
                 {
-                    await writeFunc(buffer, readSize);
+                    await writeFunc(buffer, readSize).ConfigureAwait(false);
                 }
 
                 _bufferSize += readSize;

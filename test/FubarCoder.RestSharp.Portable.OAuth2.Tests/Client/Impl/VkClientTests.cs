@@ -1,17 +1,18 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+
 using FluentAssertions;
+
 using NSubstitute;
 using NUnit.Framework;
+
 using RestSharp.Portable.OAuth2.Client;
-using RestSharp.Portable.OAuth2;
 using RestSharp.Portable.OAuth2.Configuration;
 using RestSharp.Portable.OAuth2.Infrastructure;
 using RestSharp.Portable.OAuth2.Models;
-using RestSharp.Portable;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
 {
@@ -90,7 +91,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
         public async Task Should_ReceiveUserId_WhenAccessTokenResponseReceived()
         {
             // arrange
-            var response = await factory.CreateClient().Execute(factory.CreateRequest(null));
+            var response = await factory.CreateClient().Execute(factory.CreateRequest(null)).ConfigureAwait(false);
             response.RawBytes.Returns(
                         _encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns(
@@ -102,7 +103,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             await descendant.GetUserInfo(new Dictionary<string, string>
             {
                 {"code", "code"}
-            }.ToLookup(y => y.Key, y => y.Value));
+            }.ToLookup(y => y.Key, y => y.Value)).ConfigureAwait(false);
 
             // assert
             var notUsed = response.Received().Content;
@@ -114,7 +115,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             // arrange
             var restClient = factory.CreateClient();
             var restRequest = factory.CreateRequest(null);
-            var response = await restClient.Execute(restRequest);
+            var response = await restClient.Execute(restRequest).ConfigureAwait(false);
             response.RawBytes.Returns(
                         _encoding.GetBytes("any content to pass response verification"));
             response.Content.Returns(
@@ -126,7 +127,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             await descendant.GetUserInfo(new Dictionary<string, string>
             {
                 {"code", "code"}
-            }.ToLookup(y => y.Key, y => y.Value));
+            }.ToLookup(y => y.Key, y => y.Value)).ConfigureAwait(false);
 
             // assert
             restRequest.Parameters.Received().AddOrUpdate(Arg.Is<Parameter>(x => x.Name == "fields" && (string)x.Value == "uid,first_name,last_name,photo"));

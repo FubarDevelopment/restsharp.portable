@@ -91,7 +91,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
         public async Task Should_AddExtraParameters_WhenOnGetUserInfoIsCalled()
         {
             // arrange
-            var response = await requestFactory.CreateClient().Execute(requestFactory.CreateRequest(null));
+            var response = await requestFactory.CreateClient().Execute(requestFactory.CreateRequest(null)).ConfigureAwait(false);
             response
                 .RawBytes.Returns(
                     _encoding.GetBytes("any content to pass response verification"));
@@ -104,7 +104,7 @@ namespace RestSharp.Portable.OAuth2.Tests.Client.Impl
             await descendant.GetUserInfo(new Dictionary<string, string>
             {
                 {"code", "code"}
-            }.ToLookup(y => y.Key, y => y.Value));
+            }.ToLookup(y => y.Key, y => y.Value)).ConfigureAwait(false);
 
             // assert
             requestFactory.CreateRequest(null)

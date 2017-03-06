@@ -129,11 +129,11 @@ namespace RestSharp.Portable.OAuth2
                 PropertyFilterMode.Exclude);
             await BeforeGetLoginLinkUri(
                 new BeforeAfterRequestArgs()
-                    {
-                        Client = client,
-                        Request = request,
-                        Configuration = Configuration,
-                    });
+                {
+                    Client = client,
+                    Request = request,
+                    Configuration = Configuration,
+                }).ConfigureAwait(false);
             return client.BuildUri(request).ToString();
         }
 
@@ -146,8 +146,8 @@ namespace RestSharp.Portable.OAuth2
         {
             GrantType = _grantTypeAuthorizationKey;
             CheckErrorAndSetState(parameters);
-            await QueryAccessToken(parameters);
-            return await GetUserInfo();
+            await QueryAccessToken(parameters).ConfigureAwait(false);
+            return await GetUserInfo().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace RestSharp.Portable.OAuth2
         {
             GrantType = _grantTypeAuthorizationKey;
             CheckErrorAndSetState(parameters);
-            await QueryAccessToken(parameters);
+            await QueryAccessToken(parameters).ConfigureAwait(false);
             return AccessToken;
         }
 
@@ -196,7 +196,7 @@ namespace RestSharp.Portable.OAuth2
                     };
 
                 GrantType = _grantTypeRefreshTokenKey;
-                await QueryAccessToken(parameters.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase));
+                await QueryAccessToken(parameters.ToLookup(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase)).ConfigureAwait(false);
             }
 
             return AccessToken;
@@ -356,7 +356,7 @@ namespace RestSharp.Portable.OAuth2
                     Configuration = Configuration
                 });
 
-            var response = await client.ExecuteAndVerify(request);
+            var response = await client.ExecuteAndVerify(request).ConfigureAwait(false);
 
             var result = ParseUserInfo(response);
             result.ProviderName = Name;
@@ -394,7 +394,7 @@ namespace RestSharp.Portable.OAuth2
                         Configuration = Configuration
                     });
 
-            var response = await client.ExecuteAndVerify(request);
+            var response = await client.ExecuteAndVerify(request).ConfigureAwait(false);
 
             var content = response.Content;
             AccessToken = ParseAccessTokenResponse(content);
