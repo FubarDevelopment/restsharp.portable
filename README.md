@@ -1,4 +1,10 @@
-﻿# Portable RestSharp
+# Portable RestSharp
+
+# THIS PROJECT IS NO LONGER MAINTAINED
+
+Please use System.Net.Http.HttpClient instead.
+
+# Old README contents
 
 [![Build status](https://build.fubar-dev.de/app/rest/builds/buildType:%28id:RestSharpPortable_40Preview%29/statusIcon)](https://build.fubar-dev.com/project.html?projectId=RestSharpPortable)
 
